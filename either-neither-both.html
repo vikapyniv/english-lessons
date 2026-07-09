@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ranking Challenge: Either / Neither / Both</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --line: #e5e7eb;
+      --shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+      --green: #eaf8ef;
+      --green-border: #62b47b;
+      --red: #fff0f0;
+      --red-border: #e46c6c;
+      --yellow: #fff8dd;
+      --yellow-border: #d4a72c;
+      --blue: #eff6ff;
+      --blue-border: #3b82f6;
+      --ready: #dff8e8;
+      --waiting: #ffe1e1;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+      padding: 18px 24px 14px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 36px);
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .progress {
+      color: var(--muted);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .topic-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+    }
+
+    .topic-tab {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: 0.16s ease;
+    }
+
+    .topic-tab:hover { border-color: var(--blue-border); background: var(--blue); }
+    .topic-tab.active { background: var(--text); border-color: var(--text); color: #fff; }
+
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(280px, 3fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .question-card, .side-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .question-card { padding: 24px; }
+
+    .question-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .question {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 46px);
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+      color: #0f172a;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .drop-zone {
+      min-height: 310px;
+      border: 2px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fcfcfd;
+      transition: 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .drop-zone[data-type="both"] { background: linear-gradient(180deg, var(--green), #fff); }
+    .drop-zone[data-type="neither"] { background: linear-gradient(180deg, var(--red), #fff); }
+    .drop-zone[data-type="either"] { background: linear-gradient(180deg, var(--yellow), #fff); }
+    .drop-zone.drag-over { transform: translateY(-2px); border-color: var(--blue-border); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12); }
+    .drop-zone.full { border-style: solid; }
+
+    .zone-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .zone-title small {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .say-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+
+    .sentence-builder {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.78);
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 18px;
+      line-height: 1.65;
+      font-weight: 850;
+    }
+
+    .gap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 118px;
+      min-height: 42px;
+      margin: 0 4px;
+      padding: 4px 8px;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      background: #fff;
+      color: var(--muted);
+      vertical-align: middle;
+      transition: 0.15s ease;
+    }
+
+    .gap.empty::before {
+      content: "________";
+      color: #94a3b8;
+      letter-spacing: 0.04em;
+    }
+
+    .gap.drag-over {
+      border-color: var(--blue-border);
+      background: var(--blue);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .gap.filled {
+      border-style: solid;
+      background: #fff;
+      border-color: #cbd5e1;
+      padding: 3px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      margin-top: auto;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,0.7);
+      text-align: center;
+    }
+
+    .word-card {
+      user-select: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 13px 14px;
+      font-weight: 800;
+      cursor: grab;
+      box-shadow: 0 5px 12px rgba(16, 24, 40, 0.06);
+      transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease, border-color 0.14s ease;
+    }
+
+    .gap .word-card {
+      width: 100%;
+      padding: 9px 10px;
+      text-align: center;
+      box-shadow: none;
+      cursor: grab;
+    }
+
+    .word-card:active { cursor: grabbing; }
+    .word-card:hover { transform: translateY(-1px); box-shadow: 0 9px 18px rgba(16, 24, 40, 0.10); }
+    .gap .word-card:hover { box-shadow: none; }
+    .word-card.dragging { opacity: 0.45; }
+    .word-card.waiting { background: var(--waiting); border-color: var(--red-border); }
+    .word-card.ready { background: var(--ready); border-color: var(--green-border); }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    .btn {
+      border: 0;
+      background: var(--text);
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: 0.14s ease;
+    }
+
+    .btn.secondary { background: #eef2f7; color: var(--text); }
+    .btn:hover { transform: translateY(-1px); filter: brightness(0.96); }
+
+    .message {
+      min-height: 28px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .message.good { color: #15803d; }
+    .message.bad { color: #b91c1c; }
+
+    .side-panel {
+      padding: 20px;
+      position: sticky;
+      top: 122px;
+    }
+
+    .side-title {
+      margin: 0 0 14px;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .items-list {
+      display: grid;
+      gap: 10px;
+      min-height: 120px;
+      padding: 10px;
+      border-radius: 16px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+    }
+
+    .items-list.drag-over { outline: 3px solid rgba(59, 130, 246, 0.22); }
+
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; padding: 16px; }
+      .side-panel { position: static; }
+      .columns { grid-template-columns: 1fr; }
+      .drop-zone { min-height: 230px; }
+      .question-row { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 560px) {
+      header { padding: 14px; }
+      .topline { align-items: flex-start; flex-direction: column; }
+      .question-card, .side-panel { padding: 16px; }
+      .actions .btn { flex: 1; }
+      .sentence-builder { font-size: 16px; }
+      .gap { min-width: 96px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topline">
+      <h1>🏆 Ranking Challenge</h1>
+      <div class="progress" id="progress"></div>
+    </div>
+    <nav class="topic-bar" id="topicBar" aria-label="Topics"></nav>
+  </header>
+
+  <main>
+    <section class="question-card">
+      <div class="question-row">
+        <h2 class="question" id="question"></h2>
+      </div>
+
+      <div class="columns">
+        <div class="drop-zone" data-type="both">
+          <div class="zone-title">✅ BOTH <small>2 important</small></div>
+          <div class="say-label">🗣 Say aloud</div>
+          <div class="sentence-builder" id="bothBuilder"></div>
+          <div class="hint">Drag words into the blanks.</div>
+        </div>
+
+        <div class="drop-zone" data-type="neither">
+          <div class="zone-title">❌ NEITHER <small>2 NOT important</small></div>
+          <div class="say-label">🗣 Say aloud</div>
+          <div class="sentence-builder" id="neitherBuilder"></div>
+          <div class="hint">Drag words into the blanks.</div>
+        </div>
+
+        <div class="drop-zone" data-type="either">
+          <div class="zone-title">🤔 EITHER <small>one of two</small></div>
+          <div class="say-label">🗣 Say aloud</div>
+          <div class="sentence-builder" id="eitherBuilder"></div>
+          <div class="hint">Drag words into the blanks.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn secondary" id="resetBtn">🔄 Reset</button>
+        <button class="btn" id="nextBtn">➡️ Next topic</button>
+      </div>
+      <div class="message" id="message" aria-live="polite"></div>
+    </section>
+
+    <aside class="side-panel">
+      <h3 class="side-title">📦 ITEMS</h3>
+      <div class="items-list" id="itemsList"></div>
+    </aside>
+  </main>
+
+  <script>
+    const topics = [
+      { name: 'Happiness', question: 'What makes people happy?', context: 'happiness', verb: 'make people happy', words: ['Money', 'Love', 'Health', 'Travel', 'Friends', 'Career', 'Hobbies', 'Freedom'] },
+      { name: 'Work', question: 'What makes a good job?', context: 'a good job', verb: 'make a job good', words: ['High salary', 'Friendly colleagues', 'Flexible hours', 'Promotion', 'Job security', 'Interesting tasks', 'Work-life balance', 'Remote work'] },
+      { name: 'Travel', question: 'What makes a perfect holiday?', context: 'a perfect holiday', verb: 'make a holiday perfect', words: ['Good weather', 'Beautiful nature', 'Delicious food', 'Interesting culture', 'Relaxation', 'Adventure', 'Good accommodation', 'Affordable prices'] },
+      { name: 'Friendship', question: 'What makes a good friend?', context: 'a good friend', verb: 'make a good friend', words: ['Honesty', 'Sense of humour', 'Loyalty', 'Similar interests', 'Being a good listener', 'Helpfulness', 'Intelligence', 'Generosity'] },
+      { name: 'City', question: 'What makes a city great to live in?', context: 'a great city to live in', verb: 'make a city great to live in', words: ['Public transport', 'Affordable housing', 'Job opportunities', 'Parks', 'Cultural events', 'Safety', 'Good schools', 'Friendly people'] },
+      { name: 'Relaxation', question: 'What helps you relax?', context: 'relaxation', verb: 'help you relax', words: ['Watching TV', 'Reading a book', 'Taking a bath', 'Listening to music', 'Going for a walk', 'Meditating', 'Talking to a friend', 'Playing video games'] },
+      { name: 'Health', question: 'What should you give up to be healthier?', context: 'better health', verb: 'improve your health', words: ['Sugar', 'Alcohol', 'Smoking', 'Social media', 'Junk food', 'Stress', 'Lack of sleep', 'Sitting too much'] },
+      { name: 'Investments', question: 'What should you invest in for a better future?', context: 'a better future', verb: 'help your future', words: ['Education', 'Health', 'Real estate', 'Travel experiences', 'Technology', 'Retirement savings', 'Hobbies', 'Relationships'] },
+      { name: 'Success', question: 'What makes a successful person?', context: 'success', verb: 'make a person successful', words: ['Hard work', 'Talent', 'Luck', 'Good connections', 'Education', 'Creativity', 'Discipline', 'Confidence'] },
+      { name: 'Languages', question: 'What helps you learn a language?', context: 'language learning', verb: 'help you learn a language', words: ['Watching movies', 'Reading books', 'Speaking with natives', 'Language apps', 'Private lessons', 'Podcasts', 'Writing diary', 'YouTube videos'] },
+      { name: 'Perfect Day', question: 'What makes a perfect day?', context: 'a perfect day', verb: 'make a day perfect', words: ['Waking up late', 'Good coffee', 'Exercising', 'Meeting friends', 'Good food', 'No stress', 'Sunshine', 'Laughing'] },
+      { name: 'Romance', question: 'What makes a good relationship?', context: 'a good relationship', verb: 'make a relationship good', words: ['Trust', 'Communication', 'Shared interests', 'Physical attraction', 'Patience', 'Compromise', 'Fun', 'Respect'] },
+      { name: 'Career', question: 'What helps you get promoted?', context: 'promotion', verb: 'help you get promoted', words: ['Hard work', 'Networking', 'Showing initiative', 'Being likeable', 'Skills', 'Experience', 'Education', 'Luck'] },
+      { name: 'Stress', question: 'What causes the most stress?', context: 'stress', verb: 'cause stress', words: ['Work', 'Money', 'Relationships', 'Health', 'Family', 'Future uncertainty', 'Social media', 'Lack of time'] },
+      { name: 'Happy Marriage', question: 'What makes a happy marriage?', context: 'a happy marriage', verb: 'make a marriage happy', words: ['Love', 'Trust', 'Shared values', 'Good communication', 'Humour', 'Patience', 'Shared interests', 'Physical intimacy'] },
+      { name: 'Education', question: 'What makes a good school?', context: 'a good school', verb: 'make a school good', words: ['Qualified teachers', 'Good facilities', 'Small classes', 'Extracurricular activities', 'Safe environment', 'Technology', 'Library', 'Sports'] },
+      { name: 'Food', question: 'What makes food delicious?', context: 'delicious food', verb: 'make food delicious', words: ['Fresh ingredients', 'Spices', 'Good presentation', 'Cooking technique', 'Company', 'Atmosphere', 'Quality', 'Tradition'] },
+      { name: 'Ageing', question: 'What helps you stay young?', context: 'staying young', verb: 'help you stay young', words: ['Exercise', 'Healthy diet', 'Positivity', 'Good sleep', 'Friends', 'Hobbies', 'No stress', 'Learning new things'] },
+      { name: 'Creativity', question: 'What inspires creativity?', context: 'creativity', verb: 'inspire creativity', words: ['Nature', 'Music', 'Travel', 'Reading', 'Other artists', 'Solitude', 'Conversations', 'Constraints'] },
+      { name: 'Life Goals', question: 'What matters most in life?', context: 'life', verb: 'matter most in life', words: ['Family', 'Health', 'Happiness', 'Love', 'Purpose', 'Success', 'Friends', 'Freedom'] }
+    ];
+
+    const state = {
+      topicIndex: 0,
+      placements: { both: [null, null], neither: [null, null], either: [null, null] },
+      draggedId: null
+    };
+
+    const topicBar = document.getElementById('topicBar');
+    const progress = document.getElementById('progress');
+    const question = document.getElementById('question');
+    const itemsList = document.getElementById('itemsList');
+    const message = document.getElementById('message');
+    const builders = {
+      both: document.getElementById('bothBuilder'),
+      neither: document.getElementById('neitherBuilder'),
+      either: document.getElementById('eitherBuilder')
+    };
+
+    function uid(word) {
+      return word.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.random().toString(36).slice(2, 7);
+    }
+
+    function activeTopic() { return topics[state.topicIndex]; }
+
+    function createCard(word, id = uid(word)) {
+      const card = document.createElement('div');
+      card.className = 'word-card';
+      card.textContent = word;
+      card.draggable = true;
+      card.dataset.word = word;
+      card.dataset.id = id;
+
+      card.addEventListener('dragstart', () => {
+        state.draggedId = id;
+        card.classList.add('dragging');
+      });
+
+      card.addEventListener('dragend', () => {
+        state.draggedId = null;
+        card.classList.remove('dragging');
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+      });
+
+      return card;
+    }
+
+    function setupTopicTabs() {
+      topicBar.innerHTML = '';
+      topics.forEach((topic, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'topic-tab';
+        btn.textContent = topic.name;
+        btn.addEventListener('click', () => tryChangeTopic(index));
+        topicBar.appendChild(btn);
+      });
+    }
+
+    function loadTopic(index) {
+      state.topicIndex = index;
+      state.placements = { both: [null, null], neither: [null, null], either: [null, null] };
+      message.textContent = '';
+      message.className = 'message';
+      render();
+    }
+
+    function findCardById(id) {
+      return document.querySelector(`.word-card[data-id="${CSS.escape(id)}"]`);
+    }
+
+    function removeFromPlacements(id) {
+      Object.keys(state.placements).forEach(type => {
+        state.placements[type] = state.placements[type].map(item => item && item.id === id ? null : item);
+      });
+    }
+
+    function placedItems() {
+      return Object.values(state.placements).flat().filter(Boolean);
+    }
+
+    function handleGapDrop(targetType, targetIndex) {
+      const id = state.draggedId;
+      if (!id) return;
+      const card = findCardById(id);
+      if (!card) return;
+
+      const word = card.dataset.word;
+      removeFromPlacements(id);
+
+      const current = state.placements[targetType][targetIndex];
+      if (current && current.id !== id) {
+        setMessage('That blank is already filled. Move the card out first, or use another blank.', 'bad');
+        render();
+        return;
+      }
+
+      state.placements[targetType][targetIndex] = { id, word };
+      setMessage('', '');
+      render();
+    }
+
+    function handleReturnToList() {
+      const id = state.draggedId;
+      if (!id) return;
+      removeFromPlacements(id);
+      setMessage('', '');
+      render();
+    }
+
+    function cardStatusClass(type) {
+      const count = state.placements[type].filter(Boolean).length;
+      if (count === 1) return 'waiting';
+      if (count === 2) return 'ready';
+      return '';
+    }
+
+    function createGap(type, index) {
+      const gap = document.createElement('span');
+      const item = state.placements[type][index];
+      gap.className = 'gap' + (item ? ' filled' : ' empty');
+      gap.dataset.type = type;
+      gap.dataset.index = String(index);
+
+      gap.addEventListener('dragover', event => {
+        event.preventDefault();
+        gap.classList.add('drag-over');
+      });
+
+      gap.addEventListener('dragleave', () => gap.classList.remove('drag-over'));
+
+      gap.addEventListener('drop', event => {
+        event.preventDefault();
+        gap.classList.remove('drag-over');
+        handleGapDrop(type, index);
+      });
+
+      if (item) {
+        const card = createCard(item.word, item.id);
+        const status = cardStatusClass(type);
+        if (status) card.classList.add(status);
+        gap.appendChild(card);
+      }
+
+      return gap;
+    }
+
+    function renderBuilder(type) {
+      const builder = builders[type];
+      builder.innerHTML = '';
+      const topic = activeTopic();
+
+      if (type === 'both') {
+        builder.append('Both ');
+        builder.appendChild(createGap(type, 0));
+        builder.append(' and ');
+        builder.appendChild(createGap(type, 1));
+        builder.append(` are important for ${topic.context}.`);
+      }
+
+      if (type === 'neither') {
+        builder.append('Neither ');
+        builder.appendChild(createGap(type, 0));
+        builder.append(' nor ');
+        builder.appendChild(createGap(type, 1));
+        builder.append(` is important for ${topic.context}.`);
+      }
+
+      if (type === 'either') {
+        builder.append('Either ');
+        builder.appendChild(createGap(type, 0));
+        builder.append(' or ');
+        builder.appendChild(createGap(type, 1));
+        builder.append(` can ${topic.verb}.`);
+      }
+    }
+
+    function renderItemsList() {
+      itemsList.innerHTML = '';
+      const placedWords = new Set(placedItems().map(item => item.word));
+
+      activeTopic().words.forEach(word => {
+        if (!placedWords.has(word)) itemsList.appendChild(createCard(word));
+      });
+
+      if (!itemsList.children.length) {
+        const empty = document.createElement('div');
+        empty.className = 'hint';
+        empty.textContent = 'All items are placed';
+        itemsList.appendChild(empty);
+      }
+    }
+
+    function setMessage(text, status) {
+      message.textContent = text;
+      message.className = 'message' + (status ? ` ${status}` : '');
+    }
+
+    function render() {
+      const topic = activeTopic();
+      question.textContent = '❓ ' + topic.question;
+      progress.textContent = `${state.topicIndex + 1} / ${topics.length}`;
+      document.querySelectorAll('.topic-tab').forEach((tab, index) => tab.classList.toggle('active', index === state.topicIndex));
+
+      ['both', 'neither', 'either'].forEach(type => {
+        renderBuilder(type);
+        const parent = builders[type].closest('.drop-zone');
+        parent.classList.toggle('full', state.placements[type].filter(Boolean).length === 2);
+      });
+
+      renderItemsList();
+    }
+
+    itemsList.addEventListener('dragover', event => {
+      event.preventDefault();
+      itemsList.classList.add('drag-over');
+    });
+
+    itemsList.addEventListener('dragleave', () => itemsList.classList.remove('drag-over'));
+
+    itemsList.addEventListener('drop', event => {
+      event.preventDefault();
+      itemsList.classList.remove('drag-over');
+      handleReturnToList();
+    });
+
+    function singleCardColumns() {
+      return Object.entries(state.placements)
+        .filter(([, items]) => items.filter(Boolean).length === 1)
+        .map(([type]) => type.toUpperCase());
+    }
+
+    function tryChangeTopic(index) {
+      const singles = singleCardColumns();
+      if (singles.length) {
+        setMessage(`One blank is waiting for a partner in: ${singles.join(', ')}. Fill the second blank or move the card back before changing topics. Empty columns are okay.`, 'bad');
+        return;
+      }
+      loadTopic(index);
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', () => loadTopic(state.topicIndex));
+    document.getElementById('nextBtn').addEventListener('click', () => tryChangeTopic((state.topicIndex + 1) % topics.length));
+
+    setupTopicTabs();
+    render();
+  </script>
+</body>
+</html>
