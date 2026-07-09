@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>B1 Adjectives & Adverbs Card Game</title>
+<style>
+:root {
+  --bg: #f6f1ea;
+  --text: #243234;
+  --muted: #667579;
+  --shadow: 0 24px 70px rgba(31, 45, 48, .18);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(180, 210, 200, .45), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(225, 190, 185, .45), transparent 30%),
+    var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  padding: 18px;
+}
+.app {
+  width: min(980px, 100%);
+  min-height: calc(100vh - 36px);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 18px;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,.62);
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 24px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 12px 30px rgba(40, 50, 55, .08);
+}
+.title {
+  font-weight: 750;
+  letter-spacing: -.03em;
+  font-size: clamp(18px, 3vw, 26px);
+}
+.score {
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  border: 1px solid rgba(30,40,45,.08);
+}
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+.card-wrap {
+  width: min(760px, 100%);
+  height: min(690px, calc(100vh - 135px));
+  min-height: 520px;
+  perspective: 1400px;
+}
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .75s cubic-bezier(.2,.8,.2,1);
+  cursor: pointer;
+}
+.card.flipped { transform: rotateY(180deg); }
+.face {
+  position: absolute;
+  inset: 0;
+  border-radius: 34px;
+  backface-visibility: hidden;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,.62);
+}
+.front, .back {
+  background:
+    linear-gradient(135deg, var(--c1), var(--c2));
+}
+.front {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 5vw, 56px);
+}
+.front-inner {
+  width: 100%;
+  display: grid;
+  gap: clamp(22px, 4vw, 38px);
+  place-items: center;
+}
+.chip {
+  min-width: min(440px, 92%);
+  text-align: center;
+  font-size: clamp(34px, 8vw, 70px);
+  line-height: 1.02;
+  font-weight: 800;
+  letter-spacing: -.05em;
+  padding: clamp(18px, 3vw, 28px) clamp(18px, 4vw, 40px);
+  border-radius: 30px;
+  color: var(--ink);
+  background: rgba(255,255,255,.48);
+  border: 1px solid rgba(255,255,255,.72);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 18px 36px rgba(0,0,0,.08);
+  backdrop-filter: blur(10px);
+}
+.plus {
+  font-size: clamp(34px, 8vw, 66px);
+  font-weight: 500;
+  color: var(--ink);
+  opacity: .82;
+}
+.back {
+  transform: rotateY(180deg);
+  cursor: default;
+}
+.back-scroll {
+  height: 100%;
+  overflow-y: auto;
+  padding: clamp(22px, 4vw, 42px);
+}
+.back-scroll::-webkit-scrollbar { width: 10px; }
+.back-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,.18); border-radius: 99px; }
+.task-type {
+  display: inline-flex;
+  margin-bottom: 18px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.45);
+  border: 1px solid rgba(255,255,255,.65);
+  font-weight: 750;
+  color: var(--ink);
+}
+.question {
+  font-size: clamp(25px, 4.5vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -.045em;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 0 26px;
+}
+.options {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+button {
+  min-height: 60px;
+  width: 100%;
+  border: 0;
+  border-radius: 20px;
+  padding: 16px 18px;
+  font-size: clamp(17px, 2.5vw, 22px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+  background: rgba(255,255,255,.62);
+  border: 1px solid rgba(255,255,255,.8);
+  box-shadow: 0 10px 24px rgba(0,0,0,.07);
+  cursor: pointer;
+  transition: transform .16s ease, background .16s ease, box-shadow .16s ease;
+  text-align: left;
+}
+button:hover { transform: translateY(-1px); background: rgba(255,255,255,.78); }
+button:active { transform: translateY(1px); }
+button.selected {
+  outline: 3px solid rgba(32, 63, 68, .38);
+}
+.feedback {
+  min-height: 88px;
+  padding: 16px 18px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.44);
+  border: 1px solid rgba(255,255,255,.7);
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+.feedback strong {
+  display: block;
+  font-size: 23px;
+  margin-bottom: 4px;
+}
+.actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.next {
+  text-align: center;
+  justify-content: center;
+  background: rgba(36, 50, 52, .88);
+  color: white;
+  border: 1px solid rgba(36,50,52,.2);
+}
+.next:hover { background: rgba(36, 50, 52, .95); }
+.done {
+  text-align: center;
+  font-size: clamp(28px, 6vw, 48px);
+  font-weight: 850;
+  letter-spacing: -.05em;
+  color: var(--ink);
+  background: rgba(255,255,255,.5);
+  padding: 32px;
+  border-radius: 28px;
+}
+.hint {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--ink);
+  opacity: .62;
+  font-weight: 650;
+}
+@media (max-width: 560px) {
+  body { padding: 10px; }
+  .app { min-height: calc(100vh - 20px); gap: 10px; }
+  .topbar { border-radius: 18px; padding: 12px; align-items: flex-start; flex-direction: column; }
+  .score { width: 100%; text-align: center; }
+  .card-wrap { height: calc(100vh - 138px); min-height: 520px; }
+  .face { border-radius: 26px; }
+  .chip { border-radius: 24px; }
+  .back-scroll { padding: 20px; }
+  button { min-height: 62px; border-radius: 18px; }
+}
+</style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="title">Adjectives & Adverbs Card Game</div>
+      <div class="score" id="score">Correct answers: 0 / 44</div>
+    </header>
+
+    <section class="stage">
+      <div class="card-wrap" id="wrap">
+        <div class="card" id="card">
+          <div class="face front" id="front">
+            <div class="front-inner">
+              <div class="chip" id="word1"></div>
+              <div class="plus">+</div>
+              <div class="chip" id="word2"></div>
+            </div>
+            <div class="hint">Click the card</div>
+          </div>
+          <div class="face back" id="back">
+            <div class="back-scroll">
+              <div class="task-type" id="taskType"></div>
+              <h1 class="question" id="question"></h1>
+              <div class="options" id="options"></div>
+              <div class="feedback" id="feedback"></div>
+              <div class="actions" id="actions"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<script>
+const cards = [{"w1": "cook", "w2": "well", "type": "Choose the correct sentence.", "question": "Choose the correct sentence.", "options": ["She cooks good.", "She cooks well.", "She is cook well."], "answer": ["She cooks well."], "explanation": "Well describes the action cook, so we use the adverb well."}, {"w1": "friend", "w2": "good", "type": "Which sentence sounds natural?", "question": "Which sentence sounds natural?", "options": ["He is a good friend.", "He is a well friend.", "He friends good."], "answer": ["He is a good friend."], "explanation": "Good describes the noun friend, so we use the adjective good."}, {"w1": "speak English", "w2": "well", "type": "Complete the sentence.", "question": "Complete the sentence: She speaks English ____.", "options": ["good", "well", "friendly"], "answer": ["well"], "explanation": "We use well after the verb speak because it describes how she speaks."}, {"w1": "be", "w2": "good at", "type": "Choose the correct question.", "question": "Choose the correct question.", "options": ["What are you good at?", "What do you good at?", "What are you well at?"], "answer": ["What are you good at?"], "explanation": "With the phrase good at, we use be: What are you good at?"}, {"w1": "sleep", "w2": "well", "type": "Can we say this?", "question": "Can we say: I slept good last night?", "options": ["Yes, it is standard grammar.", "No, say: I slept well last night.", "No, say: I slept friendly last night."], "answer": ["No, say: I slept well last night."], "explanation": "Sleep is an action here. We normally use the adverb well."}, {"w1": "teamplayer", "w2": "good", "type": "Find the mistake.", "question": "Find the mistake: She is a well teamplayer.", "options": ["well", "teamplayer", "She"], "answer": ["well"], "explanation": "Teamplayer is a noun. We need the adjective good: a good teamplayer."}, {"w1": "work", "w2": "hard", "type": "Same or different meaning?", "question": "Do work hard and hardly work mean the same?", "options": ["Yes, they are the same.", "No, work hard means work a lot / seriously.", "No, hard is always wrong after work."], "answer": ["No, work hard means work a lot / seriously."], "explanation": "Hard can be an adverb. Work hard means put in a lot of effort."}, {"w1": "study", "w2": "hard", "type": "Situational question.", "question": "Your student studies for many hours and prepares seriously. What can you say?", "options": ["She studies hard.", "She studies hardly.", "She is study hard."], "answer": ["She studies hard."], "explanation": "Study hard means study with a lot of effort."}, {"w1": "watch TV", "w2": "hardly", "type": "Which word is needed?", "question": "I ____ watch TV. I almost never watch it.", "options": ["hard", "hardly", "good"], "answer": ["hardly"], "explanation": "Hardly means almost not / almost never."}, {"w1": "type", "w2": "fast", "type": "Choose all correct answers.", "question": "Choose all correct answers.", "options": ["She types fast.", "She is a fast typer.", "She types fastly."], "answer": ["She types fast.", "She is a fast typer."], "explanation": "Fast can be both an adjective and an adverb. Fastly is not standard."}, {"w1": "runner", "w2": "fast", "type": "Which sentence describes a person and which describes an action?", "question": "Which sentence describes a person?", "options": ["He is a fast runner.", "He runs fast.", "He run fast."], "answer": ["He is a fast runner."], "explanation": "Fast runner describes the noun runner, so fast is an adjective here."}, {"w1": "internet", "w2": "slow", "type": "Choose the correct sentence.", "question": "Choose the correct sentence.", "options": ["The internet is slow.", "The internet works slowest.", "The internet is slowly."], "answer": ["The internet is slow."], "explanation": "Slow describes the noun internet, so we use the adjective slow."}, {"w1": "arrive", "w2": "late", "type": "Choose the correct question.", "question": "Choose the correct question.", "options": ["Did he arrive late?", "Did he arrive lately?", "Was he arrive late?"], "answer": ["Did he arrive late?"], "explanation": "Late means after the expected time. Lately means recently."}, {"w1": "be busy", "w2": "lately", "type": "Complete the sentence.", "question": "Complete the sentence: I have been very busy ____.", "options": ["late", "lately", "slowly"], "answer": ["lately"], "explanation": "Lately means recently, often used with present perfect."}, {"w1": "buy", "w2": "lately", "type": "Can we say this?", "question": "Can we say: I bought a new phone lately?", "options": ["Yes, always correct.", "It is possible, but Have you bought anything lately? sounds more natural.", "No, lately means late."], "answer": ["It is possible, but Have you bought anything lately? sounds more natural."], "explanation": "Lately usually connects to recent time and often sounds natural with present perfect."}, {"w1": "drive", "w2": "carefully", "type": "Find the mistake.", "question": "Find the mistake: Please drive careful.", "options": ["drive", "careful", "Please"], "answer": ["careful"], "explanation": "Drive is an action, so we need the adverb carefully."}, {"w1": "listen", "w2": "carefully", "type": "Situational question.", "question": "The teacher gives important instructions. What should students do?", "options": ["Listen carefully.", "Listen careful.", "Be listen carefully."], "answer": ["Listen carefully."], "explanation": "Carefully describes how they listen."}, {"w1": "choose", "w2": "carefully", "type": "Grammar explanation.", "question": "Why do we say choose carefully?", "options": ["Because carefully describes the action choose.", "Because carefully describes a person.", "Because carefully is a noun."], "answer": ["Because carefully describes the action choose."], "explanation": "Adverbs often describe actions: choose carefully, listen carefully, drive carefully."}, {"w1": "speak", "w2": "slowly", "type": "Which sentence sounds natural?", "question": "Which sentence sounds natural?", "options": ["Can you speak slowly, please?", "Can you speak slow, please?", "Can you slowly speakly, please?"], "answer": ["Can you speak slowly, please?"], "explanation": "Slowly is the adverb form and describes the action speak."}, {"w1": "walk", "w2": "slowly", "type": "Choose the correct sentence.", "question": "Choose the correct sentence.", "options": ["He walks slowly because he is tired.", "He walks slow because he is tired.", "He is slowly walker."], "answer": ["He walks slowly because he is tired."], "explanation": "Slowly describes how he walks."}, {"w1": "recover", "w2": "slowly", "type": "Complete the sentence.", "question": "Complete the sentence: After the illness, she recovered ____.", "options": ["slow", "slowly", "lively"], "answer": ["slowly"], "explanation": "Recover is an action/process, so slowly is needed."}, {"w1": "learn", "w2": "quickly", "type": "Choose all correct answers.", "question": "Choose all correct answers.", "options": ["Children often learn quickly.", "Children are quickly learners.", "Some people are quick learners."], "answer": ["Children often learn quickly.", "Some people are quick learners."], "explanation": "Learn quickly describes an action. Quick learner describes a person."}, {"w1": "answer", "w2": "quickly", "type": "Which word is needed?", "question": "He answered the email very ____.", "options": ["quick", "quickly", "good"], "answer": ["quickly"], "explanation": "Answered is a verb, so quickly describes the action."}, {"w1": "understand", "w2": "quickly", "type": "Same or different meaning?", "question": "Are these the same? She understands quickly. / She is a quick student.", "options": ["Exactly the same.", "Related, but not exactly the same.", "Both are incorrect."], "answer": ["Related, but not exactly the same."], "explanation": "Understands quickly describes an action/ability in the moment. A quick student describes the person."}, {"w1": "explain", "w2": "clearly", "type": "Find the mistake.", "question": "Find the mistake: She explains grammar clear.", "options": ["explains", "clear", "grammar"], "answer": ["clear"], "explanation": "Explain is an action. We need clearly: She explains grammar clearly."}, {"w1": "answer", "w2": "politely", "type": "Situational question.", "question": "A customer asks an angry question. What should the worker do?", "options": ["Answer politely.", "Answer polite.", "Be answer politely."], "answer": ["Answer politely."], "explanation": "Politely describes the manner of answering."}, {"w1": "react", "w2": "calmly", "type": "Choose the correct sentence.", "question": "Choose the correct sentence.", "options": ["She reacted calmly.", "She reacted calm.", "She was reacted calmly."], "answer": ["She reacted calmly."], "explanation": "Calmly describes how she reacted."}, {"w1": "argue", "w2": "loudly", "type": "Can we say this?", "question": "Can we say: They argued loudly?", "options": ["Yes, loudly describes how they argued.", "No, loudly can describe only music.", "No, say: They argued loudful."], "answer": ["Yes, loudly describes how they argued."], "explanation": "Loudly is an adverb and can describe speaking, arguing, singing, etc."}, {"w1": "speak", "w2": "quietly", "type": "Choose the correct question.", "question": "Choose the correct question.", "options": ["Could you speak quietly?", "Could you speak quiet?", "Could you quietly speaker?"], "answer": ["Could you speak quietly?"], "explanation": "Quietly describes the action speak."}, {"w1": "travel", "w2": "safely", "type": "Grammar explanation.", "question": "Why is safely correct in travel safely?", "options": ["It describes how someone travels.", "It describes the noun travel.", "It means the same as safe country."], "answer": ["It describes how someone travels."], "explanation": "Safely is an adverb. Safe is an adjective."}, {"w1": "sing", "w2": "badly", "type": "Complete the sentence.", "question": "Complete the sentence: I love karaoke, but I sing ____.", "options": ["bad", "badly", "terrible"], "answer": ["badly"], "explanation": "Badly describes the action sing."}, {"w1": "write exams", "w2": "badly", "type": "Which sentence sounds natural?", "question": "Which sentence sounds natural?", "options": ["He writes exams badly when he is stressed.", "He writes exams bad when he is stressed.", "He is badly exam writer."], "answer": ["He writes exams badly when he is stressed."], "explanation": "Badly describes how he performs in exams."}, {"w1": "remember names", "w2": "easily", "type": "Which word is needed?", "question": "She remembers names ____.", "options": ["easy", "easily", "good"], "answer": ["easily"], "explanation": "Easily describes the action remember."}, {"w1": "neighbour", "w2": "friendly", "type": "Which sentence describes a person and which describes an action?", "question": "Which sentence describes a person?", "options": ["My neighbour is friendly.", "My neighbour speaks friendly.", "My neighbour friendly speaks."], "answer": ["My neighbour is friendly."], "explanation": "Friendly is usually an adjective. It describes a person."}, {"w1": "colleague", "w2": "helpful", "type": "Choose the correct sentence.", "question": "Choose the correct sentence.", "options": ["My colleague is helpful.", "My colleague helps helpful.", "My colleague works helpful."], "answer": ["My colleague is helpful."], "explanation": "Helpful describes the noun colleague."}, {"w1": "country", "w2": "safe", "type": "Can we say this?", "question": "Can we say: This country is safely?", "options": ["Yes, it is correct.", "No, say: This country is safe.", "No, say: This country safe is."], "answer": ["No, say: This country is safe."], "explanation": "Safe is an adjective after be. Safely describes an action."}, {"w1": "weather", "w2": "terrible", "type": "Find the mistake.", "question": "Find the mistake: The weather is terribly today.", "options": ["weather", "terribly", "today"], "answer": ["terribly"], "explanation": "Weather is a noun, so we need the adjective terrible."}, {"w1": "restaurant", "w2": "quiet", "type": "Choose all correct answers.", "question": "Choose all correct answers.", "options": ["The restaurant is quiet.", "We ate quietly in the restaurant.", "The restaurant is quietly."], "answer": ["The restaurant is quiet.", "We ate quietly in the restaurant."], "explanation": "Quiet describes a place. Quietly describes an action."}, {"w1": "place", "w2": "lovely", "type": "Complete the sentence.", "question": "Complete the sentence: It is a ____ place for dinner.", "options": ["lovely", "lovelily", "well"], "answer": ["lovely"], "explanation": "Lovely is an adjective. It describes the noun place."}, {"w1": "city", "w2": "lively", "type": "Same or different meaning?", "question": "Are these the same? The city is lively. / The city is alive.", "options": ["Exactly the same.", "Different. Lively means full of life and energy.", "Both mean lonely."], "answer": ["Different. Lively means full of life and energy."], "explanation": "Lively means active and energetic. Alive means not dead."}, {"w1": "person", "w2": "lonely", "type": "Choose the correct sentence.", "question": "Choose the correct sentence.", "options": ["He is a lonely person.", "He is a lonelily person.", "He behaves lonely every day."], "answer": ["He is a lonely person."], "explanation": "Lonely is an adjective and describes a person or feeling."}, {"w1": "room", "w2": "messy", "type": "Which sentence sounds natural?", "question": "Which sentence sounds natural?", "options": ["The room is messy.", "The room is messily.", "The room messies."], "answer": ["The room is messy."], "explanation": "Messy is an adjective. It describes the room."}, {"w1": "customer", "w2": "rude", "type": "Situational question.", "question": "A customer speaks in an impolite way. What can you say?", "options": ["The customer is rude.", "The customer speaks rudeful.", "The customer is rudely person."], "answer": ["The customer is rude."], "explanation": "Rude describes the customer. Rudely describes an action."}, {"w1": "teacher", "w2": "patient", "type": "Grammar explanation.", "question": "Why do we say a patient teacher?", "options": ["Because patient describes the noun teacher.", "Because patient describes an action.", "Because patiently is a noun."], "answer": ["Because patient describes the noun teacher."], "explanation": "Patient is an adjective. Patiently is the adverb."}];
+
+const themes = [
+  ['#e8dccb','#b7c8b5','#263635'], ['#d8e2ea','#f0d4c2','#263845'],
+  ['#ddd2ee','#f4e8d7','#342f45'], ['#f2d0c7','#d7e6da','#3d3430'],
+  ['#c8ddd6','#f5eddd','#1f4544'], ['#f1dfb9','#c9d6cf','#3b3528'],
+  ['#dbe0d5','#9fb8b2','#173d3f'], ['#edd5df','#d7dde9','#3c2c37'],
+  ['#f4cfad','#f3eadc','#4b3525'], ['#cedbdc','#ebe3cf','#24454a'],
+  ['#d5c5e8','#c8d9ca','#392f4f'], ['#e9d7c4','#aebec6','#293846'],
+  ['#f0cfc2','#dde7d1','#4b302b'], ['#c9d8ed','#f2ead7','#263a57'],
+  ['#d8ccb8','#bdd4c7','#26332f'], ['#ead2e2','#f5dfbf','#462d3e'],
+  ['#c1d6cb','#e7e1d4','#203b31'], ['#d9e4e2','#c8b9d9','#263c42'],
+  ['#f2d6bd','#c5d6dc','#493827'], ['#d4e1c7','#f1dddc','#34412a'],
+  ['#d3dae8','#e8d1c0','#2c384b'], ['#e6d8f2','#c9d7c3','#372a48'],
+  ['#f1e4cb','#b9cfc9','#333126'], ['#cbd8d3','#f0c9c3','#29403d'],
+  ['#efd1b3','#d8e4cf','#4a3322'], ['#d7c6d9','#c2d8e0','#382d3c'],
+  ['#e7decf','#a9c2be','#293d3c'], ['#f2d7c6','#cdd9eb','#4b3228'],
+  ['#c8d6bd','#f3e9d8','#2f3e29'], ['#d0dce7','#eddbca','#2d3f50'],
+  ['#eac7d4','#d6e2d8','#472d38'], ['#d5cfc4','#b7c9d0','#30363b'],
+  ['#f3ddba','#d0dad4','#463721'], ['#c8ded7','#ead9e5','#26423e'],
+  ['#e8d4be','#bdcfc2','#403528'], ['#d9e0cc','#c3d8e6','#303d2d'],
+  ['#f0cbc2','#e4decf','#4b2e29'], ['#c9d2e7','#e8d8c7','#2d3551'],
+  ['#ded2ec','#dce5cf','#352b47'], ['#ecd6b8','#cadbd6','#493721'],
+  ['#d1dfda','#f0d0d8','#273f3c'], ['#e5dccd','#b8c8d6','#33404d'],
+  ['#f1d4c8','#c8d9c9','#44312d'], ['#d4dce2','#eee0c9','#293944']
+];
+
+let current = 0;
+let correct = 0;
+let answeredCorrectly = false;
+let selected = new Set();
+
+const cardEl = document.getElementById('card');
+const frontEl = document.getElementById('front');
+const backEl = document.getElementById('back');
+const word1El = document.getElementById('word1');
+const word2El = document.getElementById('word2');
+const taskTypeEl = document.getElementById('taskType');
+const questionEl = document.getElementById('question');
+const optionsEl = document.getElementById('options');
+const feedbackEl = document.getElementById('feedback');
+const actionsEl = document.getElementById('actions');
+const scoreEl = document.getElementById('score');
+
+function setTheme(i) {
+  const [c1, c2, ink] = themes[i % themes.length];
+  frontEl.style.setProperty('--c1', c1);
+  frontEl.style.setProperty('--c2', c2);
+  frontEl.style.setProperty('--ink', ink);
+  backEl.style.setProperty('--c1', c1);
+  backEl.style.setProperty('--c2', c2);
+  backEl.style.setProperty('--ink', ink);
+}
+
+function isMulti(card) {
+  return card.type === 'Choose all correct answers.';
+}
+
+function arraysEqualSet(a, b) {
+  if (a.size !== b.length) return false;
+  return b.every(x => a.has(x));
+}
+
+function renderCard() {
+  if (current >= cards.length) {
+    document.querySelector('.stage').innerHTML = `<div class="card-wrap"><div class="face front" style="position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#d8e2da,#f1dccb);"><div class="done">Game finished<br><span style="font-size:.55em;font-weight:750;">Correct answers: ${correct} / ${cards.length}</span></div></div></div>`;
+    scoreEl.textContent = `Correct answers: ${correct} / ${cards.length}`;
+    return;
+  }
+
+  const c = cards[current];
+  answeredCorrectly = false;
+  selected = new Set();
+  cardEl.classList.remove('flipped');
+  setTheme(current);
+
+  word1El.textContent = c.w1;
+  word2El.textContent = c.w2;
+  taskTypeEl.textContent = c.type;
+  questionEl.textContent = c.question;
+  feedbackEl.innerHTML = '';
+  actionsEl.innerHTML = '';
+  optionsEl.innerHTML = '';
+
+  c.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      handleAnswer(opt, btn);
+    });
+    optionsEl.appendChild(btn);
+  });
+}
+
+function handleAnswer(opt, btn) {
+  const c = cards[current];
+  if (answeredCorrectly) return;
+
+  if (isMulti(c)) {
+    if (selected.has(opt)) {
+      selected.delete(opt);
+      btn.classList.remove('selected');
+    } else {
+      selected.add(opt);
+      btn.classList.add('selected');
+    }
+
+    actionsEl.innerHTML = '';
+    const check = document.createElement('button');
+    check.textContent = 'Check answer';
+    check.className = 'next';
+    check.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const ok = arraysEqualSet(selected, c.answer);
+      showFeedback(ok, c);
+    });
+    actionsEl.appendChild(check);
+  } else {
+    showFeedback(c.answer.includes(opt), c);
+  }
+}
+
+function showFeedback(ok, c) {
+  if (ok) {
+    answeredCorrectly = true;
+    correct++;
+    scoreEl.textContent = `Correct answers: ${correct} / ${cards.length}`;
+    feedbackEl.innerHTML = `<strong>✓ Correct!</strong>${c.explanation}`;
+    actionsEl.innerHTML = '';
+    const next = document.createElement('button');
+    next.className = 'next';
+    next.textContent = current === cards.length - 1 ? 'Finish' : 'Next Card';
+    next.addEventListener('click', (e) => {
+      e.stopPropagation();
+      current++;
+      renderCard();
+    });
+    actionsEl.appendChild(next);
+  } else {
+    feedbackEl.innerHTML = `<strong>✗ Try again!</strong>${c.explanation}`;
+  }
+}
+
+cardEl.addEventListener('click', () => {
+  if (!cardEl.classList.contains('flipped')) {
+    cardEl.classList.add('flipped');
+  }
+});
+
+renderCard();
+</script>
+</body>
+</html>
