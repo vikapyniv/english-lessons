@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>✈️ Airport Chaos | 10 Hard Stories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #cfe7fa;
+            font-family: system-ui, 'Segoe UI', 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .game {
+            max-width: 650px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 36px;
+            overflow: hidden;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: #2c7ab1;
+            color: white;
+            padding: 20px 18px;
+            text-align: center;
+        }
+        .header h2 {
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+        }
+        .header p {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .warning {
+            background: #e3f0fa;
+            font-size: 0.7rem;
+            text-align: center;
+            padding: 8px;
+            color: #1e6a9f;
+            font-weight: 500;
+        }
+        .chat {
+            padding: 24px 20px;
+            background: #f0f6fc;
+            min-height: 480px;
+            display: flex;
+            flex-direction: column;
+        }
+        .bubble {
+            background: #ffffff;
+            padding: 18px 20px;
+            border-radius: 28px;
+            margin-bottom: 20px;
+            border-left: 6px solid #5ba4cf;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: #1f2e3a;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .bubble .name {
+            font-weight: 800;
+            color: #1c6c9e;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+        .vocab-badge {
+            background: #5ba4cf;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .status {
+            background: #d4e6f5;
+            color: #1a5a82;
+            padding: 10px 14px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            margin: 12px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0 10px;
+        }
+        .btn {
+            background: white;
+            border: 1.8px solid #5ba4cf;
+            border-radius: 60px;
+            padding: 12px 18px;
+            font-size: 0.88rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #1b5a7a;
+        }
+        .btn:hover {
+            background: #e1f0fa;
+            border-color: #2c7ab1;
+        }
+        .reset {
+            background: #5ba4cf;
+            border: none;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .reset:hover {
+            background: #2c7ab1;
+        }
+        .menu-btn {
+            background: #2c7ab1;
+            border: none;
+        }
+        .fired {
+            background: #fce4e1;
+            border-left-color: #d95b4a;
+        }
+        .win-style {
+            background: #e0f2e9;
+            border-left-color: #3b9b6e;
+        }
+        .footer {
+            font-size: 0.65rem;
+            text-align: center;
+            padding: 14px;
+            background: #e3eef6;
+            color: #4a6f88;
+        }
+        button {
+            font-family: inherit;
+        }
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 20px 0;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        .story-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: 0.1s;
+            border: 1px solid #cde3f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .story-card:hover {
+            background: #e9f3fa;
+            transform: scale(0.99);
+        }
+        .story-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            color: #1e5a82;
+        }
+        .story-desc {
+            font-size: 0.8rem;
+            color: #5a6e7a;
+        }
+    </style>
+</head>
+<body>
+<div class="game" id="gameRoot">
+    <div class="header">
+        <h2>🛫 AIRPORT CHAOS</h2>
+        <p>ALL answers look correct · ONLY ONE saves your job</p>
+    </div>
+    <div class="warning">⚠️ 10 real-life situations · Every option seems right · Think like a pro! ⚠️</div>
+    <div class="chat" id="chatZone"></div>
+</div>
+
+<script>
+    let currentScreen = 'menu';
+    let activeStory = null;
+    let storyStep = 0;
+    let storyData = null;
+
+    const STORIES = {
+        angryDad: {
+            title: "😤 ANGRY DAD",
+            desc: "Baggage reclaim · Missing stroller · Connecting flight in 40 min",
+            vocab: "baggage reclaim · delayed · boarding pass",
+            steps: [
+                {
+                    role: "😡 FURIOUS FATHER",
+                    text: `"I've been waiting 30 minutes! My daughter's stroller never came out at baggage reclaim. The screen says 'delayed' for luggage. We have a connecting flight to Paris in 40 minutes! What do I do?"`,
+                    options: [
+                        { text: "File lost luggage report. He runs to gate. Deliver stroller tomorrow.", nextStep: -1, failMsg: "Father: 'Tomorrow?! My daughter can't walk for a day!' He misses his flight waiting for you. Manager fires you. ❌ FIRED" },
+                        { text: "Give rental stroller. Send him to gate. Offer to deliver luggage to final destination.", nextStep: 1, failMsg: null },
+                        { text: "Apologize. Tell him buy new stroller at duty-free. Offer discount voucher.", nextStep: -1, failMsg: "Duty-free doesn't sell strollers. He wastes 15 minutes looking. Misses flight. Sues airport. YOU ARE FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "😤 DAD (still angry but listening)",
+                    text: `"Okay, we have a rental stroller. But now the departure lounge screen shows our flight is delayed by 2 hours. My daughter is tired and hungry. A restaurant nearby is expensive. What's your advice?"`,
+                    options: [
+                        { text: "Stay near gate. Delayed flights can board suddenly. I'll bring free snacks.", nextStep: 2, failMsg: null },
+                        { text: "Go to airport hotel. Rest for 2 hours and come back.", nextStep: -1, failMsg: "Hotel check-in takes 40 minutes. The flight unexpectedly boards early. Family misses it. Father screams at you. FIRED. ❌" },
+                        { text: "Leave airport to eat at nearby café. It's cheaper and faster.", nextStep: -1, failMsg: "They leave secure area. Going back through security takes 1 hour. Flight departs without them. YOU ARE FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 VICTORY!",
+                    text: `The father stays near the gate. The flight boards after 90 minutes. His daughter got free snacks from you. He shakes your hand and thanks you. Your boss gives you a raise. YOU SURVIVED! 🎉`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        securityMess: {
+            title: "🔍 SECURITY MESS",
+            desc: "Security checkpoint · Passenger with forbidden items",
+            vocab: "security checkpoint · carry-on · gate · take off",
+            steps: [
+                {
+                    role: "😰 PANICKING PASSENGER",
+                    text: `"I'm at the security checkpoint. My carry-on has a power bank, perfume bottle, laptop, and a Swiss knife I forgot about! My flight to Tokyo takes off in 25 minutes. What do I do?"`,
+                    options: [
+                        { text: "Confiscate knife. Keep everything else. Send to fast lane.", nextStep: -1, failMsg: "Perfume bottle is over 100ml — security stops him again. He misses the flight. Supervisor fires you. ❌ FIRED" },
+                        { text: "Put knife and perfume in small bag. Check at check-in desk. Run back.", nextStep: -1, failMsg: "Check-in desk queue is 20 minutes. Impossible. He misses take off. Passenger cries. FIRED. ❌" },
+                        { text: "Throw away knife and perfume (too big). Power bank and laptop fine. Run to gate NOW.", nextStep: 1, failMsg: null }
+                    ]
+                },
+                {
+                    role: "🏃‍♂️ BREATHLESS PASSENGER",
+                    text: `"I threw away the perfume and knife. Now I'm at gate 42. But my boarding pass says gate 42A — I can't find it! The screens show 'final call'. My phone is dead. What now?"`,
+                    options: [
+                        { text: "Gate 42A is downstairs. Run! I'll call gate agent to wait 2 minutes.", nextStep: 2, failMsg: null },
+                        { text: "Too late. Go to check-in desk for new flight tomorrow.", nextStep: -1, failMsg: "Next flight is in 14 hours. He misses a wedding. FIRED. ❌" },
+                        { text: "Wait here. Maybe flight is delayed. Check screen in 10 minutes.", nextStep: -1, failMsg: "Flight takes off without him. He sues the airport. YOU ARE FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 YOU DID IT!",
+                    text: `The passenger runs downstairs, finds gate 42A, boards just as doors close. He waves at you from the window. Your manager saw everything and promotes you. WELL DONE!`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        customsOfficer: {
+            title: "📄 CUSTOMS OFFICER",
+            desc: "Customs · Passenger with undeclared goods",
+            vocab: "customs · land · duty-free shop · baggage reclaim",
+            steps: [
+                {
+                    role: "🌍 TOURIST",
+                    text: `"I just landed from Dubai. I bought 3 bottles of expensive perfume at the duty-free shop. Also some food — dates and nuts. Do I need to declare everything at customs? My receipt is somewhere in my carry-on."`,
+                    options: [
+                        { text: "Food is fine. Perfume under 500ml fine. Walk through green channel.", nextStep: -1, failMsg: "Customs randomly searches him. Finds perfume over limit. Fines him $500. He blames you. FIRED. ❌" },
+                        { text: "Declare everything honestly. Fill out this form. Perfume may have small tax.", nextStep: 1, failMsg: null },
+                        { text: "Put one perfume bottle in pocket. Hide dates inside jacket. Don't declare.", nextStep: -1, failMsg: "Security cameras see you. You're arrested for helping smuggling. PERMANENTLY FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "😅 RELIEVED TOURIST",
+                    text: `"I declared everything. They charged me $12 tax. Easy! Now I need to get to baggage reclaim for my suitcase. Then go to departures for my connecting flight to Rome. It leaves in 45 minutes. Fastest way?"`,
+                    options: [
+                        { text: "Go through baggage reclaim first, then shuttle to departures. 30 minutes.", nextStep: -1, failMsg: "Baggage belt breaks. He waits 40 minutes. Misses flight. FIRED. ❌" },
+                        { text: "Skip baggage reclaim. Suitcase sent to Rome automatically. Go to departures directly.", nextStep: 2, failMsg: null },
+                        { text: "Take train between terminals. Faster. But first buy snack at duty-free.", nextStep: -1, failMsg: "Duty-free distracts him. He misses train. Flight gone. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 SUCCESS!",
+                    text: `He skips baggage reclaim, goes straight to the connection desk, and makes his flight to Rome with 10 minutes to spare. He sends you a gift from Italy. YOU KEEP YOUR JOB! 🎉`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        gateAgent: {
+            title: "🏃 GATE AGENT",
+            desc: "Gate · Final call · Passenger with problems",
+            vocab: "gate · board · take off · boarding pass · carry-on",
+            steps: [
+                {
+                    role: "😫 DESPERATE PASSENGER",
+                    text: `"Final call for flight 847 to Chicago! My boarding pass is on my phone — battery died. My carry-on is 2kg overweight. The screen says 'gate closing in 3 minutes'. HELP ME!"`,
+                    options: [
+                        { text: "Print boarding pass at gate. Leave carry-on with me — I'll put on plane. Run to board.", nextStep: 1, failMsg: null },
+                        { text: "Go back to check-in desk to print pass and check bag.", nextStep: -1, failMsg: "Check-in desk is 15 minutes away. He misses take off. FIRED. ❌" },
+                        { text: "Pay $50 for overweight bag at gate. Then board.", nextStep: -1, failMsg: "Payment machine is broken. He wastes 5 minutes. Doors close. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "✈️ ON THE PLANE... BUT",
+                    text: `"I'm on the plane! Thank you! But now the captain says there's a 'technical problem' with the engine. They want everyone to deplane and wait in the departure lounge. Should I leave?"`,
+                    options: [
+                        { text: "Follow crew instructions. Leave calmly. Stay near gate. Don't go far.", nextStep: 2, failMsg: null },
+                        { text: "Refuse to leave. Stay in seat. They can't force you.", nextStep: -1, failMsg: "Security removes him from plane. He's banned from airline. FIRED. ❌" },
+                        { text: "Get off and go to baggage reclaim. Flight probably cancelled.", nextStep: -1, failMsg: "Flight fixed in 20 minutes. He misses it. Passenger furious. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 AMAZING!",
+                    text: `He leaves calmly, waits 25 minutes, and reboards. The flight takes off safely. He thanks you on social media. Your manager gives you a bonus. YOU WIN!`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        lostPassenger: {
+            title: "🗺️ LOST PASSENGER",
+            desc: "Departure lounge · Elderly passenger confused",
+            vocab: "departure lounge · gate · boarding pass · delayed · take off",
+            steps: [
+                {
+                    role: "👵 CONFUSED ELDERLY WOMAN",
+                    text: `"Dear, I'm lost. My boarding pass says 'Gate B23' but I'm in departure lounge A. My flight to Boston is at 2 PM. It's 1:45 PM now. The screen says 'on time'. Where do I go?"`,
+                    options: [
+                        { text: "B23 is in Terminal B. Take shuttle. 8 minutes. Run, you can make it!", nextStep: -1, failMsg: "She runs, falls, twists ankle. Ambulance comes. You're sued. FIRED. ❌" },
+                        { text: "B23 is far. Take shuttle. I'll call gate agent to wait 10 minutes. Here's a wheelchair.", nextStep: 1, failMsg: null },
+                        { text: "Don't worry. Stay here. Flight will be delayed. I'll check for you.", nextStep: -1, failMsg: "Flight not delayed. Takes off without her. She cries. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "😊 GRATEFUL WOMAN",
+                    text: `"Thank you for the wheelchair and calling ahead. I'm at gate B23 now. But my daughter was supposed to meet me in Boston. Her number is on my phone — battery is low. Can I borrow your charger?"`,
+                    options: [
+                        { text: "Sorry, no chargers for passengers. Ask at duty-free shop.", nextStep: -1, failMsg: "Duty-free doesn't have chargers. She panics, misses flight. FIRED. ❌" },
+                        { text: "Of course. Here's my charger. I'll write her name on paper — give to flight attendant.", nextStep: 2, failMsg: null },
+                        { text: "Don't worry. She'll find you at baggage reclaim automatically.", nextStep: -1, failMsg: "Daughter doesn't find her. Woman lost for hours. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 HERO!",
+                    text: `She charges her phone, calls her daughter, and boards the flight peacefully. She hugs you goodbye. Your supervisor gives you an award. YOU WIN! 🏆`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        overbookedFlight: {
+            title: "🎫 OVERBOOKED FLIGHT",
+            desc: "Gate · Airline overbooked · Volunteers needed",
+            vocab: "gate · boarding pass · take off · delayed · check-in desk",
+            steps: [
+                {
+                    role: "😤 ANGRY BUSINESSMAN",
+                    text: `"I have a confirmed boarding pass for flight 202 to Frankfurt. But the gate agent says the flight is overbooked by 3 seats. They're asking for volunteers to take a later flight. I have a meeting in 5 hours! What should I do?"`,
+                    options: [
+                        { text: "Fight for your seat. Refuse to volunteer. They'll remove someone else.", nextStep: -1, failMsg: "He argues loudly. Security removes him from gate. Banned from flight. FIRED. ❌" },
+                        { text: "Ask compensation. If $500 + hotel + next flight in 3 hours — take it.", nextStep: 1, failMsg: null },
+                        { text: "Give up your seat. Be nice. Airline will remember you.", nextStep: -1, failMsg: "Gives up seat. Next flight in 9 hours. Misses meeting. Company sues. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "💼 BUSINESSMAN (calmer)",
+                    text: `"The airline offers $800 and business class on the next flight in 4 hours. But I have a connecting flight after Frankfurt. Should I take the offer or keep my original seat?"`,
+                    options: [
+                        { text: "Keep original seat. $800 not worth missing connection.", nextStep: -1, failMsg: "Keeps seat but flight delayed 5 hours anyway. Gets nothing. Blames you. FIRED. ❌" },
+                        { text: "Take offer. Ask to rebook entire connection for free. $800 + business class good deal.", nextStep: 2, failMsg: null },
+                        { text: "Take offer but demand $1500. Don't accept less.", nextStep: -1, failMsg: "Demands $1500. Airline refuses. Loses both offers. Cries. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 WIN-WIN!",
+                    text: `He takes the $800 + business class. The airline rebooks his connection. He arrives 2 hours late but rested and rich. He sends you a thank-you email. YOUR JOB IS SAFE! 🎉`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        missedConnection: {
+            title: "⏰ MISSED CONNECTION",
+            desc: "Arrivals · Passenger missed connecting flight",
+            vocab: "arrivals · baggage reclaim · gate · boarding pass · delayed",
+            steps: [
+                {
+                    role: "😭 CRYING STUDENT",
+                    text: `"I landed from New York but my connection to Dublin was delayed. I ran to the gate but it was closed. They said I need to go to arrivals and rebook. I have no money for a hotel. What do I do?"`,
+                    options: [
+                        { text: "Go to baggage reclaim, get suitcase, then check-in desk. Ask for hotel voucher.", nextStep: 1, failMsg: null },
+                        { text: "Sleep in departure lounge. Free. Rebook tomorrow morning.", nextStep: -1, failMsg: "Sleeps in lounge. Security thinks homeless. Removed from airport. FIRED. ❌" },
+                        { text: "Call parents. Ask them to send money for hotel.", nextStep: -1, failMsg: "Parents asleep. Panics, misses rebooking window. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "😟 SCARED STUDENT",
+                    text: `"I got my suitcase from baggage reclaim. At the check-in desk, they said the next flight to Dublin is tomorrow at 6 AM. They won't give a hotel voucher because the delay was due to weather. What now?"`,
+                    options: [
+                        { text: "Go to information desk. Ask for cheap hotels near airport. Borrow my phone to book.", nextStep: 2, failMsg: null },
+                        { text: "Sleep on bench. I'll bring you a blanket.", nextStep: -1, failMsg: "Sleeps on bench. Suitcase stolen. Cries on TikTok. Airport fires you. ❌" },
+                        { text: "Rent a car and drive to Dublin.", nextStep: -1, failMsg: "Can't drive on other side of road. Gets lost. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 HAPPY STUDENT!",
+                    text: `She finds a cheap hostel, books it with your phone, and catches the 6 AM flight. She brings you coffee the next morning. YOU SAVED HER! 🎉`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        medicalEmergency: {
+            title: "🚑 MEDICAL EMERGENCY",
+            desc: "Departure lounge · Sick passenger before boarding",
+            vocab: "departure lounge · gate · board · take off · delayed",
+            steps: [
+                {
+                    role: "🤢 SICK PASSENGER",
+                    text: `"I'm at gate C8 waiting to board. I feel terrible — dizziness, nausea, cold sweat. My flight to Chicago takes off in 20 minutes. I don't want to miss it. What should I do?"`,
+                    options: [
+                        { text: "Board the flight. You'll feel better sitting down. Drink water.", nextStep: -1, failMsg: "Boards, has heart attack mid-flight. Emergency landing. FIRED. ❌" },
+                        { text: "Don't board. I'll call medic. Health more important. Airline will rebook.", nextStep: 1, failMsg: null },
+                        { text: "Go to duty-free, buy painkillers. Then board.", nextStep: -1, failMsg: "Collapses in duty-free. Ambulance comes. Family sues. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🩺 PASSENGER (with medic)",
+                    text: `"The medic says my blood pressure is very high. I shouldn't fly today. But the airline says rebooking fee is $300. I can't afford that. Help me."`,
+                    options: [
+                        { text: "Pay the fee. Your health is worth $300.", nextStep: -1, failMsg: "Pays, then finds fee should be waived for medical reasons. Angry. FIRED. ❌" },
+                        { text: "Ask for medical waiver. Get medic note. Airline MUST rebook for free.", nextStep: 2, failMsg: null },
+                        { text: "Fly anyway. Take medicine on plane.", nextStep: -1, failMsg: "Flies, gets worse, plane diverts. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 HEALTH FIRST!",
+                    text: `The airline waives the fee. He rebooks for tomorrow. He thanks you for saving his life. His wife sends flowers to your manager. YOU KEEP YOUR JOB! 🌸`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        lostPassport: {
+            title: "🪪 LOST PASSPORT",
+            desc: "Check-in desk · Passenger lost passport before flight",
+            vocab: "check-in desk · gate · boarding pass · customs · take off",
+            steps: [
+                {
+                    role: "😰 PANICKING TOURIST",
+                    text: `"I'm at the check-in desk. I CAN'T FIND MY PASSPORT! I had it 10 minutes ago at the café. My flight to Tokyo takes off in 1 hour. What do I do?"`,
+                    options: [
+                        { text: "Run back to café. Check under table. Ask staff.", nextStep: 1, failMsg: null },
+                        { text: "Go to your country's embassy. Emergency passport in 2 hours.", nextStep: -1, failMsg: "Embassy 1 hour away. Misses flight. No refund. FIRED. ❌" },
+                        { text: "Fly without passport. Explain at customs.", nextStep: -1, failMsg: "Arrested at gate. Lose your job. ❌" }
+                    ]
+                },
+                {
+                    role: "🏃 TOURIST (back from café)",
+                    text: `"The café staff found it! Thank you! But now my flight is boarding in 15 minutes. The check-in line is huge. How do I get my boarding pass fast?"`,
+                    options: [
+                        { text: "Use self-service kiosk. Print boarding pass there. Then run to security.", nextStep: 2, failMsg: null },
+                        { text: "Wait in check-in line. 30 minutes but safe.", nextStep: -1, failMsg: "Waits 30 minutes, misses gate closing. FIRED. ❌" },
+                        { text: "Jump the line. Tell everyone it's emergency.", nextStep: -1, failMsg: "People angry. Security removes him. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 PASSPORT SAVED!",
+                    text: `He prints his boarding pass at the kiosk, runs through security, and boards just as the doors close. He cries with joy. YOU ARE A HERO! 🏆`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        },
+        wheelchairPassenger: {
+            title: "♿ WHEELCHAIR PASSENGER",
+            desc: "Gate · Passenger with disability needs assistance",
+            vocab: "gate · board · take off · departure lounge · boarding pass",
+            steps: [
+                {
+                    role: "♿ PASSENGER IN WHEELCHAIR",
+                    text: `"I requested wheelchair assistance when I booked my flight. But no one is here. My gate is 15 minutes away. My flight takes off in 30 minutes. I can't walk that far. What do I do?"`,
+                    options: [
+                        { text: "I'll push you to gate myself. Let's go now.", nextStep: 1, failMsg: null },
+                        { text: "Wait here. I'll call someone. Might take 20 minutes.", nextStep: -1, failMsg: "Waits 20 minutes, no one comes. Misses flight. FIRED. ❌" },
+                        { text: "Crawl to gate. Slow but possible.", nextStep: -1, failMsg: "Attempts to crawl. Passengers film. Viral video. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "😊 GRATEFUL PASSENGER",
+                    text: `"Thank you for pushing me! We're at the gate. But the gate agent says my seat was given to someone else because I was 'late'. What do I do now?"`,
+                    options: [
+                        { text: "Demand manager. This is discrimination. Must give you seat.", nextStep: 2, failMsg: null },
+                        { text: "Accept next flight. Not worth fighting.", nextStep: -1, failMsg: "Accepts next flight but cancelled. Stuck 2 days. FIRED. ❌" },
+                        { text: "Sue airline. I'll be witness.", nextStep: -1, failMsg: "Lawsuit takes 2 years. Lose job. FIRED. ❌" }
+                    ]
+                },
+                {
+                    role: "🏆 JUSTICE!",
+                    text: `The manager gives him a business class seat. He boards and waves goodbye. He writes a great review about you. YOU ARE PROMOTED! 🎉`,
+                    options: [],
+                    isWin: true
+                }
+            ]
+        }
+    };
+
+    function renderMenu() {
+        const container = document.getElementById('chatZone');
+        let html = `
+            <div class="bubble" style="background:#eef4fa;">
+                <div class="name">🎮 CHOOSE YOUR MISSION</div>
+                <div style="font-size:0.9rem;">⚠️ 10 real airport situations · ALL answers look correct · ONLY ONE saves your job</div>
+            </div>
+            <div class="menu-grid">
+        `;
+        for (const [key, story] of Object.entries(STORIES)) {
+            html += `
+                <div class="story-card" data-story="${key}">
+                    <div class="story-title">${story.title}</div>
+                    <div class="story-desc">${story.desc}</div>
+                    <div style="font-size:0.7rem; margin-top:8px; color:#4a7a9c;">📖 ${story.vocab}</div>
+                </div>
+            `;
+        }
+        html += `</div><div class="footer">✈️ 10 stories · discuss with classmates · think before you click</div>`;
+        container.innerHTML = html;
+        document.querySelectorAll('.story-card').forEach(card => {
+            card.addEventListener('click', () => {
+                startStory(card.getAttribute('data-story'));
+            });
+        });
+    }
+
+    function startStory(storyId) {
+        currentScreen = 'story';
+        activeStory = storyId;
+        storyData = STORIES[storyId];
+        storyStep = 0;
+        renderStoryStep();
+    }
+
+    function renderStoryStep() {
+        const container = document.getElementById('chatZone');
+        if (!storyData || storyStep >= storyData.steps.length) {
+            currentScreen = 'menu';
+            renderMenu();
+            return;
+        }
+        const step = storyData.steps[storyStep];
+        const isWinStep = step.isWin === true;
+        
+        let html = `
+            <div class="vocab-badge">📘 ${storyData.vocab}</div>
+            <div class="bubble ${isWinStep ? 'win-style' : ''}">
+                <div class="name">${step.role}</div>
+                <div>${step.text}</div>
+            </div>
+            <div class="status">⚠️ Step ${storyStep+1}/${storyData.steps.length} · Only ONE answer is correct · Think carefully!</div>
+        `;
+        
+        if (step.options && step.options.length > 0) {
+            html += `<div class="options">`;
+            for (let i=0; i<step.options.length; i++) {
+                const opt = step.options[i];
+                html += `<button class="btn" data-opt-index="${i}">${opt.text}</button>`;
+            }
+            html += `</div>`;
+        } else {
+            html += `<button class="btn reset menu-btn" id="backToMenuBtn">🏠 BACK TO MAIN MENU</button>`;
+        }
+        
+        html += `<div class="footer">✈️ gate · check-in · customs · baggage reclaim · boarding pass · delayed · take off · arrivals · departure lounge</div>`;
+        container.innerHTML = html;
+        
+        if (step.options && step.options.length > 0) {
+            for (let i=0; i<step.options.length; i++) {
+                const btn = container.querySelector(`.btn[data-opt-index="${i}"]`);
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        const chosen = step.options[i];
+                        if (chosen.nextStep === -1) {
+                            showFailAndRestart(chosen.failMsg || "❌ WRONG CHOICE. The passenger is furious. Manager fires you on the spot. Restarting story...");
+                        } else {
+                            storyStep = chosen.nextStep;
+                            renderStoryStep();
+                        }
+                    });
+                }
+            }
+        }
+        
+        const backBtn = document.getElementById('backToMenuBtn');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                currentScreen = 'menu';
+                renderMenu();
+            });
+        }
+    }
+    
+    function showFailAndRestart(message) {
+        const container = document.getElementById('chatZone');
+        container.innerHTML = `
+            <div class="bubble fired">
+                <div class="name">💀 FIRED</div>
+                <div>${message}</div>
+            </div>
+            <button class="btn reset" id="restartStoryBtn">🔄 TRY AGAIN (same story)</button>
+            <button class="btn reset menu-btn" id="failToMenuBtn">🏠 MAIN MENU</button>
+            <div class="footer">✈️ Wrong answer = restart from beginning · Discuss with your group!</div>
+        `;
+        const restartBtn = document.getElementById('restartStoryBtn');
+        if (restartBtn) {
+            restartBtn.addEventListener('click', () => {
+                if (activeStory) startStory(activeStory);
+                else { currentScreen='menu'; renderMenu(); }
+            });
+        }
+        const menuBtn = document.getElementById('failToMenuBtn');
+        if (menuBtn) {
+            menuBtn.addEventListener('click', () => {
+                currentScreen = 'menu';
+                renderMenu();
+            });
+        }
+    }
+    
+    renderMenu();
+</script>
+</body>
+</html>
