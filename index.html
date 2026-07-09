@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Guess the Word</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f7fa;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 30px 15px;
+}
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 35px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2a7de1;
+}
+
+.progress-wrapper {
+    width: 100%;
+    height: 12px;
+    background: #e7ebf0;
+    border-radius: 30px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progress {
+    height: 100%;
+    background: #2a7de1;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.top-info {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 1rem;
+}
+
+.clue-box {
+    background: #f8fafc;
+    border-left: 5px solid #2a7de1;
+    padding: 25px;
+    border-radius: 12px;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.inputs {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.field {
+    flex: 1;
+    min-width: 220px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #d6dbe1;
+    border-radius: 10px;
+    font-size: 1.1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2a7de1;
+}
+
+.buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+button {
+    border: none;
+    background: #2a7de1;
+    color: #ffffff;
+    padding: 14px 22px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.secondary {
+    background: #eef2f7;
+    color: #222;
+}
+
+.feedback {
+    min-height: 35px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.correct {
+    color: #2ca44f;
+}
+
+.wrong {
+    color: #d63d3d;
+}
+
+.info {
+    color: #2a7de1;
+}
+
+.scoreboard {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: #555;
+    font-size: 1.05rem;
+}
+
+.pronoun {
+    color: #2a7de1;
+    font-weight: 700;
+}
+
+.finish {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.finish h2 {
+    color: #2a7de1;
+    margin-bottom: 20px;
+}
+
+.finish p {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.answer-word {
+    color: #2a7de1;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+@media (max-width: 700px) {
+    .container {
+        padding: 25px;
+    }
+
+    .clue-box {
+        font-size: 1.15rem;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🔍 Guess the Word</h1>
+
+    <div class="progress-wrapper">
+        <div class="progress" id="progress"></div>
+    </div>
+
+    <div id="game"></div>
+</div>
+
+<script>
+const cards = [
+    { word: "CASH", twoWords: false, clues: ["I don't like to use it because I can't track my spending.", "You need to have it physically, but some shops don't accept it anymore.", "I pay with it when I want to control my budget, but I need to go to an ATM first."] },
+    { word: "BASKET", twoWords: false, clues: ["I add things to it, but I don't always buy them immediately.", "You can leave it for days, and the website remembers what you put in it.", "On a shopping website, you click the button to add it, and then you go to checkout."] },
+    { word: "DELIVERY DRIVER", twoWords: true, clues: ["He always arrives late, and I never know when to expect him.", "I always meet him at the threshold.", "He brings packages to my house, and I always thank him for it."] },
+    { word: "SHOP ASSISTANT", twoWords: true, clues: ["She wears a badge with her name on it, but I never remember it.", "She spends all day on her feet, surrounded by things she doesn't own.", "This woman helps you find things in a store — you can ask her for anything."] },
+    { word: "SUPERMARKET", twoWords: false, clues: ["My whole family goes to this place, and it takes us two hours to finish.", "We never leave it with empty hands — we always carry something out.", "We buy everything there — food, drinks, even clothes sometimes."] },
+    { word: "ONLINE SHOPPING", twoWords: true, clues: ["I know you all do this, but I prefer to buy things in person.", "You can do it from home, and you don't need to go outside.", "When you buy things on the internet, you are doing this."] },
+    { word: "SHOES", twoWords: false, clues: ["I buy them online, but they never fit me properly.", "I try them on at home, but they are always too small or too big.", "You wear these on your feet."] },
+    { word: "REFUND", twoWords: false, clues: ["The shop refused to give me this, and it made me very angry.", "I asked them for it, but they said I was too late.", "When you return something, you get your money back."] },
+    { word: "TRY ON", twoWords: true, clues: ["You can't do this online, but you can do it in a shop.", "It changes how you see yourself.", "You need a changing room to do this. You should always do it before you pay."] },
+    { word: "WEBSITE", twoWords: false, clues: ["My parents don't trust it, but they still use it to buy things.", "They compare prices on different ones before buying.", "Amazon, Ozon, AliExpress — these are all examples of a website."] },
+    { word: "RECEIPT", twoWords: false, clues: ["My girlfriend always asks for it, but I throw it away immediately.", "She keeps it in case we need to return something.", "The cashier gives you a paper with the price."] },
+    { word: "GADGETS", twoWords: false, clues: ["My husband buys them all the time, but he never uses them.", "He spends too much money on them, and I don't understand why.", "Phones, laptops, tablets — these are all electronic gadgets."] },
+    { word: "SHOPPING LIST", twoWords: true, clues: ["My wife and I always forget it at home.", "We write it before we go, but we never look at it.", "You write down what you need to buy on this piece of paper."] },
+    { word: "CARD", twoWords: false, clues: ["I use it every day.", "It fits in my pocket, but it holds more than my wallet does.", "I need to enter my PIN to use it. I always forget it."] },
+    { word: "CASHIER", twoWords: false, clues: ["He sits all day but never gets comfortable.", "He touches more money in an hour than most people see in a month, but none of it belongs to him.", "This is the person who takes your money in a shop — you see him every time you pay."] },
+    { word: "FURNITURE", twoWords: false, clues: ["My sister wants to buy it for our new apartment, but we don't have space.", "She spends hours looking at it online.", "Tables, chairs, sofas — these are all types of furniture."] },
+    { word: "BOOKS", twoWords: false, clues: ["My friends gave them to her for her birthday.", "They are on her shelf now, and she wants to give them back.", "You read these in your free time."] },
+    { word: "FOOD", twoWords: false, clues: ["We always buy it from the local market.", "We need it every day, and we can't live without it.", "You eat this to survive."] },
+    { word: "SHOPPING", twoWords: false, clues: ["Can you join us for this on Saturday?", "We love doing this together, and you always find the best deals.", "This is the activity of buying things from shops."] },
+    { word: "PACKAGE", twoWords: false, clues: ["I love opening it when it arrives.", "You need scissors to open it.", "This is the box or envelope your online order comes in — I can't wait to open it."] },
+    { word: "GIFT", twoWords: false, clues: ["She bought it for him, but he didn't like it.", "He told her he loved it, but I could tell he was lying.", "You give this to someone on their birthday."] },
+    { word: "DRESS", twoWords: false, clues: ["I bought it for her, but she didn't like it.", "She tried it on, but it didn't fit.", "This is a piece of clothing that women wear."] },
+    { word: "ORDER", twoWords: false, clues: ["I do it online because it saves me time.", "My husband says I do it too often, and she — my sister — agrees with him.", "But you know what? It is so easy! You click a button on a website, and it is done."] },
+    { word: "CHOOSE", twoWords: false, clues: ["I hate doing this because there are too many options.", "My girlfriend spends five minutes and makes a decision.", "When you have many options and you need to pick one, you choose it."] },
+    { word: "FLOWERS", twoWords: false, clues: ["My husband buys them for me on special occasions, but he always forgets what kind I like.", "They are beautiful, but they die so quickly.", "These are colourful and beautiful — you give them to someone you love, especially on birthdays or anniversaries."] },
+    { word: "SUNGLASSES", twoWords: false, clues: ["I wear them every summer, but I always lose them.", "They make me feel like a movie star.", "You wear these on your eyes when it is sunny — they protect your eyes from the light."] },
+    { word: "COFFEE", twoWords: false, clues: ["It is the first thing I think about when I wake up.", "Without it, we would all be grumpy and tired.", "This is a dark drink that you drink in the morning to wake up — you buy it in a café or make it at home."] }
+];
+
+let currentCard = 0;
+let clueIndex = 0;
+let score = 0;
+let wrongGuesses = 0;
+let correctAnswers = 0;
+
+const game = document.getElementById("game");
+const progress = document.getElementById("progress");
+
+function highlightPronouns(text) {
+    return text.replace(/\b(me|you|him|her|it|us|them)\b/gi, '<span class="pronoun">$1</span>');
+}
+
+function normalize(text) {
+    return text.trim().toLowerCase().replace(/\s+/g, "");
+}
+
+function render() {
+    if (currentCard >= cards.length) {
+        renderFinishScreen();
+        return;
+    }
+
+    const card = cards[currentCard];
+    progress.style.width = ((currentCard / cards.length) * 100) + "%";
+
+    game.innerHTML = `
+        <div class="top-info">
+            <div>Card ${currentCard + 1} of ${cards.length}</div>
+            <div>Clue ${clueIndex + 1}/3</div>
+        </div>
+
+        <div class="clue-box">
+            ${highlightPronouns(card.clues[clueIndex])}
+        </div>
+
+        <div class="inputs" id="inputs"></div>
+
+        <div class="buttons">
+            <button onclick="checkAnswer()">✅ Check</button>
+            ${clueIndex < 2
+                ? '<button class="secondary" onclick="nextClue()">➡️ Next clue</button>'
+                : '<button class="secondary" onclick="showAnswer()">👀 Show answer</button>'
+            }
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="scoreboard" id="scoreboard">
+            <div>🎯 Score: ${score}</div>
+            <div>❌ Wrong guesses: ${wrongGuesses}</div>
+        </div>
+    `;
+
+    renderInputs(card);
+    activateEnterKey();
+}
+
+function renderInputs(card) {
+    const inputs = document.getElementById("inputs");
+
+    if (card.twoWords) {
+        inputs.innerHTML = `
+            <div class="field">
+                <label for="word1">Word 1</label>
+                <input id="word1" type="text" autocomplete="off" />
+            </div>
+            <div class="field">
+                <label for="word2">Word 2</label>
+                <input id="word2" type="text" autocomplete="off" />
+            </div>
+        `;
+        document.getElementById("word1").focus();
+    } else {
+        inputs.innerHTML = `
+            <div class="field">
+                <label for="answer">Your answer</label>
+                <input id="answer" type="text" autocomplete="off" />
+            </div>
+        `;
+        document.getElementById("answer").focus();
+    }
+}
+
+function activateEnterKey() {
+    document.querySelectorAll("input").forEach(input => {
+        input.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        });
+    });
+}
+
+function nextClue() {
+    if (clueIndex < 2) {
+        clueIndex++;
+        render();
+    }
+}
+
+function checkAnswer() {
+    const card = cards[currentCard];
+    let isCorrect = false;
+
+    if (card.twoWords) {
+        const word1 = normalize(document.getElementById("word1").value);
+        const word2 = normalize(document.getElementById("word2").value);
+        const correctWords = card.word.toLowerCase().split(" ");
+
+        if (!word1 || !word2) {
+            showFeedback("Please fill in both words.", "wrong");
+            return;
+        }
+
+        isCorrect = word1 === normalize(correctWords[0]) && word2 === normalize(correctWords[1]);
+    } else {
+        const answer = normalize(document.getElementById("answer").value);
+
+        if (!answer) {
+            showFeedback("Please enter an answer.", "wrong");
+            return;
+        }
+
+        isCorrect = answer === normalize(card.word);
+    }
+
+    if (isCorrect) {
+        score += 3 - clueIndex;
+        correctAnswers++;
+        showFeedback("✅ Correct! Great job.", "correct");
+
+        setTimeout(() => {
+            goNextCard();
+        }, 900);
+    } else {
+        score--;
+        wrongGuesses++;
+        updateScoreboard();
+        showFeedback("❌ Incorrect. Try again!", "wrong");
+    }
+}
+
+function showAnswer() {
+    const card = cards[currentCard];
+
+    game.innerHTML = `
+        <div class="top-info">
+            <div>Card ${currentCard + 1} of ${cards.length}</div>
+            <div>Answer</div>
+        </div>
+
+        <div class="clue-box">
+            The answer is: <span class="answer-word">${card.word}</span>
+        </div>
+
+        <div class="feedback info">
+            No points are added for this card. Click Next card to continue.
+        </div>
+
+        <div class="buttons">
+            <button onclick="goNextCard()">➡️ Next card</button>
+        </div>
+
+        <div class="scoreboard">
+            <div>🎯 Score: ${score}</div>
+            <div>❌ Wrong guesses: ${wrongGuesses}</div>
+        </div>
+    `;
+}
+
+function goNextCard() {
+    currentCard++;
+    clueIndex = 0;
+    render();
+}
+
+function showFeedback(message, type) {
+    const feedback = document.getElementById("feedback");
+    if (!feedback) return;
+    feedback.textContent = message;
+    feedback.className = "feedback " + type;
+}
+
+function updateScoreboard() {
+    const scoreboard = document.getElementById("scoreboard");
+    if (!scoreboard) return;
+    scoreboard.innerHTML = `
+        <div>🎯 Score: ${score}</div>
+        <div>❌ Wrong guesses: ${wrongGuesses}</div>
+    `;
+}
+
+function renderFinishScreen() {
+    progress.style.width = "100%";
+
+    game.innerHTML = `
+        <div class="finish">
+            <h2>🎉 Game Finished!</h2>
+            <p>Final score: <strong>${score}</strong></p>
+            <p>Correct words: <strong>${correctAnswers} / ${cards.length}</strong></p>
+            <p>Wrong guesses: <strong>${wrongGuesses}</strong></p>
+            <button onclick="restartGame()">Play Again</button>
+        </div>
+    `;
+}
+
+function restartGame() {
+    currentCard = 0;
+    clueIndex = 0;
+    score = 0;
+    wrongGuesses = 0;
+    correctAnswers = 0;
+    render();
+}
+
+render();
+</script>
+
+</body>
+</html>
