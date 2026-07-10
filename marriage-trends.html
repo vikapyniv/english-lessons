@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Marriage Trends — Interactive Lesson</title>
+<style>
+:root{
+  --teal:#0f9f96; --teal-dark:#08736e; --teal-soft:#e7f8f6;
+  --teal-pale:#f4fbfa; --ink:#17333a; --muted:#64767a; --line:#d9e9e7;
+  --white:#fff; --ok:#168568; --bad:#c55252; --shadow:0 14px 38px rgba(8,115,110,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#f5faf9;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.58}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1500px;margin:auto;padding:12px 22px;display:flex;align-items:center;gap:16px}
+.brand{font-weight:950}.brand span{color:var(--teal)}
+.progress-wrap{flex:1;height:8px;background:#e6f1f0;border-radius:999px;overflow:hidden}
+.progress{height:100%;width:0;background:var(--teal);transition:.25s}
+.score{font-size:13px;color:var(--muted)}
+.hero{max-width:1500px;margin:auto;padding:58px 22px 32px}
+.eyebrow{display:inline-flex;background:var(--teal-soft);color:var(--teal-dark);padding:7px 12px;border-radius:999px;font-weight:850;font-size:13px}
+h1{font-size:clamp(44px,7vw,84px);line-height:.95;letter-spacing:-.06em;margin:18px 0}
+.hero p{max-width:760px;color:var(--muted);font-size:18px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{border:0;border-radius:12px;padding:11px 16px;background:var(--teal-dark);color:#fff;font-weight:850}
+.btn.light{background:#fff;color:var(--teal-dark);border:1px solid var(--line)}
+.btn.primary{background:var(--teal)}
+.lesson{max-width:1500px;margin:auto;padding:0 22px 70px}
+.section{margin:28px 0 56px;scroll-margin-top:82px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:16px}
+.kicker{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--teal);font-weight:950}
+.section-title{font-size:clamp(28px,3.4vw,44px);letter-spacing:-.04em;margin:2px 0 0}
+.pill{padding:7px 11px;border-radius:999px;background:var(--teal-soft);color:var(--teal-dark);font-size:13px;font-weight:800}
+.panel{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.start-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+.start-left,.definition{padding:24px}
+.activity{border:1px solid var(--line);border-radius:16px;padding:17px;margin-bottom:13px;background:#fff}
+.activity:last-child{margin-bottom:0}
+.num{display:inline-grid;place-items:center;width:31px;height:31px;border-radius:9px;background:var(--teal);color:#fff;font-weight:900;margin-right:7px}
+.title{font-weight:900;font-size:18px}
+.instruction{color:var(--muted);margin:9px 0 13px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+input[type=text],textarea,select{width:100%;border:1px solid #c9ddda;background:#fcfefe;color:var(--ink);border-radius:11px;padding:11px 12px}
+textarea{min-height:90px;resize:vertical}
+.feedback{min-height:24px;margin-top:9px;font-weight:800}
+.good{color:var(--ok)}.bad{color:var(--bad)}
+.definition{display:flex;align-items:center;justify-content:center;min-height:100%}
+.definition-card{width:100%;border:2px solid var(--teal);background:var(--teal-pale);border-radius:20px;padding:34px 26px;text-align:center}
+.definition-word{font-size:34px;color:var(--teal-dark);font-weight:950;font-style:italic}
+.definition-text{font-size:21px;margin-top:10px}
+.article-shell{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.article-header{padding:28px 30px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,var(--teal-pale),#fff)}
+.article-title{font-size:clamp(27px,3vw,42px);line-height:1.1;letter-spacing:-.035em;margin:0 0 8px}
+.deck{font-size:18px;font-weight:850;font-style:italic;margin:0 0 8px}
+.byline{color:var(--muted);margin:0}
+.article-map{display:grid;grid-template-columns:minmax(0,1.16fr) minmax(390px,.84fr)}
+.article-text-head,.task-head{padding:14px 24px;background:#f2fbfa;border-bottom:1px solid var(--line);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--teal-dark)}
+.task-head{border-left:1px solid var(--line)}
+.article-row{display:contents}
+.paragraph,.side-task{padding:24px 26px;border-bottom:1px solid var(--line)}
+.paragraph{font-size:17px}
+.paragraph p{margin:0}
+.side-task{border-left:1px solid var(--line);background:#fbfefd}
+.article-row:last-child .paragraph,.article-row:last-child .side-task{border-bottom:0}
+.marker{display:inline-flex;align-items:center;gap:7px;color:var(--teal-dark);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.07em;margin-bottom:9px}
+.marker:before{content:"";width:18px;height:3px;border-radius:4px;background:var(--teal)}
+.choice{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 11px;margin:7px 0;transition:.16s}
+.choice:hover{border-color:var(--teal)}
+.choice.selected{background:var(--teal-soft);border-color:var(--teal)}
+.choice.correct{background:#e8f8f2;border-color:var(--ok)}
+.choice.wrong{background:#fff0f0;border-color:var(--bad)}
+.checkrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:11px}
+.compact{font-size:14px}
+.language-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.language-bank,.practice{padding:24px}
+.note{background:var(--teal-soft);border-left:4px solid var(--teal);padding:13px 15px;border-radius:11px;margin:10px 0}
+.speaking{background:linear-gradient(135deg,var(--teal-dark),#0b8f88);color:#fff;border-radius:18px;padding:22px}
+.speaking p{font-size:20px;margin-top:0}
+.timer{font-size:30px;font-weight:950;font-variant-numeric:tabular-nums}
+@media(max-width:1000px){
+  .start-grid,.language-grid{grid-template-columns:1fr}
+  .article-map{grid-template-columns:1fr}
+  .task-head{border-left:0}
+  .side-task{border-left:0;background:#f8fcfb}
+  .article-text-head,.task-head{display:none}
+  .paragraph{padding-bottom:12px;border-bottom:0}
+  .side-task{padding-top:12px}
+}
+@media(max-width:650px){
+  .grid2,.grid3{grid-template-columns:1fr}
+  .hero,.lesson{padding-left:12px;padding-right:12px}
+  .panel,.article-shell{border-radius:16px}
+  .article-header,.paragraph,.side-task{padding-left:17px;padding-right:17px}
+}
+@media print{
+  .topbar,.controls,.btn{display:none!important}
+  body{background:#fff}
+  .panel,.article-shell{box-shadow:none}
+}
+
+
+
+
+.start-one-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr .82fr;
+  gap:14px;
+  padding:16px;
+  align-items:stretch;
+}
+.start-card{margin:0;min-width:0}
+.start-inputs{display:grid;gap:8px}
+.start-card textarea{min-height:122px}
+.start-definition{display:flex;flex-direction:column;justify-content:center;text-align:center;background:var(--teal-pale);border:2px solid var(--teal);padding:22px;border-radius:16px}
+
+.article-map{grid-template-columns:minmax(0,1.18fr) minmax(390px,.82fr)}
+.article-row.wide-row{
+  display:grid;
+  grid-column:1 / -1;
+  grid-template-columns:1fr;
+}
+.wide-row .paragraph{border-bottom:0}
+.wide-row .side-task{
+  border-left:0;
+  border-bottom:1px solid var(--line);
+  padding-top:8px;
+  background:#fbfefd;
+}
+.question-row{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+}
+.question-row .activity{margin:0}
+.wide-row:first-of-type .question-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+.line-number{
+  float:left;
+  margin:2px 12px 0 0;
+  width:28px;height:28px;
+  border-radius:8px;
+  display:grid;place-items:center;
+  background:var(--teal-soft);
+  color:var(--teal-dark);
+  font-size:13px;font-weight:950;
+}
+.sentence-list{display:grid;gap:8px;margin-top:14px}
+.sentence-row{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+  min-height:44px;
+  padding:8px 10px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:#fbfefd;
+}
+.inline-choice{
+  width:auto;
+  min-width:130px;
+  padding:6px 30px 6px 9px;
+  border-radius:8px;
+}
+.gap-sentence-list{display:grid;gap:9px;margin-top:14px}
+.gap-sentence{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+  min-height:44px;
+  padding:8px 10px;
+  border-bottom:1px solid var(--line);
+}
+.inline-gap{
+  width:105px !important;
+  padding:5px 7px !important;
+  border:0 !important;
+  border-bottom:2px solid var(--teal) !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  text-align:center;
+}
+.line-hint{
+  margin-left:auto;
+  padding:4px 8px;
+  border-radius:999px;
+  background:var(--teal-soft);
+  color:var(--teal-dark);
+  font-size:12px;
+  font-weight:850;
+}
+@media(max-width:1150px){
+  .start-one-row{grid-template-columns:1fr 1fr}
+}
+@media(max-width:820px){
+  .start-one-row{grid-template-columns:1fr}
+  .question-row,.wide-row:first-of-type .question-row{grid-template-columns:1fr}
+}
+
+
+.target-lang{
+  font-weight:900;
+  color:var(--teal-dark);
+  background:linear-gradient(transparent 64%,rgba(15,159,150,.16) 64%);
+}
+.first-feature-row{
+  display:grid;
+  grid-column:1 / -1;
+  grid-template-columns:minmax(0,1.15fr) minmax(380px,.85fr);
+  border-bottom:1px solid var(--line);
+}
+.first-feature-row .paragraph,
+.first-feature-row .side-task{border-bottom:0}
+.first-feature-row .paragraph{padding:28px 30px}
+.first-feature-row .side-task{
+  border-left:1px solid var(--line);
+  padding:20px;
+  background:linear-gradient(180deg,#fbfefd,#f3fbfa);
+}
+.first-feature-row .activity{margin-bottom:12px}
+.first-feature-row .activity:last-child{margin-bottom:0}
+
+.paragraph-discussion{
+  margin-top:18px;
+  padding:13px 15px;
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:var(--teal-pale);
+}
+.paragraph-discussion p{margin:5px 0 0;font-weight:700}
+.discussion-label{
+  display:inline-flex;
+  padding:4px 8px;
+  border-radius:999px;
+  background:var(--teal);
+  color:#fff;
+  font-size:11px;
+  font-weight:950;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+.discussion-panel{padding:24px}
+.discussion-cards,
+.statement-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:14px;
+}
+.discussion-card,
+.statement-card{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  background:#fbfefd;
+  transition:.18s;
+}
+.discussion-card:hover,
+.statement-card:hover{
+  border-color:var(--teal);
+  transform:translateY(-1px);
+}
+.discussion-card input,
+.statement-card input{
+  margin-top:4px;
+  accent-color:var(--teal);
+}
+.vocab-box{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  padding:14px;
+  border-radius:14px;
+  background:var(--teal-soft);
+  color:var(--teal-dark);
+  margin:14px 0;
+}
+.vocab-box span{
+  padding:5px 9px;
+  border-radius:999px;
+  background:#fff;
+  border:1px solid var(--line);
+  font-weight:800;
+  font-size:13px;
+}
+.writing-templates{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-top:16px;
+}
+.writing-card{
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+  background:#fff;
+}
+.writing-head{
+  font-weight:950;
+  color:var(--teal-dark);
+  margin-bottom:8px;
+}
+.template-line{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-bottom:9px;
+}
+.stance-select{width:auto;min-width:150px;padding:7px 9px}
+.tiny-input{width:58px!important;padding:7px 8px!important;text-align:center}
+.writing-card textarea{min-height:125px}
+.discussion-followup{
+  margin-top:16px;
+  padding:14px 16px;
+  border-left:4px solid var(--teal);
+  background:var(--teal-pale);
+  border-radius:12px;
+}
+@media(max-width:1050px){
+  .discussion-cards,.statement-grid,.writing-templates{grid-template-columns:1fr 1fr}
+}
+@media(max-width:850px){
+  .first-feature-row{grid-template-columns:1fr}
+  .first-feature-row .side-task{border-left:0;border-top:1px solid var(--line)}
+}
+@media(max-width:680px){
+  .discussion-cards,.statement-grid,.writing-templates{grid-template-columns:1fr}
+}
+
+.hero a{
+  color:var(--teal-dark);
+  font-weight:800;
+  text-decoration-thickness:1.5px;
+  text-underline-offset:3px;
+}
+.simple-model{
+  display:grid;
+  gap:9px;
+}
+.simple-model p{
+  margin:0;
+  line-height:1.9;
+}
+.model-gap{
+  display:inline-block;
+  width:auto;
+  border:0!important;
+  border-bottom:2px solid var(--teal)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  padding:4px 5px!important;
+}
+.long-gap{
+  min-width:190px;
+  width:58%!important;
+}
+.vocab-gap{
+  width:110px!important;
+}
+@media(max-width:680px){
+  .long-gap{width:100%!important;min-width:0}
+}
+
+.tasks-two-columns{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  align-items:start;
+}
+.tasks-two-columns .activity{
+  margin-bottom:0;
+  height:100%;
+}
+textarea.auto-grow{
+  min-height:48px;
+  overflow:hidden;
+  resize:vertical;
+  white-space:pre-wrap;
+}
+.start-inputs textarea.auto-grow{
+  min-height:48px;
+}
+.writing-card textarea.auto-grow{
+  min-height:72px;
+}
+@media(max-width:900px){
+  .tasks-two-columns{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="topbar-inner">
+<div class="brand"><span>Marriage</span> Trends</div>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="score" id="score">0 completed</div>
+</div>
+</header>
+<section class="hero">
+<span class="eyebrow">Interactive ESL lesson · B2–C1</span>
+<h1>Marriage<br/>trends</h1>
+<p>Created by Viktoriia Pyniv<br/>AI-assisted educational resource developed with ChatGPT (OpenAI).<br/>Resource: ESL Brains - Marriage trends <a href="https://eslbrains.com/esl-lesson-on-marriage/" rel="noopener noreferrer" target="_blank">https://eslbrains.com/esl-lesson-on-marriage/</a></p>
+</section>
+<main class="lesson">
+<section class="section" id="start">
+<div class="section-head">
+<div><div class="kicker">Section 1</div><h2 class="section-title">Start with ideas</h2></div>
+<span class="pill">Prediction + key vocabulary</span>
+</div>
+<div class="panel start-one-row">
+<div class="activity start-card" data-id="a1">
+<span class="num">1</span><span class="title">Predict three trends</span>
+<p class="instruction">Look at the lesson title and list three marriage trends that come to mind.</p>
+<div class="start-inputs">
+<textarea class="auto-grow" data-save="trend1" placeholder="Trend 1"></textarea>
+<textarea class="auto-grow" data-save="trend2" placeholder="Trend 2"></textarea>
+<textarea class="auto-grow" data-save="trend3" placeholder="Trend 3"></textarea>
+</div>
+<div class="checkrow"><button class="btn" onclick="saveOpen(this)">Save</button><span class="feedback"></span></div>
+</div>
+<div class="activity start-card" data-id="a2">
+<span class="num">2</span><span class="title">Build the concept</span>
+<p class="instruction">Think of one example for each type of asset.</p>
+<div class="start-inputs">
+<textarea class="auto-grow" data-save="asset1" placeholder="A couple’s asset"></textarea>
+<textarea class="auto-grow" data-save="asset2" placeholder="A business owner’s asset"></textarea>
+<textarea class="auto-grow" data-save="asset3" placeholder="A student’s asset"></textarea>
+</div>
+<div class="checkrow"><button class="btn" onclick="saveOpen(this)">Save</button><span class="feedback"></span></div>
+</div>
+<div class="activity start-card" data-id="a3">
+<span class="num">3</span><span class="title">Predict a prenup</span>
+<p class="instruction">What do you think a prenup is, and what information might it contain?</p>
+<textarea class="auto-grow" data-save="prenup" placeholder="I think a prenup is... It might contain..."></textarea>
+<div class="checkrow"><button class="btn" onclick="saveOpen(this)">Save</button><span class="feedback"></span></div>
+</div>
+<aside class="definition-card start-definition">
+<div class="definition-word">asset</div>
+<div class="definition-text">something of value which a person or a company owns</div>
+<p class="instruction">Examples: savings, a car, a laptop, a home, investments or a business.</p>
+</aside>
+</div>
+</section>
+<section class="section" id="article">
+<div class="section-head">
+<div><div class="kicker">Section 2</div><h2 class="section-title">Read the complete article</h2></div>
+<span class="pill">Text left · related tasks right</span>
+</div>
+<div class="article-shell">
+<header class="article-header">
+<h2 class="article-title">The Gen Z prenup boom coming to Britain</h2>
+<p class="deck">Rising number of anxious couples who want to protect their assets fuel wave of new start-ups</p>
+<p class="byline">by Melissa Lawford in <em>The Telegraph</em> (article abridged)</p>
+</header>
+<div class="article-map">
+<div class="article-text-head">Complete article</div>
+<div class="task-head">Activities linked to each part</div>
+<div class="article-row first-feature-row">
+<div class="paragraph"><span class="line-number">1</span>
+<p>Jason Berrent was initially <strong class="target-lang">taken aback</strong> when – before they got married – his partner suggested that they <strong class="target-lang">draw up an agreement</strong> to determine how their <strong class="target-lang">assets</strong> would be divided if they got divorced. “I was really against it,” says Berrent, 42, who runs a YouTube business with his now-husband Adam Newell, 32. “I was thinking that if someone wants a <strong class="target-lang">prenup</strong> that means they’re expecting to get divorced.” For Newell, though, it was not that he thought their marriage was doomed.</p>
+<div class="paragraph-discussion"><span class="discussion-label">Discuss</span><p>Do you think asking for a prenup shows a lack of trust, or can it be a sign of responsibility?</p></div></div>
+<aside class="side-task question-strip">
+<div class="activity" data-id="a4">
+<span class="num">4</span><span class="title">Check your prediction</span>
+<p class="instruction compact">Which definition best matches the paragraph?</p>
+<button class="choice" data-correct="false">A promise that a couple will never divorce</button>
+<button class="choice" data-correct="true">An agreement about how assets will be divided after divorce</button>
+<button class="choice" data-correct="false">A contract for running a business together</button>
+<div class="checkrow"><button class="btn" onclick="checkChoice(this)">Check</button><span class="feedback"></span></div>
+</div><div class="activity" data-id="a5">
+<span class="num">5</span><span class="title">Infer the attitude</span>
+<p class="instruction compact">Why was Berrent initially against the prenup?</p>
+<textarea class="auto-grow" data-save="attitude" placeholder="He believed that..."></textarea>
+<div class="checkrow"><button class="btn" onclick="saveOpen(this)">Save</button><span class="feedback"></span></div>
+</div></aside>
+</div>
+<div class="article-row">
+<div class="paragraph"><span class="line-number">2</span>
+<p>Instead, it was simply that he had seen how <strong class="target-lang">financially brutal separation</strong> could be too many times. “His mum was married and divorced six times and his dad was married and divorced five times,” says Berrent. “His dad would bankrupt himself so that the other person couldn’t take anything. He watched him lose everything and have to <strong class="target-lang">start all over</strong>. That’s something he didn’t want to do.” Ultimately, the couple signed a <strong class="target-lang">prenup</strong> before they <strong class="target-lang">tied the knot</strong> in 2022. <strong class="target-lang">Among other things</strong>, they agreed that, if they <strong class="target-lang">split</strong>, Newell would keep their business but Berrent would get a <strong class="target-lang">payout</strong>. “Looking back, it was one of the best things we ever did,” Berrent says. “Because we just <strong class="target-lang">know where we stand</strong>.”</p>
+<div class="paragraph-discussion"><span class="discussion-label">Discuss</span><p>Should couples decide in advance what happens to shared assets if they separate? Why?</p></div></div>
+<aside class="side-task">
+<div class="activity" data-id="a6">
+<span class="num">6</span><span class="title">Who is who?</span>
+<p class="instruction compact">Complete with Berrent or Newell.</p>
+<div class="grid2">
+<label>Suggested the prenup<select data-answer="Newell"><option value="">Choose…</option><option>Berrent</option><option>Newell</option></select></label>
+<label>His dad lost everything<select data-answer="Newell"><option value="">Choose…</option><option>Berrent</option><option>Newell</option></select></label>
+<label>Would receive a payout<select data-answer="Berrent"><option value="">Choose…</option><option>Berrent</option><option>Newell</option></select></label>
+<label>Calls it a great decision<select data-answer="Berrent"><option value="">Choose…</option><option>Berrent</option><option>Newell</option></select></label>
+</div>
+<div class="checkrow"><button class="btn" onclick="checkSelects(this)">Check</button><span class="feedback"></span></div>
+</div>
+</aside>
+</div>
+<div class="article-row wide-row">
+<div class="paragraph"><span class="line-number">3</span>
+<p>The couple’s approach is rapidly becoming the norm in weddings across America, paving the way for Britain to soon <strong class="target-lang">follow suit</strong>. Between 2010 and 2023, the share of married or engaged Americans who have signed a <strong class="target-lang">prenup</strong> <strong class="target-lang">surged</strong> from 3% to 20%, according to The Harris Poll, a research firm. Among <strong class="target-lang">Gen Z</strong> and <strong class="target-lang">millennial</strong> respondents, the shares were much higher – rising to 41% and 47% respectively. It has already sparked a wave of new <strong class="target-lang">start-ups</strong> in the market, promising to make the process cheaper, faster and more accessible. The sector is becoming big business. Hello<strong class="target-lang">Prenup</strong>, an app founded in 2021, has <strong class="target-lang">drawn up agreements</strong> for hundreds of thousands of clients online – including Berrent and Newell – encompassing <strong class="target-lang">assets</strong> worth a combined $27bn (£19.8bn). Meanwhile, Neptune, a pre-seed start-up that launched a year and a half ago providing online AI consultations and drafting with a lawyer, has several thousand users primarily across New York, California and Texas.</p>
+<div class="paragraph-discussion"><span class="discussion-label">Discuss</span><p>Why do you think prenups are becoming more popular among younger generations?</p></div></div>
+<aside class="side-task question-strip">
+<div class="question-row"><div class="activity" data-id="a7">
+<span class="num">7</span><span class="title">Read the evidence</span>
+<p class="instruction compact">What does the author predict about Britain?</p>
+<button class="choice" data-correct="true">Britain may follow the US trend.</button>
+<button class="choice" data-correct="false">Prenups are already equally common in Britain.</button>
+<button class="choice" data-correct="false">Prenups will become less common in Britain.</button>
+<div class="checkrow"><button class="btn" onclick="checkChoice(this)">Check</button><span class="feedback"></span></div>
+</div><div class="activity" data-id="a8">
+<span class="num">8</span><span class="title">Which statement is true, according to The Harris Poll?</span>
+<p class="instruction compact">Choose the correct statement.</p>
+<button class="choice" data-correct="false">The share of prenups among Gen Zers and Millennials is growing faster than among other generations.</button>
+<button class="choice" data-correct="false">Prenup start-ups are successful only because Gen Zers and Millennials sign prenups.</button>
+<button class="choice" data-correct="true">Millennials sign prenups more often than the other groups mentioned.</button>
+<button class="choice" data-correct="false">Between 2010 and 2023, the share of couples signing a prenup rose by 27 percentage points.</button>
+<div class="checkrow"><button class="btn" onclick="checkChoice(this)">Check</button><span class="feedback"></span></div>
+</div><div class="activity" data-id="a9">
+<span class="num">9</span><span class="title">Interpret the figures</span>
+<p class="instruction compact">What does $27bn refer to?</p>
+<button class="choice" data-correct="false">HelloPrenup’s income</button>
+<button class="choice" data-correct="true">Combined assets covered by its clients’ agreements</button>
+<button class="choice" data-correct="false">Berrent and Newell’s assets</button>
+<div class="checkrow"><button class="btn" onclick="checkChoice(this)">Check</button><span class="feedback"></span></div>
+</div></div></aside>
+</div>
+<div class="article-row">
+<div class="paragraph"><span class="line-number">4</span>
+<p>The rise of the <strong class="target-lang">prenup</strong> is an unexpected byproduct from the convergence of three economic and demographic trends. First, couples are getting married later. The average American man in 2005 got married at the age of 27.1 for the first time. The number hit a record high of 30.8 in 2025. It means that, by the time they get married, both men and women are increasingly likely to have built their careers and <strong class="target-lang">accrued <strong class="target-lang">assets</strong></strong> by themselves. These are <strong class="target-lang">assets</strong> that, in many cases, individuals want to protect should they end up <strong class="target-lang">split</strong>ting up from their partner. Second, many of the adults getting married today, like Newell, are the children of America’s divorce boom, which peaked in the 1980s. Roughly half of those who got married in the 1970s and 1980s ended up divorced. Today, their adult children are wary about making themselves <strong class="target-lang">financially vulnerable</strong> in the same way that their parents were.</p>
+<div class="paragraph-discussion"><span class="discussion-label">Discuss</span><p>Does marrying later make financial conversations more important? Explain.</p></div></div>
+<aside class="side-task">
+<div class="activity" data-id="a10">
+<span class="num">10</span><span class="title">Summarise two reasons</span>
+<p class="instruction compact">Use no more than one sentence for each reason.</p>
+<textarea class="auto-grow" data-save="reason1" placeholder="1. People marry later, so..."></textarea><br/><br/>
+<textarea class="auto-grow" data-save="reason2" placeholder="2. Children of the divorce boom..."></textarea>
+<div class="checkrow"><button class="btn" onclick="saveOpen(this)">Save</button><span class="feedback"></span></div>
+</div>
+</aside>
+</div>
+<div class="article-row">
+<div class="paragraph"><span class="line-number">5</span>
+<p>On top of this, as those parents die, they are making the greatest <strong class="target-lang">wealth transfer</strong> in history. By 2048, an estimated $124tn will have been <strong class="target-lang">inherited</strong> in America as baby boomers pass their cash to their children and grandchildren, according to consulting firm Cerulli Associates. Suddenly, everyone has <strong class="target-lang">a lot more to lose</strong>.</p>
+<div class="paragraph-discussion"><span class="discussion-label">Discuss</span><p>Should inherited wealth always be protected in a marriage? Why or why not?</p></div></div>
+<aside class="side-task">
+<div class="activity" data-id="a11">
+<span class="num">11</span><span class="title">Complete the logic</span>
+<p class="instruction compact">Choose the best ending.</p>
+<p>Inherited wealth may increase interest in prenups because…</p>
+<button class="choice" data-correct="false">people will stop getting married.</button>
+<button class="choice" data-correct="true">more people will have significant assets to protect.</button>
+<button class="choice" data-correct="false">lawyers will no longer be needed.</button>
+<div class="checkrow"><button class="btn" onclick="checkChoice(this)">Check</button><span class="feedback"></span></div>
+</div>
+</aside>
+</div>
+</div>
+</div>
+</section>
+<section class="section" id="postreading">
+<div class="section-head">
+<div><div class="kicker">Section 3</div><h2 class="section-title">Work with the article</h2></div>
+<span class="pill">Notice → practise</span>
+</div>
+<div class="panel" style="padding:24px">
+<div class="tasks-two-columns"><div class="activity" data-id="a12">
+<span class="num">12</span><span class="title">Look at some sentences from the article and choose the correct words. Then, check your answers in the article.</span>
+<div class="sentence-list"><div class="sentence-row">1. Jason Berrent was initially <select class="inline-choice" data-answer="taken aback"><option value="">Choose…</option><option>taken aback</option><option>taken over</option></select> when his partner suggested a prenup.</div><div class="sentence-row">2. His father had to <select class="inline-choice" data-answer="start all over"><option value="">Choose…</option><option>start all over</option><option>start over all</option></select> after losing everything.</div><div class="sentence-row">3. The couple signed a prenup before they <select class="inline-choice" data-answer="tied the knot"><option value="">Choose…</option><option>tied the knot</option><option>made the knot</option></select>.</div><div class="sentence-row">4. HelloPrenup has <select class="inline-choice" data-answer="drawn up"><option value="">Choose…</option><option>drawn up</option><option>drawn out</option></select> agreements for clients online.</div><div class="sentence-row">5. Younger adults are <select class="inline-choice" data-answer="increasingly"><option value="">Choose…</option><option>increasingly</option><option>increased</option></select> likely to have their own assets.</div></div>
+<div class="checkrow"><button class="btn" onclick="checkSelects(this)">Check</button><span class="feedback"></span></div>
+</div><div class="activity" data-id="a13">
+<span class="num">13</span><span class="title">Complete the gaps with one word each.</span>
+<div class="gap-sentence-list"><div class="gap-sentence">1. Couples draw <input aria-label="Gap 1" class="gap inline-gap" data-answer="up" type="text"/> an agreement. <span class="line-hint">line 1</span></div><div class="gap-sentence">2. They want to know where they <input aria-label="Gap 2" class="gap inline-gap" data-answer="stand" type="text"/>. <span class="line-hint">line 2</span></div><div class="gap-sentence">3. Some couples have more to <input aria-label="Gap 3" class="gap inline-gap" data-answer="lose" type="text"/>. <span class="line-hint">line 5</span></div><div class="gap-sentence">4. They may <input aria-label="Gap 4" class="gap inline-gap" data-answer="inherit" type="text"/> wealth from their parents. <span class="line-hint">line 5</span></div><div class="gap-sentence">5. Before they <input aria-label="Gap 5" class="gap inline-gap" data-answer="tie" type="text"/> the knot, they discuss money. <span class="line-hint">line 2</span></div><div class="gap-sentence">6. Among other <input aria-label="Gap 6" class="gap inline-gap" data-answer="things" type="text"/>, they protect a business. <span class="line-hint">line 2</span></div></div>
+<div class="checkrow"><button class="btn" onclick="checkGaps(this)">Check</button><span class="feedback"></span></div>
+</div></div>
+
+</div>
+</section>
+<section class="section" id="discussion">
+<div class="section-head">
+<div><div class="kicker">Section 4</div><h2 class="section-title">Discuss the ideas</h2></div>
+<span class="pill">Choose → prepare → speak</span>
+</div>
+<div class="panel discussion-panel">
+<div class="activity" data-id="a15">
+<span class="num">15</span><span class="title">Choose three statements and prepare your view.</span>
+<p class="instruction">Choose any three statements. Complete one short model for each statement. Add your own ideas and use two vocabulary items from the box. Then compare your answers in pairs.</p>
+<div class="vocab-box">
+<strong>Vocabulary box:</strong>
+<span>draw up</span><span>assets</span><span>know where you stand</span><span>tie the knot</span><span>financially vulnerable</span><span>inherit</span><span>approach</span><span>increasingly</span>
+</div>
+<div class="statement-grid">
+<label class="statement-card">
+<input class="statement-check" type="checkbox"/>
+<span><strong>A.</strong> Every couple with significant assets should sign a prenup.</span>
+</label>
+<label class="statement-card">
+<input class="statement-check" type="checkbox"/>
+<span><strong>B.</strong> Asking for a prenup makes a relationship less romantic.</span>
+</label>
+<label class="statement-card">
+<input class="statement-check" type="checkbox"/>
+<span><strong>C.</strong> Inherited wealth should always remain separate property.</span>
+</label>
+<label class="statement-card">
+<input class="statement-check" type="checkbox"/>
+<span><strong>D.</strong> Online services are a good way to create legal agreements.</span>
+</label>
+<label class="statement-card">
+<input class="statement-check" type="checkbox"/>
+<span><strong>E.</strong> Couples should discuss money before they tie the knot.</span>
+</label>
+<label class="statement-card">
+<input class="statement-check" type="checkbox"/>
+<span><strong>F.</strong> Prenups will become normal for most young couples.</span>
+</label>
+</div>
+<div class="writing-templates">
+<div class="writing-card">
+<div class="writing-head">Response 1</div>
+<div class="simple-model">
+<p>I <select class="stance-select"><option value="">agree / disagree</option><option>agree</option><option>disagree</option></select>
+            with statement <input class="tiny-input" maxlength="1" placeholder="A–F" type="text"/>.</p>
+<p>In my view, <textarea class="model-gap long-gap auto-grow" data-save="idea1a" placeholder="write your main idea"></textarea>.</p>
+<p>This is because <textarea class="model-gap long-gap auto-grow" data-save="idea1b" placeholder="give one reason"></textarea>.</p>
+<p>For example, <textarea class="model-gap long-gap auto-grow" data-save="idea1c" placeholder="add an example"></textarea>.</p>
+<p>Therefore, I believe <textarea class="model-gap long-gap auto-grow" data-save="idea1d" placeholder="write your conclusion"></textarea>.</p>
+<p>Vocabulary: <input class="model-gap vocab-gap" data-save="vocab1a" placeholder="item 1" type="text"/>
+            + <input class="model-gap vocab-gap" data-save="vocab1b" placeholder="item 2" type="text"/></p>
+</div>
+</div>
+<div class="writing-card">
+<div class="writing-head">Response 2</div>
+<div class="simple-model">
+<p>I <select class="stance-select"><option value="">agree / disagree</option><option>agree</option><option>disagree</option></select>
+            with statement <input class="tiny-input" maxlength="1" placeholder="A–F" type="text"/>.</p>
+<p>In my view, <textarea class="model-gap long-gap auto-grow" data-save="idea2a" placeholder="write your main idea"></textarea>.</p>
+<p>This is because <textarea class="model-gap long-gap auto-grow" data-save="idea2b" placeholder="give one reason"></textarea>.</p>
+<p>For example, <textarea class="model-gap long-gap auto-grow" data-save="idea2c" placeholder="add an example"></textarea>.</p>
+<p>Therefore, I believe <textarea class="model-gap long-gap auto-grow" data-save="idea2d" placeholder="write your conclusion"></textarea>.</p>
+<p>Vocabulary: <input class="model-gap vocab-gap" data-save="vocab2a" placeholder="item 1" type="text"/>
+            + <input class="model-gap vocab-gap" data-save="vocab2b" placeholder="item 2" type="text"/></p>
+</div>
+</div>
+<div class="writing-card">
+<div class="writing-head">Response 3</div>
+<div class="simple-model">
+<p>I <select class="stance-select"><option value="">agree / disagree</option><option>agree</option><option>disagree</option></select>
+            with statement <input class="tiny-input" maxlength="1" placeholder="A–F" type="text"/>.</p>
+<p>In my view, <textarea class="model-gap long-gap auto-grow" data-save="idea3a" placeholder="write your main idea"></textarea>.</p>
+<p>This is because <textarea class="model-gap long-gap auto-grow" data-save="idea3b" placeholder="give one reason"></textarea>.</p>
+<p>For example, <textarea class="model-gap long-gap auto-grow" data-save="idea3c" placeholder="add an example"></textarea>.</p>
+<p>Therefore, I believe <textarea class="model-gap long-gap auto-grow" data-save="idea3d" placeholder="write your conclusion"></textarea>.</p>
+<p>Vocabulary: <input class="model-gap vocab-gap" data-save="vocab3a" placeholder="item 1" type="text"/>
+            + <input class="model-gap vocab-gap" data-save="vocab3b" placeholder="item 2" type="text"/></p>
+</div>
+</div>
+</div>
+<div class="discussion-followup"><strong>Then discuss your responses:</strong> compare your reasons, ask one follow-up question, and decide which statement produced the strongest disagreement.</div>
+<div class="checkrow"><button class="btn" onclick="checkWritingTask(this)">Save preparation</button><span class="feedback"></span></div>
+</div>
+</div>
+</section>
+</main>
+<script>
+const completed=new Set(JSON.parse(localStorage.getItem("mtV2Completed")||"[]"));
+function sync(){
+  localStorage.setItem("mtV2Completed",JSON.stringify([...completed]));
+  const total=document.querySelectorAll(".activity").length,n=completed.size;
+  document.getElementById("progress").style.width=(n/total*100)+"%";
+  document.getElementById("score").textContent=`${n} of ${total} completed`;
+  document.querySelectorAll(".activity").forEach(x=>{if(completed.has(x.dataset.id))x.style.borderColor="#168568"});
+}
+function complete(task){completed.add(task.dataset.id);sync()}
+document.addEventListener("click",e=>{
+ if(e.target.classList.contains("choice")){
+   e.target.closest(".activity").querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));
+   e.target.classList.add("selected");
+ }
+});
+function saveOpen(btn){
+ const task=btn.closest(".activity"),fields=[...task.querySelectorAll("input[type=text],textarea")],fb=task.querySelector(".feedback");
+ if(fields.some(x=>x.value.trim().length>1)){complete(task);fb.textContent="Saved.";fb.className="feedback good"}
+ else{fb.textContent="Add an answer first.";fb.className="feedback bad"}
+}
+function checkChoice(btn){
+ const task=btn.closest(".activity"),sel=task.querySelector(".choice.selected"),fb=task.querySelector(".feedback");
+ if(!sel){fb.textContent="Choose an answer.";fb.className="feedback bad";return}
+ if(sel.dataset.correct==="true"){sel.classList.add("correct");fb.textContent="Correct.";fb.className="feedback good";complete(task)}
+ else{sel.classList.add("wrong");fb.textContent="Try again and check the paragraph beside this task.";fb.className="feedback bad"}
+}
+function checkSelects(btn){
+ const task=btn.closest(".activity"),sels=[...task.querySelectorAll("select")];let n=0;
+ sels.forEach(s=>{const ok=s.value===s.dataset.answer;s.style.borderColor=ok?"#168568":"#c55252";if(ok)n++});
+ const fb=task.querySelector(".feedback");fb.textContent=`${n}/${sels.length} correct.`;fb.className="feedback "+(n===sels.length?"good":"bad");if(n===sels.length)complete(task)
+}
+
+function checkGaps(btn){
+ const task=btn.closest(".activity"),gaps=[...task.querySelectorAll(".gap")];let n=0;
+ gaps.forEach(g=>{const ok=g.value.trim().toLowerCase()===g.dataset.answer;g.style.borderColor=ok?"#168568":"#c55252";if(ok)n++});
+ const fb=task.querySelector(".feedback");fb.textContent=`${n}/${gaps.length} correct.`;fb.className="feedback "+(n===gaps.length?"good":"bad");if(n===gaps.length)complete(task)
+}
+document.querySelectorAll("[data-save]").forEach(el=>{
+ const k="mtV2_"+el.dataset.save;if(localStorage.getItem(k)!==null)el.value=localStorage.getItem(k);
+ el.addEventListener("input",()=>localStorage.setItem(k,el.value))
+});
+function resetLesson(){
+ if(confirm("Clear all answers and progress?")){
+   Object.keys(localStorage).filter(k=>k.startsWith("mtV2")).forEach(k=>localStorage.removeItem(k));location.reload()
+ }
+}
+const prompts=[
+ "Are prenups practical or unromantic? Give reasons.",
+ "Will prenups become popular in your country? Why?",
+ "What businesses could emerge around future marriage trends?",
+ "Will people marry later in the future? What might change?"
+];
+let pi=0;function nextPrompt(){pi=(pi+1)%prompts.length;document.getElementById("prompt").textContent=prompts[pi];resetTimer()}
+let left=60,int=null;
+function toggleTimer(){
+ const b=document.getElementById("timerBtn");
+ if(int){clearInterval(int);int=null;b.textContent="Resume timer";return}
+ b.textContent="Pause";
+ int=setInterval(()=>{left--;document.getElementById("timer").textContent=`00:${String(left).padStart(2,"0")}`;if(left<=0){clearInterval(int);int=null;b.textContent="Start again"}},1000)
+}
+function resetTimer(){clearInterval(int);int=null;left=60;document.getElementById("timer").textContent="01:00";document.getElementById("timerBtn").textContent="Start timer"}
+sync();
+
+
+function checkThree(btn){
+ const task=btn.closest(".activity"),selected=[...task.querySelectorAll(".discussion-check:checked")],fb=task.querySelector(".feedback");
+ if(selected.length===3){
+   complete(task);
+   fb.textContent="Three questions selected. Start your discussion.";
+   fb.className="feedback good";
+ }else{
+   fb.textContent=`Select exactly three questions (${selected.length} selected).`;
+   fb.className="feedback bad";
+ }
+}
+function checkWritingTask(btn){
+ const task=btn.closest(".activity");
+ const selected=[...task.querySelectorAll(".statement-check:checked")];
+ const models=[...task.querySelectorAll(".writing-card")];
+ const completeModels=models.filter(card=>{
+   const stance=card.querySelector(".stance-select").value;
+   const statement=card.querySelector(".tiny-input").value.trim();
+   const fields=[...card.querySelectorAll(".model-gap")];
+   return stance && statement && fields.every(f=>f.value.trim().length>1);
+ }).length;
+ const fb=task.querySelector(".feedback");
+ if(selected.length!==3){
+   fb.textContent=`Choose exactly three statements (${selected.length} selected).`;
+   fb.className="feedback bad";
+   return;
+ }
+ if(completeModels<3){
+   fb.textContent="Complete all three response models, including two vocabulary items in each.";
+   fb.className="feedback bad";
+   return;
+ }
+ complete(task);
+ fb.textContent="Preparation saved. Now compare and discuss your responses.";
+ fb.className="feedback good";
+}
+
+function autoGrow(el){
+  el.style.height="auto";
+  el.style.height=Math.max(el.scrollHeight,48)+"px";
+}
+document.querySelectorAll("textarea.auto-grow").forEach(el=>{
+  autoGrow(el);
+  el.addEventListener("input",()=>autoGrow(el));
+});
+</script>
+</body>
+</html>
