@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>At the Airport — Interactive English Lesson</title>
+<style>
+:root{
+  --bg:#edf7ff;--surface:#ffffff;--surface2:#f6fbff;--ink:#203448;--muted:#61798f;
+  --blue:#70b7e6;--blue2:#a9d8f5;--deep:#326f9d;--line:#d7e9f5;
+  --good:#2d9271;--bad:#c85b66;--warn:#ad7b25;--shadow:0 14px 36px rgba(50,111,157,.12);
+  --radius:24px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:
+radial-gradient(circle at 10% 0%,#d8efff 0,transparent 28%),
+linear-gradient(180deg,#f4faff,#eaf6ff);line-height:1.55}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(247,252,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(112,183,230,.22)}
+.topbar-inner{max-width:1180px;margin:auto;padding:12px 22px;display:grid;grid-template-columns:1fr minmax(180px,360px) auto;align-items:center;gap:20px}
+.brand{font-weight:850;letter-spacing:-.02em}.brand span{color:var(--deep)}
+.progress-wrap{height:9px;border-radius:99px;background:#dcecf7;overflow:hidden}
+.progress{height:100%;width:33.333%;background:linear-gradient(90deg,var(--blue),var(--deep));transition:.35s}
+.section-indicator{font-size:.85rem;color:var(--muted);font-weight:700;white-space:nowrap}
+main{max-width:1180px;margin:auto;padding:32px 22px 64px}
+.hero{display:grid;grid-template-columns:1.45fr .75fr;gap:28px;align-items:stretch;margin:12px 0 24px}
+.hero-main,.hero-card{background:rgba(255,255,255,.88);border:1px solid var(--line);border-radius:32px;box-shadow:var(--shadow)}
+.hero-main{padding:42px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#e3f4ff;color:var(--deep);padding:7px 12px;border-radius:99px;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+h1{font-size:clamp(2.6rem,6vw,5.4rem);line-height:.92;margin:22px 0 18px;letter-spacing:-.06em}
+.subtitle{font-size:1.1rem;color:var(--muted);max-width:650px}
+.author{margin-top:28px;padding-top:20px;border-top:1px solid var(--line);font-size:.88rem;color:var(--muted)}
+.author strong{color:var(--ink)}.author a{color:var(--deep);font-weight:750}
+.hero-card{padding:30px;background:linear-gradient(145deg,#d9f0ff,#fff)}
+.hero-card h3{margin:0 0 18px;font-size:1.18rem}
+.objectives{display:grid;gap:12px}.objective{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.72);padding:13px;border-radius:16px}
+.objective b{display:grid;place-items:center;min-width:30px;height:30px;border-radius:10px;background:var(--blue);color:white}
+.hero-nav{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 30px}
+.nav-pill,.primary,.secondary,.ghost{border:0;border-radius:14px;padding:12px 17px;font-weight:800;transition:.2s}
+.nav-pill{background:white;color:var(--deep);box-shadow:0 6px 18px rgba(50,111,157,.09);border:1px solid var(--line)}
+.nav-pill.active,.primary{background:var(--deep);color:white}.nav-pill:hover,.primary:hover{transform:translateY(-2px)}
+.secondary{background:#dff1fc;color:var(--deep)}.ghost{background:white;color:var(--muted);border:1px solid var(--line)}
+.lesson-section{display:none;animation:fade .35s ease}.lesson-section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin:24px 0 18px}
+.section-head h2{font-size:clamp(1.8rem,4vw,3rem);letter-spacing:-.04em;margin:0}.section-head p{max-width:580px;color:var(--muted);margin:0}
+.activity{background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin:18px 0}
+.activity-title{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+.num{display:grid;place-items:center;min-width:38px;height:38px;border-radius:12px;background:var(--deep);color:white;font-weight:900}
+.activity-title h3{margin:0;font-size:1.25rem}.activity-title p{margin:4px 0 0;color:var(--muted)}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:stretch}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--surface2);border:1px solid var(--line);border-radius:18px;padding:20px}
+.riddle{display:flex;flex-direction:column}.riddle p{flex:1;white-space:pre-line}.answer-input,textarea,.word-input{width:100%;border:1.5px solid #bddbed;background:white;border-radius:12px;padding:11px 13px;color:var(--ink);outline:none}
+.answer-input:focus,textarea:focus,.word-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(112,183,230,.16)}
+.feedback{min-height:24px;font-size:.88rem;font-weight:750;margin-top:8px}.good{color:var(--good)}.bad{color:var(--bad)}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.word-cloud-inputs{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.prompt-card{position:relative;min-height:155px;display:flex;flex-direction:column;justify-content:space-between}
+.prompt-card .speech{font-size:1.04rem;font-weight:700}.prompt-card button{align-self:flex-start}
+.hidden-answer{display:none;margin-top:12px;padding:12px;border-radius:12px;background:#e4f4fd;color:var(--deep)}
+.match-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.picture-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.picture-card{background:linear-gradient(145deg,#f7fcff,#e9f6ff);border:2px solid transparent;border-radius:18px;padding:14px;text-align:center;min-height:130px;display:flex;flex-direction:column;justify-content:center;transition:.2s}
+.picture-card.selected{border-color:var(--deep);box-shadow:0 0 0 4px rgba(112,183,230,.15)}
+.icon{font-size:2.5rem;line-height:1}.slot{margin-top:10px;min-height:34px;border:1.5px dashed #9fcbe5;border-radius:10px;display:grid;place-items:center;font-size:.84rem;color:var(--muted);padding:5px}
+.word-bank{display:flex;flex-wrap:wrap;gap:9px;align-content:flex-start}
+.token{border:1.5px solid var(--blue);background:white;color:var(--deep);padding:9px 12px;border-radius:99px;font-weight:800;user-select:none;transition:.15s}
+.token:hover,.token.selected{background:var(--deep);color:white}.token.used{opacity:.35}
+.mcq-list{display:grid;gap:13px}.mcq{padding:15px;border:1px solid var(--line);border-radius:15px;background:var(--surface2)}
+.mcq strong{display:block;margin-bottom:9px}.choices{display:flex;gap:9px;flex-wrap:wrap}
+.choice{border:1px solid #bddbed;background:white;border-radius:11px;padding:8px 11px}.choice.selected{background:var(--deep);color:white}.choice.correct{background:#dff5ec;border-color:#73bca4;color:#19664e}.choice.wrong{background:#fde9eb;border-color:#df8c94;color:#983845}
+.category-table{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.category{min-height:210px;background:var(--surface2);border:1.5px dashed #9fcbe5;border-radius:18px;padding:14px}
+.category h4{margin:0 0 12px}.dropzone{min-height:145px;display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start}
+.mini-note{font-size:.82rem;color:var(--muted);margin-top:8px}
+.role-stage{background:linear-gradient(145deg,#e4f4ff,#fff);border-radius:22px;padding:22px;border:1px solid var(--line)}
+.role-label{font-size:.75rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--deep)}
+.dialogue{display:grid;gap:14px;margin-top:16px}
+.bubble{max-width:85%;padding:15px 18px;border-radius:18px;background:white;box-shadow:0 5px 15px rgba(50,111,157,.08)}
+.bubble.passenger{border-bottom-left-radius:5px}.bubble.employee{margin-left:auto;background:#d9effd;border-bottom-right-radius:5px}
+.stage{display:none}.stage.active{display:block}
+.solution-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.solution{border:1px solid var(--line);border-radius:15px;background:white;padding:15px;text-align:left;transition:.2s}.solution:hover{border-color:var(--blue);transform:translateY(-2px)}
+.solution.best{background:#e2f6ef;border-color:#7bc2aa}.solution.risky{background:#fff7e4;border-color:#e4bf6c}
+.vocab-strip{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.vocab-strip span{background:white;border:1px solid var(--line);border-radius:99px;padding:6px 10px;font-size:.82rem;font-weight:750}
+.section-nav{display:flex;justify-content:space-between;gap:14px;margin-top:24px}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--ink);color:white;padding:12px 16px;border-radius:12px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s;z-index:200}.toast.show{opacity:1;transform:none}
+@media(max-width:850px){
+ .topbar-inner{grid-template-columns:1fr auto}.progress-wrap{grid-column:1/-1;grid-row:2}.hero,.grid-2,.match-layout{grid-template-columns:1fr}
+ .grid-3,.solution-grid{grid-template-columns:1fr}.word-cloud-inputs{grid-template-columns:repeat(2,1fr)}.category-table{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+ main{padding:20px 14px 48px}.hero-main{padding:28px}.hero-card{padding:22px}.activity{padding:18px}.picture-grid{grid-template-columns:1fr}
+ .section-head{display:block}.section-head p{margin-top:8px}.section-indicator{display:none}.topbar-inner{padding:10px 14px}
+}
+
+/* Revised layouts */
+.starter-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+.starter-row>.activity{height:670px;display:flex;flex-direction:column;overflow:hidden}
+.starter-scroll{flex:1;overflow:auto;padding-right:4px}
+.starter-row .activity,.starter-row .activity p,.starter-row .activity input,.starter-row .activity button{font-size:.93rem}
+.vocab-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+.vocab-col{display:grid;gap:20px}.vocab-col>.activity{width:100%}
+.letters-list{display:grid;gap:10px}.letters-row{display:grid;grid-template-columns:30px 1fr;gap:9px;align-items:center}.letter-input{width:100%;border:1.5px solid #bddbed;background:white;border-radius:12px;padding:10px 12px;color:var(--ink)}
+.story-menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.story-card{border:1px solid var(--line);background:linear-gradient(145deg,#fff,#edf8ff);border-radius:18px;padding:17px;text-align:left;transition:.2s}.story-card:hover{transform:translateY(-2px);border-color:var(--blue)}.story-card h4{margin:0 0 5px}.story-card p{margin:0;color:var(--muted);font-size:.84rem}
+.role-toolbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.outcome{background:#e3f6ef;border:1px solid #abd9c8;border-radius:17px;padding:18px}
+@media(max-width:980px){.starter-row,.vocab-columns{grid-template-columns:1fr}.starter-row>.activity{height:auto}.story-menu{grid-template-columns:1fr}}
+
+/* Final layout refinements */
+.vertical-inputs{grid-template-columns:1fr!important;gap:14px}
+.discussion-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start}
+.discussion-card{min-height:150px;border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(145deg,#f7fcff,#e7f5ff);display:flex;align-items:center;justify-content:center;text-align:center;font-weight:750;box-shadow:0 6px 16px rgba(50,111,157,.08)}
+.vocab-top-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.vocab-main{height:100%;margin:0}
+.vocab-side{display:grid;grid-template-rows:1fr 1fr;gap:20px}
+.equal-side-card{height:100%;margin:0;display:flex;flex-direction:column}
+.equal-side-card .mcq-list,.equal-side-card .category-table{flex:1}
+.vocab-bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch;margin-top:20px}
+.vocab-bottom-grid>.activity{margin:0;height:100%}
+.vocab-match-layout{grid-template-columns:1fr 190px}
+.vertical-bank{display:flex;flex-direction:column;align-items:stretch}
+.vertical-bank .token{width:100%;text-align:center}
+.category-table{grid-template-columns:1fr}
+.category{min-height:120px}.dropzone{min-height:58px}
+.sentence-completion-list{display:grid;gap:13px}
+.sentence-completion-list label{display:block;background:var(--surface2);border:1px solid var(--line);border-radius:15px;padding:14px;font-weight:700}
+.sentence-completion-list textarea{margin-top:10px;font-weight:400}
+.gap-word{color:var(--deep);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;white-space:nowrap}
+.missing-letter-inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.missing-letter-inputs .letters-row{grid-template-columns:28px 1fr}
+.solution-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.solution-option{border:1px solid var(--line);border-radius:15px;background:#fff;padding:15px;text-align:left;transition:.2s}
+.solution-option:hover{transform:translateY(-2px);border-color:var(--blue)}
+.solution-option.best{background:#e2f6ef;border-color:#7bc2aa}
+.solution-option.possible{background:#fff7e4;border-color:#e4bf6c}
+.solution-option.risky{background:#fdebed;border-color:#df8c94}
+@media(max-width:980px){.vocab-top-grid,.vocab-bottom-grid{grid-template-columns:1fr}.vocab-main{height:auto}.vocab-side{grid-template-rows:auto}.discussion-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.vocab-match-layout{grid-template-columns:1fr}.missing-letter-inputs{grid-template-columns:1fr}}
+
+
+/* Alignment update requested */
+.starter-row{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+  align-items:stretch;
+}
+.starter-row>.activity{
+  height:760px;
+  display:flex;
+  flex-direction:column;
+  margin:0;
+}
+.starter-scroll{
+  flex:1;
+  min-height:0;
+  overflow:auto;
+  padding-right:4px;
+}
+.starter-row .activity-title{
+  min-height:92px;
+}
+.starter-row .activity-title h3{
+  font-size:1.22rem;
+}
+.starter-row .activity-title p{
+  font-size:.94rem;
+}
+.discussion-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  align-content:start;
+}
+.discussion-card{
+  min-height:210px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  background:linear-gradient(145deg,#f7fcff,#e7f5ff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-weight:780;
+  line-height:1.45;
+  box-shadow:0 6px 16px rgba(50,111,157,.08);
+}
+.vocab-top-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  align-items:stretch;
+}
+.vocab-main{
+  height:100%;
+}
+.vocab-side{
+  display:grid;
+  grid-template-rows:1fr 1fr;
+  gap:20px;
+  min-height:0;
+}
+.equal-side-card{
+  height:100%;
+  min-height:0;
+  overflow:auto;
+}
+.equal-side-card .activity-title{
+  margin-bottom:12px;
+}
+.equal-side-card .mcq-list{
+  gap:8px;
+}
+.equal-side-card .mcq{
+  padding:10px;
+}
+.category-table.flight-flow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.category.flight-flow-col{
+  min-height:300px;
+}
+.category.flight-flow-col .dropzone{
+  min-height:220px;
+}
+.sentence-completion-list.simple-gap-list{
+  display:grid;
+  gap:12px;
+}
+.simple-gap-row{
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+}
+.simple-gap-row input{
+  margin-top:8px;
+}
+@media(max-width:980px){
+  .starter-row,.vocab-top-grid{grid-template-columns:1fr}
+  .starter-row>.activity{height:auto}
+  .discussion-grid{grid-template-columns:1fr 1fr}
+  .vocab-side{grid-template-rows:auto}
+}
+@media(max-width:650px){
+  .discussion-grid{grid-template-columns:1fr}
+  .category-table.flight-flow{grid-template-columns:1fr}
+}
+
+
+/* Final corrections */
+.before-after-card .word-bank{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:14px;
+}
+.before-after-card .token{
+  width:100%;
+  text-align:center;
+}
+.before-after-card .category-table{
+  grid-template-columns:1fr 1fr;
+}
+.before-after-card .category{
+  min-height:250px;
+}
+.before-after-card .dropzone{
+  min-height:180px;
+}
+.letter-sentence{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:12px;
+  font-weight:700;
+}
+.mini-letter{
+  width:30px;
+  height:34px;
+  text-align:center;
+  border:1.5px solid #9fcbe5;
+  border-radius:8px;
+  background:#fff;
+  padding:0;
+  font-weight:800;
+  color:var(--deep);
+}
+.mini-letter:focus{
+  outline:none;
+  border-color:var(--deep);
+  box-shadow:0 0 0 3px rgba(50,111,157,.12);
+}
+.story-menu{
+  display:grid !important;
+}
+@media(max-width:650px){
+  .before-after-card .category-table{grid-template-columns:1fr}
+  .before-after-card .word-bank{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">✈ <span>At the Airport</span></div>
+    <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+    <div class="section-indicator" id="indicator">Section 1 of 3 · Warm-up</div>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-main">
+    <span class="eyebrow">Interactive English lesson · B1</span>
+    <h1>At the<br>Airport</h1>
+    
+    <div class="author">
+      <strong>Created by Viktoriia Pyniv</strong><br>
+      AI-assisted educational resource developed with ChatGPT (OpenAI).<br>
+      Adapted from <a href="https://eslbrains.com/" target="_blank" rel="noopener">ESL Brains</a>.
+    </div>
+  </div>
+  <aside class="hero-card">
+    <h3>Lesson objectives</h3>
+    <div class="objectives">
+      <div class="objective"><b>1</b><span>Recognise and use essential airport places and travel words.</span></div>
+      <div class="objective"><b>2</b><span>Notice key sounds in common airport vocabulary.</span></div>
+      <div class="objective"><b>3</b><span>Respond politely and effectively in a realistic role play.</span></div>
+    </div>
+  </aside>
+</section>
+
+<nav class="hero-nav">
+  <button class="nav-pill active" data-section="0">Get started</button>
+  <button class="nav-pill" data-section="1">Vocabulary lab</button>
+  <button class="nav-pill" data-section="2">Airport challenge</button>
+</nav>
+
+
+<section class="lesson-section active" id="section-0">
+  <div class="section-head"><div><h2>Get started</h2></div></div>
+  <div class="starter-row">
+    <article class="activity">
+      <div class="activity-title"><span class="num">1</span><div><h3>Airport riddles</h3><p>Read, type and check.</p></div></div>
+      <div class="starter-scroll">
+        <div class="card riddle"><p>I carry a bag and sometimes feel stressed. I look at big screens to find where to go next. I show a document with my name and flight, then I sit and wait before I fly.</p><input class="answer-input riddle-input" data-answer="passenger" placeholder="Your answer"><div class="feedback"></div></div>
+        <div class="card riddle"><p>You pack me before you go away, with clothes and things for every day. I travel on my wheels near and far, then wait for you where the others are.</p><input class="answer-input riddle-input" data-answer="suitcase" placeholder="Your answer"><div class="feedback"></div></div>
+        <div class="card riddle"><p>You show me before you get on the plane. I have your photo, your number and name. Without me, they won't let you fly.</p><input class="answer-input riddle-input" data-answer="passport" placeholder="Your answer"><div class="feedback"></div></div>
+      </div>
+      <div class="actions"><button class="primary" onclick="checkRiddles()">Check</button><button class="ghost" onclick="resetRiddles()">Reset</button></div>
+    </article>
+
+    <article class="activity">
+      <div class="activity-title"><span class="num">2</span><div><h3>Five-word brainstorm</h3><p>Write five words connected with airports.</p></div></div>
+      <div class="starter-scroll">
+        <div class="word-cloud-inputs vertical-inputs">
+          <input class="word-input" placeholder="Word 1">
+          <input class="word-input" placeholder="Word 2">
+          <input class="word-input" placeholder="Word 3">
+          <input class="word-input" placeholder="Word 4">
+          <input class="word-input" placeholder="Word 5">
+        </div>
+        <div class="hidden-answer" id="brainstormAnswer">Possible ideas: gate, luggage, boarding pass, security, departure.</div>
+      </div>
+      <div class="actions"><button class="secondary" onclick="revealIdeas()">Show ideas</button><button class="ghost" onclick="clearWords()">Reset</button></div>
+    </article>
+
+    <article class="activity">
+      <div class="activity-title"><span class="num">3</span><div><h3>Discuss the questions</h3><p>Choose a card and speak with a partner.</p></div></div>
+      <div class="starter-scroll discussion-grid">
+        <div class="discussion-card">What three things do you always pack for a flight? Why?</div>
+        <div class="discussion-card">What do you like most and least about airports? Why?</div>
+        <div class="discussion-card">When was the last time you were in an airport? Share some details.</div>
+        <div class="discussion-card">Is it easy for you to find where you need to go at an airport?</div>
+      </div>
+    </article>
+  </div>
+  <div class="section-nav"><span></span><button class="primary" onclick="showSection(1)">Next: Vocabulary lab →</button></div>
+</section>
+
+
+<section class="lesson-section" id="section-1">
+  <div class="section-head"><div><h2>Vocabulary lab</h2></div></div>
+
+  <div class="vocab-top-grid">
+    <article class="activity vocab-main">
+      <div class="activity-title"><span class="num">4</span><div><h3>Match airport places</h3><p>Drag or tap a word, then choose a picture.</p></div></div>
+      <div class="match-layout vocab-match-layout">
+        <div class="picture-grid" id="placesPictures"></div>
+        <div class="vertical-bank-wrap"><h4>Word bank</h4><div class="word-bank vertical-bank" id="placesBank"></div></div>
+      </div>
+      <div class="actions"><button class="primary" onclick="checkMatch('places')">Check</button><button class="ghost" onclick="resetMatch('places')">Reset</button></div>
+      <div class="feedback" id="placesFeedback"></div>
+    </article>
+
+    <div class="vocab-side">
+      <article class="activity equal-side-card">
+        <div class="activity-title"><span class="num">5</span><div><h3>Choose the correct sound</h3><p>Select the correct pronunciation.</p></div></div>
+        <div class="mcq-list" id="soundQuestions"></div>
+        <div class="actions"><button class="primary" onclick="checkSounds()">Check</button><button class="ghost" onclick="resetSounds()">Reset</button></div>
+        <div class="feedback" id="soundFeedback"></div>
+      </article>
+
+      <article class="activity equal-side-card before-after-card">
+        <div class="activity-title"><span class="num">6</span><div><h3>Before or after the flight?</h3><p>Drag each place into the correct column.</p></div></div>
+        <div class="word-bank" id="categoryBank"></div>
+        <div class="category-table" id="categoryTable">
+          <div class="category" data-cat="before"><h4>Where you go before the flight</h4><div class="dropzone"></div></div>
+          <div class="category" data-cat="after"><h4>Where you go after the flight</h4><div class="dropzone"></div></div>
+        </div>
+        <div class="actions"><button class="primary" onclick="checkCategories()">Check</button><button class="ghost" onclick="resetCategories()">Reset</button></div>
+        <div class="feedback" id="categoryFeedback"></div>
+      </article>
+    </div>
+  </div>
+
+  <div class="vocab-bottom-grid">
+    <article class="activity">
+      <div class="activity-title"><span class="num">7</span><div><h3>Match travel words</h3><p>Complete the second visual vocabulary set.</p></div></div>
+      <div class="match-layout vocab-match-layout">
+        <div class="picture-grid" id="travelPictures"></div>
+        <div class="vertical-bank-wrap"><h4>Word bank</h4><div class="word-bank vertical-bank" id="travelBank"></div></div>
+      </div>
+      <div class="actions"><button class="primary" onclick="checkMatch('travel')">Check</button><button class="ghost" onclick="resetMatch('travel')">Reset</button></div>
+      <div class="feedback" id="travelFeedback"></div>
+    </article>
+
+    <article class="activity">
+      <div class="activity-title"><span class="num">8</span><div><h3>Write the missing letters</h3><p>Complete the missing words. Then finish the sentences with your own ideas.</p></div></div>
+
+      <div id="lettersList">
+        <div class="letter-sentence">I usually start packing my c <input class="mini-letter" data-char="a" maxlength="1"> <input class="mini-letter" data-char="r" maxlength="1"> r <input class="mini-letter" data-char="y" maxlength="1"> - <input class="mini-letter" data-char="o" maxlength="1"> n …</div>
+
+        <div class="letter-sentence">If I’m at the airport and I find out my flight is <input class="mini-letter" data-char="d" maxlength="1"> e l <input class="mini-letter" data-char="a" maxlength="1"> y <input class="mini-letter" data-char="e" maxlength="1"> d, I…</div>
+
+        <div class="letter-sentence">When flights get <input class="mini-letter" data-char="c" maxlength="1"> <input class="mini-letter" data-char="a" maxlength="1"> n c <input class="mini-letter" data-char="e" maxlength="1"> l <input class="mini-letter" data-char="l" maxlength="1"> e d, airlines should…</div>
+
+        <div class="letter-sentence">While I wait to b <input class="mini-letter" data-char="o" maxlength="1"> <input class="mini-letter" data-char="a" maxlength="1"> r <input class="mini-letter" data-char="d" maxlength="1"> the plane, I usually…</div>
+
+        <div class="letter-sentence">I always keep my <input class="mini-letter" data-char="b" maxlength="1"> o <input class="mini-letter" data-char="a" maxlength="1"> <input class="mini-letter" data-char="r" maxlength="1"> d <input class="mini-letter" data-char="i" maxlength="1"> n <input class="mini-letter" data-char="g" maxlength="1"> &nbsp; p <input class="mini-letter" data-char="a" maxlength="1"> <input class="mini-letter" data-char="s" maxlength="1"> s in…</div>
+
+        <div class="letter-sentence">When the plane <input class="mini-letter" data-char="t" maxlength="1"> a k <input class="mini-letter" data-char="e" maxlength="1"> s &nbsp; o <input class="mini-letter" data-char="f" maxlength="1"> <input class="mini-letter" data-char="f" maxlength="1">, I feel…</div>
+
+        <div class="letter-sentence">The first thing I do when I l <input class="mini-letter" data-char="a" maxlength="1"> <input class="mini-letter" data-char="n" maxlength="1"> d in a new country is…</div>
+      </div>
+
+      <div class="actions"><button class="primary" onclick="checkLetters()">Check</button><button class="ghost" onclick="resetLetters()">Reset</button><button class="secondary" onclick="showLetters()">Show answers</button></div>
+      <div class="feedback" id="lettersFeedback"></div>
+    </article>
+  </div>
+
+  <div class="section-nav"><button class="ghost" onclick="showSection(0)">← Previous</button><button class="primary" onclick="showSection(2)">Next: Airport challenge →</button></div>
+</section>
+
+<section class="lesson-section" id="section-2"><div class="section-head"><div><h2>Airport challenge</h2><p>Choose a situation. Student B is the passenger; Student A is the airport employee. Speak before revealing the solutions.</p></div></div><article class="activity"><div class="activity-title"><span class="num">9</span><div><h3>Ten guided role plays</h3><p>All situations from the original game are included.</p></div></div><div id="storyMenu" class="story-menu"></div><div id="storyPlayer" style="display:none"></div></article><div class="section-nav"><button class="ghost" onclick="showSection(1)">← Previous</button><button class="primary" onclick="showSection(0)">Restart lesson ↻</button></div></section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+const sections=[...document.querySelectorAll('.lesson-section')];
+const names=['Warm-up','Vocabulary lab','Airport challenge'];
+function showSection(i){
+ sections.forEach((s,n)=>s.classList.toggle('active',n===i));
+ document.querySelectorAll('.nav-pill').forEach((b,n)=>b.classList.toggle('active',n===i));
+ document.getElementById('progress').style.width=((i+1)/3*100)+'%';
+ document.getElementById('indicator').textContent=`Section ${i+1} of 3 · ${names[i]}`;
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav-pill').forEach(b=>b.addEventListener('click',()=>showSection(+b.dataset.section)));
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+function norm(s){return s.trim().toLowerCase().replace(/[^a-z -]/g,'')}
+function checkRiddles(){
+ document.querySelectorAll('.riddle-input').forEach(inp=>{
+  const ok=norm(inp.value)===inp.dataset.answer;
+  const f=inp.nextElementSibling;f.textContent=ok?'Correct!':'Try again.';f.className='feedback '+(ok?'good':'bad');
+ });
+}
+function resetRiddles(){document.querySelectorAll('.riddle-input').forEach(i=>{i.value='';i.nextElementSibling.textContent=''})}
+function revealIdeas(){document.getElementById('brainstormAnswer').style.display='block'}
+function clearWords(){document.querySelectorAll('.word-input').forEach(i=>i.value='');document.getElementById('brainstormAnswer').style.display='none'}
+function toggleTip(btn,text){const box=btn.nextElementSibling;box.textContent=text;box.style.display=box.style.display==='block'?'none':'block'}
+function toggleElement(id){const e=document.getElementById(id);e.style.display=e.style.display==='block'?'none':'block'}
+
+const sets={
+ places:[
+  ['check-in desk','🧳','Drop off checked luggage'],
+  ['customs','🛃','Declare goods'],
+  ['arrivals','👋','Meet arriving passengers'],
+  ['departure lounge','🪑','Wait before the flight'],
+  ['duty-free shop','🛍️','Shop after security'],
+  ['gate','🚪','Board the plane here'],
+  ['security checkpoint','🔍','People and bags are checked'],
+  ['baggage reclaim','🛄','Collect checked bags']
+ ],
+ travel:[
+  ['carry-on','🎒','A small bag for the cabin'],
+  ['boarding pass','🎫','Your flight document'],
+  ['board','🚶‍♀️✈️','Get onto the plane'],
+  ['take off','🛫','Leave the ground'],
+  ['land','🛬','Come down to the ground'],
+  ['delayed','⏳','Leaving later than planned'],
+  ['cancelled','🚫✈️','The flight will not operate'],
+  ['passenger','🧑‍💼','A person travelling']
+ ]
+};
+let selectedToken=null;
+function initMatch(type){
+ const pics=document.getElementById(type+'Pictures'),bank=document.getElementById(type+'Bank');
+ pics.innerHTML='';bank.innerHTML='';
+ sets[type].forEach(([word,icon,hint],i)=>{
+  const p=document.createElement('div');p.className='picture-card';p.dataset.answer=word;p.innerHTML=`<div class="icon">${icon}</div><small>${hint}</small><div class="slot">Drop / tap a word</div>`;
+  p.addEventListener('click',()=>{if(selectedToken)placeToken(selectedToken,p,type)});
+  p.addEventListener('dragover',e=>e.preventDefault());p.addEventListener('drop',e=>{e.preventDefault();const w=e.dataTransfer.getData('text/plain');const tok=[...bank.children].find(x=>x.dataset.word===w);if(tok)placeToken(tok,p,type)});
+  pics.appendChild(p);
+ });
+ [...sets[type]].sort(()=>Math.random()-.5).forEach(([word])=>{
+  const t=document.createElement('button');t.className='token';t.textContent=word;t.dataset.word=word;t.draggable=true;
+  t.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',word));
+  t.addEventListener('click',()=>{document.querySelectorAll(`#${type}Bank .token`).forEach(x=>x.classList.remove('selected'));selectedToken=t;t.classList.add('selected')});
+  bank.appendChild(t);
+ });
+}
+function placeToken(tok,pic,type){
+ const old=[...document.querySelectorAll(`#${type}Pictures .picture-card`)].find(p=>p.dataset.placed===tok.dataset.word);
+ if(old){old.dataset.placed='';old.querySelector('.slot').textContent='Drop / tap a word'}
+ if(pic.dataset.placed){const previous=[...document.querySelectorAll(`#${type}Bank .token`)].find(t=>t.dataset.word===pic.dataset.placed);if(previous)previous.classList.remove('used')}
+ pic.dataset.placed=tok.dataset.word;pic.querySelector('.slot').textContent=tok.dataset.word;tok.classList.add('used');tok.classList.remove('selected');selectedToken=null;
+}
+function checkMatch(type){
+ let correct=0;document.querySelectorAll(`#${type}Pictures .picture-card`).forEach(p=>{
+  const ok=p.dataset.answer===p.dataset.placed;p.style.borderColor=ok?'#55ad8f':'#d77a84';if(ok)correct++;
+ });
+ const total=sets[type].length,f=document.getElementById(type+'Feedback');f.textContent=`${correct} / ${total} correct.`;f.className='feedback '+(correct===total?'good':'bad');
+}
+function resetMatch(type){initMatch(type);const f=document.getElementById(type+'Feedback');f.textContent='';selectedToken=null}
+
+const sounds=[
+ ["‘i’ in arrivals","/aɪ/ like in five","/ɪ/ like in sit",1],
+ ["‘ture’ in departure","/tʃə/ like in picture","/tə/ like in water",0],
+ ["‘ou’ in lounge","/ʌ/ like in lunch","/aʊ/ like in house",1],
+ ["‘u’ in customs","/ʊ/ like in put","/ʌ/ like in cup",1],
+ ["‘a’ in baggage","/æ/ like in bag","/ʌ/ like in bus",0]
+];
+function initSounds(){
+ const box=document.getElementById('soundQuestions');box.innerHTML='';
+ sounds.forEach((q,qi)=>{
+  const d=document.createElement('div');d.className='mcq';d.innerHTML=`<strong>${String.fromCharCode(65+qi)}. ${q[0]}</strong><div class="choices"></div>`;
+  [q[1],q[2]].forEach((txt,ci)=>{const b=document.createElement('button');b.className='choice';b.textContent=txt;b.onclick=()=>{d.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');d.dataset.selected=ci};d.querySelector('.choices').appendChild(b)});
+  box.appendChild(d);
+ });
+}
+function checkSounds(){
+ let c=0;document.querySelectorAll('.mcq').forEach((d,i)=>{const sel=+d.dataset.selected;d.querySelectorAll('.choice').forEach((b,j)=>{b.classList.remove('correct','wrong');if(j===sounds[i][3])b.classList.add('correct');else if(j===sel)b.classList.add('wrong')});if(sel===sounds[i][3])c++});
+ const f=document.getElementById('soundFeedback');f.textContent=`${c} / ${sounds.length} correct.`;f.className='feedback '+(c===sounds.length?'good':'bad')
+}
+function resetSounds(){initSounds();document.getElementById('soundFeedback').textContent=''}
+
+
+
+const catWords={
+  before:['check-in desk','departure lounge','duty-free shop','gate','security checkpoint'],
+  after:['arrivals','baggage reclaim','customs']
+};
+let selectedCatToken=null;
+function initCategories(){
+  const bank=document.getElementById('categoryBank');
+  const table=document.getElementById('categoryTable');
+  if(!bank || !table) return;
+  bank.innerHTML='';
+  table.querySelectorAll('.dropzone').forEach(z=>z.innerHTML='');
+  Object.entries(catWords).flatMap(([cat,ws])=>ws.map(w=>[w,cat])).sort(()=>Math.random()-.5).forEach(([w,cat])=>{
+    const t=document.createElement('button');
+    t.className='token';
+    t.textContent=w;
+    t.dataset.word=w;
+    t.dataset.correct=cat;
+    t.draggable=true;
+    t.onclick=()=>{
+      document.querySelectorAll('#categoryBank .token,#categoryTable .token').forEach(x=>x.classList.remove('selected'));
+      selectedCatToken=t;
+      t.classList.add('selected');
+    };
+    t.ondragstart=e=>e.dataTransfer.setData('text/plain',w);
+    bank.appendChild(t);
+  });
+  table.querySelectorAll('.category').forEach(c=>{
+    c.onclick=()=>{
+      if(selectedCatToken){
+        c.querySelector('.dropzone').appendChild(selectedCatToken);
+        selectedCatToken.classList.remove('selected');
+        selectedCatToken=null;
+      }
+    };
+    c.ondragover=e=>e.preventDefault();
+    c.ondrop=e=>{
+      e.preventDefault();
+      const w=e.dataTransfer.getData('text/plain');
+      const t=[...document.querySelectorAll('#categoryBank .token,#categoryTable .token')].find(x=>x.dataset.word===w);
+      if(t)c.querySelector('.dropzone').appendChild(t);
+    };
+  });
+}
+function checkCategories(){
+  const table=document.getElementById('categoryTable');
+  if(!table) return;
+  let c=0;
+  table.querySelectorAll('.category').forEach(cat=>cat.querySelectorAll('.token').forEach(t=>{
+    const ok=t.dataset.correct===cat.dataset.cat;
+    t.style.borderColor=ok?'#55ad8f':'#d77a84';
+    if(ok)c++;
+  }));
+  const total=Object.values(catWords).flat().length;
+  const f=document.getElementById('categoryFeedback');
+  f.textContent=`${c} / ${total} correct.`;
+  f.className='feedback '+(c===total?'good':'bad');
+}
+function resetCategories(){
+  initCategories();
+  const f=document.getElementById('categoryFeedback');
+  if(f) f.textContent='';
+}
+
+
+
+function solutionFeedback(btn,type,stage=1){
+ const parent=btn.parentElement;parent.querySelectorAll('.solution').forEach(b=>b.classList.remove('best','risky'));
+ btn.classList.add(type==='best'?'best':'risky');
+ const f=document.getElementById('roleFeedback'+stage);
+ if(type==='best'){f.textContent='Strong solution: it is practical, empathetic and protects the connection.';f.className='feedback good'}
+ else if(type==='possible'){f.textContent='Possible, but waiting may make the family miss the connecting flight.';f.className='feedback'}
+ else{f.textContent='Risky: this could waste time or create another problem.';f.className='feedback bad'}
+}
+function nextRoleStage(n){document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));document.getElementById('roleStage'+n).classList.add('active');document.getElementById('roleStage'+n).scrollIntoView({behavior:'smooth',block:'center'})}
+function restartRolePlay(){document.querySelectorAll('.stage').forEach(s=>s.classList.remove('active'));document.getElementById('roleStage1').classList.add('active');['employeeResponse1','employeeResponse2'].forEach(id=>document.getElementById(id).value='');['language1','language2','solutions1','solutions2'].forEach(id=>document.getElementById(id).style.display='none')}
+
+
+
+
+
+function initLetters(){
+  document.querySelectorAll('.mini-letter').forEach((input,index,all)=>{
+    input.addEventListener('input',()=>{
+      input.value=input.value.slice(0,1);
+      if(input.value && index<all.length-1) all[index+1].focus();
+    });
+  });
+}
+function checkLetters(){
+  let correct=0;
+  const inputs=[...document.querySelectorAll('.mini-letter')];
+  inputs.forEach(i=>{
+    const ok=i.value.trim().toLowerCase()===i.dataset.char;
+    i.style.borderColor=ok?'#55ad8f':'#d77a84';
+    if(ok) correct++;
+  });
+  const f=document.getElementById('lettersFeedback');
+  f.textContent=`${correct} / ${inputs.length} letters correct.`;
+  f.className='feedback '+(correct===inputs.length?'good':'bad');
+}
+function resetLetters(){
+  document.querySelectorAll('.mini-letter').forEach(i=>{
+    i.value='';
+    i.style.borderColor='#9fcbe5';
+  });
+  document.getElementById('lettersFeedback').textContent='';
+}
+function showLetters(){
+  document.querySelectorAll('.mini-letter').forEach(i=>i.value=i.dataset.char);
+  checkLetters();
+}
+
+
+
+
+const RP=[
+['😤 Angry Dad','Missing stroller · connecting flight',['baggage reclaim','connecting flight','delayed'],[["My daughter's stroller never arrived and our connection leaves in 40 minutes. What can you do?",'Provide a rental stroller, contact baggage services and arrange delivery.'],["Now the flight is delayed by two hours. Should we leave the airport to eat?",'Recommend staying near the gate and offer nearby food options.']]],
+['🔍 Security Mess','Forbidden items · final call',['security checkpoint','carry-on','final call'],[["My bag has a knife, a large perfume bottle, a laptop and a power bank. I fly in 25 minutes.",'Explain what must be removed and what may stay in the carry-on.'],["My pass says Gate 42A, but I am at 42 and the screen says final call.",'Give precise directions and contact the gate agent.']]],
+['📄 Customs Officer','Goods to declare · connection',['customs','duty-free','baggage reclaim'],[["I bought three perfumes and some food. Must I declare them?",'Advise the passenger to declare the goods and show receipts.'],["My connecting flight leaves in 45 minutes. Do I collect my suitcase?",'Check whether the bag is tagged through and direct the passenger accordingly.']]],
+['🏃 Gate Agent','Dead phone · overweight bag',['boarding pass','carry-on','gate'],[["My phone is dead, my carry-on is overweight and the gate closes in three minutes!",'Print the pass at the gate and arrange immediate bag handling.'],["The crew says we must deplane because of a technical problem. Should I stay?",'Tell the passenger to follow crew instructions and stay near the gate.']]],
+['🗺️ Lost Passenger','Wrong terminal · elderly traveller',['departure lounge','gate','wheelchair'],[["I am in Lounge A, but my gate is B23 and my flight leaves in 15 minutes.",'Arrange assistance, use the shuttle and call the gate.'],["My phone battery is nearly empty and I need to contact my daughter.",'Provide charging help and write down backup contact details.']]],
+['🎫 Overbooked Flight','Volunteer needed · meeting',['overbooked','compensation','rebook'],[["The flight is overbooked and I have an important meeting. Should I volunteer?",'Ask about the next confirmed flight, compensation and onward connection.'],["They offer $800 and business class in four hours. What should I check?",'Confirm the entire itinerary is rebooked in writing.']]],
+['⏰ Missed Connection','Student stranded overnight',['arrivals','rebook','hotel voucher'],[["I missed my connection and have no money for a hotel.",'Confirm rebooking and request accommodation or meal support.'],["The airline will not pay for a hotel because the delay was weather-related.",'Help find safe, affordable accommodation and transport.']]],
+['🚑 Medical Emergency','Sick before boarding',['medic','board','rebook'],[["I feel dizzy and sick, but boarding starts in 20 minutes.",'Stop boarding and call the airport medical team.'],["The medic says I should not fly, but the rebooking fee is $300.",'Request a medical waiver using the medic’s written note.']]],
+['🪪 Lost Passport','Passport missing · short time',['passport','check-in desk','security'],[["I cannot find my passport. I used it at the café ten minutes ago.",'Retrace steps, contact café staff and lost property.'],["The café found it, but the check-in line is huge and boarding starts soon.",'Use a self-service kiosk and alert airport staff.']]],
+['♿ Wheelchair Passenger','Assistance did not arrive',['wheelchair assistance','gate','board'],[["I booked assistance, but no one came and my gate is 15 minutes away.",'Arrange immediate safe assistance and notify the gate.'],["At the gate they say my seat was given away because I was late.",'Escalate to a supervisor and document the failed assistance request.']]]
+];
+let rpStory=0,rpStep=0;
+function renderStoryMenu(){
+  const menu=document.getElementById('storyMenu');
+  if(!menu) return;
+  menu.innerHTML='';
+  RP.forEach((s,i)=>{
+    const b=document.createElement('button');
+    b.className='story-card';
+    b.innerHTML=`<h4>${s[0]}</h4><p>${s[1]}</p>`;
+    b.onclick=()=>startRP(i);
+    menu.appendChild(b);
+  });
+}
+function startRP(i){
+  rpStory=i;
+  rpStep=0;
+  const menu=document.getElementById('storyMenu');
+  const player=document.getElementById('storyPlayer');
+  menu.style.display='none';
+  player.style.display='block';
+  renderRP();
+}
+
+function renderRP(){
+  const s=RP[rpStory],st=s[3][rpStep];
+  const model=st[1];
+  const alternatives=[
+    [model,'best'],
+    ['Ask the passenger to wait without taking any immediate action.','possible'],
+    ['Send the passenger somewhere else without checking the details.','risky']
+  ];
+  document.getElementById('storyPlayer').innerHTML=`<div class="role-stage">
+    <div class="role-toolbar"><button class="ghost" onclick="backRP()">← All situations</button><div class="role-label">${s[0]} · Stage ${rpStep+1} of 2</div></div>
+    <div class="vocab-strip">${s[2].map(v=>`<span>${v}</span>`).join('')}</div>
+    <div class="dialogue">
+      <div class="bubble passenger"><strong>Student B — Passenger</strong><br>${st[0]}</div>
+      <div class="bubble employee"><strong>Student A — Airport employee</strong><br>Respond politely, ask questions and suggest a solution.</div>
+    </div>
+    <div class="actions">
+      <button class="secondary" onclick="toggleElement('rpLanguage')">Show useful language</button>
+      <button class="primary" onclick="toggleElement('rpSolution')">Reveal model solution</button>
+    </div>
+    <div class="hidden-answer" id="rpLanguage"><strong>Useful language:</strong> I'm sorry about that. · Let me check. · Can I see your boarding pass? · I recommend… · The safest option is…</div>
+    <div class="hidden-answer" id="rpSolution">
+      <div class="solution-grid">
+        ${alternatives.map((o,n)=>`<button class="solution-option" onclick="selectRPOption(this,'${o[1]}')"><strong>${String.fromCharCode(65+n)}</strong><br>${o[0]}</button>`).join('')}
+      </div>
+      <div class="feedback" id="rpFeedback"></div>
+      <div class="actions"><button class="primary" onclick="nextRP()">${rpStep===0?'Continue the story →':'See the outcome →'}</button></div>
+    </div>
+  </div>`;
+  document.getElementById('storyPlayer').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function selectRPOption(btn,type){
+  btn.parentElement.querySelectorAll('.solution-option').forEach(x=>x.classList.remove('best','possible','risky'));
+  btn.classList.add(type);
+  rpFeedback.textContent=type==='best'
+    ? 'Best option: practical, professional and passenger-focused.'
+    : type==='possible'
+      ? 'Possible, but too passive. Improve it with a clear action plan.'
+      : 'Risky option: it does not solve the passenger’s problem.';
+  rpFeedback.className='feedback '+(type==='best'?'good':type==='risky'?'bad':'');
+}
+
+
+function nextRP(){
+  if(rpStep===0){
+    rpStep=1;
+    renderRP();
+  }else{
+    const s=RP[rpStory];
+    document.getElementById('storyPlayer').innerHTML=`<div class="role-stage">
+      <div class="role-toolbar"><button class="ghost" onclick="backRP()">← All situations</button><div class="role-label">${s[0]} · OUTCOME</div></div>
+      <div class="outcome">
+        <h3 style="margin-top:0">${s[4] || 'The passenger problem is solved'}</h3>
+        <p>${s[5] || 'The passenger receives clear support, follows the advice and completes the journey successfully.'}</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px">
+        <div class="card"><strong>Reflection</strong><p>Which phrases helped the employee sound professional and empathetic?</p></div>
+        <div class="card"><strong>Personal response</strong><p>Have you ever experienced a similar airport problem? What happened?</p></div>
+      </div>
+      <div class="actions"><button class="secondary" onclick="startRP(${rpStory})">Play again</button></div>
+    </div>`;
+  }
+}
+function backRP(){
+  const player=document.getElementById('storyPlayer');
+  const menu=document.getElementById('storyMenu');
+  player.style.display='none';
+  player.innerHTML='';
+  menu.style.display='grid';
+}
+
+window.addEventListener('DOMContentLoaded',()=>{
+  initMatch('places');
+  initMatch('travel');
+  initSounds();
+  initCategories();
+  initLetters();
+  renderStoryMenu();
+});
+</script>
+</body>
+</html>
