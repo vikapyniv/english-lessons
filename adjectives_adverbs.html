@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Adjectives or Adverbs? | Interactive B1–B1+ Lesson</title>
+<style>
+:root{
+  --bg:#f5f7fb;--surface:#fff;--surface-2:#eef3ff;--ink:#172033;--muted:#667085;
+  --primary:#5b5ce2;--primary-dark:#4445ba;--accent:#16a085;--danger:#df4b5f;
+  --line:#dde3ef;--success:#16865c;--shadow:0 16px 40px rgba(30,41,59,.10);--radius:22px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 8% 4%,rgba(91,92,226,.10),transparent 26%),
+    radial-gradient(circle at 92% 8%,rgba(22,160,133,.09),transparent 24%),var(--bg);
+  color:var(--ink);line-height:1.55
+}
+button{font:inherit;cursor:pointer}
+a{color:inherit}
+.topbar{position:sticky;top:0;z-index:1000;backdrop-filter:blur(18px);background:rgba(245,247,251,.9);border-bottom:1px solid rgba(221,227,239,.88)}
+.topbar-inner{max-width:1220px;margin:auto;padding:12px 24px;display:grid;grid-template-columns:minmax(220px,1fr) minmax(260px,1.4fr) auto;gap:20px;align-items:center}
+.brand{font-weight:850;letter-spacing:-.02em}
+.progress-track{height:9px;background:#e1e6f2;border-radius:999px;overflow:hidden}
+.progress-fill{width:33.33%;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .35s ease}
+.section-indicator{color:var(--muted);font-size:.9rem;white-space:nowrap;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:7px 11px}
+main{max-width:1220px;margin:auto;padding:28px 24px 64px}
+.hero{display:grid;grid-template-columns:1.4fr .8fr;gap:24px;align-items:stretch;margin:12px 0 22px}
+.hero-main,.info-card,.card,.activity,.practice-block,.game-shell{background:var(--surface);border:1px solid rgba(221,227,239,.9);box-shadow:var(--shadow);border-radius:var(--radius)}
+.hero-main{padding:38px;position:relative;overflow:hidden}
+.hero-main::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;right:-80px;top:-80px;background:linear-gradient(135deg,rgba(91,92,226,.14),rgba(22,160,133,.08))}
+.kicker{display:inline-flex;color:var(--primary-dark);font-weight:750;font-size:.86rem;background:#ededff;border-radius:999px;padding:7px 12px;margin-bottom:14px}
+h1{font-size:clamp(2.35rem,5vw,4.7rem);line-height:.96;letter-spacing:-.055em;margin:0 0 22px}
+.author{border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:.92rem}
+.author strong{color:var(--ink)}
+.author a{color:var(--primary-dark);font-weight:750;text-decoration:none}
+.author a:hover{text-decoration:underline}
+.info-card{padding:28px;background:linear-gradient(155deg,#20284b,#384178);color:#fff;display:flex;flex-direction:column;justify-content:space-between}
+.info-card h2{margin:0 0 14px;font-size:1.2rem}
+.info-card ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.info-card li{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:13px 14px}
+.info-card small{display:block;color:#cfd5f7;margin-top:3px}
+.hero-nav{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 30px}
+.nav-btn,.primary-btn,.secondary-btn,.ghost-btn{border:none;border-radius:14px;padding:12px 18px;font-weight:800;transition:.2s ease}
+.nav-btn{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.nav-btn.active,.primary-btn{background:var(--primary);color:#fff;box-shadow:0 10px 22px rgba(91,92,226,.24)}
+.secondary-btn{background:#e9edff;color:var(--primary-dark)}
+.ghost-btn{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.nav-btn:hover,.primary-btn:hover,.secondary-btn:hover,.ghost-btn:hover{transform:translateY(-2px)}
+.lesson-section{display:none;animation:fade .35s ease}
+.lesson-section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section-head{margin:10px 0 20px}
+.section-head .eyebrow{color:var(--primary-dark);font-weight:850;text-transform:uppercase;letter-spacing:.12em;font-size:.76rem}
+.section-head h2{font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-.04em;margin:4px 0 8px}
+.section-head p{color:var(--muted);max-width:760px;margin:0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.card,.activity,.practice-block{padding:26px}
+.card h3,.activity h3,.practice-block h3{margin:0 0 12px;font-size:1.18rem}
+.story{font-size:1.05rem;background:linear-gradient(180deg,#fbfcff,#f2f5ff)}
+.story p{margin:0 0 12px}
+.highlight{font-weight:850;color:var(--primary-dark)}
+.activity-number{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:11px;background:var(--primary);color:#fff;font-weight:900;margin-right:9px}
+.prompt-list{display:grid;gap:12px}
+.prompt-card{border:1px solid var(--line);border-radius:16px;padding:15px;background:#fff}
+.prompt-card strong{display:block;margin-bottom:4px}
+.muted{color:var(--muted)}
+.discovery-table{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.discovery-table>div{padding:15px 16px;border-bottom:1px solid var(--line)}
+.discovery-table>div:nth-child(odd){border-right:1px solid var(--line)}
+.discovery-table .head{font-weight:850;background:var(--surface-2)}
+.discovery-table .last{border-bottom:none}
+.quiz-stack{display:grid;gap:14px}
+.quiz-item{border:1px solid var(--line);border-radius:18px;padding:17px;background:#fff}
+.quiz-item p{margin:0 0 12px;font-weight:750}
+.options{display:grid;gap:9px}
+.option,.choice-chip,.reason-option,.game-option{border:1px solid var(--line);background:#f8faff;border-radius:12px;padding:10px 12px;font-weight:750;text-align:left}
+.option.selected,.choice-chip.selected,.reason-option.selected,.game-option.selected{border-color:var(--primary);background:#ececff;color:var(--primary-dark)}
+.option.correct,.game-option.correct{border-color:var(--success);background:#e9f8f1;color:var(--success)}
+.option.wrong,.game-option.wrong{border-color:var(--danger);background:#fff0f2;color:var(--danger)}
+.feedback,.final-feedback,.game-feedback{min-height:24px;margin-top:9px;color:var(--muted);font-size:.92rem}
+.rule-strip{margin-top:22px;background:linear-gradient(90deg,#20284b,#3b467e);color:#fff;padding:18px 22px;border-radius:18px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;box-shadow:var(--shadow)}
+.rule-pill{background:rgba(255,255,255,.12);padding:8px 11px;border-radius:999px}
+
+.grammar-summary{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+.grammar-summary-card{
+  background:linear-gradient(180deg,#ffffff,#f5f7ff);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+.grammar-summary-card h3{margin:8px 0 14px;font-size:1.05rem}
+.grammar-summary-card p{margin:7px 0}
+.grammar-summary-label{
+  display:inline-flex;padding:6px 10px;border-radius:999px;background:#ececff;
+  color:var(--primary-dark);font-size:.78rem;font-weight:850;
+  text-transform:uppercase;letter-spacing:.07em;
+}
+
+
+.heading-note{
+  display:inline-block;
+  margin-left:10px;
+  color:var(--muted);
+  font-size:.88rem;
+  font-weight:650;
+}
+.game-controls{
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.flip-back-btn{
+  width:auto;
+}
+.game-progress-dots{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.game-dot{
+  width:9px;height:9px;border-radius:50%;background:#d7ddeb;
+}
+.game-dot.active{background:var(--primary)}
+
+.practice-block{margin-bottom:22px}
+.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.logic-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px}
+.sentence{font-size:1.02rem;font-weight:750;margin:10px 0 14px}
+.choice-row{display:flex;gap:9px;flex-wrap:wrap}
+.reason-panel{display:none;margin-top:14px;padding:14px;border-radius:14px;background:#f7f9fd;border:1px dashed #c8d0df}
+.reason-panel.show{display:block}
+.reason-options{display:grid;gap:8px;margin-top:10px}
+.correct-text{color:var(--success);font-weight:700}
+.wrong-text{color:var(--danger);font-weight:700}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+.section-controls{display:flex;justify-content:space-between;gap:14px;margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}
+.game-shell{padding:24px}
+.lesson-game{background:var(--surface)}
+.game-instructions{
+  padding:15px 17px;border-radius:16px;background:var(--surface-2);
+  color:var(--muted);margin-bottom:18px;border:1px solid var(--line)
+}
+.game-toolbar{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  margin-bottom:16px;flex-wrap:wrap
+}
+.game-score{font-weight:800}
+.game-progress-dots{display:flex;gap:6px;flex-wrap:wrap}
+.game-dot{width:9px;height:9px;border-radius:50%;background:#d7ddeb}
+.game-dot.active{background:var(--primary)}
+.lesson-game-card{
+  max-width:820px;margin:auto;background:#fff;border:1px solid var(--line);
+  border-radius:22px;box-shadow:var(--shadow);overflow:hidden
+}
+.game-prompt-side,.game-task-side{padding:28px}
+.game-card-topline{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:22px
+}
+.game-label{
+  display:inline-flex;padding:7px 11px;border-radius:999px;
+  background:#ececff;color:var(--primary-dark);font-weight:850;
+  font-size:.78rem;text-transform:uppercase;letter-spacing:.07em
+}
+.game-card-number{color:var(--muted);font-weight:750;font-size:.9rem}
+.game-prompt-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px
+}
+.game-prompt-box{
+  padding:22px;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(180deg,#fff,#f7f8ff)
+}
+.game-prompt-box small{
+  display:block;color:var(--muted);font-size:.78rem;font-weight:850;
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px
+}
+.game-prompt-box strong{
+  display:block;font-size:clamp(1.7rem,4vw,2.7rem);line-height:1.05;
+  letter-spacing:-.04em;color:var(--ink)
+}
+.game-speaking-instruction{
+  margin-top:18px;padding:14px 16px;border-radius:14px;
+  background:#f8faff;border:1px dashed #cbd3e3;
+  color:var(--muted);font-weight:700
+}
+.game-open-btn{width:100%;margin-top:18px}
+.game-question{
+  font-size:clamp(1.55rem,4vw,2.35rem);line-height:1.15;
+  letter-spacing:-.035em;margin:0 0 20px
+}
+.game-option{
+  border:1px solid var(--line);background:#f8faff;border-radius:14px;
+  padding:13px 14px;font-weight:750;text-align:left
+}
+.game-option.selected{border-color:var(--primary);background:#ececff;color:var(--primary-dark)}
+.game-option.correct{border-color:var(--success);background:#e9f8f1;color:var(--success)}
+.game-option.wrong{border-color:var(--danger);background:#fff0f2;color:var(--danger)}
+.game-feedback{min-height:28px;margin-top:12px;color:var(--muted)}
+.game-bottom-actions{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)
+}
+.game-bottom-actions .toolbar{margin:0}
+.heading-note{
+  display:inline-block;margin-left:10px;color:var(--muted);
+  font-size:.88rem;font-weight:650
+}
+@media(max-width:900px){
+ .topbar-inner{grid-template-columns:1fr auto}.progress-wrap{grid-column:1/-1;grid-row:2}
+ .hero,.grid-2,.practice-grid,.grammar-summary,.game-prompt-grid{grid-template-columns:1fr}.hero-main{padding:28px}
+}
+@media(max-width:620px){
+ main{padding:18px 14px 46px}.topbar-inner{padding:10px 14px;gap:10px}
+ .card,.activity,.practice-block,.game-shell{padding:18px}
+ .section-controls{flex-direction:column}.section-controls button{width:100%}
+ .game-prompt-side,.game-task-side{padding:20px}.game-bottom-actions{flex-direction:column;align-items:stretch}.game-bottom-actions button{width:100%}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Adjectives or Adverbs?</div>
+    <div class="progress-wrap"><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+    <div class="section-indicator" id="sectionIndicator">Section 1 of 3 · Discover</div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-main">
+      <div class="kicker">B1–B1+ · Grammar through speaking</div>
+      <h1>Adjectives or Adverbs?</h1>
+      <div class="author">
+        <strong>Created by Viktoriia Pyniv</strong><br><br>
+        AI-assisted educational resource developed with ChatGPT (OpenAI).<br>
+        Source material adapted from <a href="https://www.cambridge.org/pl/cambridgeenglish/catalog/grammar-vocabulary-and-pronunciation/english-grammar-use-5th-edition" target="_blank" rel="noopener"><em>English Grammar in Use</em>, Units 100–101</a>.
+      </div>
+    </div>
+    <aside class="info-card">
+      <div>
+        <h2>Your decision map</h2>
+        <ul>
+          <li><strong>Person or thing?</strong><small>Choose an adjective.</small></li>
+          <li><strong>Action?</strong><small>Choose an adverb.</small></li>
+        </ul>
+      </div>
+      <div style="color:#cfd5f7;font-size:.9rem">Keep asking: “What am I describing?”</div>
+    </aside>
+  </section>
+
+  <nav class="hero-nav">
+    <button class="nav-btn active" data-target="section1">Discover</button>
+    <button class="nav-btn" data-target="section2">Controlled Practice</button>
+    <button class="nav-btn" data-target="section3">Speaking Game</button>
+  </nav>
+
+  <section id="section1" class="lesson-section active">
+    <div class="section-head">
+      <div class="eyebrow">Section one</div>
+      <h2>Discover the pattern</h2>
+      <p>Meet two different colleagues, notice the grammar, and build the rule yourself.</p>
+    </div>
+
+    <div class="grid-2">
+      <article class="card story">
+        <h3><span class="activity-number">1</span>Two very different colleagues</h3>
+        <p class="muted"><strong>Read the story, then discuss the questions on the right. Do not analyse the grammar yet.</strong></p>
+        <p><span class="highlight">Anna</span> is a careful person. She always plans her work carefully. She speaks quietly and listens patiently.</p>
+        <p><span class="highlight">Tom</span> is energetic and fast. He works fast and makes decisions quickly. However, he sometimes does things badly because he does not check his work carefully.</p>
+      </article>
+
+      <div class="activity">
+        <h3>Discuss</h3>
+        <div class="prompt-list">
+          <div class="prompt-card"><strong>Who would you prefer to work with?</strong><span class="muted">Explain your choice.</span></div>
+          <div class="prompt-card"><strong>Can a person be both fast and careful?</strong><span class="muted">Give a real example.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:22px">
+      <article class="card">
+        <h3><span class="activity-number">2</span>Guided discovery</h3>
+        <div class="discovery-table">
+          <div class="head">Person or thing</div><div class="head">Action</div>
+          <div>Anna is <strong>careful</strong>.</div><div>Anna works <strong>carefully</strong>.</div>
+          <div>She is <strong>quiet</strong>.</div><div>She speaks <strong>quietly</strong>.</div>
+          <div>Her work is <strong>good</strong>.</div><div>She works <strong>well</strong>.</div>
+          <div class="last">Tom is a <strong>fast</strong> worker.</div><div class="last">Tom works <strong>fast</strong>.</div>
+        </div>
+      </article>
+
+      <article class="activity">
+        <h3>Grammar quiz</h3>
+        <div class="quiz-stack">
+          <div class="quiz-item" data-answer="works-carefully">
+            <p>Which sentence describes an action?</p>
+            <div class="options">
+              <button class="option" data-value="is-careful">Anna is careful.</button>
+              <button class="option" data-value="works-carefully">Anna works carefully.</button>
+            </div><div class="feedback"></div>
+          </div>
+          <div class="quiz-item" data-answer="is-quiet">
+            <p>Which sentence describes a person?</p>
+            <div class="options">
+              <button class="option" data-value="is-quiet">She is quiet.</button>
+              <button class="option" data-value="speaks-quietly">She speaks quietly.</button>
+            </div><div class="feedback"></div>
+          </div>
+          <div class="quiz-item" data-answer="works-well">
+            <p>Which sentence tells us how Anna works?</p>
+            <div class="options">
+              <button class="option" data-value="work-good">Her work is good.</button>
+              <button class="option" data-value="works-well">She works well.</button>
+            </div><div class="feedback"></div>
+          </div>
+          <div class="quiz-item" data-answer="both-fast">
+            <p>Which pair uses the same form for adjective and adverb?</p>
+            <div class="options">
+              <button class="option" data-value="both-fast">a fast worker / works fast</button>
+              <button class="option" data-value="quiet-pair">a quiet person / speaks quietly</button>
+            </div><div class="feedback"></div>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="primary-btn" id="checkDiscovery">Check answers</button>
+          <button class="ghost-btn" id="resetDiscovery">Reset</button>
+        </div>
+      </article>
+    </div>
+
+    <div class="grammar-summary">
+      <div class="grammar-summary-card">
+        <div class="grammar-summary-label">Use an adjective</div>
+        <h3>Describe a person or thing</h3>
+        <p><strong>a careful driver</strong></p>
+        <p>The driver is <strong>careful</strong>.</p>
+      </div>
+      <div class="grammar-summary-card">
+        <div class="grammar-summary-label">Use an adverb</div>
+        <h3>Describe an action</h3>
+        <p>He drives <strong>carefully</strong>.</p>
+        <p>She speaks <strong>quietly</strong>.</p>
+        <p>They worked <strong>hard</strong>.</p>
+      </div>
+      <div class="grammar-summary-card">
+        <div class="grammar-summary-label">Ask yourself</div>
+        <h3>What am I describing?</h3>
+        <p><strong>A person or thing?</strong><br>→ adjective</p>
+        <p><strong>How an action happens?</strong><br>→ adverb</p>
+      </div>
+    </div>
+
+    <div class="section-controls"><span></span><button class="primary-btn next-section" data-target="section2">Next: Controlled Practice</button></div>
+  </section>
+
+  <section id="section2" class="lesson-section">
+    <div class="section-head">
+      <div class="eyebrow">Section two</div>
+      <h2>Controlled practice</h2>
+      <p>Choose the correct form and explain the reason.</p>
+    </div>
+
+    <div class="practice-block">
+      <h3><span class="activity-number">3</span>quick / quickly</h3>
+      <div class="practice-grid">
+        <article class="logic-card" data-correct="carefully" data-reason="action">
+          <div class="sentence">Sam drove <u>careful / carefully</u> along the narrow road.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="careful">careful</button><button class="choice-chip" data-value="carefully">carefully</button></div>
+          <div class="reason-panel"><strong>What does the word describe?</strong><div class="reason-options"><button class="reason-option" data-value="person">Sam, the person.</button><button class="reason-option" data-value="action">How Sam drove.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="selfishly" data-reason="action">
+          <div class="sentence">I think you behaved very <u>selfish / selfishly</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="selfish">selfish</button><button class="choice-chip" data-value="selfishly">selfishly</button></div>
+          <div class="reason-panel"><strong>What does the word describe?</strong><div class="reason-options"><button class="reason-option" data-value="person">The person.</button><button class="reason-option" data-value="action">How the person behaved.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="safe" data-reason="thing">
+          <div class="sentence">Be careful on that ladder. It doesn’t look very <u>safe / safely</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="safe">safe</button><button class="choice-chip" data-value="safely">safely</button></div>
+          <div class="reason-panel"><strong>What does the word describe?</strong><div class="reason-options"><button class="reason-option" data-value="thing">The ladder.</button><button class="reason-option" data-value="action">How someone climbs.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="safely" data-reason="action">
+          <div class="sentence">I’m glad you had a good trip and got home <u>safe / safely</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="safe">safe</button><button class="choice-chip" data-value="safely">safely</button></div>
+          <div class="reason-panel"><strong>What does the word describe?</strong><div class="reason-options"><button class="reason-option" data-value="home">The place “home”.</button><button class="reason-option" data-value="action">How you got home.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="practice-block">
+      <h3><span class="activity-number">4</span>good or well <span class="heading-note">good = adjective · well = adverb</span></h3>
+      <div class="practice-grid">
+        <article class="logic-card" data-correct="good" data-reason="noun">
+          <div class="sentence">Lucy is a <u>good / well</u> language learner.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="good">good</button><button class="choice-chip" data-value="well">well</button></div>
+          <div class="reason-panel"><strong>What does the word describe?</strong><div class="reason-options"><button class="reason-option" data-value="noun">The noun phrase “language learner”.</button><button class="reason-option" data-value="action">How Lucy learns.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="well" data-reason="action">
+          <div class="sentence">Lucy speaks German <u>good / well</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="good">good</button><button class="choice-chip" data-value="well">well</button></div>
+          <div class="reason-panel"><strong>What does the word describe?</strong><div class="reason-options"><button class="reason-option" data-value="language">German as a language.</button><button class="reason-option" data-value="action">How Lucy speaks.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="well" data-reason="action">
+          <div class="sentence">I didn’t sleep <u>good / well</u> last night.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="good">good</button><button class="choice-chip" data-value="well">well</button></div>
+          <div class="reason-panel"><strong>Why?</strong><div class="reason-options"><button class="reason-option" data-value="person">It describes me.</button><button class="reason-option" data-value="action">It describes how I slept.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="good" data-reason="adjective">
+          <div class="sentence">Joe’s exam results were very <u>good / well</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="good">good</button><button class="choice-chip" data-value="well">well</button></div>
+          <div class="reason-panel"><strong>Why?</strong><div class="reason-options"><button class="reason-option" data-value="adjective">It describes the noun phrase “exam results”.</button><button class="reason-option" data-value="action">It describes how Joe did something.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="practice-block">
+      <h3><span class="activity-number">5</span>fast, late, hard / hardly <span class="heading-note">fast &amp; late keep the same form · hard = with effort · hardly = almost not</span></h3>
+      <div class="practice-grid">
+        <article class="logic-card" data-correct="hard" data-reason="effort">
+          <div class="sentence">I’m tired because I’ve been working <u>hard / hardly</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="hard">hard</button><button class="choice-chip" data-value="hardly">hardly</button></div>
+          <div class="reason-panel"><strong>Which meaning is needed?</strong><div class="reason-options"><button class="reason-option" data-value="effort">With a lot of effort.</button><button class="reason-option" data-value="almost">Almost not.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="hardly" data-reason="almost">
+          <div class="sentence">This coat is almost unused. I’ve <u>hard / hardly</u> worn it.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="hard">hard</button><button class="choice-chip" data-value="hardly">hardly</button></div>
+          <div class="reason-panel"><strong>Which meaning is needed?</strong><div class="reason-options"><button class="reason-option" data-value="effort">With a lot of effort.</button><button class="reason-option" data-value="almost">Almost not.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="lately" data-reason="recently">
+          <div class="sentence">I haven’t been to the cinema <u>late / lately</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="late">late</button><button class="choice-chip" data-value="lately">lately</button></div>
+          <div class="reason-panel"><strong>Which meaning is needed?</strong><div class="reason-options"><button class="reason-option" data-value="after">After the expected time.</button><button class="reason-option" data-value="recently">Recently.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+        <article class="logic-card" data-correct="fast" data-reason="same">
+          <div class="sentence">Slow down! You’re walking too <u>fast / fastly</u>.</div>
+          <div class="choice-row"><button class="choice-chip" data-value="fast">fast</button><button class="choice-chip" data-value="fastly">fastly</button></div>
+          <div class="reason-panel"><strong>Which rule applies?</strong><div class="reason-options"><button class="reason-option" data-value="same">“Fast” is both adjective and adverb.</button><button class="reason-option" data-value="ly">Every adverb ends in -ly.</button></div></div>
+          <div class="final-feedback"></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="primary-btn" id="checkPractice">Check all answers</button>
+      <button class="secondary-btn" id="showPractice">Show answers</button>
+      <button class="ghost-btn" id="resetPractice">Reset</button>
+    </div>
+
+    <div class="section-controls">
+      <button class="ghost-btn prev-section" data-target="section1">Previous: Discover</button>
+      <button class="primary-btn next-section" data-target="section3">Next: Speaking Game</button>
+    </div>
+  </section>
+
+  <section id="section3" class="lesson-section">
+    <div class="section-head">
+      <div class="eyebrow">Section three</div>
+      <h2>Speaking game</h2>
+      <p>Create a personal question, speak to your partner, then flip the card and complete a varied follow-up task.</p>
+    </div>
+
+    <div class="game-shell lesson-game">
+      <div class="game-instructions">
+        <strong>How to play:</strong> Use the two prompts to create a natural personal question.
+        Ask your partner and one follow-up question. Then open the task and complete it together.
+      </div>
+
+      <div class="game-toolbar">
+        <div class="game-score" id="gameScore">Card 1 of 25 · Correct answers: 0</div>
+        <div class="game-progress-dots" id="gameDots"></div>
+      </div>
+
+      <article class="lesson-game-card" id="gameCard">
+        <div class="game-prompt-side" id="gameFront">
+          <div class="game-card-topline">
+            <span class="game-label" id="gameCategory"></span>
+            <span class="game-card-number" id="gameCardNumber">1 / 25</span>
+          </div>
+
+          <div class="game-prompt-grid">
+            <div class="game-prompt-box">
+              <small>Topic</small>
+              <strong id="gameTopic"></strong>
+            </div>
+            <div class="game-prompt-box">
+              <small>Target word</small>
+              <strong id="gameTarget"></strong>
+            </div>
+          </div>
+
+          <div class="game-speaking-instruction">
+            Create a natural personal question using both prompts.
+          </div>
+
+          <button class="primary-btn game-open-btn" id="openTaskBtn">Open follow-up task</button>
+        </div>
+
+        <div class="game-task-side" id="gameBack" hidden>
+          <div class="game-card-topline">
+            <span class="game-label" id="gameType"></span>
+            <span class="game-card-number" id="gameTaskNumber">1 / 25</span>
+          </div>
+
+          <h3 class="game-question" id="gameQuestion"></h3>
+          <div class="options" id="gameOptions"></div>
+          <div class="game-feedback" id="gameFeedback"></div>
+
+          <div class="game-bottom-actions">
+            <button class="ghost-btn" id="flipBackBtn">Back to speaking prompt</button>
+            <div class="toolbar" id="gameActions"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="section-controls"><button class="ghost-btn prev-section" data-target="section2">Previous: Controlled Practice</button><span></span></div>
+  </section>
+</main>
+
+<script>
+const sections=[...document.querySelectorAll('.lesson-section')];
+const navButtons=[...document.querySelectorAll('.nav-btn')];
+const indicator=document.getElementById('sectionIndicator');
+const progress=document.getElementById('progressFill');
+const names={section1:'Discover',section2:'Controlled Practice',section3:'Speaking Game'};
+function showSection(id){
+  sections.forEach(s=>s.classList.toggle('active',s.id===id));
+  navButtons.forEach(b=>b.classList.toggle('active',b.dataset.target===id));
+  const index=sections.findIndex(s=>s.id===id);
+  progress.style.width=((index+1)/sections.length*100)+'%';
+  indicator.textContent=`Section ${index+1} of ${sections.length} · ${names[id]}`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+navButtons.forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.target)));
+document.querySelectorAll('.next-section,.prev-section').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.target)));
+
+document.querySelectorAll('.quiz-item .option').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const item=btn.closest('.quiz-item');
+    item.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','correct','wrong'));
+    btn.classList.add('selected');item.dataset.selected=btn.dataset.value;item.querySelector('.feedback').textContent='';
+  });
+});
+document.getElementById('checkDiscovery').addEventListener('click',()=>{
+  document.querySelectorAll('.quiz-item').forEach(item=>{
+    const selected=item.dataset.selected,feedback=item.querySelector('.feedback');
+    item.querySelectorAll('.option').forEach(x=>x.classList.remove('correct','wrong'));
+    if(!selected){feedback.textContent='Choose an answer first.';return}
+    const chosen=item.querySelector(`.option[data-value="${selected}"]`);
+    if(selected===item.dataset.answer){chosen.classList.add('correct');feedback.textContent='Correct.'}
+    else{chosen.classList.add('wrong');item.querySelector(`.option[data-value="${item.dataset.answer}"]`).classList.add('correct');feedback.textContent='Look again at what the sentence describes.'}
+  });
+});
+document.getElementById('resetDiscovery').addEventListener('click',()=>{
+  document.querySelectorAll('.quiz-item').forEach(item=>{
+    delete item.dataset.selected;item.querySelectorAll('.option').forEach(x=>x.classList.remove('selected','correct','wrong'));item.querySelector('.feedback').textContent='';
+  });
+});
+
+document.querySelectorAll('.logic-card').forEach(card=>{
+  const maybeCheck=()=>{
+    if(card.dataset.choice&&card.dataset.reasonChoice) checkCard(card);
+  };
+  card.querySelectorAll('.choice-chip').forEach(btn=>btn.addEventListener('click',()=>{
+    card.querySelectorAll('.choice-chip').forEach(x=>x.classList.remove('selected'));
+    btn.classList.add('selected');
+    card.dataset.choice=btn.dataset.value;
+    card.querySelector('.reason-panel').classList.add('show');
+    card.querySelector('.final-feedback').textContent='';
+    maybeCheck();
+  }));
+  card.querySelectorAll('.reason-option').forEach(btn=>btn.addEventListener('click',()=>{
+    card.querySelectorAll('.reason-option').forEach(x=>x.classList.remove('selected'));
+    btn.classList.add('selected');
+    card.dataset.reasonChoice=btn.dataset.value;
+    maybeCheck();
+  }));
+});
+function checkCard(card){
+  const out=card.querySelector('.final-feedback');
+  if(!card.dataset.choice||!card.dataset.reasonChoice){
+    out.textContent='Choose a word and a reason.';
+    out.className='final-feedback wrong-text';
+    return;
+  }
+  if(card.dataset.choice===card.dataset.correct&&card.dataset.reasonChoice===card.dataset.reason){
+    out.textContent='✓ Correct.';
+    out.className='final-feedback correct-text';
+  }else{
+    out.textContent='✗ Not quite. Check the word and the reason.';
+    out.className='final-feedback wrong-text';
+  }
+}
+document.getElementById('checkPractice').addEventListener('click',()=>document.querySelectorAll('.logic-card').forEach(checkCard));
+document.getElementById('showPractice').addEventListener('click',()=>{
+  document.querySelectorAll('.logic-card').forEach(card=>{
+    card.querySelectorAll('.choice-chip').forEach(btn=>btn.classList.toggle('selected',btn.dataset.value===card.dataset.correct));
+    card.querySelectorAll('.reason-option').forEach(btn=>btn.classList.toggle('selected',btn.dataset.value===card.dataset.reason));
+    card.querySelector('.reason-panel').classList.add('show');
+    card.dataset.choice=card.dataset.correct;
+    card.dataset.reasonChoice=card.dataset.reason;
+    card.querySelector('.final-feedback').textContent='✓ Answer shown. Explain it aloud.';
+    card.querySelector('.final-feedback').className='final-feedback correct-text';
+  });
+});
+document.getElementById('resetPractice').addEventListener('click',()=>{
+  document.querySelectorAll('.logic-card').forEach(card=>{
+    delete card.dataset.choice;delete card.dataset.reasonChoice;
+    card.querySelectorAll('.choice-chip,.reason-option').forEach(x=>x.classList.remove('selected'));
+    card.querySelector('.reason-panel').classList.remove('show');
+    card.querySelector('.final-feedback').textContent='';
+  });
+});
+
+const gameCards=[{"category": "Good or well", "topic": "cook", "target": "well", "type": "Complete the sentence", "question": "I can cook quite ____.", "options": ["good", "well", "goodly"], "answer": "well", "explanation": "Well describes how the action is done."}, {"category": "Good or well", "topic": "team player", "target": "good", "type": "Choose the natural question", "question": "Which question is correct?", "options": ["Are you a well team player?", "Do you good at teamwork?", "Are you a good team player?"], "answer": "Are you a good team player?", "explanation": "Good describes the noun phrase team player."}, {"category": "Good or well", "topic": "speak English", "target": "well", "type": "Grammar choice", "question": "Which sentence is correct?", "options": ["She speaks English well.", "She speaks English good.", "She is well English speaker."], "answer": "She speaks English well.", "explanation": "Well describes how she speaks."}, {"category": "Good or well", "topic": "friend", "target": "good", "type": "Choose the natural sentence", "question": "Which sentence is correct?", "options": ["He is a well friend.", "He friends good.", "He is a good friend."], "answer": "He is a good friend.", "explanation": "Good describes the noun friend."}, {"category": "Good or well", "topic": "sleep", "target": "well", "type": "Quick check", "question": "Which sentence is standard English?", "options": ["I slept good last night.", "I slept well last night.", "I was sleep well last night."], "answer": "I slept well last night.", "explanation": "Well describes how someone slept."}, {"category": "Good or well", "topic": "exam results", "target": "good", "type": "Person, thing or action?", "question": "Which sentence describes a thing?", "options": ["Her exam results were good.", "She did well in the exam.", "She answered well."], "answer": "Her exam results were good.", "explanation": "Good describes the noun phrase exam results."}, {"category": "Good or well", "topic": "play tennis", "target": "well", "type": "Complete the sentence", "question": "Marta plays tennis very ____.", "options": ["good", "well", "goodly"], "answer": "well", "explanation": "Well describes how Marta plays."}, {"category": "Good or well", "topic": "language learner", "target": "good", "type": "Structure check", "question": "Which noun phrase is correct?", "options": ["a well language learner", "a language learner well", "a good language learner"], "answer": "a good language learner", "explanation": "Good comes before the noun phrase language learner."}, {"category": "Fast", "topic": "type", "target": "fast", "type": "True or false", "question": "“Fastly” is the normal adverb from “fast”.", "options": ["False", "True"], "answer": "False", "explanation": "Fast is both an adjective and an adverb."}, {"category": "Fast", "topic": "runner", "target": "fast", "type": "Describe a person", "question": "Which sentence describes the person?", "options": ["He runs fast.", "He is a fast runner.", "He runs fastly."], "answer": "He is a fast runner.", "explanation": "Fast describes the noun runner."}, {"category": "Fast", "topic": "run", "target": "fast", "type": "Describe an action", "question": "Which sentence describes the action?", "options": ["He is a fast runner.", "He is fast person.", "He runs fast."], "answer": "He runs fast.", "explanation": "Fast describes how he runs."}, {"category": "Fast", "topic": "learn", "target": "fast", "type": "Choose the natural sentence", "question": "Which sentence is natural?", "options": ["Some people learn fast.", "Some people learn fastly.", "Some people are learn fast."], "answer": "Some people learn fast.", "explanation": "Fast can be used as an adverb."}, {"category": "Fast", "topic": "internet connection", "target": "fast", "type": "Adjective or adverb?", "question": "Which sentence describes a thing?", "options": ["The internet works fast.", "The internet is fastly.", "We have a fast internet connection."], "answer": "We have a fast internet connection.", "explanation": "Fast describes the noun phrase internet connection."}, {"category": "Adjective or adverb", "topic": "drive", "target": "carefully", "type": "Find the mistake", "question": "Please drive careful.", "options": ["Please", "careful", "drive"], "answer": "careful", "explanation": "Carefully describes how someone drives."}, {"category": "Adjective or adverb", "topic": "neighbour", "target": "friendly", "type": "Think about it", "question": "Why is “friendly” an adjective here?", "options": ["It describes a person.", "Every -ly word is an adjective.", "It describes how someone speaks."], "answer": "It describes a person.", "explanation": "Friendly ends in -ly, but it is an adjective."}, {"category": "Adjective or adverb", "topic": "explain ideas", "target": "clearly", "type": "Correction", "question": "She explains grammar clear.", "options": ["Change explains to explaining.", "The sentence is correct.", "Change clear to clearly."], "answer": "Change clear to clearly.", "explanation": "Clearly describes how she explains."}, {"category": "Adjective or adverb", "topic": "teacher", "target": "patient", "type": "Structure check", "question": "Which noun phrase is correct?", "options": ["a patient teacher", "a patiently teacher", "a teacher patiently"], "answer": "a patient teacher", "explanation": "Patient describes the noun teacher."}, {"category": "Adjective or adverb", "topic": "remember names", "target": "easily", "type": "Complete the sentence", "question": "She remembers names ____.", "options": ["easy", "easily", "easiness"], "answer": "easily", "explanation": "Easily describes the action remember."}, {"category": "Adjective or adverb", "topic": "sing", "target": "badly", "type": "Contrast", "question": "Which pair is correct?", "options": ["a badly singer / sings bad", "a goodly singer / sings well", "a bad singer / sings badly"], "answer": "a bad singer / sings badly", "explanation": "Bad describes the singer; badly describes the action."}, {"category": "Adjective or adverb", "topic": "answer people", "target": "politely", "type": "Situation", "question": "A customer is angry. What should the worker do?", "options": ["Answer polite.", "Answer politely.", "Be politely."], "answer": "Answer politely.", "explanation": "Politely describes the action answer."}, {"category": "Everyday English", "topic": "speak", "target": "quietly", "type": "Choose the natural sentence", "question": "Which sentence is correct?", "options": ["Could you speak quietly, please?", "Could you speak quiet, please?", "Could you quietly speaker, please?"], "answer": "Could you speak quietly, please?", "explanation": "Quietly describes how the person speaks."}, {"category": "Everyday English", "topic": "careful driver", "target": "careful", "type": "Adjective or adverb?", "question": "Which sentence describes the person?", "options": ["She drives carefully.", "She is a carefully driver.", "She is a careful driver."], "answer": "She is a careful driver.", "explanation": "Careful describes the noun driver."}, {"category": "Everyday English", "topic": "answer", "target": "quickly", "type": "Complete the sentence", "question": "Please answer the message ____.", "options": ["quickness", "quickly", "quick"], "answer": "quickly", "explanation": "Quickly describes how the message should be answered."}, {"category": "Everyday English", "topic": "bad day", "target": "bad", "type": "Choose the correct sentence", "question": "Which sentence describes the day?", "options": ["It was a bad day.", "It was a badly day.", "The day was badly."], "answer": "It was a bad day.", "explanation": "Bad describes the noun day."}, {"category": "Everyday English", "topic": "work", "target": "carefully", "type": "Meaning and form", "question": "You do not want to make mistakes. What should you do?", "options": ["Work careful.", "Be work carefully.", "Work carefully."], "answer": "Work carefully.", "explanation": "Carefully describes how you should work."}];
+const themes=[['#e8dccb','#b7c8b5'],['#d8e2ea','#f0d4c2'],['#ddd2ee','#f4e8d7'],['#f2d0c7','#d7e6da'],['#c8ddd6','#f5eddd'],['#f1dfb9','#c9d6cf']];
+let gameIndex=0,gameCorrect=0,gameAnswered=false;
+
+const gameFront=document.getElementById('gameFront');
+const gameBack=document.getElementById('gameBack');
+const openTaskBtn=document.getElementById('openTaskBtn');
+const flipBackBtn=document.getElementById('flipBackBtn');
+
+function renderDots(){
+  const dots=document.getElementById('gameDots');
+  dots.innerHTML='';
+  gameCards.forEach((_,i)=>{
+    const d=document.createElement('span');
+    d.className='game-dot'+(i===gameIndex?' active':'');
+    dots.appendChild(d);
+  });
+}
+
+function showPrompt(){
+  gameFront.hidden=false;
+  gameBack.hidden=true;
+}
+
+function showTask(){
+  gameFront.hidden=true;
+  gameBack.hidden=false;
+}
+
+function renderGame(){
+  const c=gameCards[gameIndex];
+  gameAnswered=false;
+  showPrompt();
+
+  document.getElementById('gameCategory').textContent=c.category;
+  document.getElementById('gameTopic').textContent=c.topic;
+  document.getElementById('gameTarget').textContent=c.target;
+  document.getElementById('gameType').textContent=c.type;
+  document.getElementById('gameQuestion').textContent=c.question;
+  document.getElementById('gameFeedback').textContent='';
+  document.getElementById('gameActions').innerHTML='';
+  document.getElementById('gameScore').textContent=`Card ${gameIndex+1} of ${gameCards.length} · Correct answers: ${gameCorrect}`;
+  document.getElementById('gameCardNumber').textContent=`${gameIndex+1} / ${gameCards.length}`;
+  document.getElementById('gameTaskNumber').textContent=`${gameIndex+1} / ${gameCards.length}`;
+
+  renderDots();
+
+  const opts=document.getElementById('gameOptions');
+  opts.innerHTML='';
+
+  c.options.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='game-option';
+    b.textContent=opt;
+
+    b.addEventListener('click',()=>{
+      if(gameAnswered)return;
+
+      opts.querySelectorAll('.game-option').forEach(x=>x.classList.remove('selected','correct','wrong'));
+      b.classList.add('selected');
+
+      if(opt===c.answer){
+        b.classList.add('correct');
+        gameAnswered=true;
+        gameCorrect++;
+
+        document.getElementById('gameFeedback').innerHTML=`<span class="correct-text">✓ Correct.</span> ${c.explanation}`;
+
+        const next=document.createElement('button');
+        next.className='primary-btn';
+        next.textContent=gameIndex===gameCards.length-1?'Restart game':'Next card';
+        next.addEventListener('click',()=>{
+          if(gameIndex===gameCards.length-1){
+            gameIndex=0;
+            gameCorrect=0;
+          }else{
+            gameIndex++;
+          }
+          renderGame();
+        });
+
+        document.getElementById('gameActions').appendChild(next);
+      }else{
+        b.classList.add('wrong');
+        document.getElementById('gameFeedback').innerHTML='<span class="wrong-text">✗ Try again.</span> Think about the word form, meaning, or sentence structure.';
+      }
+
+      document.getElementById('gameScore').textContent=`Card ${gameIndex+1} of ${gameCards.length} · Correct answers: ${gameCorrect}`;
+    });
+
+    opts.appendChild(b);
+  });
+}
+
+openTaskBtn.addEventListener('click',showTask);
+flipBackBtn.addEventListener('click',showPrompt);
+renderGame();</script>
+</body>
+</html>
