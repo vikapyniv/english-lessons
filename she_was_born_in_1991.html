@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>She Was Born in 1991 — Past Simple Review</title>
+<style>
+:root{
+  --bg:#f7f1e8;
+  --surface:#fffaf3;
+  --surface-2:#efe2d1;
+  --surface-3:#e4d2bd;
+  --ink:#3c2f26;
+  --muted:#75665b;
+  --accent:#a66f45;
+  --accent-dark:#805133;
+  --accent-soft:#d7b895;
+  --ok:#3f7a5b;
+  --bad:#a64b3c;
+  --shadow:0 12px 30px rgba(84,56,35,.10);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:linear-gradient(180deg,#f8f2ea 0%,#f4ede3 100%);
+  color:var(--ink);
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:var(--accent-dark)}
+.topbar{
+  position:sticky;top:0;z-index:1000;
+  background:rgba(255,250,243,.94);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(166,111,69,.14);
+}
+.topbar-inner{
+  max-width:1180px;margin:auto;padding:12px 22px;
+  display:grid;grid-template-columns:1fr 1.2fr auto;gap:18px;align-items:center
+}
+.brand{font-weight:800;white-space:nowrap}
+.section-indicator{font-size:.92rem;color:var(--muted);white-space:nowrap}
+.progress-wrap{height:9px;background:#eadccc;border-radius:999px;overflow:hidden}
+.progress{height:100%;width:50%;background:linear-gradient(90deg,var(--accent),var(--accent-soft));transition:.35s ease}
+.hero{
+  max-width:1180px;margin:32px auto 0;padding:0 22px;
+  display:grid;grid-template-columns:1.25fr .75fr;gap:24px;align-items:stretch
+}
+.hero-main,.info-card{
+  background:var(--surface);border-radius:28px;box-shadow:var(--shadow);padding:34px
+}
+.eyebrow{
+  display:inline-flex;padding:7px 11px;border-radius:999px;background:var(--surface-2);
+  color:var(--accent-dark);font-size:.82rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase
+}
+h1{font-size:clamp(2.2rem,5vw,4.5rem);line-height:.98;margin:18px 0 16px;letter-spacing:-.045em}
+.subtitle{font-size:1.12rem;color:var(--muted);max-width:700px;line-height:1.65}
+.author{margin-top:24px;padding-top:20px;border-top:1px solid #eadccd;font-size:.92rem;line-height:1.65;color:var(--muted)}
+.author strong{color:var(--ink)}
+.info-card{
+  background:linear-gradient(160deg,#ead8c2 0%,#d7b895 100%);
+  display:flex;flex-direction:column;justify-content:space-between
+}
+.info-card h2{margin:0 0 12px;font-size:1.45rem}
+.info-list{display:grid;gap:12px}
+.info-item{background:rgba(255,250,243,.72);padding:14px 16px;border-radius:16px}
+.info-item b{display:block;margin-bottom:4px}
+.hero-nav{
+  max-width:1180px;margin:18px auto 0;padding:0 22px;
+  display:flex;flex-wrap:wrap;gap:10px
+}
+.nav-btn{
+  border:none;border-radius:999px;padding:12px 18px;font-weight:800;
+  background:#eadccc;color:var(--ink);transition:.22s ease
+}
+.nav-btn:hover,.nav-btn.active{transform:translateY(-1px);background:var(--accent);color:white}
+main{max-width:1180px;margin:24px auto 70px;padding:0 22px}
+.section{display:none;animation:fade .35s ease}
+.section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section-head{
+  display:flex;justify-content:space-between;gap:20px;align-items:end;margin:28px 0 18px
+}
+.section-head h2{font-size:clamp(1.7rem,3vw,2.5rem);margin:0}
+.section-head p{margin:0;color:var(--muted);max-width:620px;line-height:1.6}
+.activity{
+  background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:24px;margin:18px 0;border:1px solid rgba(166,111,69,.08)
+}
+.activity-title{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+.num{
+  width:34px;height:34px;border-radius:50%;background:var(--accent);color:white;
+  display:grid;place-items:center;font-weight:900;flex:0 0 auto
+}
+.activity h3{margin:2px 0 5px;font-size:1.22rem}
+.instruction{color:var(--muted);line-height:1.55;margin:0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.jobs{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.job{
+  border:1px solid #d8c4ad;background:#fffaf3;border-radius:999px;padding:10px 14px;font-weight:700;
+  transition:.2s
+}
+.job.selected{background:var(--accent);color:white;border-color:var(--accent)}
+textarea,input,select{
+  width:100%;border:1px solid #d9c8b4;background:#fffdf9;color:var(--ink);
+  border-radius:14px;padding:12px 13px;outline:none;transition:.2s
+}
+textarea:focus,input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(166,111,69,.14)}
+textarea{min-height:116px;resize:vertical}
+.celeb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.celeb-card{
+  background:#fffdf9;border:1px solid #eadccb;border-radius:18px;padding:16px;
+  display:flex;flex-direction:column;gap:12px
+}
+.avatar{
+  width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#cda986,#9b6743);
+  color:white;display:grid;place-items:center;font-weight:900;font-size:1.1rem
+}
+.fact{line-height:1.5;min-height:72px}
+.verb-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.icon-btn{
+  border:none;border-radius:12px;background:var(--surface-2);padding:10px 12px;font-weight:800;color:var(--accent-dark)
+}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.primary,.secondary,.ghost{
+  border:none;border-radius:14px;padding:11px 16px;font-weight:850;transition:.2s
+}
+.primary{background:var(--accent);color:white}
+.secondary{background:var(--surface-2);color:var(--ink)}
+.ghost{background:transparent;color:var(--accent-dark);border:1px solid #d8c4ad}
+.primary:hover,.secondary:hover,.ghost:hover{transform:translateY(-1px)}
+.feedback{margin-top:12px;font-weight:800;min-height:24px}
+.correct{border-color:var(--ok)!important;background:#f3fbf6}
+.incorrect{border-color:var(--bad)!important;background:#fff6f4}
+.year-list{display:grid;gap:10px}
+.year-item{display:grid;grid-template-columns:85px 1fr;align-items:center;gap:10px}
+.rule-list{display:grid;gap:14px}
+.rule{background:#fffdf9;border:1px solid #eadccb;border-radius:16px;padding:14px}
+.rule label{display:block;margin-bottom:8px;line-height:1.45}
+.reveal{
+  margin-top:12px;padding:12px 14px;border-radius:14px;background:#f0e4d5;display:none;line-height:1.55
+}
+.reveal.show{display:block}
+.timeline-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.timeline-card{background:#fffdf9;border:1px solid #eadccb;border-radius:16px;padding:14px}
+.timeline-card input{margin-bottom:8px}
+.question-bank{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.q-card{
+  border:1px solid #ddc9b1;background:#fffdf9;border-radius:16px;padding:16px;text-align:left;
+  transition:.22s;min-height:96px
+}
+.q-card:hover,.q-card.selected{background:var(--surface-2);border-color:var(--accent);transform:translateY(-2px)}
+.random-box{
+  min-height:110px;border-radius:18px;background:linear-gradient(145deg,#ead8c2,#d7b895);
+  display:grid;place-items:center;text-align:center;padding:20px;font-weight:850;font-size:1.15rem
+}
+.speaking-frame{background:#fffdf9;border:1px dashed #caa783;border-radius:16px;padding:16px;line-height:1.7}
+.game-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.game-grid textarea{min-height:100px}
+.section-nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
+.footer-note{text-align:center;color:var(--muted);font-size:.9rem;margin-top:30px}
+.small{font-size:.88rem;color:var(--muted)}
+@media(max-width:900px){
+  .topbar-inner{grid-template-columns:1fr auto}.progress-wrap{grid-column:1/-1}
+  .hero,.grid-2{grid-template-columns:1fr}
+  .celeb-grid{grid-template-columns:repeat(2,1fr)}
+  .timeline-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:620px){
+  .hero-main,.info-card,.activity{padding:19px}
+  .celeb-grid,.question-bank,.game-grid,.timeline-grid{grid-template-columns:1fr}
+  .section-head{display:block}.section-head p{margin-top:8px}
+  .year-item{grid-template-columns:70px 1fr}
+  .topbar-inner{padding:10px 14px}
+  .brand{font-size:.9rem}
+}
+
+.year-sentence{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:#fffdf9;border:1px solid #eadccb;border-radius:14px;padding:12px 14px;
+  line-height:1.5
+}
+.year-sentence input{width:140px;display:inline-block}
+.rule-label{font-weight:700;line-height:1.45;margin-bottom:10px}
+.rule-options{display:flex;gap:10px;flex-wrap:wrap}
+.rule-option{
+  border:1px solid #d8c4ad;background:#fffaf3;border-radius:999px;padding:9px 14px;
+  font-weight:800;color:var(--ink);transition:.2s
+}
+.rule-option:hover,.rule-option.selected{background:var(--accent);color:white;border-color:var(--accent)}
+.rule.correct{border-color:var(--ok);background:#f3fbf6}
+.rule.incorrect{border-color:var(--bad);background:#fff6f4}
+.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.category-card{
+  border:1px solid #d8c4ad;background:#fffdf9;border-radius:16px;padding:14px;
+  text-align:left;font-weight:800;color:var(--ink);transition:.2s
+}
+.category-card:hover,.category-card.selected{background:var(--surface-2);border-color:var(--accent);transform:translateY(-1px)}
+.single-question-card{
+  min-height:180px;border-radius:22px;background:linear-gradient(145deg,#ead8c2,#d7b895);
+  display:grid;place-items:center;text-align:center;padding:30px;font-size:clamp(1.35rem,3vw,2rem);
+  line-height:1.35;font-weight:850
+}
+@media(max-width:900px){.category-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.category-grid{grid-template-columns:1fr}.year-sentence input{width:120px}}
+
+.hero{grid-template-columns:1fr}
+.hero-main{max-width:none}
+.activity-title .instruction strong{
+  color:var(--accent-dark);
+  font-weight:900;
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="topbar-inner">
+<div class="brand">She Was Born in 1991</div>
+<div aria-label="Lesson progress" class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="section-indicator" id="sectionIndicator">Section 1 of 2 · Famous lives</div>
+</div>
+</header>
+<section class="hero">
+<div class="hero-main">
+<span class="eyebrow">Past Simple review · Speaking-focused lesson</span>
+<h1>She Was Born in 1991</h1>
+
+<div class="author"><strong>Created by Viktoriia Pyniv</strong><br/>AI-assisted educational resource developed with ChatGPT (OpenAI).<br/>Source inspiration: <a href="https://eslbrains.com/past-simple-for-beginners/" rel="noopener" target="_blank">ESL Brains - Did you cook dinner? (Past Simple negative and questions)</a></div>
+</div>
+
+</section>
+<nav aria-label="Lesson sections" class="hero-nav">
+<button class="nav-btn active" data-section="section1">Famous lives</button>
+<button class="nav-btn" data-section="section2">Life stories</button>
+</nav>
+<main>
+<section class="section active" id="section1">
+<div class="section-head">
+<div><h2>Famous lives</h2></div>
+
+</div>
+<article class="activity">
+<div class="activity-title">
+<span class="num">1</span>
+<div><h3>Famous people by profession</h3><p class="instruction">Choose three jobs. For each job, name a famous person from your country or another country and add some details.</p></div>
+</div>
+<div class="jobs" id="jobs">
+<button class="job">chef</button><button class="job">podcaster</button><button class="job">writer</button>
+<button class="job">businessperson</button><button class="job">singer</button><button class="job">actor</button>
+</div>
+</article>
+<article class="activity">
+<div class="activity-title">
+<span class="num">2</span>
+<div><h3>What did you already know?</h3><p class="instruction">Read the facts. Discuss which ones you already knew. Then write the present form of the bold verb phrase.</p></div>
+</div>
+<div class="celeb-grid" id="celebGrid">
+<div class="celeb-card" data-answer="get married"><div class="avatar">JL</div><div class="fact">John Lennon and Yoko Ono <b>got married</b> in 1969.</div><div class="verb-row"><input placeholder="Present form"/><button class="icon-btn reveal-one">Show</button></div></div>
+<div class="celeb-card" data-answer="graduate"><div class="avatar">NP</div><div class="fact">Natalie Portman <b>graduated</b> from Harvard University in 2003.</div><div class="verb-row"><input placeholder="Present form"/><button class="icon-btn reveal-one">Show</button></div></div>
+<div class="celeb-card" data-answer="be born"><div class="avatar">FK</div><div class="fact">Frida Kahlo <b>was born</b> in Mexico in 1907.</div><div class="verb-row"><input placeholder="Present form"/><button class="icon-btn reveal-one">Show</button></div></div>
+<div class="celeb-card" data-answer="find a job"><div class="avatar">JJ</div><div class="fact">Jameela Jamil <b>found a job</b> on TV in 2008.</div><div class="verb-row"><input placeholder="Present form"/><button class="icon-btn reveal-one">Show</button></div></div>
+<div class="celeb-card" data-answer="become famous"><div class="avatar">MC</div><div class="fact">Macaulay Culkin <b>became famous</b> in 1990.</div><div class="verb-row"><input placeholder="Present form"/><button class="icon-btn reveal-one">Show</button></div></div>
+<div class="celeb-card" data-answer="die"><div class="avatar">VG</div><div class="fact">Vincent van Gogh <b>died</b> in 1890 as a poor man.</div><div class="verb-row"><input placeholder="Present form"/><button class="icon-btn reveal-one">Show</button></div></div>
+</div>
+<div class="controls"><button class="primary" id="checkCelebs">Check answers</button><button class="secondary" id="resetCelebs">Reset</button></div>
+<div class="feedback" id="celebFeedback"></div>
+</article>
+<div class="grid-2">
+<article class="activity">
+<div class="activity-title">
+<span class="num">3</span>
+<div><h3>Complete the years</h3><p class="instruction">Type the missing word. Then read every year aloud.</p></div>
+</div>
+<div class="year-list" id="yearList"><div class="year-sentence">2003 – two thousand and <input aria-label="Missing word" data-answer="three"/></div><div class="year-sentence">1907 – nineteen oh <input aria-label="Missing word" data-answer="seven"/></div><div class="year-sentence">2008 – two <input aria-label="Missing word" data-answer="thousand"/> and eight</div><div class="year-sentence">2021 – twenty <input aria-label="Missing word" data-answer="twenty"/>-one</div><div class="year-sentence">1990 – nineteen <input aria-label="Missing word" data-answer="ninety"/></div><div class="year-sentence">the 1990s – the nineteen <input aria-label="Missing word" data-answer="nineties"/></div><div class="year-sentence">1890 – <input aria-label="Missing word" data-answer="eighteen"/> ninety</div><div class="year-sentence">1998 – <input aria-label="Missing word" data-answer="nineteen"/> ninety-eight</div></div>
+<div class="controls"><button class="primary" id="checkYears">Check answers</button><button class="secondary" id="resetYears">Reset</button></div>
+<div class="feedback" id="yearFeedback"></div>
+</article>
+<article class="activity">
+<div class="activity-title">
+<span class="num">4</span>
+<div><h3>Complete the rules</h3><p class="instruction">Choose the correct option. Use the years from Activity 3 as evidence.</p></div>
+</div>
+<div class="rule-list" id="ruleList"><div class="rule" data-answer="one number"><div class="rule-label">A. When we speak of years 2000–2009, we say them as:</div><div class="rule-options"><button class="rule-option" data-value="one number" type="button">one number</button><button class="rule-option" data-value="three numbers" type="button">three numbers</button></div></div><div class="rule" data-answer="two numbers"><div class="rule-label">B1. When we speak of other years, we say them as:</div><div class="rule-options"><button class="rule-option" data-value="two numbers" type="button">two numbers</button><button class="rule-option" data-value="three numbers" type="button">three numbers</button></div></div><div class="rule" data-answer="third digit"><div class="rule-label">B2. We pronounce 0 as “oh” when 0 is the:</div><div class="rule-options"><button class="rule-option" data-value="third digit" type="button">third digit</button><button class="rule-option" data-value="fourth digit" type="button">fourth digit</button></div></div><div class="rule" data-answer="plural"><div class="rule-label">C1. When we say decades, we use:</div><div class="rule-options"><button class="rule-option" data-value="singular" type="button">singular</button><button class="rule-option" data-value="plural" type="button">plural</button></div></div><div class="rule" data-answer="the"><div class="rule-label">C2. Before the number in a decade, we use:</div><div class="rule-options"><button class="rule-option" data-value="the" type="button">the</button><button class="rule-option" data-value="a" type="button">a</button></div></div></div>
+<div class="controls"><button class="primary" id="checkRules">Check answers</button><button class="secondary" id="resetRules">Reset</button><button class="ghost" id="toggleExamples">Show examples</button></div>
+<div class="reveal" id="ruleExamples"><b>Examples:</b> 2003 = two thousand and three; 1907 = nineteen oh seven; 1998 = nineteen ninety-eight; the 1990s = the nineteen nineties.</div>
+<div class="feedback" id="ruleFeedback"></div>
+</article>
+</div>
+<div class="section-nav"><span></span><button class="primary next-btn" data-next="section2">Next: Life stories →</button></div>
+</section>
+<section class="section" id="section2"><div class="section-head"><div><h2>Life stories</h2></div></div><article class="activity"><div class="activity-title"><span class="num">5</span><div><h3>Your life in conversation</h3><p class="instruction"><strong>Choose several categories.</strong> <strong>Tell your partner what happened, when it happened and why it mattered.</strong> Use these linkers: <strong>first · then · after that · later · finally</strong></p></div></div><div class="category-grid" id="categoryGrid"><button class="category-card" type="button">school</button><button class="category-card" type="button">university or college</button><button class="category-card" type="button">first job</button><button class="category-card" type="button">career change</button><button class="category-card" type="button">moving house</button><button class="category-card" type="button">moving to another city</button><button class="category-card" type="button">moving abroad</button><button class="category-card" type="button">family</button><button class="category-card" type="button">friendship</button><button class="category-card" type="button">relationship</button><button class="category-card" type="button">marriage</button><button class="category-card" type="button">children</button><button class="category-card" type="button">pets</button><button class="category-card" type="button">travel</button><button class="category-card" type="button">a difficult decision</button><button class="category-card" type="button">a proud achievement</button><button class="category-card" type="button">a memorable celebration</button><button class="category-card" type="button">a health or lifestyle change</button><button class="category-card" type="button">learning a new skill</button><button class="category-card" type="button">a surprising event</button></div><div class="speaking-frame" style="margin-top:18px"><b>Keep the conversation going:</b><br/>When did it happen? · Where were you? · Who was with you? · Why did it matter? · What happened next? · How did you feel?</div></article><article class="activity"><div class="activity-title"><span class="num">6</span><div><h3>Life-changing events discussion</h3><p class="instruction">Discuss one question at a time. Give a developed answer and ask your partner two follow-up questions.</p></div></div><div class="single-question-card" id="singleQuestion">Which decision changed your life the most?</div><div class="controls"><button class="primary" id="nextQuestion" type="button">Next question</button></div></article><div class="section-nav"><button class="secondary prev-btn" data-prev="section1">← Previous: Famous lives</button><span></span></div><div class="footer-note">Use Past Simple to tell a complete story, not just a single sentence.</div></section>
+</main>
+<script>
+const sections=[...document.querySelectorAll('.section')];
+const navBtns=[...document.querySelectorAll('.nav-btn')];
+const progress=document.getElementById('progress');
+const indicator=document.getElementById('sectionIndicator');
+
+function showSection(id){
+  sections.forEach(s=>s.classList.toggle('active',s.id===id));
+  navBtns.forEach(b=>b.classList.toggle('active',b.dataset.section===id));
+  const index=id==='section1'?0:1;
+  progress.style.width=(index+1)*50+'%';
+  indicator.textContent=index===0?'Section 1 of 2 · Famous lives':'Section 2 of 2 · Life stories';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+navBtns.forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.section)));
+document.querySelectorAll('.next-btn').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.next)));
+document.querySelectorAll('.prev-btn').forEach(b=>b.addEventListener('click',()=>showSection(b.dataset.prev)));
+
+const jobs=[...document.querySelectorAll('.job')];
+jobs.forEach(j=>j.addEventListener('click',()=>j.classList.toggle('selected')));
+
+function normalise(v){return v.trim().toLowerCase().replace(/\s+/g,' ')}
+
+document.querySelectorAll('.reveal-one').forEach(btn=>btn.addEventListener('click',()=>{
+  const card=btn.closest('.celeb-card');
+  const input=card.querySelector('input');
+  input.value=card.dataset.answer;
+  input.classList.remove('incorrect');
+  input.classList.add('correct');
+}));
+document.getElementById('checkCelebs').addEventListener('click',()=>{
+  let score=0;
+  document.querySelectorAll('.celeb-card').forEach(card=>{
+    const input=card.querySelector('input');
+    const ok=normalise(input.value)===normalise(card.dataset.answer);
+    input.classList.toggle('correct',ok);
+    input.classList.toggle('incorrect',!ok);
+    if(ok) score++;
+  });
+  document.getElementById('celebFeedback').textContent=`${score}/6 correct`;
+});
+document.getElementById('resetCelebs').addEventListener('click',()=>{
+  document.querySelectorAll('.celeb-card input').forEach(i=>{i.value='';i.className=''});
+  document.getElementById('celebFeedback').textContent='';
+});
+
+document.getElementById('checkYears').addEventListener('click',()=>{
+  const inputs=[...document.querySelectorAll('#yearList input')];
+  let score=0;
+  inputs.forEach(i=>{
+    const ok=normalise(i.value)===normalise(i.dataset.answer);
+    i.classList.toggle('correct',ok);
+    i.classList.toggle('incorrect',!ok);
+    if(ok) score++;
+  });
+  document.getElementById('yearFeedback').textContent=`${score}/${inputs.length} correct`;
+});
+document.getElementById('resetYears').addEventListener('click',()=>{
+  document.querySelectorAll('#yearList input').forEach(i=>{i.value='';i.className=''});
+  document.getElementById('yearFeedback').textContent='';
+});
+
+document.querySelectorAll('.rule-option').forEach(btn=>btn.addEventListener('click',()=>{
+  const rule=btn.closest('.rule');
+  rule.querySelectorAll('.rule-option').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  rule.dataset.selected=btn.dataset.value;
+}));
+document.getElementById('checkRules').addEventListener('click',()=>{
+  const rules=[...document.querySelectorAll('#ruleList .rule')];
+  let score=0;
+  rules.forEach(rule=>{
+    const ok=rule.dataset.selected===rule.dataset.answer;
+    rule.classList.toggle('correct',ok);
+    rule.classList.toggle('incorrect',!ok);
+    if(ok) score++;
+  });
+  document.getElementById('ruleFeedback').textContent=`${score}/${rules.length} correct`;
+});
+document.getElementById('resetRules').addEventListener('click',()=>{
+  document.querySelectorAll('#ruleList .rule').forEach(rule=>{
+    delete rule.dataset.selected;
+    rule.classList.remove('correct','incorrect');
+    rule.querySelectorAll('.rule-option').forEach(b=>b.classList.remove('selected'));
+  });
+  document.getElementById('ruleFeedback').textContent='';
+});
+document.getElementById('toggleExamples').addEventListener('click',e=>{
+  const box=document.getElementById('ruleExamples');
+  box.classList.toggle('show');
+  e.target.textContent=box.classList.contains('show')?'Hide examples':'Show examples';
+});
+
+document.querySelectorAll('.category-card').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('selected')));
+
+const questions=[
+  "Which decision changed your life the most?",
+  "What was the best year of your life so far? Why?",
+  "What difficult experience taught you something important?",
+  "What did you enjoy doing as a child but stop doing later?",
+  "Who influenced you most when you were younger?",
+  "What achievement made you feel proud?",
+  "What mistake did you make that you later learned from?",
+  "What period of your life would you like to experience again?",
+  "When did you last do something for the first time?",
+  "What event made you become more independent?",
+  "What was the most unexpected thing that happened to you?",
+  "Which trip changed the way you saw the world?",
+  "What was one difficult choice that turned out well?",
+  "What childhood memory still makes you smile?",
+  "When did you realise that your priorities had changed?",
+  "What person did you meet at exactly the right moment?",
+  "What was a time when you surprised yourself?",
+  "Which failure helped you grow the most?",
+  "What important lesson did you learn too late?",
+  "What moment made you feel that you were starting a new chapter?"
+]
+let questionIndex=0;
+document.getElementById('nextQuestion').addEventListener('click',()=>{
+  questionIndex=(questionIndex+1)%questions.length;
+  const box=document.getElementById('singleQuestion');
+  box.style.opacity='0';
+  setTimeout(()=>{
+    box.textContent=questions[questionIndex];
+    box.style.opacity='1';
+  },180);
+});
+</script>
+</body>
+</html>
