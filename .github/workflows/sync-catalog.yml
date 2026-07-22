@@ -1,0 +1,52 @@
+name: Copy lessons to private catalog
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  copy-lessons:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download public lessons
+        uses: actions/checkout@v4
+        with:
+          path: public-lessons
+
+      - name: Open private catalog
+        uses: actions/checkout@v4
+        with:
+          repository: vikapyniv/englishcatalog
+          token: ${{ secrets.CATALOG_TOKEN }}
+          path: private-catalog
+
+      - name: Copy lesson files
+        run: |
+          mkdir -p private-catalog/lessons
+
+          rsync -av --delete \
+            --exclude=".git" \
+            --exclude=".github" \
+            --exclude="README.md" \
+            public-lessons/ private-catalog/lessons/
+
+      - name: Save changes
+        working-directory: private-catalog
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add lessons
+
+          if git diff --cached --quiet; then
+            echo "No changes to save"
+          else
+            git commit -m "Update lessons from public repository"
+            git push
+          fi
