@@ -3,3 +3,4 @@ description: English lesson library
 
 exclude:
   - README.md
+lesson: true
