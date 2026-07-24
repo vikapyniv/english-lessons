@@ -4,6 +4,10 @@ level: B1
 
 lesson_types:
   - Grammar
+  
+grammar:
+  - Adjectives
+  - Adverbs
 
 topics:
   - Everyday conversations
