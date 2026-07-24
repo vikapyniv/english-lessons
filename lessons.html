@@ -1,3 +1,335 @@
 ---
 title: "All lessons"
 ---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>All lessons</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: Arial, sans-serif;
+      background: #f6f6f6;
+      color: #222;
+    }
+
+    .page-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 36px;
+    }
+
+    .page-description {
+      margin: 0 0 30px;
+      color: #666;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .filters input,
+    .filters select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: white;
+      font-size: 15px;
+    }
+
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .lesson-card {
+      padding: 22px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 3px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .lesson-card h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+    }
+
+    .lesson-card h2 a {
+      color: #222;
+      text-decoration: none;
+    }
+
+    .lesson-card h2 a:hover {
+      text-decoration: underline;
+    }
+
+    .tags {
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 0 5px 7px 0;
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: #eeeeee;
+      font-size: 13px;
+    }
+
+    .lesson-details {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .lesson-details p {
+      margin: 8px 0;
+    }
+
+    .description {
+      color: #555;
+    }
+
+    #no-results {
+      display: none;
+      padding: 25px;
+      background: white;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 800px) {
+      .filters {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="page-container">
+
+    <h1>All lessons</h1>
+
+    <p class="page-description">
+      Search and filter lessons by level, lesson type and grammar.
+    </p>
+
+    <section class="filters">
+
+      <input
+        type="search"
+        id="lesson-search"
+        placeholder="Search by title, topic, grammar or function..."
+      >
+
+      <select id="level-filter">
+        <option value="">All levels</option>
+
+        {% for level in site.data.taxonomy.levels %}
+          <option value="{{ level | downcase }}">
+            {{ level }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <select id="type-filter">
+        <option value="">All lesson types</option>
+
+        {% for type in site.data.taxonomy.lesson_types %}
+          <option value="{{ type | downcase }}">
+            {{ type }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <select id="grammar-filter">
+        <option value="">All grammar</option>
+
+        {% for item in site.data.taxonomy.grammar %}
+          <option value="{{ item | downcase }}">
+            {{ item }}
+          </option>
+        {% endfor %}
+      </select>
+
+    </section>
+
+    {% assign lessons = site.pages | where: "lesson", true | sort: "title" %}
+
+    <section class="lesson-grid" id="lesson-grid">
+
+      {% for lesson in lessons %}
+
+        <article
+          class="lesson-card"
+          data-level="{{ lesson.level | downcase | escape }}"
+          data-title="{{ lesson.title | downcase | escape }}"
+          data-types="{{ lesson.lesson_types | join: '|' | downcase | escape }}"
+          data-grammar="{{ lesson.grammar | join: '|' | downcase | escape }}"
+          data-functions="{{ lesson.functions | join: '|' | downcase | escape }}"
+          data-topics="{{ lesson.topics | join: '|' | downcase | escape }}"
+          data-vocabulary="{{ lesson.vocabulary | join: '|' | downcase | escape }}"
+          data-skills="{{ lesson.skills | join: '|' | downcase | escape }}"
+        >
+
+          <h2>
+            <a href="{{ lesson.url | relative_url }}">
+              {{ lesson.title }}
+            </a>
+          </h2>
+
+          <div class="tags">
+
+            {% if lesson.level %}
+              <span class="tag">{{ lesson.level }}</span>
+            {% endif %}
+
+            {% for type in lesson.lesson_types %}
+              <span class="tag">{{ type }}</span>
+            {% endfor %}
+
+          </div>
+
+          <div class="lesson-details">
+
+            {% if lesson.grammar %}
+              <p>
+                <strong>Grammar:</strong>
+                {{ lesson.grammar | join: ", " }}
+              </p>
+            {% endif %}
+
+            {% if lesson.functions %}
+              <p>
+                <strong>Functions:</strong>
+                {{ lesson.functions | join: ", " }}
+              </p>
+            {% endif %}
+
+            {% if lesson.vocabulary %}
+              <p>
+                <strong>Vocabulary:</strong>
+                {{ lesson.vocabulary | join: ", " }}
+              </p>
+            {% endif %}
+
+            {% if lesson.topics %}
+              <p>
+                <strong>Topics:</strong>
+                {{ lesson.topics | join: ", " }}
+              </p>
+            {% endif %}
+
+            {% if lesson.description %}
+              <p class="description">
+                {{ lesson.description }}
+              </p>
+            {% endif %}
+
+          </div>
+
+        </article>
+
+      {% endfor %}
+
+    </section>
+
+    <p id="no-results">No lessons found.</p>
+
+  </main>
+
+  <script>
+    const searchInput = document.querySelector("#lesson-search");
+    const levelFilter = document.querySelector("#level-filter");
+    const typeFilter = document.querySelector("#type-filter");
+    const grammarFilter = document.querySelector("#grammar-filter");
+
+    const cards = [
+      ...document.querySelectorAll(".lesson-card")
+    ];
+
+    const noResults = document.querySelector("#no-results");
+
+    function filterLessons() {
+      const search = searchInput.value.trim().toLowerCase();
+      const level = levelFilter.value;
+      const type = typeFilter.value;
+      const grammar = grammarFilter.value;
+
+      let visibleLessons = 0;
+
+      cards.forEach((card) => {
+        const lessonTypes = (
+          card.dataset.types || ""
+        ).split("|");
+
+        const grammarItems = (
+          card.dataset.grammar || ""
+        ).split("|");
+
+        const searchableText = [
+          card.dataset.title || "",
+          card.dataset.types || "",
+          card.dataset.grammar || "",
+          card.dataset.functions || "",
+          card.dataset.topics || "",
+          card.dataset.vocabulary || "",
+          card.dataset.skills || ""
+        ].join(" ");
+
+        const matchesSearch =
+          !search || searchableText.includes(search);
+
+        const matchesLevel =
+          !level || card.dataset.level === level;
+
+        const matchesType =
+          !type || lessonTypes.includes(type);
+
+        const matchesGrammar =
+          !grammar || grammarItems.includes(grammar);
+
+        const shouldShow =
+          matchesSearch &&
+          matchesLevel &&
+          matchesType &&
+          matchesGrammar;
+
+        card.hidden = !shouldShow;
+
+        if (shouldShow) {
+          visibleLessons++;
+        }
+      });
+
+      noResults.style.display =
+        visibleLessons === 0 ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", filterLessons);
+    levelFilter.addEventListener("change", filterLessons);
+    typeFilter.addEventListener("change", filterLessons);
+    grammarFilter.addEventListener("change", filterLessons);
+  </script>
+
+</body>
+</html>
