@@ -200,8 +200,10 @@ title: "All lessons"
           <div class="tags">
 
             {% if lesson.level %}
-              <span class="tag">{{ lesson.level }}</span>
-            {% endif %}
+  {% for item_level in lesson.level %}
+    <span class="tag">{{ item_level }}</span>
+  {% endfor %}
+{% endif %}
 
             {% for type in lesson.lesson_types %}
               <span class="tag">{{ type }}</span>
@@ -278,48 +280,52 @@ title: "All lessons"
       let visibleLessons = 0;
 
       cards.forEach((card) => {
-        const lessonTypes = (
-          card.dataset.types || ""
-        ).split("|");
+  const lessonLevels = (
+    card.dataset.level || ""
+  ).split("|");
 
-        const grammarItems = (
-          card.dataset.grammar || ""
-        ).split("|");
+  const lessonTypes = (
+    card.dataset.types || ""
+  ).split("|");
 
-        const searchableText = [
-          card.dataset.title || "",
-          card.dataset.types || "",
-          card.dataset.grammar || "",
-          card.dataset.functions || "",
-          card.dataset.topics || "",
-          card.dataset.vocabulary || "",
-          card.dataset.skills || ""
-        ].join(" ");
+  const grammarItems = (
+    card.dataset.grammar || ""
+  ).split("|");
 
-        const matchesSearch =
-          !search || searchableText.includes(search);
+  const searchableText = [
+    card.dataset.title || "",
+    card.dataset.types || "",
+    card.dataset.grammar || "",
+    card.dataset.functions || "",
+    card.dataset.topics || "",
+    card.dataset.vocabulary || "",
+    card.dataset.skills || ""
+  ].join(" ");
 
-        const matchesLevel =
-          !level || card.dataset.level === level;
+  const matchesSearch =
+    !search || searchableText.includes(search);
 
-        const matchesType =
-          !type || lessonTypes.includes(type);
+  const matchesLevel =
+    !level || lessonLevels.includes(level);
 
-        const matchesGrammar =
-          !grammar || grammarItems.includes(grammar);
+  const matchesType =
+    !type || lessonTypes.includes(type);
 
-        const shouldShow =
-          matchesSearch &&
-          matchesLevel &&
-          matchesType &&
-          matchesGrammar;
+  const matchesGrammar =
+    !grammar || grammarItems.includes(grammar);
 
-        card.hidden = !shouldShow;
+  const shouldShow =
+    matchesSearch &&
+    matchesLevel &&
+    matchesType &&
+    matchesGrammar;
 
-        if (shouldShow) {
-          visibleLessons++;
-        }
-      });
+  card.hidden = !shouldShow;
+
+  if (shouldShow) {
+    visibleLessons++;
+  }
+});
 
       noResults.style.display =
         visibleLessons === 0 ? "block" : "none";
