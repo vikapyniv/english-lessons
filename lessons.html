@@ -181,7 +181,7 @@ title: "All lessons"
 
         <article
           class="lesson-card"
-          data-level="{{ lesson.level | downcase | escape }}"
+          data-level="{{ lesson.level | join: '|' | downcase | escape }}"
           data-title="{{ lesson.title | downcase | escape }}"
           data-types="{{ lesson.lesson_types | join: '|' | downcase | escape }}"
           data-grammar="{{ lesson.grammar | join: '|' | downcase | escape }}"
