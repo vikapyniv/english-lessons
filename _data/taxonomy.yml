@@ -1,0 +1,61 @@
+levels:
+  - A1
+  - A2
+  - B1
+  - B2
+  - C1
+
+lesson_types:
+  - Grammar
+  - Vocabulary
+  - Reading
+  - Listening
+  - Speaking
+  - Functional Language
+  - Pronunciation
+  - Writing
+  - Discussion
+  - Revision
+
+topics:
+  - Daily life
+  - Family
+  - Relationships
+  - Food
+  - Health
+  - Home
+  - Work
+  - Education
+  - Travel
+  - Transport
+  - Technology
+  - Environment
+  - Money
+  - Shopping
+  - Leisure
+  - Culture
+  - Society
+  - Crime
+  - Clothes
+  - Personality
+  - Media
+  - Success
+
+grammar:
+  - Present Simple
+  - Present Continuous
+  - Past Simple
+  - Past Continuous
+  - Present Perfect
+  - Future forms
+  - Articles
+  - Prepositions
+  - Modal verbs
+  - Passive Voice
+  - Reported Speech
+  - Relative Clauses
+  - Gerunds and Infinitives
+  - Zero Conditional
+  - First Conditional
+  - Second Conditional
+  - Third Conditional
