@@ -17,6 +17,7 @@ title: "All lessons"
     body {
       margin: 0;
       padding: 40px 20px;
+
       font-family:
         Inter,
         ui-sans-serif,
@@ -25,6 +26,7 @@ title: "All lessons"
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
+
       background:
         radial-gradient(
           circle at top left,
@@ -37,6 +39,7 @@ title: "All lessons"
           transparent 30%
         ),
         #f6f6f8;
+
       color: #222;
     }
 
@@ -47,6 +50,7 @@ title: "All lessons"
 
     h1 {
       margin: 0 0 10px;
+
       font-size: clamp(32px, 5vw, 48px);
       line-height: 1;
       letter-spacing: -0.045em;
@@ -54,11 +58,93 @@ title: "All lessons"
     }
 
     .page-description {
-      margin: 0 0 30px;
+      margin: 0 0 22px;
       color: #666;
       font-size: 16px;
       line-height: 1.5;
     }
+
+    /* Lesson statistics */
+
+    .lesson-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 24px;
+    }
+
+    .stat-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+
+      min-height: 34px;
+      padding: 7px 12px;
+
+      border: 1px solid #dedee5;
+      border-radius: 999px;
+
+      background: rgba(255, 255, 255, 0.92);
+      color: #61616b;
+
+      font-size: 13px;
+      line-height: 1;
+
+      box-shadow: 0 4px 12px rgba(25, 25, 35, 0.04);
+    }
+
+    .stat-item strong {
+      color: #222228;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .stat-item.total-stat {
+      background: #222228;
+      border-color: #222228;
+      color: #ffffff;
+    }
+
+    .stat-item.total-stat strong {
+      color: #ffffff;
+    }
+
+    .stat-item.showing-stat {
+      background: #ffffff;
+      border-color: #aaaab4;
+    }
+
+    .stat-item.level-a-stat {
+      background: #fff4b8;
+      border-color: #ead77d;
+      color: #62520a;
+    }
+
+    .stat-item.level-a-stat strong {
+      color: #62520a;
+    }
+
+    .stat-item.level-b-stat {
+      background: #e7dcff;
+      border-color: #c7b4f0;
+      color: #4d357e;
+    }
+
+    .stat-item.level-b-stat strong {
+      color: #4d357e;
+    }
+
+    .stat-item.level-c-stat {
+      background: #dff2ff;
+      border-color: #a8d7f1;
+      color: #245d7e;
+    }
+
+    .stat-item.level-c-stat strong {
+      color: #245d7e;
+    }
+
+    /* Filters */
 
     .filters {
       display: grid;
@@ -72,17 +158,21 @@ title: "All lessons"
       width: 100%;
       min-height: 48px;
       padding: 12px 14px;
+
       border: 1px solid #d5d5dc;
       border-radius: 12px;
+
       background: rgba(255, 255, 255, 0.95);
       color: #222;
+
       font: inherit;
       font-size: 15px;
+
       outline: none;
+
       transition:
         border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
+        box-shadow 0.2s ease;
     }
 
     .filters input:focus,
@@ -91,9 +181,14 @@ title: "All lessons"
       box-shadow: 0 0 0 4px rgba(143, 120, 216, 0.14);
     }
 
+    /* Lesson grid */
+
     .lesson-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(280px, 1fr)
+      );
       gap: 22px;
       align-items: stretch;
     }
@@ -107,12 +202,16 @@ title: "All lessons"
 
       position: relative;
       overflow: hidden;
+
       min-height: 100%;
       padding: 26px 24px 24px;
+
       background: var(--card-background);
       border: 1px solid var(--card-border);
       border-radius: 20px;
+
       box-shadow: 0 8px 26px rgba(25, 25, 35, 0.07);
+
       transition:
         transform 0.22s ease,
         box-shadow 0.22s ease,
@@ -121,10 +220,12 @@ title: "All lessons"
 
     .lesson-card::before {
       content: "";
+
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
+
       height: 7px;
       background: var(--card-accent);
     }
@@ -139,6 +240,7 @@ title: "All lessons"
     .lesson-card.level-a {
       --card-accent: #e8c840;
       --card-border: #ead77d;
+
       --card-background:
         linear-gradient(
           180deg,
@@ -146,6 +248,7 @@ title: "All lessons"
           #fffdf1 25%,
           #ffffff 62%
         );
+
       --tag-background: #f8e994;
       --tag-text: #62520a;
     }
@@ -155,6 +258,7 @@ title: "All lessons"
     .lesson-card.level-b {
       --card-accent: #9b7be3;
       --card-border: #c7b4f0;
+
       --card-background:
         linear-gradient(
           180deg,
@@ -162,6 +266,7 @@ title: "All lessons"
           #f8f5ff 25%,
           #ffffff 62%
         );
+
       --tag-background: #ddcffb;
       --tag-text: #4d357e;
     }
@@ -171,6 +276,7 @@ title: "All lessons"
     .lesson-card.level-c {
       --card-accent: #62b7e8;
       --card-border: #a8d7f1;
+
       --card-background:
         linear-gradient(
           180deg,
@@ -178,12 +284,14 @@ title: "All lessons"
           #f3faff 25%,
           #ffffff 62%
         );
+
       --tag-background: #ccecff;
       --tag-text: #245d7e;
     }
 
     .lesson-card h2 {
       margin: 0 0 16px;
+
       font-size: 24px;
       line-height: 1.12;
       letter-spacing: -0.035em;
@@ -201,6 +309,8 @@ title: "All lessons"
       text-underline-offset: 4px;
     }
 
+    /* Tags */
+
     .tags {
       display: flex;
       flex-wrap: wrap;
@@ -211,12 +321,16 @@ title: "All lessons"
     .tag {
       display: inline-flex;
       align-items: center;
+
       min-height: 28px;
       margin: 0;
       padding: 5px 10px;
+
       border-radius: 999px;
+
       background: var(--tag-background);
       color: var(--tag-text);
+
       font-size: 12px;
       line-height: 1;
       font-weight: 750;
@@ -228,6 +342,8 @@ title: "All lessons"
       color: #44444d;
       border: 1px solid rgba(0, 0, 0, 0.09);
     }
+
+    /* Card details */
 
     .lesson-details {
       font-size: 14px;
@@ -251,12 +367,16 @@ title: "All lessons"
 
     #no-results {
       display: none;
+
       margin: 20px 0 0;
       padding: 28px;
+
       background: white;
       border: 1px solid #dedee4;
       border-radius: 16px;
+
       box-shadow: 0 8px 24px rgba(25, 25, 35, 0.06);
+
       text-align: center;
       color: #666;
     }
@@ -291,6 +411,15 @@ title: "All lessons"
       .lesson-card {
         padding: 24px 20px 21px;
       }
+
+      .lesson-stats {
+        gap: 6px;
+      }
+
+      .stat-item {
+        padding: 7px 10px;
+        font-size: 12px;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -316,6 +445,56 @@ title: "All lessons"
     <p class="page-description">
       Search and filter lessons by level, lesson type, grammar and pronunciation.
     </p>
+
+    <section
+      class="lesson-stats"
+      aria-label="Lesson statistics"
+    >
+      <span class="stat-item total-stat">
+        Total:
+        <strong id="count-total">0</strong>
+      </span>
+
+      <span class="stat-item showing-stat">
+        Showing:
+        <strong id="count-showing">0</strong>
+      </span>
+
+      <span class="stat-item">
+        Grammar:
+        <strong id="count-grammar">0</strong>
+      </span>
+
+      <span class="stat-item">
+        Vocabulary:
+        <strong id="count-vocabulary">0</strong>
+      </span>
+
+      <span class="stat-item">
+        Speaking:
+        <strong id="count-speaking">0</strong>
+      </span>
+
+      <span class="stat-item">
+        Pronunciation:
+        <strong id="count-pronunciation">0</strong>
+      </span>
+
+      <span class="stat-item level-a-stat">
+        A1–A2:
+        <strong id="count-a">0</strong>
+      </span>
+
+      <span class="stat-item level-b-stat">
+        B1–B2:
+        <strong id="count-b">0</strong>
+      </span>
+
+      <span class="stat-item level-c-stat">
+        C1–C2:
+        <strong id="count-c">0</strong>
+      </span>
+    </section>
 
     <section class="filters">
 
@@ -367,7 +546,10 @@ title: "All lessons"
 
     </section>
 
-    {% assign lessons = site.pages | where: "lesson", true | sort: "title" %}
+    {% assign lessons = site.pages
+      | where: "lesson", true
+      | sort: "title"
+    %}
 
     <section class="lesson-grid" id="lesson-grid">
 
@@ -463,7 +645,9 @@ title: "All lessons"
 
     </section>
 
-    <p id="no-results">No lessons found.</p>
+    <p id="no-results">
+      No lessons found.
+    </p>
 
   </main>
 
@@ -490,8 +674,42 @@ title: "All lessons"
     const noResults =
       document.querySelector("#no-results");
 
+    const countTotal =
+      document.querySelector("#count-total");
+
+    const countShowing =
+      document.querySelector("#count-showing");
+
+    const countGrammar =
+      document.querySelector("#count-grammar");
+
+    const countVocabulary =
+      document.querySelector("#count-vocabulary");
+
+    const countSpeaking =
+      document.querySelector("#count-speaking");
+
+    const countPronunciation =
+      document.querySelector("#count-pronunciation");
+
+    const countA =
+      document.querySelector("#count-a");
+
+    const countB =
+      document.querySelector("#count-b");
+
+    const countC =
+      document.querySelector("#count-c");
+
+    function getItems(value) {
+      return (value || "")
+        .split("|")
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
     /*
-      Add a colour class automatically.
+      Add card colours automatically.
 
       Priority:
       C1/C2 → blue
@@ -500,29 +718,25 @@ title: "All lessons"
     */
 
     cards.forEach((card) => {
-      const lessonLevels = (
-        card.dataset.level || ""
-      )
-        .split("|")
-        .map((level) => level.trim())
-        .filter(Boolean);
+      const levels =
+        getItems(card.dataset.level);
 
       const hasCLevel =
-        lessonLevels.some(
+        levels.some(
           (level) =>
             level === "c1" ||
             level === "c2"
         );
 
       const hasBLevel =
-        lessonLevels.some(
+        levels.some(
           (level) =>
             level === "b1" ||
             level === "b2"
         );
 
       const hasALevel =
-        lessonLevels.some(
+        levels.some(
           (level) =>
             level === "a1" ||
             level === "a2"
@@ -536,6 +750,102 @@ title: "All lessons"
         card.classList.add("level-a");
       }
     });
+
+    /*
+      Calculate the general lesson statistics.
+    */
+
+    function updateLessonStats() {
+      let grammarLessons = 0;
+      let vocabularyLessons = 0;
+      let speakingLessons = 0;
+      let pronunciationLessons = 0;
+
+      let aLevelLessons = 0;
+      let bLevelLessons = 0;
+      let cLevelLessons = 0;
+
+      cards.forEach((card) => {
+        const levels =
+          getItems(card.dataset.level);
+
+        const types =
+          getItems(card.dataset.types);
+
+        if (types.includes("grammar")) {
+          grammarLessons++;
+        }
+
+        if (types.includes("vocabulary")) {
+          vocabularyLessons++;
+        }
+
+        if (types.includes("speaking")) {
+          speakingLessons++;
+        }
+
+        if (types.includes("pronunciation")) {
+          pronunciationLessons++;
+        }
+
+        if (
+          levels.some(
+            (level) =>
+              level === "a1" ||
+              level === "a2"
+          )
+        ) {
+          aLevelLessons++;
+        }
+
+        if (
+          levels.some(
+            (level) =>
+              level === "b1" ||
+              level === "b2"
+          )
+        ) {
+          bLevelLessons++;
+        }
+
+        if (
+          levels.some(
+            (level) =>
+              level === "c1" ||
+              level === "c2"
+          )
+        ) {
+          cLevelLessons++;
+        }
+      });
+
+      countTotal.textContent =
+        cards.length;
+
+      countShowing.textContent =
+        cards.length;
+
+      countGrammar.textContent =
+        grammarLessons;
+
+      countVocabulary.textContent =
+        vocabularyLessons;
+
+      countSpeaking.textContent =
+        speakingLessons;
+
+      countPronunciation.textContent =
+        pronunciationLessons;
+
+      countA.textContent =
+        aLevelLessons;
+
+      countB.textContent =
+        bLevelLessons;
+
+      countC.textContent =
+        cLevelLessons;
+    }
 
     function filterLessons() {
       const search =
@@ -558,29 +868,19 @@ title: "All lessons"
       let visibleLessons = 0;
 
       cards.forEach((card) => {
-        const lessonLevels = (
-          card.dataset.level || ""
-        )
-          .split("|")
-          .map((item) => item.trim());
+        const lessonLevels =
+          getItems(card.dataset.level);
 
-        const lessonTypes = (
-          card.dataset.types || ""
-        )
-          .split("|")
-          .map((item) => item.trim());
+        const lessonTypes =
+          getItems(card.dataset.types);
 
-        const grammarItems = (
-          card.dataset.grammar || ""
-        )
-          .split("|")
-          .map((item) => item.trim());
+        const grammarItems =
+          getItems(card.dataset.grammar);
 
-        const pronunciationItems = (
-          card.dataset.pronunciation || ""
-        )
-          .split("|")
-          .map((item) => item.trim());
+        const pronunciationItems =
+          getItems(
+            card.dataset.pronunciation
+          );
 
         const searchableText = [
           card.dataset.title || "",
@@ -629,11 +929,16 @@ title: "All lessons"
         }
       });
 
+      countShowing.textContent =
+        visibleLessons;
+
       noResults.style.display =
         visibleLessons === 0
           ? "block"
           : "none";
     }
+
+    updateLessonStats();
 
     searchInput.addEventListener(
       "input",
