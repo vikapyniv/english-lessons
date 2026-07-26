@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Public Speaking | Interactive English Lesson</title>
+<style>
+:root {
+  --baby-blue: #bfe4ff;
+  --baby-blue-2: #eaf7ff;
+  --blue: #2f7ebc;
+  --blue-dark: #174f79;
+  --ink: #173042;
+  --muted: #627786;
+  --white: #ffffff;
+  --line: #cfe7f7;
+  --success: #21885b;
+  --danger: #c64d55;
+  --shadow: 0 12px 34px rgba(47,126,188,.13);
+  --radius: 22px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top right, rgba(191,228,255,.70), transparent 30%),
+    linear-gradient(180deg, #f8fcff 0%, #eef8ff 100%);
+  min-height: 100vh;
+}
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: var(--blue-dark); }
+.topbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(255,255,255,.91);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(207,231,247,.9);
+}
+.topbar-inner {
+  max-width: 1240px; margin: auto; padding: 13px 22px;
+  display: grid; grid-template-columns: 1fr minmax(220px, 420px) auto;
+  gap: 18px; align-items: center;
+}
+.brand { font-weight: 850; letter-spacing: -.02em; }
+.progress-wrap { display: flex; align-items: center; gap: 10px; }
+.progress-track { width: 100%; height: 9px; background: #e8f3fa; border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; width: 33.333%; background: linear-gradient(90deg, #5daee8, #2f7ebc); transition: width .35s ease; }
+.section-indicator {
+  white-space: nowrap; padding: 8px 12px; border-radius: 999px;
+  background: var(--baby-blue-2); color: var(--blue-dark); font-weight: 750; font-size: .88rem;
+}
+.container { max-width: 1240px; margin: 0 auto; padding: 28px 22px 60px; }
+.hero {
+  display: grid; grid-template-columns: 1.3fr .7fr; gap: 26px; align-items: stretch;
+  padding: 34px; border-radius: 30px; background: linear-gradient(135deg, #d9efff, #fafdff 68%);
+  border: 1px solid #d4ebfa; box-shadow: var(--shadow); overflow: hidden; position: relative;
+}
+.hero::after {
+  content: ""; position: absolute; width: 240px; height: 240px; border-radius: 50%;
+  background: rgba(255,255,255,.6); right: -70px; top: -110px;
+}
+.kicker { text-transform: uppercase; letter-spacing: .16em; font-size: .76rem; font-weight: 850; color: var(--blue); }
+h1 { font-size: clamp(2.5rem, 5vw, 5rem); line-height: .98; margin: 12px 0 18px; letter-spacing: -.055em; }
+.hero p { max-width: 720px; color: var(--muted); font-size: 1.05rem; line-height: 1.65; }
+.author {
+  margin-top: 23px; padding-top: 18px; border-top: 1px solid rgba(47,126,188,.18);
+  font-size: .93rem; line-height: 1.55;
+}
+.info-card {
+  position: relative; z-index: 1; background: rgba(255,255,255,.82);
+  border: 1px solid rgba(255,255,255,.95); border-radius: 24px; padding: 24px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.info-card h3 { margin: 0 0 12px; }
+.tip-list { display: grid; gap: 10px; margin-top: 14px; }
+.tip {
+  display: flex; gap: 10px; align-items: flex-start; background: #f5fbff;
+  border: 1px solid #dceefa; border-radius: 15px; padding: 12px;
+}
+.tip b { color: var(--blue-dark); }
+.hero-nav { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 28px; }
+.nav-pill {
+  border: 1px solid #c8e4f6; background: white; color: var(--blue-dark);
+  border-radius: 999px; padding: 11px 17px; font-weight: 800; box-shadow: 0 5px 14px rgba(47,126,188,.08);
+  transition: .2s ease;
+}
+.nav-pill:hover, .nav-pill.active { transform: translateY(-2px); background: var(--blue); color: white; border-color: var(--blue); }
+.lesson-section { display: none; animation: fade .35s ease; }
+.lesson-section.active { display: block; }
+@keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.section-head { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin: 26px 0 18px; }
+.section-head h2 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.7rem); letter-spacing: -.035em; }
+.section-head p { margin: 6px 0 0; color: var(--muted); }
+.time-badge { background: #dff2ff; color: var(--blue-dark); border-radius: 999px; padding: 9px 13px; font-weight: 800; white-space: nowrap; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; align-items: stretch; }
+.card {
+  background: rgba(255,255,255,.94); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px; box-shadow: 0 10px 28px rgba(47,126,188,.09);
+}
+.card h3 { margin: 0 0 8px; font-size: 1.12rem; }
+.activity-title { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+.num {
+  flex: 0 0 32px; height: 32px; border-radius: 10px; display: grid; place-items: center;
+  background: var(--blue); color: white; font-weight: 900;
+}
+.instruction { color: var(--muted); line-height: 1.55; margin: 0; }
+.definition {
+  margin-top: 15px; background: var(--baby-blue-2); border-left: 5px solid var(--blue);
+  padding: 15px 16px; border-radius: 0 14px 14px 0; line-height: 1.55;
+}
+textarea, input[type="text"] {
+  width: 100%; border: 1px solid #bddced; border-radius: 12px; padding: 12px 13px;
+  background: #fbfdff; color: var(--ink); outline: none; transition: .2s;
+}
+textarea:focus, input[type="text"]:focus { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(47,126,188,.12); }
+textarea { min-height: 110px; resize: vertical; }
+.prompt-list { display: grid; gap: 10px; }
+.prompt {
+  border: 1px solid #d5e9f7; background: #f9fdff; border-radius: 15px; padding: 13px 14px; line-height: 1.45;
+}
+.choice-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.choice-chip {
+  border: 1px solid #bcdced; background: white; border-radius: 999px; padding: 9px 12px; font-weight: 750;
+}
+.choice-chip.selected { background: var(--blue-dark); color: white; border-color: var(--blue-dark); }
+.video-shell { overflow: hidden; border-radius: 18px; background: #0d2637; }
+video { display: block; width: 100%; max-height: 430px; background: #0d2637; }
+.small-note { color: var(--muted); font-size: .9rem; line-height: 1.45; }
+.mcq { display: grid; gap: 14px; }
+.question { border: 1px solid #d9ebf7; border-radius: 16px; padding: 14px; background: #fcfeff; }
+.question strong { display: block; margin-bottom: 8px; }
+.option { display: flex; gap: 9px; align-items: flex-start; margin: 7px 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+.btn {
+  border: none; border-radius: 12px; padding: 10px 15px; font-weight: 850;
+  background: var(--blue); color: white; transition: .2s ease;
+}
+.btn:hover { transform: translateY(-1px); filter: brightness(.97); }
+.btn.secondary { background: #e8f5fd; color: var(--blue-dark); }
+.btn.ghost { background: white; color: var(--blue-dark); border: 1px solid #c9e3f4; }
+.feedback { min-height: 24px; margin-top: 10px; font-weight: 750; }
+.feedback.ok { color: var(--success); }
+.feedback.bad { color: var(--danger); }
+.accordion-btn {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  border: 0; background: #e9f7ff; color: var(--blue-dark); border-radius: 15px;
+  padding: 14px 16px; font-weight: 850; text-align: left;
+}
+.accordion-content { display: none; padding-top: 14px; }
+.accordion-content.open { display: block; animation: fade .25s ease; }
+.statement-list { display: grid; gap: 10px; }
+.sentence {
+  padding: 12px 13px; border-radius: 14px; border: 1px solid #d6eaf7; background: #fbfeff; line-height: 1.5;
+}
+.map {
+  min-height: 100%; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px;
+  align-content: center; position: relative;
+}
+.center-node {
+  grid-column: 1 / -1; justify-self: center; background: var(--blue-dark); color: white;
+  padding: 14px 26px; border-radius: 16px; font-weight: 900; margin: 4px 0;
+}
+.map-node { background: #eef8ff; border: 1px dashed #89bddf; border-radius: 15px; padding: 11px; }
+.rank-card {
+  border: 1px solid #cfe5f4; padding: 13px 14px; border-radius: 14px; background: white;
+  transition: .18s; cursor: pointer; position: relative;
+}
+.rank-card:hover { transform: translateY(-2px); }
+.rank-card.selected { border-color: var(--blue); background: #e9f7ff; box-shadow: inset 0 0 0 1px var(--blue); }
+.rank-card.selected::after {
+  content: attr(data-rank); position: absolute; top: 10px; right: 10px; width: 27px; height: 27px;
+  display: grid; place-items: center; border-radius: 50%; background: var(--blue); color: white; font-weight: 900;
+}
+.topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+.topic {
+  border: 1px solid #cce4f4; background: #fbfeff; border-radius: 16px; padding: 14px;
+  min-height: 88px; font-weight: 800; display: flex; align-items: center; transition: .18s;
+}
+.topic:hover { transform: translateY(-2px); }
+.topic.selected { background: var(--blue-dark); color: white; border-color: var(--blue-dark); }
+.template { display: grid; gap: 11px; }
+.template label { font-weight: 800; color: var(--blue-dark); }
+.timer {
+  display: flex; align-items: center; justify-content: space-between; gap: 15px;
+  padding: 16px; border-radius: 16px; background: #e8f6ff; margin-top: 16px;
+}
+.timer-display { font-size: 2rem; font-weight: 950; letter-spacing: .06em; }
+.section-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 24px; }
+.footer-note { text-align: center; color: var(--muted); margin-top: 26px; font-size: .9rem; }
+@media (max-width: 860px) {
+  .topbar-inner { grid-template-columns: 1fr auto; }
+  .progress-wrap { grid-column: 1 / -1; grid-row: 2; }
+  .hero, .grid-2 { grid-template-columns: 1fr; }
+  .hero { padding: 25px; }
+  .info-card { min-height: 260px; }
+}
+@media (max-width: 580px) {
+  .container { padding: 20px 14px 42px; }
+  .topbar-inner { padding: 11px 14px; }
+  .section-indicator { display: none; }
+  .topic-grid, .map { grid-template-columns: 1fr; }
+  .center-node { grid-column: 1; }
+  .card { padding: 17px; }
+  h1 { font-size: 2.55rem; }
+}
+
+/* Final UX refinements */
+body { overflow-x: hidden; }
+.hero, .card, .info-card, .prompt, .sentence, .question, .topic,
+.rank-card, .definition, .tip { min-width: 0; }
+.hero *, .card *, .info-card * {
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.hero h1 { max-width: 100%; }
+.hero p, .instruction, .prompt, .sentence, .question, .definition,
+.small-note, .author, .tip, .topic { line-height: 1.6; }
+.card h3, .info-card h3, .section-head h2 { line-height: 1.2; }
+.activity-title { align-items: flex-start; }
+.activity-title > div:last-child { min-width: 0; flex: 1; }
+.grid-2 > * { min-width: 0; }
+.question label, .option { line-height: 1.45; }
+.option input { flex: 0 0 auto; margin-top: .22em; }
+.choice-row { align-items: stretch; }
+.choice-chip {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.3;
+}
+.actions { align-items: center; }
+.btn {
+  white-space: normal;
+  line-height: 1.25;
+  text-align: center;
+}
+.accordion-btn span:first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.map-node, .center-node { min-width: 0; }
+.map-node input { min-width: 0; }
+.topic {
+  line-height: 1.4;
+  text-align: left;
+  justify-content: flex-start;
+}
+.template label { line-height: 1.4; }
+@media (max-width: 700px) {
+  .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .time-badge { align-self: flex-start; }
+  .activity-title { gap: 10px; }
+  .num {
+    flex-basis: 30px;
+    width: 30px;
+    height: 30px;
+  }
+  .actions .btn { flex: 1 1 160px; }
+}
+@media (max-width: 420px) {
+  .hero { padding: 20px; }
+  .card { padding: 15px; }
+  .topbar-inner { gap: 10px; }
+  .brand { font-size: .95rem; }
+  .progress-wrap { font-size: .86rem; }
+}
+
+/* Robust global layout and text fixes */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+main, section, article, div, nav, header, footer {
+  min-width: 0;
+}
+.card {
+  overflow: hidden;
+}
+.card,
+.info-card,
+.prompt,
+.question,
+.sentence,
+.definition,
+.tip,
+.topic,
+.map-node,
+.center-node {
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
+}
+.grid-2 {
+  width: 100%;
+}
+.grid-2 > * {
+  min-width: 0;
+  max-width: 100%;
+}
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-top: 18px;
+}
+.actions .btn {
+  width: 100%;
+  min-width: 0;
+}
+.btn,
+.nav-pill,
+.accordion-btn,
+.choice-chip,
+.topic {
+  font-size: clamp(.88rem, 1.15vw, 1rem);
+  line-height: 1.3;
+  overflow-wrap: break-word;
+}
+.btn {
+  padding: 10px 14px;
+}
+.section-nav {
+  width: 100%;
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.section-nav .btn {
+  flex: 0 1 auto;
+  max-width: min(100%, 360px);
+}
+.footer-note {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  clear: both;
+  margin: 36px 0 0;
+  padding: 24px 16px 8px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  line-height: 1.5;
+}
+.video-discussion {
+  margin-top: 18px;
+}
+.video-discussion .accordion-content {
+  padding: 16px 2px 2px;
+}
+.video-discussion .grid-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.activity-title h3,
+.section-head h2,
+.info-card h3 {
+  overflow-wrap: break-word;
+}
+@media (max-width: 760px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+  .section-nav {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .section-nav > span {
+    display: none;
+  }
+  .section-nav .btn {
+    width: 100%;
+    max-width: none;
+  }
+  .video-discussion .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Section headers without time badges */
+.section-head {
+  align-items: flex-start;
+}
+.section-head > div:first-child {
+  max-width: 760px;
+}
+
+/* Clear answer-checking controls for the idea map */
+.idea-map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.idea-map-actions .btn {
+  flex: 1 1 150px;
+}
+
+/* Highly visible idea-map answer controls */
+.idea-check-panel {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.idea-check-btn {
+  display: block !important;
+  width: 100% !important;
+  min-height: 48px;
+  font-size: 1rem;
+  background: var(--blue-dark);
+  color: #fff;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.idea-secondary-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.idea-secondary-actions .btn {
+  width: 100%;
+  min-width: 0;
+}
+@media (max-width: 520px) {
+  .idea-secondary-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Force idea-map controls to remain visible */
+.card {
+  overflow: visible !important;
+}
+#ideaMap {
+  align-content: start;
+}
+.idea-map-controls {
+  grid-column: 1 / -1;
+  display: grid !important;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative;
+  z-index: 5;
+}
+.idea-map-controls .btn {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 48px;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.idea-map-controls .idea-check-btn {
+  background: var(--blue-dark) !important;
+  color: #fff !important;
+}
+@media (max-width: 620px) {
+  .idea-map-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+.video-shell{
+  background:linear-gradient(135deg,#eaf7ff,#d7efff);
+  border:1px solid var(--line);
+  padding:18px;
+}
+.video-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:110px;
+  padding:20px;
+  border-radius:15px;
+  background:var(--blue-dark);
+  color:#fff;
+  text-decoration:none;
+  font-size:1.08rem;
+  font-weight:900;
+  text-align:center;
+  transition:.2s ease;
+}
+.video-link:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.06);
+}
+
+.single-wide{
+  display:block;
+  width:100%;
+}
+.single-wide > .card{
+  width:100%;
+  max-width:none;
+}
+.video-shell{
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 9;
+  overflow:hidden;
+  border-radius:18px;
+  background:#0d2637;
+  padding:0;
+  border:0;
+}
+.video-shell iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="topbar-inner">
+<div class="brand">Public Speaking</div>
+<div aria-label="Lesson progress" class="progress-wrap">
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+<span id="progressText">1 / 3</span>
+</div>
+<div class="section-indicator" id="sectionIndicator">Video &amp; Ideas</div>
+</div>
+</header>
+<main class="container">
+<section class="hero">
+<div>
+<div class="kicker">B1–B2 Interactive English Lesson</div>
+<h1>Public<br/>Speaking</h1>
+<div class="author">
+<strong>Created by Viktoriia Pyniv</strong><br/>
+        AI-assisted educational resource developed with ChatGPT (OpenAI).<br/>
+        Source: <a href="https://eslbrains.com/esl-lesson-on-public-speaking/" rel="noopener" target="_blank">ESL Brains — Public Speaking</a>
+</div>
+</div>
+<aside class="info-card">
+<div>
+<div class="kicker">Speaking tips</div>
+<h3>Make one idea memorable</h3>
+<div class="tip-list">
+<div class="tip"><span>①</span><div><b>Be clear.</b><br/>Use simple language.</div></div>
+<div class="tip"><span>②</span><div><b>Be specific.</b><br/>Support your point with an example.</div></div>
+<div class="tip"><span>③</span><div><b>Be focused.</b><br/>Develop one key idea.</div></div>
+</div>
+</div>
+</aside>
+</section>
+<nav aria-label="Lesson sections" class="hero-nav">
+<button class="nav-pill active" data-go="0">Video &amp; Ideas</button>
+<button class="nav-pill" data-go="1">Language for Ideas</button>
+<button class="nav-pill" data-go="2">Speaking Challenge</button>
+</nav>
+<section class="lesson-section active" data-section="0">
+<div class="section-head">
+<div><h2>Video &amp; Ideas</h2><p>Connect the topic to your experience and identify what makes an idea effective.</p></div>
+</div>
+<div class="single-wide">
+<article class="card">
+<div class="activity-title"><div class="num">1</div><div><h3>Discuss and choose</h3><p class="instruction">Answer one discussion question, then choose one pair of options and explain your preference.</p></div></div>
+<div class="prompt-list">
+<div class="prompt">Why do some people find public speaking difficult?</div>
+<div class="prompt">What can people do to feel less nervous?</div>
+<div class="prompt">Do you think everyone can become a good public speaker?</div>
+</div>
+<div class="choice-row">
+<button class="choice-chip">100 people</button>
+<button class="choice-chip">5 people</button>
+<button class="choice-chip">Online talk</button>
+<button class="choice-chip">Live audience</button>
+<button class="choice-chip">Confident speaker</button>
+<button class="choice-chip">Interesting idea</button>
+</div>
+</article>
+</div>
+<div class="grid-2" style="margin-top:20px">
+<article class="card">
+<div class="activity-title"><div class="num">2</div><div><h3>Watch for gist</h3><p class="instruction">Watch to 01:31 and list examples of speech ideas mentioned in the video.</p></div></div>
+<div class="video-shell"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/Z7bfPaTfU0c" title="Public speaking video"></iframe></div>
+<div class="video-discussion"><button class="accordion-btn" onclick="toggleAccordion(this)"><span>Optional discussion</span><span>＋</span></button><div class="accordion-content">
+<div class="activity-title"><div class="num">3</div><div><h3>Discuss the video</h3><p class="instruction">Choose one or two questions.</p></div></div>
+<div class="grid-2">
+<div class="prompt">Can a good speech change the way people think? Give an example.</div>
+<div class="prompt">The video compares giving an idea to giving a gift. Is this a good comparison?</div>
+<div class="prompt">What makes a speech memorable apart from the idea?</div>
+<div class="prompt">What strategies help a speaker sound powerful and convincing?</div>
+</div>
+</div></div></article>
+<article class="card">
+<div class="activity-title"><div class="num">4</div><div><h3>Watch for detail</h3><p class="instruction">Watch 01:32–04:04 and choose the correct option.</p></div></div>
+<div class="mcq" id="mcq">
+<div class="question" data-answer="2">
+<strong>A. What did Sophie Scott manage to do with her speech?</strong>
+<label class="option"><input name="q1" type="radio" value="1"/> Explain why people laugh.</label>
+<label class="option"><input name="q1" type="radio" value="2"/> Make the audience think about laughter differently.</label>
+<label class="option"><input name="q1" type="radio" value="3"/> Demonstrate how laughter is similar to animal sounds.</label>
+</div>
+<div class="question" data-answer="1">
+<strong>B. According to Sophie’s research, laughter…</strong>
+<label class="option"><input name="q2" type="radio" value="1"/> improves relationships.</label>
+<label class="option"><input name="q2" type="radio" value="2"/> is an individual reaction to a joke.</label>
+<label class="option"><input name="q2" type="radio" value="3"/> always sounds different.</label>
+</div>
+<div class="question" data-answer="2">
+<strong>C. A good public speaker should…</strong>
+<label class="option"><input name="q3" type="radio" value="1"/> surprise the audience by changing directions.</label>
+<label class="option"><input name="q3" type="radio" value="2"/> begin with what the audience already knows.</label>
+<label class="option"><input name="q3" type="radio" value="3"/> start from a beautiful place.</label>
+</div>
+</div>
+<div class="actions">
+<button class="btn" onclick="checkMCQ()">Check answers</button>
+<button class="btn ghost" onclick="resetMCQ()">Reset</button>
+</div>
+<div class="feedback" id="mcqFeedback"></div>
+</article>
+</div>
+<div class="section-nav"><span></span><button class="btn" onclick="showSection(1)">Next: Language for Ideas →</button></div>
+</section>
+<section class="lesson-section" data-section="1">
+<div class="section-head">
+<div><h2>Language for Ideas</h2><p>Notice and practise high-frequency verb–noun collocations.</p></div>
+</div>
+<div class="grid-2">
+<article class="card">
+<div class="activity-title"><div class="num">5</div><div><h3>Find the collocations</h3><p class="instruction">Look at the sentences and identify the verb that collocates with idea. When you finish, choose three ideas that you think are the most important for a speaker and discuss your choices.</p></div></div>
+<div class="statement-list">
+<div class="sentence">A. A good speaker should express ideas using simple language.</div>
+<div class="sentence">B. Public speakers should develop one key idea instead of discussing many points.</div>
+<div class="sentence">C. The best speeches challenge ideas that people accept without questioning.</div>
+<div class="sentence">D. A speaker should support their ideas with examples or facts.</div>
+<div class="sentence">E. Make sure the audience does not misunderstand your idea.</div>
+<div class="sentence">F. Save time for questions so people can clarify your ideas.</div>
+<div class="sentence">G. To prepare a speech, first come up with an idea.</div>
+</div>
+</article>
+<article class="card">
+<h3>Complete the idea map</h3>
+<p class="instruction">Type one verb or phrase in each box.</p>
+<div class="map" id="ideaMap" style="margin-top:18px">
+<div class="map-node"><input data-answer="express" placeholder="verb" type="text"/></div>
+<div class="map-node"><input data-answer="develop" placeholder="verb" type="text"/></div>
+<div class="map-node"><input data-answer="challenge" placeholder="verb" type="text"/></div>
+<div class="map-node"><input data-answer="support" placeholder="verb" type="text"/></div>
+<div class="center-node">an idea</div>
+<div class="map-node"><input data-answer="misunderstand" placeholder="verb" type="text"/></div>
+<div class="map-node"><input data-answer="clarify" placeholder="verb" type="text"/></div>
+<div class="map-node" style="grid-column:1 / -1"><input data-answer="come up with" placeholder="verb phrase" type="text"/></div>
+<div class="idea-map-controls"><button class="btn idea-check-btn" onclick="checkMap()" type="button">Check answers</button><button class="btn secondary" onclick="showMapAnswers()" type="button">Show answers</button><button class="btn ghost" onclick="resetMap()" type="button">Reset</button></div></div>
+<div class="feedback" id="mapFeedback"></div>
+</article>
+</div>
+<div class="section-nav">
+<button class="btn secondary" onclick="showSection(0)">← Previous</button>
+<button class="btn" onclick="showSection(2)">Next: Speaking Challenge →</button>
+</div>
+</section>
+<section class="lesson-section" data-section="2">
+<div class="section-head">
+<div><h2>Speaking Challenge</h2><p>Plan and deliver a focused two-minute talk.</p></div>
+</div>
+<div class="grid-2">
+<article class="card">
+<div class="activity-title"><div class="num">6</div><div><h3>Choose your idea</h3><p class="instruction">Select one topic and prepare a two-minute talk. Your partner must ask at least one follow-up question, give feedback, and add another idea if they have one.</p></div></div>
+<div class="topic-grid" id="topics">
+<button class="topic">Everyone should have a hobby.</button>
+<button class="topic">You should like what you do for a living.</button>
+<button class="topic">Success depends more on hard work than on talent.</button>
+<button class="topic">Social media does more harm than good.</button>
+<button class="topic">Speaking a foreign language is essential nowadays.</button>
+<button class="topic">Schools should teach more practical life skills.</button>
+</div>
+<div class="definition" style="margin-top:16px">
+<strong>Your goal:</strong> make your partner understand and remember one clear idea.
+        </div>
+</article>
+<article class="card">
+<h3>Two-minute talk planner</h3>
+<p class="instruction">Write keywords only — not a complete script.</p>
+<div class="template" style="margin-top:16px">
+<label>Opening / hook
+            <input placeholder="Have you ever wondered...?" type="text"/>
+</label>
+<label>My key idea
+            <input placeholder="I believe that..." type="text"/>
+</label>
+<label>Main reason
+            <input placeholder="The main reason is..." type="text"/>
+</label>
+<label>Example or evidence
+            <textarea placeholder="For example..."></textarea>
+</label>
+<label>Opposing view + response
+            <textarea placeholder="Some people might argue that..., however..."></textarea>
+</label>
+<label>Final message
+            <input placeholder="So, overall..." type="text"/>
+</label>
+</div>
+</article>
+</div>
+<div class="section-nav"><button class="btn secondary" onclick="showSection(1)">← Previous</button><button class="btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button></div>
+</section>
+<div class="footer-note">Interactive lesson • Public Speaking • Created by Viktoriia Pyniv</div>
+</main>
+<script>
+let currentSection = 0;
+const sectionNames = ["Video & Ideas", "Language for Ideas", "Speaking Challenge"];
+
+function showSection(index) {
+  currentSection = index;
+  document.querySelectorAll(".lesson-section").forEach((s,i)=>s.classList.toggle("active", i===index));
+  document.querySelectorAll(".nav-pill").forEach((b,i)=>b.classList.toggle("active", i===index));
+  document.getElementById("progressFill").style.width = ((index+1)/3*100)+"%";
+  document.getElementById("progressText").textContent = (index+1)+" / 3";
+  document.getElementById("sectionIndicator").textContent = sectionNames[index];
+  window.scrollTo({top: document.querySelector(".hero-nav").offsetTop - 70, behavior:"smooth"});
+}
+document.querySelectorAll("[data-go]").forEach(btn => btn.addEventListener("click",()=>showSection(Number(btn.dataset.go))));
+
+document.querySelectorAll(".choice-chip").forEach(btn => btn.addEventListener("click",()=>btn.classList.toggle("selected")));
+
+function revealIdeas() {
+  const f = document.getElementById("ideaFeedback");
+  f.className = "feedback ok";
+  f.textContent = "Possible answers: a useful skill, a personal story, a life lesson, a vision of the future.";
+}
+function checkMCQ() {
+  let score = 0, answered = 0;
+  document.querySelectorAll("#mcq .question").forEach(q=>{
+    const chosen = q.querySelector("input:checked");
+    q.style.borderColor = "#d9ebf7";
+    if (chosen) {
+      answered++;
+      if (chosen.value === q.dataset.answer) { score++; q.style.borderColor = "#55a97e"; }
+      else q.style.borderColor = "#d8676f";
+    }
+  });
+  const f = document.getElementById("mcqFeedback");
+  if (answered < 3) { f.className="feedback bad"; f.textContent="Please answer all three questions."; }
+  else { f.className = score===3 ? "feedback ok" : "feedback bad"; f.textContent = `You got ${score} / 3 correct.`; }
+}
+function resetMCQ() {
+  document.querySelectorAll("#mcq input").forEach(i=>i.checked=false);
+  document.querySelectorAll("#mcq .question").forEach(q=>q.style.borderColor="#d9ebf7");
+  document.getElementById("mcqFeedback").textContent="";
+}
+function toggleAccordion(btn) {
+  const content = btn.nextElementSibling;
+  content.classList.toggle("open");
+  btn.lastElementChild.textContent = content.classList.contains("open") ? "−" : "＋";
+}
+function normalize(s) { return s.trim().toLowerCase().replace(/\s+/g," "); }
+function checkMap() {
+  let correct=0;
+  const inputs=[...document.querySelectorAll("#ideaMap input")];
+  inputs.forEach(inp=>{
+    const ok = normalize(inp.value)===normalize(inp.dataset.answer);
+    inp.style.borderColor = ok ? "#55a97e" : "#d8676f";
+    if(ok) correct++;
+  });
+  const f=document.getElementById("mapFeedback");
+  f.className = correct===inputs.length ? "feedback ok" : "feedback bad";
+  f.textContent = `${correct} / ${inputs.length} correct.`;
+}
+function showMapAnswers() {
+  document.querySelectorAll("#ideaMap input").forEach(inp=>{inp.value=inp.dataset.answer; inp.style.borderColor="#55a97e";});
+  document.getElementById("mapFeedback").className="feedback ok";
+  document.getElementById("mapFeedback").textContent="All answers revealed.";
+}
+function resetMap() {
+  document.querySelectorAll("#ideaMap input").forEach(inp=>{inp.value="";inp.style.borderColor="#bddced";});
+  document.getElementById("mapFeedback").textContent="";
+}
+document.querySelectorAll(".topic").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".topic").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+}));
+
+let seconds=120, timer=null;
+function renderTimer() {
+  const m=String(Math.floor(seconds/60)).padStart(2,"0");
+  const s=String(seconds%60).padStart(2,"0");
+  document.getElementById("timerDisplay").textContent=`${m}:${s}`;
+}
+function toggleTimer() {
+  const btn=document.getElementById("timerBtn");
+  if(timer) {
+    clearInterval(timer); timer=null; btn.textContent="Start";
+  } else {
+    btn.textContent="Pause";
+    timer=setInterval(()=>{
+      seconds--; renderTimer();
+      if(seconds<=0) {
+        clearInterval(timer); timer=null; btn.textContent="Start";
+        document.getElementById("timerDisplay").textContent="Time!";
+      }
+    },1000);
+  }
+}
+function resetTimer() {
+  if(timer) clearInterval(timer);
+  timer=null; seconds=120; renderTimer(); document.getElementById("timerBtn").textContent="Start";
+}
+
+</script>
+</body>
+</html>
