@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing Effective Emails</title>
+<style>
+:root {
+  --bg:#f4faff;
+  --surface:#ffffff;
+  --surface-2:#eaf6ff;
+  --primary:#2f80ed;
+  --primary-dark:#1f5fae;
+  --accent:#72c6ef;
+  --ink:#15324a;
+  --muted:#61788c;
+  --line:#cfe7f7;
+  --success:#168a5b;
+  --success-bg:#e9f8f1;
+  --danger:#c54848;
+  --danger-bg:#fff0f0;
+  --warning:#f0a52b;
+  --shadow:0 12px 35px rgba(43,105,145,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 90% 3%, rgba(114,198,239,.25), transparent 25rem),
+    linear-gradient(180deg,#f7fcff 0%,var(--bg) 100%);
+  line-height:1.55;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.93);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  width:min(1180px,calc(100% - 32px));margin:auto;
+  display:grid;grid-template-columns:1fr minmax(180px,360px) auto;
+  align-items:center;gap:22px;padding:12px 0;
+}
+.brand{font-weight:800;letter-spacing:-.02em}
+.section-indicator{font-size:.88rem;color:var(--muted);white-space:nowrap}
+.progress-track{height:8px;background:#e5f2fb;border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;width:50%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .35s ease}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+.hero{
+  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);
+  gap:28px;padding:54px 0 24px;align-items:stretch;
+}
+.hero-main,.info-card,.card{
+  background:rgba(255,255,255,.94);border:1px solid rgba(207,231,247,.95);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.hero-main{padding:40px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;background:var(--surface-2);border-radius:999px;color:var(--primary-dark);font-weight:700;font-size:.84rem}
+h1{font-size:clamp(2.4rem,6vw,5.1rem);line-height:.98;letter-spacing:-.055em;margin:20px 0 18px}
+.hero-sub{font-size:1.1rem;color:var(--muted);max-width:700px}
+.author{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);font-size:.94rem;color:var(--muted)}
+.author strong{color:var(--ink)}
+.info-card{padding:28px;background:linear-gradient(145deg,#dff3ff,#ffffff)}
+.info-card h2{margin:0 0 16px;font-size:1.25rem}
+.tip-list{display:grid;gap:12px}
+.tip{display:flex;gap:11px;align-items:flex-start;padding:13px;background:rgba(255,255,255,.75);border-radius:14px}
+.tip b{color:var(--primary-dark)}
+.section-tabs{display:flex;gap:12px;flex-wrap:wrap;padding:12px 0 36px}
+.tab-btn,.primary-btn,.secondary-btn,.ghost-btn{
+  border:0;border-radius:13px;padding:12px 18px;font-weight:750;transition:.2s ease;
+}
+.tab-btn{background:#e6f4fd;color:var(--primary-dark)}
+.tab-btn.active,.primary-btn{background:var(--primary);color:#fff;box-shadow:0 8px 18px rgba(47,128,237,.25)}
+.tab-btn:hover,.primary-btn:hover{transform:translateY(-2px)}
+.secondary-btn{background:#dff2ff;color:var(--primary-dark)}
+.ghost-btn{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.lesson-section{display:none;animation:fade .35s ease}
+.lesson-section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section-head{margin:8px 0 22px}
+.section-head h2{font-size:clamp(2rem,4vw,3.2rem);letter-spacing:-.04em;margin:0}
+.section-head p{color:var(--muted);margin:.5rem 0 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch;margin-bottom:22px}
+.card{padding:25px;min-width:0}
+.card h3{font-size:1.15rem;margin:0 0 8px}
+.activity-label{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.num{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--primary);color:#fff;font-weight:800;flex:0 0 auto}
+.instruction{font-weight:750}
+.muted{color:var(--muted)}
+.chip-bank{display:flex;gap:8px;flex-wrap:wrap;padding:13px;background:#f3f9fd;border-radius:14px;margin-bottom:14px;min-height:58px}
+.drag-item{padding:8px 11px;background:#fff;border:1px solid #a9d5f0;border-radius:10px;box-shadow:0 3px 9px rgba(20,70,110,.08);cursor:grab;user-select:none}
+.drag-item.selected{outline:3px solid rgba(47,128,237,.25)}
+.drop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dropzone{min-height:130px;border:2px dashed #a7d4ef;border-radius:14px;padding:12px;background:#fbfdff}
+.dropzone h4{margin:0 0 8px;font-size:.9rem;color:var(--primary-dark)}
+.dropzone.over{background:#e4f5ff;border-color:var(--primary)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.feedback{margin-top:12px;font-weight:700;min-height:24px}
+.feedback.ok{color:var(--success)} .feedback.bad{color:var(--danger)}
+.question-list{display:grid;gap:10px}
+.question{padding:12px 14px;border-left:4px solid var(--accent);background:#f7fbfe;border-radius:0 12px 12px 0}
+.match-row{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;margin:10px 0}
+select,input[type="text"],textarea{
+  width:100%;border:1px solid #bcdcf0;border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);
+}
+select:focus,input:focus,textarea:focus{outline:3px solid rgba(47,128,237,.15);border-color:var(--primary)}
+.video-wrap{overflow:hidden;border-radius:16px;background:#0d2232;aspect-ratio:16/9}
+video,.video-wrap iframe{width:100%;height:100%;display:block;border:0}
+.order-list{display:grid;gap:9px}
+.order-item{display:grid;grid-template-columns:62px 1fr;gap:9px;align-items:center;padding:10px;background:#f7fbfe;border-radius:12px}
+details{background:#f7fbfe;border:1px solid var(--line);border-radius:13px;padding:13px 15px;margin-top:9px}
+summary{cursor:pointer;font-weight:750}
+.email-card{border-radius:16px;padding:22px;height:100%}
+.email-card.bad{background:var(--danger-bg);border:1px solid #f2bcbc}
+.email-card.good{background:var(--success-bg);border:1px solid #a9dfc6}
+.email-card h4{margin:0 0 12px;font-size:1.15rem}
+.email-part{margin:13px 0}
+.email-part b{display:block;text-transform:uppercase;font-size:.75rem;letter-spacing:.04em;margin-bottom:4px}
+.upgrade{background:#fff6b8;padding:1px 4px;border-radius:4px}
+.formal-match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.formal-match .match-row{grid-template-columns:1fr}
+.match-board{position:relative;display:grid;grid-template-columns:minmax(120px,1fr) minmax(150px,1.35fr);gap:64px;padding:8px 0;min-height:260px}
+.match-column{display:flex;flex-direction:column;gap:10px;position:relative;z-index:2}
+.match-card{width:100%;border:1px solid #acd4ec;background:#fff;border-radius:12px;padding:11px 13px;text-align:left;color:var(--ink);font-weight:700;transition:.18s ease;box-shadow:0 3px 9px rgba(20,70,110,.06)}
+.match-card:hover{transform:translateY(-1px);border-color:var(--primary)}
+.match-card.active{outline:3px solid rgba(47,128,237,.18);border-color:var(--primary);background:#edf7ff}
+.match-card.paired{background:#f3f9fd}
+.match-card.correct{border-color:#39a474;background:#e9f8f1}
+.match-card.incorrect{border-color:#d15b5b;background:#fff0f0}
+.match-lines{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+.word-bank{display:flex;gap:8px;flex-wrap:wrap;padding:12px;background:#edf7fd;border-radius:13px;margin:12px 0}
+.word-pair{padding:7px 10px;background:#fff;border:1px solid #b8dcef;border-radius:9px;font-weight:700;font-size:.9rem}
+@media(max-width:560px){.match-board{gap:26px;grid-template-columns:1fr 1fr}.match-card{font-size:.88rem;padding:9px}}
+.rewrite-item{padding:13px;background:#f8fcff;border-radius:13px;margin:10px 0}
+.answer-reveal{display:none;margin-top:9px;padding:10px;border-radius:10px;background:var(--success-bg);color:#176846}
+.answer-reveal.show{display:block}
+.topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0 16px}
+.topic{display:flex;align-items:center;gap:9px;padding:11px;background:#f6fbfe;border:1px solid var(--line);border-radius:11px}
+.email-builder{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start}
+.template-box{background:#eaf6ff;border-radius:15px;padding:16px;position:sticky;top:82px}
+.template-box h4{margin:0 0 9px}
+textarea{min-height:360px;resize:vertical;line-height:1.6}
+.checklist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.check{padding:9px;background:#f7fbfe;border-radius:10px}
+.section-nav{display:flex;justify-content:space-between;gap:12px;padding:12px 0 50px}
+.full{grid-column:1/-1}
+@media(max-width:850px){
+  .topbar-inner{grid-template-columns:1fr auto} .progress-track{grid-column:1/-1;grid-row:2}
+  .hero,.grid-2,.email-builder{grid-template-columns:1fr}
+  .template-box{position:static}
+  .hero-main{padding:30px}
+}
+@media(max-width:560px){
+  .container,.topbar-inner{width:min(100% - 20px,1180px)}
+  .drop-grid,.topic-grid,.checklist{grid-template-columns:1fr}
+  .card{padding:18px}
+  .hero{padding-top:26px}
+  .hero-main{padding:24px}
+  .section-indicator{display:none}
+  .match-row{grid-template-columns:90px 1fr}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">Writing Effective Emails</div>
+    <div class="progress-track" aria-label="Lesson progress"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="section-indicator" id="sectionIndicator">Section 1 of 2 · Foundations</div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div class="hero-main">
+      <span class="eyebrow">Business English · Formal and informal language</span>
+      <h1>Writing Effective Emails</h1>
+      <div class="author">
+        <strong>Created by Viktoriia Pyniv</strong><br>
+        AI-assisted educational resource developed with ChatGPT (OpenAI).<br>
+        Source: <a href="https://eslbrains.com/b1-formal-and-informal-emails/" target="_blank" rel="noopener">Writing effective emails – formal and informal language</a>
+      </div>
+    </div>
+    <aside class="info-card">
+      <h2>Email success checklist</h2>
+      <div class="tip-list">
+        <div class="tip"><b>01</b><span>Write a brief, descriptive subject line.</span></div>
+        <div class="tip"><b>02</b><span>State your purpose early and clearly.</span></div>
+        <div class="tip"><b>03</b><span>Use an appropriate greeting and sign-off.</span></div>
+        <div class="tip"><b>04</b><span>Request action politely and professionally.</span></div>
+      </div>
+    </aside>
+  </section>
+
+  <nav class="section-tabs" aria-label="Lesson sections">
+    <button class="tab-btn active" data-section="1">Foundations & Video</button>
+    <button class="tab-btn" data-section="2">Professional Writing</button>
+  </nav>
+
+  <section class="lesson-section active" id="section-1">
+    <div class="section-head">
+      <h2>Foundations & Video</h2>
+      <p>Explore register, key vocabulary and practical rules for effective business emails.</p>
+    </div>
+
+    <div class="grid-2">
+      <article class="card">
+        <div class="activity-label"><span class="num">1</span><span class="instruction">Read the list of email greetings and closings. Put them in the correct columns.</span></div>
+        <div class="chip-bank" id="greetingBank"></div>
+        <div class="drop-grid">
+          <div class="dropzone" data-category="formal-greeting"><h4>Formal greetings</h4></div>
+          <div class="dropzone" data-category="informal-greeting"><h4>Informal greetings</h4></div>
+          <div class="dropzone" data-category="formal-closing"><h4>Formal closings</h4></div>
+          <div class="dropzone" data-category="informal-closing"><h4>Informal closings</h4></div>
+        </div>
+        <div class="controls"><button class="primary-btn" onclick="checkGreetings()">Check answers</button><button class="ghost-btn" onclick="resetGreetings()">Reset</button></div>
+        <div class="feedback" id="greetingFeedback"></div>
+      </article>
+
+      <div>
+        <article class="card" style="margin-bottom:22px">
+          <div class="activity-label"><span class="num">2</span><span class="instruction">Match the words to their meanings.</span></div>
+          <p class="muted">Click a word on the left, then click its meaning on the right to connect them.</p>
+          <div id="vocabMatch"></div>
+          <div class="controls"><button class="primary-btn" onclick="checkVocab()">Check answers</button><button class="ghost-btn" onclick="resetVocab()">Reset</button></div>
+          <div class="feedback" id="vocabFeedback"></div>
+        </article>
+
+        <article class="card">
+          <details>
+            <summary><span class="activity-label" style="display:inline-flex;margin:0"><span class="num">3</span><span class="instruction">Discuss the questions.</span></span></summary>
+            <div class="question-list" style="margin-top:14px">
+              <div class="question">How many emails do you get every day? Are they all important?</div>
+              <div class="question">Do you feel that people overuse emails?</div>
+              <div class="question">Do you set up an autoresponder when you are out of the office?</div>
+              <div class="question">When are emails a necessary means of communication?</div>
+            </div>
+          </details>
+        </article>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <article class="card">
+        <h3>Writing an effective business email</h3>
+        <div class="video-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/amJZXjxnhTI"
+            title="Writing an effective business email"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="activity-label"><span class="num">4</span><span class="instruction">Watch the video and put the rules below in the order you hear them.</span></div>
+        <div class="order-list" id="ruleOrder"></div>
+        <div class="controls"><button class="primary-btn" onclick="checkOrder()">Check answers</button><button class="ghost-btn" onclick="resetOrder()">Reset</button></div>
+        <div class="feedback" id="orderFeedback"></div>
+
+        <div style="margin-top:22px">
+          <details>
+            <summary><span class="activity-label" style="display:inline-flex;margin:0"><span class="num">5</span><span class="instruction">Discuss the questions.</span></span></summary>
+            <div class="question-list" style="margin-top:14px">
+              <div class="question">What do you think about the rules presented in the video?</div>
+              <div class="question">Have you ever taken an email-writing course? Should every company offer one?</div>
+              <div class="question">What aspect of writing emails do you find most problematic?</div>
+            </div>
+          </details>
+        </div>
+      </article>
+    </div>
+
+    <div class="section-nav">
+      <span></span>
+      <button class="primary-btn" onclick="showSection(2)">Next: Professional Writing →</button>
+    </div>
+  </section>
+
+  <section class="lesson-section" id="section-2">
+    <div class="section-head">
+      <h2>Professional Writing</h2>
+      <p>Compare register, upgrade informal vocabulary and produce a complete professional email.</p>
+    </div>
+
+    <article class="card" style="margin-bottom:22px">
+      <div class="activity-label"><span class="num">6</span><span class="instruction">Compare the two emails. Identify what makes the second version more professional.</span></div>
+      <div class="grid-2" style="margin:0">
+        <div class="email-card bad">
+          <h4>Bad email</h4>
+          <p><b>Subject:</b> SOS!!! ANSWER NOW</p>
+          <div class="email-part"><b>Greeting</b>Hello Aleksandra,</div>
+          <div class="email-part"><b>Paragraph 1 · Purpose</b>I am so sorry but I <span class="upgrade">need your help</span>.</div>
+          <div class="email-part"><b>Paragraph 2 · Explanation</b>I <span class="upgrade">want to tell you</span> that I cannot see the lessons on our platform. I <span class="upgrade">sent you</span> a screenshot below.</div>
+          <div class="email-part"><b>Paragraph 3 · Additional information</b>I also <span class="upgrade">want to ask for</span> information about my lessons next week because I do not <span class="upgrade">get</span> any schedule.</div>
+          <div class="email-part"><b>Paragraph 4 · Request for action</b>Please check if everything is OK and answer me now because this is very urgent.</div>
+          <div class="email-part"><b>Closing and sign-off</b>Thank you.<br>See you soon,<br>Bye,<br>Vika</div>
+        </div>
+
+        <div class="email-card good">
+          <h4>Professional email</h4>
+          <p><b>Subject:</b> Unable to Access the Platform and Lesson Schedule</p>
+          <div class="email-part"><b>Greeting</b>Dear Aleksandra,</div>
+          <div class="email-part"><b>Paragraph 1 · Purpose</b>I am writing to <span class="upgrade">request your assistance</span> with a problem on the teaching platform.</div>
+          <div class="email-part"><b>Paragraph 2 · Explanation</b>I <span class="upgrade">would like to inform you</span> that I cannot see my lessons on the platform. I <span class="upgrade">have attached</span> a screenshot of the issue below.</div>
+          <div class="email-part"><b>Paragraph 3 · Additional information</b>I would also like to <span class="upgrade">request information</span> about my lessons for next week because I have not <span class="upgrade">received</span> a schedule.</div>
+          <div class="email-part"><b>Paragraph 4 · Request for action</b>Could you please <span class="upgrade">verify</span> whether everything is working correctly?</div>
+          <div class="email-part"><b>Closing and sign-off</b>Thank you for your time and <span class="upgrade">assistance</span>. I <span class="upgrade">look forward to</span> your reply.<br><br>Kind regards,<br>Viktoriia Pyniv</div>
+        </div>
+      </div>
+      <details><summary>Reveal the main differences</summary>
+        <p>The professional version uses a descriptive subject line, a more appropriate greeting, formal verbs, present perfect for the missing schedule, a polite indirect request, and one consistent sign-off.</p>
+      </details>
+    </article>
+
+
+    <article class="card">
+      <div class="activity-label"><span class="num">9</span><span class="instruction">EMAIL TASK — Choose ONE topic and write a professional email.</span></div>
+      <div class="topic-grid" id="topics"></div>
+      <div class="email-builder">
+        <aside class="template-box">
+          <h4>Email template</h4>
+          <p><b>Subject</b><br>Brief and descriptive</p>
+          <p><b>Greeting</b><br>Dear Sir or Madam,<br>Dear Mr/Ms Smith,<br>Dear Maria,</p>
+          <p><b>Paragraph 1</b><br>Purpose: inform, request, require</p>
+          <p><b>Paragraph 2</b><br>Explanation: receive, verify, assist</p>
+          <p><b>Paragraph 3</b><br>Additional information: reply, confirm, provide, clarify</p>
+          <p><b>Closing</b><br>I appreciate your assistance.<br>I look forward to hearing from you.</p>
+          <p><b>Sign-off</b><br>Kind regards,<br>Best regards,<br>Yours sincerely,</p>
+        </aside>
+        <div>
+          <input id="emailSubject" type="text" placeholder="Subject:">
+          <textarea id="emailDraft" placeholder="Dear ...,
+
+I am writing to ...
+
+...
+
+Kind regards,
+Your name"></textarea>
+          <div class="checklist">
+            <label class="check"><input type="checkbox"> Clear subject line</label>
+            <label class="check"><input type="checkbox"> Appropriate greeting</label>
+            <label class="check"><input type="checkbox"> Purpose stated early</label>
+            <label class="check"><input type="checkbox"> Formal vocabulary</label>
+            <label class="check"><input type="checkbox"> Polite request for action</label>
+            <label class="check"><input type="checkbox"> Suitable sign-off</label>
+          </div>
+          <div class="controls">
+            <button class="primary-btn" onclick="reviewEmail()">Review structure</button>
+            <button class="ghost-btn" onclick="resetEmail()">Reset</button>
+          </div>
+          <div class="feedback" id="emailFeedback"></div>
+        </div>
+      </div>
+    </article>
+
+    <div class="section-nav">
+      <button class="secondary-btn" onclick="showSection(1)">← Previous: Foundations</button>
+      <button class="primary-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top ↑</button>
+    </div>
+  </section>
+</main>
+
+<script>
+const greetingData = [
+  ["Love,","informal-closing"],["Regards,","formal-closing"],["Hi...","informal-greeting"],
+  ["Best,","informal-closing"],["Hey,","informal-greeting"],["Cheers,","informal-closing"],
+  ["Dear Sir or Madam,","formal-greeting"],["Kind regards,","formal-closing"],
+  ["Yours sincerely,","formal-closing"],["All the best,","informal-closing"],
+  ["Hello,","informal-greeting"],["Yours faithfully,","formal-closing"],
+  ["XOXO,","informal-closing"],["To the Financial Director,","formal-greeting"],
+  ["Dear Mr...","formal-greeting"]
+];
+let selectedDrag = null;
+
+function makeDragItem(text, category) {
+  const el=document.createElement("div");
+  el.className="drag-item"; el.textContent=text; el.draggable=true;
+  el.dataset.answer=category;
+  el.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",text); selectedDrag=el;});
+  el.addEventListener("click",()=>{
+    document.querySelectorAll(".drag-item").forEach(x=>x.classList.remove("selected"));
+    selectedDrag=el;el.classList.add("selected");
+  });
+  return el;
+}
+function initGreetings(){
+  const bank=document.getElementById("greetingBank"); bank.innerHTML="";
+  greetingData.forEach(([t,c])=>bank.appendChild(makeDragItem(t,c)));
+}
+document.querySelectorAll(".dropzone").forEach(z=>{
+  z.addEventListener("dragover",e=>{e.preventDefault();z.classList.add("over")});
+  z.addEventListener("dragleave",()=>z.classList.remove("over"));
+  z.addEventListener("drop",e=>{e.preventDefault();z.classList.remove("over");if(selectedDrag)z.appendChild(selectedDrag)});
+  z.addEventListener("click",()=>{if(selectedDrag){z.appendChild(selectedDrag);selectedDrag.classList.remove("selected");selectedDrag=null;}});
+});
+document.getElementById("greetingBank").addEventListener("click",()=>{
+  if(selectedDrag && selectedDrag.parentElement.id!=="greetingBank"){
+    document.getElementById("greetingBank").appendChild(selectedDrag);selectedDrag.classList.remove("selected");selectedDrag=null;
+  }
+});
+function checkGreetings(){
+  let correct=0,total=greetingData.length;
+  document.querySelectorAll(".drag-item").forEach(el=>{
+    const parent=el.closest(".dropzone");
+    const ok=parent && parent.dataset.category===el.dataset.answer;
+    el.style.borderColor=ok?"#39a474":"#d15b5b";
+    if(ok)correct++;
+  });
+  const f=document.getElementById("greetingFeedback");
+  f.textContent=`${correct} / ${total} correct.`;f.className="feedback "+(correct===total?"ok":"bad");
+}
+function resetGreetings(){initGreetings();document.getElementById("greetingFeedback").textContent="";}
+
+const vocab=[
+  ["concise","short and clear"],["brief","very short"],["forward","send an email you received to someone else"],
+  ["vague","not clear"],["multiple","many"],["response","answer"]
+];
+
+const matchStates={};
+
+function shuffled(items){
+  const a=[...items];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function initLineMatcher(containerId,data,feedbackId){
+  const host=document.getElementById(containerId);
+  const rightItems=shuffled(data.map(x=>x[1]));
+  host.innerHTML=`<div class="match-board">
+    <svg class="match-lines" aria-hidden="true"></svg>
+    <div class="match-column left-column"></div>
+    <div class="match-column right-column"></div>
+  </div>`;
+  const state={data,pairs:new Map(),activeLeft:null,feedbackId};
+  matchStates[containerId]=state;
+  const left=host.querySelector(".left-column");
+  const right=host.querySelector(".right-column");
+  data.forEach(([word])=>{
+    const b=document.createElement("button");b.type="button";b.className="match-card";b.textContent=word;b.dataset.value=word;
+    b.addEventListener("click",()=>selectLeft(containerId,b));left.appendChild(b);
+  });
+  rightItems.forEach(meaning=>{
+    const b=document.createElement("button");b.type="button";b.className="match-card";b.textContent=meaning;b.dataset.value=meaning;
+    b.addEventListener("click",()=>selectRight(containerId,b));right.appendChild(b);
+  });
+}
+function selectLeft(id,button){
+  const state=matchStates[id];
+  document.querySelectorAll(`#${id} .left-column .match-card`).forEach(x=>x.classList.remove("active"));
+  state.activeLeft=button.dataset.value;button.classList.add("active");
+}
+function selectRight(id,button){
+  const state=matchStates[id];
+  if(!state.activeLeft)return;
+  for(const [left,right] of [...state.pairs.entries()])if(right===button.dataset.value)state.pairs.delete(left);
+  state.pairs.set(state.activeLeft,button.dataset.value);
+  state.activeLeft=null;
+  document.querySelectorAll(`#${id} .match-card`).forEach(x=>x.classList.remove("active","correct","incorrect"));
+  refreshPairedCards(id);drawMatchLines(id);
+}
+function refreshPairedCards(id){
+  const state=matchStates[id],host=document.getElementById(id);
+  host.querySelectorAll(".match-card").forEach(x=>x.classList.remove("paired"));
+  for(const [l,r] of state.pairs){
+    [...host.querySelectorAll(".left-column .match-card")].find(x=>x.dataset.value===l)?.classList.add("paired");
+    [...host.querySelectorAll(".right-column .match-card")].find(x=>x.dataset.value===r)?.classList.add("paired");
+  }
+}
+function drawMatchLines(id,checked=false){
+  const host=document.getElementById(id),board=host.querySelector(".match-board"),svg=host.querySelector("svg");
+  const state=matchStates[id],rect=board.getBoundingClientRect();
+  svg.innerHTML="";
+  for(const [l,r] of state.pairs){
+    const lb=[...host.querySelectorAll(".left-column .match-card")].find(x=>x.dataset.value===l);
+    const rb=[...host.querySelectorAll(".right-column .match-card")].find(x=>x.dataset.value===r);
+    if(!lb||!rb)continue;
+    const a=lb.getBoundingClientRect(),b=rb.getBoundingClientRect();
+    const x1=a.right-rect.left,y1=a.top+a.height/2-rect.top,x2=b.left-rect.left,y2=b.top+b.height/2-rect.top;
+    const correct=state.data.find(x=>x[0]===l)?.[1]===r;
+    const color=checked?(correct?"#2f9b6b":"#d15b5b"):"#65aeda";
+    const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+    const bend=Math.max(30,(x2-x1)*.45);
+    path.setAttribute("d",`M ${x1} ${y1} C ${x1+bend} ${y1}, ${x2-bend} ${y2}, ${x2} ${y2}`);
+    path.setAttribute("fill","none");path.setAttribute("stroke",color);path.setAttribute("stroke-width","3");path.setAttribute("stroke-linecap","round");
+    svg.appendChild(path);
+  }
+}
+function checkLineMatcher(id){
+  const state=matchStates[id],host=document.getElementById(id);
+  let correct=0;
+  for(const [l,r] of state.pairs){
+    const ok=state.data.find(x=>x[0]===l)?.[1]===r;
+    [...host.querySelectorAll(".left-column .match-card")].find(x=>x.dataset.value===l)?.classList.add(ok?"correct":"incorrect");
+    [...host.querySelectorAll(".right-column .match-card")].find(x=>x.dataset.value===r)?.classList.add(ok?"correct":"incorrect");
+    if(ok)correct++;
+  }
+  drawMatchLines(id,true);
+  const f=document.getElementById(state.feedbackId);
+  f.textContent=`${correct} / ${state.data.length} correct.`;
+  f.className="feedback "+(correct===state.data.length?"ok":"bad");
+}
+function resetLineMatcher(id){
+  const state=matchStates[id];
+  initLineMatcher(id,state.data,state.feedbackId);
+  document.getElementById(state.feedbackId).textContent="";
+}
+function checkVocab(){checkLineMatcher("vocabMatch")}
+function resetVocab(){resetLineMatcher("vocabMatch")}
+
+function buildSelect(options, placeholder="Choose"){
+  const s=document.createElement("select");
+  s.innerHTML=`<option value="">${placeholder}</option>`+options.map(x=>`<option>${x}</option>`).join("");
+  return s;
+}
+function checkRows(container, feedback){
+  const rows=[...document.querySelectorAll(`#${container} .order-item`)];
+  let c=0;rows.forEach(r=>{const ok=Number(r.querySelector("select").value)===Number(r.dataset.answer);r.querySelector("select").style.borderColor=ok?"#39a474":"#d15b5b";if(ok)c++;});
+  const f=document.getElementById(feedback);f.textContent=`${c} / ${rows.length} correct.`;f.className="feedback "+(c===rows.length?"ok":"bad");
+}
+function resetRows(container, feedback){document.querySelectorAll(`#${container} select`).forEach(s=>{s.value="";s.style.borderColor=""});document.getElementById(feedback).textContent="";}
+
+const rules=[
+  ["A","Use the first name when you know the recipient, and their last name when you want to be formal.",4],
+  ["B","All business emails should be direct, clear and easy.",1],
+  ["C","Always stay professional.",2],
+  ["D","Writing concise emails is a powerful skill.",6],
+  ["E","The subject line should be brief and descriptive.",3],
+  ["F","When you have attached a file, write about it in your email.",5]
+];
+function initOrder(){
+  const box=document.getElementById("ruleOrder");box.innerHTML="";
+  rules.forEach(([l,t,a])=>{const row=document.createElement("div");row.className="order-item";row.dataset.answer=a;const sel=buildSelect([1,2,3,4,5,6],"Order");sel.setAttribute("aria-label","Order for rule "+l);row.appendChild(sel);row.insertAdjacentHTML("beforeend",`<div><b>${l}.</b> ${t}</div>`);box.appendChild(row);});
+}
+function checkOrder(){
+  const rows=[...document.querySelectorAll("#ruleOrder .order-item")];
+  let c=0;
+  rows.forEach(r=>{const sel=r.querySelector("select");const ok=sel.value===r.dataset.answer;sel.style.borderColor=ok?"#39a474":"#d15b5b";if(ok)c++;});
+  const f=document.getElementById("orderFeedback");f.textContent=`${c} / ${rows.length} correct.`;f.className="feedback "+(c===rows.length?"ok":"bad");
+}
+function resetOrder(){document.querySelectorAll("#ruleOrder select").forEach(s=>{s.value="";s.style.borderColor=""});document.getElementById("orderFeedback").textContent="";}
+
+const formal=[
+  ["answer","reply"],["ask for","request"],["be sorry","apologize"],["buy","purchase"],["check","verify"],
+  ["choose","select"],["get","receive"],["help","assist"],["need","require"],["tell","inform"]
+];
+function checkFormal(){checkLineMatcher("formalMatch")}
+function resetFormal(){resetLineMatcher("formalMatch")}
+
+const rewrites=[
+  ["Can you tell us when you expect to send these products to clients?","Could you inform us when you expect to send these products to clients?","Could you ..."],
+  ["I want to buy your new software, but I do not know where I should place an order.","I would like to purchase your new software, but I do not know where I should place an order.","I would like to ..."],
+  ["If you cannot log in to our website, contact us and we will help you with the process.","If you cannot log in to our website, contact us and we will assist you with the process.","If you cannot ..."],
+  ["Unfortunately, I have not got my order yet. Can you check what has happened to it?","Unfortunately, I have not received my order yet. Can you verify what has happened to it?","Rewrite the complete sentence."],
+  ["Mr Smith needs you to visit on Tuesday at 9 a.m. Are you available at that time?","Mr Smith requires you to visit on Tuesday at 9 a.m. Are you available at that time?","Rewrite the complete sentence."],
+  ["Our company rules say that employees have to answer all emails the day they get them.","Our company rules say that employees have to reply to all emails the day they receive them.","Rewrite the complete sentence."]
+];
+function initRewrite(){
+  const box=document.getElementById("rewriteItems");box.innerHTML="";
+  rewrites.forEach(([q,a,stem])=>{
+    box.insertAdjacentHTML("beforeend",`<div class="rewrite-item"><div><b>Original:</b> ${q}</div><input type="text" placeholder="${stem}"><div class="answer-reveal">${a}</div></div>`)
+  });
+}
+function toggleRewriteAnswers(){document.querySelectorAll(".answer-reveal").forEach(x=>x.classList.toggle("show"))}
+function resetRewrite(){document.querySelectorAll("#rewriteItems input").forEach(x=>x.value="");document.querySelectorAll(".answer-reveal").forEach(x=>x.classList.remove("show"))}
+
+const topics=[
+"Unable to Access the Platform","Request for Lesson Materials","Request for Additional Materials",
+"Question About the Lesson Schedule","Unable to Join the Lesson","Absence from a Lesson",
+"Purchase of Additional Materials","Missing Homework Feedback","Change of Lesson Time","Problem with My Account"
+];
+function initTopics(){
+  const box=document.getElementById("topics");
+  box.innerHTML=topics.map((t,i)=>`<label class="topic"><input type="radio" name="topic" value="${t}"> ${i+1}. ${t}</label>`).join("");
+  box.addEventListener("change",e=>{if(e.target.name==="topic")document.getElementById("emailSubject").value=e.target.value;});
+}
+function reviewEmail(){
+  const sub=document.getElementById("emailSubject").value.trim();
+  const body=document.getElementById("emailDraft").value.trim();
+  const f=document.getElementById("emailFeedback");
+  const notes=[];
+  if(sub.length<5)notes.push("add a clear subject line");
+  if(!/dear|hello|hi/i.test(body.slice(0,60)))notes.push("add an appropriate greeting");
+  if(body.length<180)notes.push("develop the email with enough detail");
+  if(!/(could you|would you|please|request|appreciate)/i.test(body))notes.push("include a polite request");
+  if(!/(regards|sincerely|faithfully)/i.test(body))notes.push("add a professional sign-off");
+  if(notes.length){f.textContent="Review: "+notes.join("; ")+ ".";f.className="feedback bad";}
+  else{f.textContent="The email has the key structural elements. Now check grammar, tone and clarity.";f.className="feedback ok";}
+}
+function resetEmail(){
+  document.getElementById("emailSubject").value="";document.getElementById("emailDraft").value="";
+  document.querySelectorAll('input[name="topic"], .check input').forEach(x=>x.checked=false);
+  document.getElementById("emailFeedback").textContent="";
+}
+
+function showSection(n){
+  document.querySelectorAll(".lesson-section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("section-"+n).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.section)===n));
+  document.getElementById("progressFill").style.width=(n*50)+"%";
+  document.getElementById("sectionIndicator").textContent=n===1?"Section 1 of 2 · Foundations":"Section 2 of 2 · Professional Writing";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+document.querySelectorAll(".tab-btn").forEach(b=>b.addEventListener("click",()=>showSection(Number(b.dataset.section))));
+
+initGreetings();
+initLineMatcher("vocabMatch",vocab,"vocabFeedback");
+initOrder();
+initLineMatcher("formalMatch",formal,"formalFeedback");
+initRewrite();
+initTopics();
+window.addEventListener("resize",()=>{if(matchStates.vocabMatch)drawMatchLines("vocabMatch");if(matchStates.formalMatch)drawMatchLines("formalMatch");});
+</script>
+</body>
+</html>
