@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>When You Feel Stuck in Your Job</title>
+  <style>
+    :root{
+      --red:#d92f3b;
+      --red-dark:#a91f2a;
+      --red-soft:#fff1f3;
+      --ink:#221f22;
+      --muted:#6f666b;
+      --line:#ead7da;
+      --card:#ffffff;
+      --bg:#fff8f8;
+      --success:#17824b;
+      --error:#b42318;
+      --shadow:0 16px 40px rgba(105, 24, 33, .10);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(217,47,59,.09), transparent 28%),
+        linear-gradient(180deg,#fff 0%,var(--bg) 100%);
+      line-height:1.55;
+    }
+
+    button, select, textarea, input{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:100;
+      backdrop-filter:blur(16px);
+      background:rgba(255,255,255,.92);
+      border-bottom:1px solid rgba(217,47,59,.12);
+    }
+
+    .topbar-inner{
+      max-width:1240px;
+      margin:0 auto;
+      padding:12px 22px;
+      display:grid;
+      grid-template-columns:minmax(240px,1fr) minmax(240px,420px) auto;
+      gap:20px;
+      align-items:center;
+    }
+
+    .brand{font-weight:800;letter-spacing:-.02em}
+    .brand span{color:var(--red)}
+    .progress-wrap{display:flex;align-items:center;gap:12px}
+    .progress-track{height:9px;flex:1;background:#f4dfe2;border-radius:999px;overflow:hidden}
+    .progress-fill{width:0;height:100%;background:linear-gradient(90deg,var(--red),#ef5962);transition:width .35s ease}
+    .section-indicator{font-size:.92rem;color:var(--muted);white-space:nowrap}
+
+    main{max-width:1240px;margin:0 auto;padding:34px 22px 70px}
+
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);
+      gap:26px;
+      align-items:stretch;
+      margin-bottom:24px;
+    }
+
+    .hero-main,.hero-card,.activity-card,.video-card,.mini-card{
+      background:var(--card);
+      border:1px solid rgba(217,47,59,.12);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
+    }
+
+    .hero-main{
+      padding:46px;
+      position:relative;
+      overflow:hidden;
+      min-height:350px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+    .hero-main::after{
+      content:"";
+      position:absolute;
+      width:260px;height:260px;border-radius:50%;
+      background:linear-gradient(135deg,rgba(217,47,59,.22),rgba(217,47,59,.03));
+      right:-70px;top:-70px;
+    }
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--red);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:.8rem}
+    h1{font-size:clamp(2.4rem,6vw,5.7rem);line-height:.95;letter-spacing:-.055em;margin:18px 0 20px;max-width:850px}
+    .hero-main p{font-size:1.08rem;color:var(--muted);max-width:720px;margin:0 0 20px}
+    .author{padding-top:20px;border-top:1px solid var(--line);font-size:.94rem;color:var(--muted)}
+    .author strong{color:var(--ink)}
+    .author a{color:var(--red);font-weight:700;text-decoration:none}
+    .author a:hover{text-decoration:underline}
+
+    .hero-card{padding:28px;background:linear-gradient(155deg,var(--red),var(--red-dark));color:#fff;display:flex;flex-direction:column;justify-content:space-between}
+    .hero-card h2{margin:0 0 18px;font-size:1.5rem}
+    .goal-list{display:grid;gap:12px}
+    .goal{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.12);padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.15)}
+    .goal b{display:block;margin-bottom:3px}
+    .goal small{color:rgba(255,255,255,.82)}
+    .goal-num{width:28px;height:28px;border-radius:10px;background:#fff;color:var(--red);display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+
+    .lesson-nav{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 26px}
+    .nav-btn,.primary-btn,.secondary-btn,.chip-btn{
+      border:0;border-radius:999px;padding:12px 18px;font-weight:800;transition:.2s ease;
+    }
+    .nav-btn,.primary-btn{background:var(--red);color:#fff;box-shadow:0 8px 20px rgba(217,47,59,.22)}
+    .nav-btn:hover,.primary-btn:hover{transform:translateY(-2px);background:var(--red-dark)}
+    .secondary-btn{background:#fff;color:var(--red);border:1px solid var(--line)}
+    .secondary-btn:hover{background:var(--red-soft)}
+
+    .section{display:none;animation:fadeIn .35s ease}
+    .section.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+    .section-title{display:flex;justify-content:space-between;gap:20px;align-items:end;margin:12px 0 20px}
+    .section-title h2{margin:0;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:-.03em}
+    .section-title p{margin:0;color:var(--muted);max-width:620px}
+
+    .activity-card{padding:26px;margin-bottom:22px}
+    .activity-heading{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px}
+    .activity-number{width:40px;height:40px;border-radius:14px;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:900;flex:0 0 auto}
+    .activity-heading h3{margin:0 0 4px;font-size:1.25rem}
+    .activity-heading p{margin:0;color:var(--muted)}
+
+    .warmup-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+    .prompt-panel{padding:22px;border-radius:18px;background:var(--red-soft);border:1px solid #f4c9cf}
+    .prompt-panel h4{margin:0 0 12px;font-size:1.05rem}
+    textarea{
+      width:100%;min-height:155px;resize:vertical;border:1px solid var(--line);border-radius:16px;padding:15px;background:#fff;outline:none;
+    }
+    textarea:focus, select:focus, input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(217,47,59,.10)}
+
+    .statement-list{display:grid;gap:12px}
+    .statement{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}
+    .statement p{margin:0 0 10px}
+    .toggle-row{display:flex;gap:8px;flex-wrap:wrap}
+    .toggle-btn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-weight:800;color:var(--muted)}
+    .toggle-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+
+    .matching-board{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:22px;align-items:start}
+    .phrase-list,.definition-bank{display:grid;gap:12px}
+    .match-row{border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:center;background:#fff}.drop-zone{grid-column:2;min-height:52px;border:2px dashed #e6b5bb;border-radius:14px;padding:12px;color:var(--muted);background:#fffafa;display:flex;align-items:center;transition:.2s ease}.drop-zone.drag-over{border-color:var(--red);background:var(--red-soft)}
+    .letter{width:32px;height:32px;border-radius:10px;background:var(--red-soft);color:var(--red);display:grid;place-items:center;font-weight:900}
+        .match-row.correct{border-color:#93d6ae;background:#f2fff7}
+    .match-row.incorrect{border-color:#f0aaa4;background:#fff5f4}
+    .definition-bank{padding:18px;border-radius:18px;background:#faf7f8;border:1px solid var(--line);position:sticky;top:110px}.definition-card{display:flex;gap:10px;align-items:flex-start;padding:13px;border:1px solid var(--line);border-radius:14px;background:#fff;cursor:grab;user-select:none;box-shadow:0 5px 14px rgba(105,24,33,.06)}.definition-card:active{cursor:grabbing}.definition-card b{color:var(--red)}.definition-card.selected{outline:3px solid rgba(217,47,59,.18);border-color:var(--red)}
+
+    .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .feedback{margin-top:12px;font-weight:800}
+    .feedback.ok{color:var(--success)}
+    .feedback.bad{color:var(--error)}
+
+    details{border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden}
+    summary{cursor:pointer;padding:18px 20px;font-weight:850;list-style:none;display:flex;justify-content:space-between;gap:16px;align-items:center}
+    summary::-webkit-details-marker{display:none}
+    summary::after{content:"＋";font-size:1.4rem;color:var(--red)}
+    details[open] summary::after{content:"−"}
+    .details-body{padding:0 20px 20px}
+    .discussion-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .discussion-card{padding:16px;border-radius:16px;background:var(--red-soft);border:1px solid #f4c9cf}
+
+    .media-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(340px,.92fr);gap:22px;align-items:start;margin-bottom:22px}.video-column{display:grid;gap:22px}.video-discussion{margin:0}.discussion-cards.one-column{grid-template-columns:1fr}.speaking-prompt{display:flex;flex-direction:column;justify-content:center}.speaking-prompt p{margin:0 0 16px;color:var(--muted)}.prompt-cue{padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);color:var(--muted)}
+    .video-card{padding:20px}
+    .video-frame{position:relative;padding-top:56.25%;overflow:hidden;border-radius:18px;background:#1d1113}
+    .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    .video-meta{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-top:14px;color:var(--muted);font-size:.92rem}
+
+    .sentence-stack{display:grid;gap:12px}
+    .sentence-item{display:grid;gap:10px;border:1px solid var(--line);padding:14px;border-radius:16px}
+    .sentence-item .options{display:flex;gap:8px;flex-wrap:wrap}
+    .choice{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 12px;font-weight:800}
+    .choice.active{background:var(--red);border-color:var(--red);color:#fff}
+    
+    .section-footer{display:flex;justify-content:space-between;gap:12px;margin-top:26px}
+    .section-footer .secondary-btn[disabled]{opacity:.45;cursor:not-allowed}
+
+    .toast{position:fixed;right:22px;bottom:22px;background:#221f22;color:#fff;padding:14px 18px;border-radius:14px;box-shadow:var(--shadow);opacity:0;transform:translateY(16px);pointer-events:none;transition:.25s ease;z-index:200}
+    .toast.show{opacity:1;transform:none}
+
+    @media (max-width:900px){
+      .topbar-inner{grid-template-columns:1fr auto}.progress-wrap{grid-column:1/-1;order:3}.section-indicator{display:none}
+      .hero,.warmup-grid,.matching-board,.media-grid{grid-template-columns:1fr}.definition-bank{position:static}
+      .hero-main{padding:34px;min-height:auto}
+      .discussion-cards{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      main{padding:24px 14px 50px}.topbar-inner{padding:10px 14px}.brand{font-size:.92rem}
+      .hero-main,.hero-card,.activity-card{padding:20px}
+      h1{font-size:2.65rem}
+      .match-row{grid-template-columns:34px 1fr}.drop-zone{grid-column:1/-1}
+      .section-title{display:block}.section-title p{margin-top:8px}
+      .video-meta{align-items:flex-start;flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">When You Feel <span>Stuck</span> in Your Job</div>
+      <div class="progress-wrap" aria-label="Lesson progress">
+        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        <strong id="progressText">0%</strong>
+      </div>
+      <div class="section-indicator">Section <strong id="sectionIndicator">1 of 1</strong></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-main">
+        <h1>When you feel stuck in your job</h1>
+        <div class="author">
+          <strong>Created by Viktoriia Pyniv</strong><br>
+          AI-assisted educational resource developed with ChatGPT (OpenAI).<br>
+          Source: <a href="https://eslbrains.com/" target="_blank" rel="noopener">ESL Brains — When you feel stuck in your job</a>
+        </div>
+      </div>
+
+      <aside class="hero-card">
+        <div>
+          <h2>Useful language for this lesson</h2>
+          <div class="goal-list">
+            <div class="goal"><span class="goal-num">1</span><div><b>Describe dissatisfaction</b><small>Explain what is not working and why.</small></div></div>
+            <div class="goal"><span class="goal-num">2</span><div><b>Evaluate workplace culture</b><small>Talk about recognition, growth and values.</small></div></div>
+            <div class="goal"><span class="goal-num">3</span><div><b>Express a position</b><small>Agree, disagree and support ideas with examples.</small></div></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section active" id="lesson">
+      <div class="section-title">
+        <div><h2>Explore the problem</h2></div>
+        <p>Move from personal ideas to precise workplace vocabulary, then use the language to discuss the video and develop your own opinions.</p>
+      </div>
+
+      <article class="activity-card" data-activity>
+        <div class="activity-heading">
+          <div class="activity-number">1</div>
+          <div>
+            <h3>Think, choose and explain</h3>
+            <p>Name three reasons why people may be dissatisfied with their job. Give more details. Then say if you agree or disagree with the statements and explain why.</p>
+          </div>
+        </div>
+        <div class="warmup-grid">
+          <div class="prompt-panel speaking-prompt">
+            <h4>Name three reasons why people may be dissatisfied with their job.</h4>
+            <p>Give more details and support each reason with an example.</p>
+            <div class="prompt-cue">Think about management, workload, recognition, salary, growth, workplace culture and work-life balance.</div>
+          </div>
+          <div class="statement-list">
+            <div class="statement">
+              <p>Many people look for better opportunities even when they’re still employed, as switching jobs has become increasingly common.</p>
+              <div class="toggle-row"><button class="toggle-btn">Agree</button><button class="toggle-btn">Disagree</button></div>
+            </div>
+            <div class="statement">
+              <p>Employees and employers will never understand each other when it comes to work-life balance.</p>
+              <div class="toggle-row"><button class="toggle-btn">Agree</button><button class="toggle-btn">Disagree</button></div>
+            </div>
+            <div class="statement">
+              <p>Feeling stuck is normal; it’s part of any long-term job.</p>
+              <div class="toggle-row"><button class="toggle-btn">Agree</button><button class="toggle-btn">Disagree</button></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="activity-card" data-activity>
+        <div class="activity-heading">
+          <div class="activity-number">2</div>
+          <div>
+            <h3>Match the phrases in bold with their definitions</h3>
+            <p>Connect each sentence with the correct definition.</p>
+          </div>
+        </div>
+
+        <div class="matching-board" id="matchingBoard">
+          <div class="phrase-list" id="matchingRows">
+            <div class="match-row" data-answer="2"><span class="letter">A</span><div>I find it hard to grow when every tiny decision gets questioned. I’m so tired of being <strong>micromanaged</strong>.</div><div class="drop-zone" data-slot="A" aria-label="Drop definition for A">Drop a definition here</div></div>
+            <div class="match-row" data-answer="5"><span class="letter">B</span><div>I hate the feeling when my contribution <strong>goes unnoticed</strong> even though my team succeeds because of it.</div><div class="drop-zone" data-slot="B" aria-label="Drop definition for B">Drop a definition here</div></div>
+            <div class="match-row" data-answer="1"><span class="letter">C</span><div>I thought this job would help me <strong>tap into my potential</strong>, but all I do is fill out spreadsheets.</div><div class="drop-zone" data-slot="C" aria-label="Drop definition for C">Drop a definition here</div></div>
+            <div class="match-row" data-answer="6"><span class="letter">D</span><div>The company culture just doesn’t <strong>align with my values</strong> anymore, especially when it comes to things like work-life balance or transparency.</div><div class="drop-zone" data-slot="D" aria-label="Drop definition for D">Drop a definition here</div></div>
+            <div class="match-row" data-answer="3"><span class="letter">E</span><div>It’s not that I dislike my work, but I feel the tasks I’m getting are not challenging enough to help me <strong>achieve my full potential</strong>.</div><div class="drop-zone" data-slot="E" aria-label="Drop definition for E">Drop a definition here</div></div>
+            <div class="match-row" data-answer="4"><span class="letter">F</span><div>One day they want creativity, the next day they want us to follow the script. We constantly <strong>get mixed messages</strong>.</div><div class="drop-zone" data-slot="F" aria-label="Drop definition for F">Drop a definition here</div></div>
+          </div>
+
+          <div class="definition-bank" id="definitionBank">
+            <div class="definition-card" draggable="true" data-value="1"><b>1.</b><span>use something in a way that brings good results</span></div>
+            <div class="definition-card" draggable="true" data-value="2"><b>2.</b><span>have a boss who controls every small detail of your work</span></div>
+            <div class="definition-card" draggable="true" data-value="3"><b>3.</b><span>develop your abilities, skills and talents as much as possible</span></div>
+            <div class="definition-card" draggable="true" data-value="4"><b>4.</b><span>receive confusing or contradictory instructions</span></div>
+            <div class="definition-card" draggable="true" data-value="5"><b>5.</b><span>not be seen, recognised or appreciated</span></div>
+            <div class="definition-card" draggable="true" data-value="6"><b>6.</b><span>match your personal beliefs and principles</span></div>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button class="primary-btn" id="checkMatching">Check answers</button>
+          <button class="secondary-btn" id="resetMatching">Reset</button>
+          <button class="secondary-btn" id="showMatching">Show answers</button>
+        </div>
+        <div id="matchingFeedback" class="feedback" aria-live="polite"></div>
+
+      </article>
+
+      <div class="media-grid" id="videoBlock">
+        <div class="video-column">
+          <div class="video-card">
+            <div class="video-frame">
+              <iframe src="https://www.youtube.com/embed/N2n2gusZHAU?start=0&end=223&rel=0" title="When you feel stuck in your job video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+            <div class="video-meta"><strong>Watch up to 03:43</strong><span>Notice the steps the speaker recommends.</span></div>
+          </div>
+
+          <details class="activity-card video-discussion" data-activity>
+            <summary><span><strong>4. Discuss the questions</strong><br><small style="color:var(--muted);font-weight:600">Open after watching the video.</small></span></summary>
+            <div class="details-body">
+              <div class="discussion-cards one-column">
+                <div class="discussion-card">How can the exercises in the video help people?</div>
+                <div class="discussion-card">Why do you think the speaker narrows the first list to only the top three things she doesn’t like about her job?</div>
+                <div class="discussion-card">Which step is most important when you are looking for a new job: making a list of things you like about your position, reading professional bios of people who once shared your job title, or networking?</div>
+                <div class="discussion-card">Have you ever felt stuck in your job? What did you do? Do you think the process from the video could help you?</div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <article class="activity-card" data-activity style="margin:0">
+          <div class="activity-heading">
+            <div class="activity-number">3</div>
+            <div><h3>Choose an option and complete the sentences</h3><p>Select one option, then complete each sentence aloud with your own idea.</p></div>
+          </div>
+          <div class="sentence-stack" id="finalTask">
+            <div class="sentence-item"><div>When people focus more on evaluating what <strong>is / isn’t</strong> working for them…</div><div class="options"><button class="choice">is</button><button class="choice">isn’t</button></div></div>
+            <div class="sentence-item"><div>Looking at the career paths of people with the same job title <strong>might / can’t</strong>…</div><div class="options"><button class="choice">might</button><button class="choice">can’t</button></div></div>
+            <div class="sentence-item"><div>A regular pay rise <strong>can / can’t</strong> make the job you hate bearable, but…</div><div class="options"><button class="choice">can</button><button class="choice">can’t</button></div></div>
+            <div class="sentence-item"><div>Employers <strong>are / aren’t</strong> responsible for ensuring their employees’ growth, because…</div><div class="options"><button class="choice">are</button><button class="choice">aren’t</button></div></div>
+            <div class="sentence-item"><div><strong>Only some / Most</strong> people know how to stand up for themselves, so…</div><div class="options"><button class="choice">Only some</button><button class="choice">Most</button></div></div>
+            <div class="sentence-item"><div>A sideways move within a company is <strong>sometimes / rarely</strong> better than…</div><div class="options"><button class="choice">sometimes</button><button class="choice">rarely</button></div></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="section-footer">
+        <button class="secondary-btn" disabled>Previous</button>
+        <button class="primary-btn" id="finishLesson">Finish lesson</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">Lesson complete.</div>
+
+  <script>
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const toast = document.getElementById('toast');
+    const rows = [...document.querySelectorAll('.match-row')];
+    const feedback = document.getElementById('matchingFeedback');
+    const bank = document.getElementById('definitionBank');
+    let selectedCard = null;
+
+    function updateProgress(){
+      let completed = 0;
+      const togglesDone = [...document.querySelectorAll('.statement')].every(s => s.querySelector('.toggle-btn.active'));
+      if(togglesDone) completed++;
+      const matchingDone = rows.every(r => r.querySelector('.drop-zone .definition-card'));
+      if(matchingDone) completed++;
+      const sentenceDone = [...document.querySelectorAll('.sentence-item')].every(i => i.querySelector('.choice.active'));
+      if(sentenceDone) completed++;
+      const discussionDone = document.querySelector('.video-discussion').open;
+      if(discussionDone) completed++;
+      const pct = Math.round((completed / 4) * 100);
+      progressFill.style.width = pct + '%';
+      progressText.textContent = pct + '%';
+    }
+
+    document.querySelectorAll('.toggle-row').forEach(row => {
+      row.querySelectorAll('.toggle-btn').forEach(btn => btn.addEventListener('click', () => {
+        row.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateProgress();
+      }));
+    });
+
+    document.querySelectorAll('.sentence-item').forEach(item => {
+      item.querySelectorAll('.choice').forEach(btn => btn.addEventListener('click', () => {
+        item.querySelectorAll('.choice').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateProgress();
+      }));
+    });
+
+    function makeCardInteractive(card){
+      card.addEventListener('dragstart', e => {
+        e.dataTransfer.setData('text/plain', card.dataset.value);
+        selectedCard = card;
+      });
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.definition-card').forEach(c => c.classList.remove('selected'));
+        selectedCard = card;
+        card.classList.add('selected');
+      });
+    }
+    document.querySelectorAll('.definition-card').forEach(makeCardInteractive);
+
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+      zone.addEventListener('dragover', e => {e.preventDefault(); zone.classList.add('drag-over');});
+      zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+      zone.addEventListener('drop', e => {
+        e.preventDefault(); zone.classList.remove('drag-over');
+        const value = e.dataTransfer.getData('text/plain');
+        const card = document.querySelector(`.definition-card[data-value="${value}"]`);
+        placeCard(card, zone);
+      });
+      zone.addEventListener('click', e => {
+        if(e.target.closest('.definition-card')) return;
+        if(selectedCard) placeCard(selectedCard, zone);
+      });
+    });
+
+    bank.addEventListener('dragover', e => e.preventDefault());
+    bank.addEventListener('drop', e => {
+      e.preventDefault();
+      const value = e.dataTransfer.getData('text/plain');
+      const card = document.querySelector(`.definition-card[data-value="${value}"]`);
+      if(card) bank.appendChild(card);
+      updateProgress();
+    });
+
+    function placeCard(card, zone){
+      if(!card) return;
+      const existing = zone.querySelector('.definition-card');
+      if(existing) bank.appendChild(existing);
+      zone.textContent = '';
+      zone.appendChild(card);
+      card.classList.remove('selected');
+      selectedCard = null;
+      rows.forEach(r => r.classList.remove('correct','incorrect'));
+      feedback.textContent = '';
+      updateProgress();
+    }
+
+    document.getElementById('checkMatching').addEventListener('click', () => {
+      let correct = 0;
+      rows.forEach(row => {
+        row.classList.remove('correct','incorrect');
+        const card = row.querySelector('.drop-zone .definition-card');
+        if(card && card.dataset.value === row.dataset.answer){row.classList.add('correct');correct++;}
+        else row.classList.add('incorrect');
+      });
+      feedback.textContent = `${correct} of ${rows.length} correct.`;
+      feedback.className = 'feedback ' + (correct === rows.length ? 'ok' : 'bad');
+      updateProgress();
+    });
+
+    document.getElementById('resetMatching').addEventListener('click', () => {
+      rows.forEach(row => {
+        const zone = row.querySelector('.drop-zone');
+        const card = zone.querySelector('.definition-card');
+        if(card) bank.appendChild(card);
+        zone.textContent = 'Drop a definition here';
+        row.classList.remove('correct','incorrect');
+      });
+      [...bank.querySelectorAll('.definition-card')].sort((a,b)=>a.dataset.value-b.dataset.value).forEach(c=>bank.appendChild(c));
+      feedback.textContent='';
+      updateProgress();
+    });
+
+    document.getElementById('showMatching').addEventListener('click', () => {
+      rows.forEach(row => {
+        const zone = row.querySelector('.drop-zone');
+        const existing = zone.querySelector('.definition-card');
+        if(existing) bank.appendChild(existing);
+        const card = document.querySelector(`.definition-card[data-value="${row.dataset.answer}"]`);
+        zone.textContent='';
+        zone.appendChild(card);
+        row.classList.remove('incorrect');
+        row.classList.add('correct');
+      });
+      feedback.textContent='Answers are shown.';
+      feedback.className='feedback ok';
+      updateProgress();
+    });
+
+    document.querySelector('.video-discussion').addEventListener('toggle', updateProgress);
+
+    document.getElementById('finishLesson').addEventListener('click', () => {
+      progressFill.style.width='100%';progressText.textContent='100%';
+      toast.classList.add('show');
+      setTimeout(()=>toast.classList.remove('show'),2200);
+    });
+
+    updateProgress();
+  </script>
+</body>
+</html>
