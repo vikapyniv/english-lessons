@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Problems in Modern Cities — Interactive Lesson</title>
+<style>
+:root {
+  --navy:#071a33;
+  --navy-2:#0b274b;
+  --navy-3:#123b68;
+  --ink:#152238;
+  --muted:#617085;
+  --paper:#f5f8fc;
+  --card:#ffffff;
+  --line:#dbe4ef;
+  --accent:#4fd1c5;
+  --accent-2:#7dd3fc;
+  --warm:#f7b955;
+  --danger:#ef6f6c;
+  --ok:#25a56a;
+  --shadow:0 16px 42px rgba(7,26,51,.10);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(circle at 8% 4%, rgba(79,209,197,.12), transparent 24rem),
+    radial-gradient(circle at 90% 16%, rgba(125,211,252,.13), transparent 28rem),
+    var(--paper);
+  line-height:1.5;
+}
+button,a,input,textarea{font:inherit}
+button{cursor:pointer}
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(7,26,51,.96);
+  color:white;
+  backdrop-filter:blur(12px);
+  box-shadow:0 10px 30px rgba(0,0,0,.16);
+}
+.topbar-inner{
+  max-width:1180px; margin:auto; min-height:72px; padding:10px 22px;
+  display:grid; grid-template-columns:minmax(220px,1fr) minmax(240px,420px) auto;
+  gap:20px; align-items:center;
+}
+.brand small{display:block;color:#9fb3ca;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+.brand strong{font-size:1rem}
+.progress-wrap{display:flex;align-items:center;gap:12px}
+.progress-track{height:8px;background:rgba(255,255,255,.14);border-radius:999px;overflow:hidden;flex:1}
+.progress-fill{height:100%;width:50%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .35s ease}
+.section-indicator{font-size:.82rem;color:#d8e3ee;white-space:nowrap}
+.shell{max-width:1180px;margin:auto;padding:0 22px 54px}
+.hero{
+  margin:34px 0 24px;
+  background:linear-gradient(135deg,var(--navy),var(--navy-2) 60%,var(--navy-3));
+  color:white;border-radius:30px;padding:38px;
+  display:grid;grid-template-columns:1.25fr .75fr;gap:32px;
+  box-shadow:0 24px 58px rgba(7,26,51,.24);position:relative;overflow:hidden;
+}
+.hero:after{
+  content:"";position:absolute;right:-90px;top:-120px;width:340px;height:340px;border-radius:50%;
+  border:52px solid rgba(79,209,197,.09)
+}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;color:#bcefe9;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.76rem}
+.hero h1{font-size:clamp(2.3rem,5vw,4.8rem);line-height:.98;margin:.55rem 0 1rem;max-width:760px}
+.hero p{color:#d3dfeb;max-width:690px;font-size:1.05rem}
+.author{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);font-size:.9rem;color:#dce6ef}
+.author strong{color:white}
+.author a{color:#8ce7dd}
+.info-card{
+  align-self:stretch;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;padding:24px;position:relative;z-index:1;
+}
+.info-card h2{margin:0 0 14px;font-size:1.1rem}
+.objective{display:flex;gap:12px;margin:12px 0;align-items:flex-start;color:#e7eef5}
+.objective b{display:grid;place-items:center;flex:0 0 30px;height:30px;border-radius:10px;background:rgba(79,209,197,.2);color:#8ce7dd}
+.quick-nav{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 28px}
+.quick-nav button{
+  border:0;border-radius:999px;padding:12px 18px;background:white;color:var(--navy);font-weight:750;
+  box-shadow:0 8px 20px rgba(7,26,51,.08);transition:.2s ease
+}
+.quick-nav button:hover,.quick-nav button.active{transform:translateY(-2px);background:var(--navy);color:white}
+.lesson-section{display:none;animation:fade .35s ease}
+.lesson-section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.section-head{margin:20px 0 18px}
+.section-kicker{color:var(--navy-3);font-weight:800;text-transform:uppercase;letter-spacing:.1em;font-size:.75rem}
+.section-head h2{margin:.25rem 0;font-size:clamp(1.8rem,3vw,2.7rem);color:var(--navy)}
+.section-head p{margin:0;color:var(--muted);max-width:760px}
+.activity{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:26px;margin:18px 0;
+}
+.activity-title{display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+.num{display:grid;place-items:center;flex:0 0 38px;height:38px;border-radius:12px;background:var(--navy);color:white;font-weight:800}
+.activity-title h3{margin:0;color:var(--navy);font-size:1.22rem}
+.activity-title p{margin:4px 0 0;color:var(--muted)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch}
+.panel{background:#f8fafc;border:1px solid var(--line);border-radius:18px;padding:20px;height:100%}
+.prompt-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.prompt-card{
+  border:1px solid var(--line);background:white;border-radius:16px;padding:18px 12px;text-align:center;
+  font-weight:800;color:var(--navy);transition:.2s
+}
+.prompt-card:hover,.prompt-card.selected{border-color:var(--accent);background:#effcf9;transform:translateY(-2px)}
+.notes{width:100%;min-height:128px;border:1px solid var(--line);border-radius:14px;padding:14px;resize:vertical;background:white}
+.city-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-height:525px;overflow:auto;padding-right:4px}
+.city-card{
+  position:relative;border:1px solid var(--line);border-radius:17px;background:white;padding:16px;text-align:left;
+  min-height:138px;display:flex;flex-direction:column;transition:.2s;overflow:hidden
+}
+.city-card:hover{transform:translateY(-2px);box-shadow:0 9px 22px rgba(7,26,51,.08)}
+.city-card[aria-pressed="true"]{border:2px solid var(--accent);background:#effcf9}
+.city-flag{font-size:2rem}
+.city-name{font-weight:850;color:var(--navy);margin-top:7px}
+.city-desc{font-size:.78rem;color:var(--muted);margin-top:4px;line-height:1.35}
+.city-check{position:absolute;right:10px;top:10px;background:var(--navy);color:white;border-radius:999px;padding:4px 8px;font-size:.66rem;opacity:0;transform:scale(.8)}
+.city-card[aria-pressed="true"] .city-check{opacity:1;transform:scale(1)}
+.selection-status{margin:0 0 12px;color:var(--muted);font-size:.9rem}
+.questions{display:grid;gap:12px}
+.question-card{background:white;border-left:4px solid var(--accent);border-radius:14px;padding:15px;box-shadow:0 6px 16px rgba(7,26,51,.05)}
+.question-card strong{display:block;color:var(--navy);margin-bottom:4px}
+.sentence-stems{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+details{background:white;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+details+details{margin-top:9px}
+summary{font-weight:750;color:var(--navy);cursor:pointer}
+.problem-cloud{display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}
+.problem-chip{
+  border:1px solid #cdd9e6;background:white;border-radius:999px;padding:10px 13px;color:var(--ink);transition:.18s
+}
+.problem-chip:hover{border-color:var(--accent)}
+.problem-chip[aria-pressed="true"]{background:var(--navy);color:white;border-color:var(--navy)}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{
+  border:0;border-radius:12px;padding:10px 14px;background:var(--navy);color:white;font-weight:750
+}
+.btn.secondary{background:#e9f0f7;color:var(--navy)}
+.video-layout{grid-template-columns:minmax(0,1.12fr) minmax(320px,.88fr);align-items:start}
+.video-sticky{position:sticky;top:96px}
+.video-frame{background:#020712;border-radius:18px;padding:10px;box-shadow:0 18px 38px rgba(7,26,51,.22)}
+video{width:100%;display:block;border-radius:12px;max-height:500px;background:black}
+.video-note{font-size:.82rem;color:var(--muted);margin:10px 3px 0}
+.statement-list{display:grid;gap:10px}
+.statement-card{
+  display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;border:1px solid var(--line);
+  background:white;border-radius:15px;padding:15px;color:var(--ink);transition:.18s
+}
+.statement-card:hover{border-color:var(--accent)}
+.statement-mark{display:grid;place-items:center;flex:0 0 26px;height:26px;border-radius:9px;background:#edf2f7;color:transparent;font-weight:900}
+.statement-card[aria-pressed="true"]{background:#effcf9;border-color:var(--accent)}
+.statement-card[aria-pressed="true"] .statement-mark{background:var(--accent);color:var(--navy)}
+.future-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.future-card{
+  position:relative;border:1px solid var(--line);background:white;border-radius:17px;padding:16px;text-align:left;
+  min-height:135px;display:flex;flex-direction:column;gap:6px;transition:.2s
+}
+.future-card strong{color:var(--navy)}
+.future-card span:last-child{font-size:.88rem;color:var(--muted)}
+.future-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(7,26,51,.07)}
+.future-card[aria-pressed="true"]{border:2px solid var(--danger);background:#fff7f7}
+.future-rank{
+  position:absolute;right:10px;top:10px;width:28px;height:28px;border-radius:50%;display:none;
+  place-items:center;background:var(--danger);color:white;font-weight:850
+}
+.future-card[aria-pressed="true"] .future-rank{display:grid}
+.nav-bottom{display:flex;justify-content:space-between;align-items:center;margin:26px 0 0}
+.nav-bottom button{border:0;border-radius:14px;padding:13px 18px;font-weight:800}
+.prev{background:#e6edf5;color:var(--navy)}
+.next{background:var(--navy);color:white}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--navy);color:white;padding:12px 16px;border-radius:12px;box-shadow:var(--shadow);opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s;z-index:100}
+.toast.show{opacity:1;transform:none}
+footer{text-align:center;color:var(--muted);padding:34px 0 8px;font-size:.85rem}
+@media (max-width:900px){
+  .topbar-inner{grid-template-columns:1fr auto} .progress-wrap{grid-column:1/-1}
+  .hero{grid-template-columns:1fr;padding:28px}
+  .two-col,.video-layout{grid-template-columns:1fr}
+  .video-sticky{position:relative;top:auto}
+  .city-grid,.future-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:620px){
+  .shell{padding:0 14px 38px} .hero{margin-top:18px;border-radius:22px;padding:22px}
+  .activity{padding:18px} .prompt-grid{grid-template-columns:repeat(2,1fr)}
+  .city-grid,.future-grid{grid-template-columns:1fr}
+  .topbar-inner{padding:10px 14px;gap:9px} .brand strong{font-size:.88rem}
+  .section-indicator{display:none}
+}
+
+.video-frame{
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 9;
+  padding:0;
+  overflow:hidden;
+  background:#020712;
+  border-radius:18px;
+  box-shadow:0 18px 38px rgba(7,26,51,.22);
+}
+.video-frame iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="topbar-inner">
+<div class="brand"><small>Interactive lesson</small><strong>Problems in Modern Cities</strong></div>
+<div class="progress-wrap">
+<div aria-label="Lesson progress" class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+<span class="section-indicator" id="sectionIndicator">Section 1 of 2</span>
+</div>
+<span aria-hidden="true">🏙️</span>
+</div>
+</header>
+<main class="shell">
+<section class="hero">
+<div>
+<span class="eyebrow">Urban life • discussion lesson</span>
+<h1>Problems in Modern Cities</h1>
+<div class="author">
+<strong>Created by Viktoriia Pyniv</strong><br/>
+        AI-assisted educational resource developed with ChatGPT (OpenAI).<br/>
+        Source material: <a href="https://eslbrains.com/speaking-lesson-on-big-cities/" rel="noopener" target="_blank">Problems in modern cities</a>
+</div>
+</div>
+<aside class="info-card">
+<h2>Lesson objectives</h2>
+<div class="objective"><b>1</b><span>Describe and compare experiences of large cities.</span></div>
+<div class="objective"><b>2</b><span>Discuss common urban problems and their impact.</span></div>
+<div class="objective"><b>3</b><span>Respond critically to a video about Jakarta.</span></div>
+<div class="objective"><b>4</b><span>Evaluate possible risks facing future cities.</span></div>
+</aside>
+</section>
+<nav aria-label="Lesson sections" class="quick-nav">
+<button class="active" data-section="1" type="button">City Problems</button>
+<button data-section="2" type="button">Video &amp; Future Cities</button>
+</nav>
+<section class="lesson-section active" id="section-1">
+<div class="section-head">
+<span class="section-kicker">Section 1</span>
+<h2>Life in large cities</h2>
+<p>Connect personal experience with major cities around the world, then examine the most common urban problems.</p>
+</div>
+
+<article class="activity">
+<div class="activity-title">
+<span class="num">1</span>
+<div><h3>Choose three cities.</h3><p>Select exactly three city cards, then discuss them using the questions on the right.</p></div>
+</div>
+<div class="two-col">
+<div class="panel">
+<p class="selection-status" id="cityStatus">0 of 3 cities selected</p>
+<div class="city-grid"><button aria-pressed="false" class="city-card" data-city="Beijing" type="button">
+<span aria-hidden="true" class="city-flag">🇨🇳</span>
+<span class="city-name">Beijing</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Los Angeles" type="button">
+<span aria-hidden="true" class="city-flag">🇺🇸</span>
+<span class="city-name">Los Angeles</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Buenos Aires" type="button">
+<span aria-hidden="true" class="city-flag">🇦🇷</span>
+<span class="city-name">Buenos Aires</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Mexico City" type="button">
+<span aria-hidden="true" class="city-flag">🇲🇽</span>
+<span class="city-name">Mexico City</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Cairo" type="button">
+<span aria-hidden="true" class="city-flag">🇪🇬</span>
+<span class="city-name">Cairo</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Mumbai" type="button">
+<span aria-hidden="true" class="city-flag">🇮🇳</span>
+<span class="city-name">Mumbai</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Istanbul" type="button">
+<span aria-hidden="true" class="city-flag">🇹🇷</span>
+<span class="city-name">Istanbul</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="New York" type="button">
+<span aria-hidden="true" class="city-flag">🇺🇸</span>
+<span class="city-name">New York</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Jakarta" type="button">
+<span aria-hidden="true" class="city-flag">🇮🇩</span>
+<span class="city-name">Jakarta</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="São Paulo" type="button">
+<span aria-hidden="true" class="city-flag">🇧🇷</span>
+<span class="city-name">São Paulo</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Johannesburg" type="button">
+<span aria-hidden="true" class="city-flag">🇿🇦</span>
+<span class="city-name">Johannesburg</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Seoul" type="button">
+<span aria-hidden="true" class="city-flag">🇰🇷</span>
+<span class="city-name">Seoul</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Lagos" type="button">
+<span aria-hidden="true" class="city-flag">🇳🇬</span>
+<span class="city-name">Lagos</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="Tokyo" type="button">
+<span aria-hidden="true" class="city-flag">🇯🇵</span>
+<span class="city-name">Tokyo</span>
+<span class="city-check">Selected</span>
+</button>
+<button aria-pressed="false" class="city-card" data-city="London" type="button">
+<span aria-hidden="true" class="city-flag">🇬🇧</span>
+<span class="city-name">London</span>
+<span class="city-check">Selected</span>
+</button></div>
+<div class="tools"><button class="btn secondary" id="resetCities" type="button">Reset selection</button></div>
+</div>
+<div class="panel">
+<div class="questions">
+<div class="question-card"><strong>What do you know about this city?</strong>Think about its location, culture, transport, weather and reputation.</div>
+<div class="question-card"><strong>Have you ever been there?</strong>If yes, what did you like and dislike?</div>
+<div class="question-card"><strong>If not, what would you expect?</strong>What would you want to see, and do you think you would enjoy living there?</div>
+</div>
+<div class="sentence-stems">
+<details><summary>Useful sentence starters</summary>
+<p>It is best known for… / I imagine it would feel… / One advantage might be… / I would probably struggle with…</p>
+</details>
+</div>
+</div>
+</div>
+</article>
+<article class="activity">
+<div class="activity-title">
+<span class="num">2</span>
+<div><h3>Look at the common problems associated with big cities.</h3><p>Select problems on the left and use the tasks on the right to guide your discussion.</p></div>
+</div>
+<div class="two-col">
+<div class="panel">
+<div class="problem-cloud"><button aria-pressed="false" class="problem-chip" type="button">air and noise pollution</button>
+<button aria-pressed="false" class="problem-chip" type="button">lack of green spaces</button>
+<button aria-pressed="false" class="problem-chip" type="button">waste management problems</button>
+<button aria-pressed="false" class="problem-chip" type="button">lack of resources (e.g. water)</button>
+<button aria-pressed="false" class="problem-chip" type="button">heavy traffic</button>
+<button aria-pressed="false" class="problem-chip" type="button">poor road conditions</button>
+<button aria-pressed="false" class="problem-chip" type="button">lack of parking spaces</button>
+<button aria-pressed="false" class="problem-chip" type="button">unreliable public transport</button>
+<button aria-pressed="false" class="problem-chip" type="button">lack of affordable housing</button>
+<button aria-pressed="false" class="problem-chip" type="button">poor living conditions</button>
+<button aria-pressed="false" class="problem-chip" type="button">crime rates</button>
+<button aria-pressed="false" class="problem-chip" type="button">homelessness</button>
+<button aria-pressed="false" class="problem-chip" type="button">high cost of living</button>
+<button aria-pressed="false" class="problem-chip" type="button">poor urban planning</button></div>
+<div class="tools"><button class="btn secondary" id="resetProblems" type="button">Reset</button></div>
+</div>
+<div class="panel">
+<div class="questions">
+<div class="question-card">Which three problems affect your daily life the most? Explain why.</div>
+<div class="question-card">Which three problems do tourists usually complain about?</div>
+<div class="question-card">Which problems would make you not want to move to a city?</div>
+<div class="question-card">Which problem is the easiest and which is the hardest to adapt to?</div>
+<div class="question-card">Which two problems will become more serious in the future?</div>
+</div>
+</div>
+</div>
+</article>
+<div class="nav-bottom">
+<span></span>
+<button class="next" data-go="2" type="button">Next: Video &amp; Future Cities →</button>
+</div>
+</section>
+<section class="lesson-section" id="section-2">
+<div class="section-head">
+<span class="section-kicker">Section 2</span>
+<h2>Jakarta and future cities</h2>
+<p>Watch the video, respond to the statements, and decide which future urban risks could have the worst consequences.</p>
+</div>
+<article class="activity">
+<div class="activity-title">
+<span class="num">3</span>
+<div><h3>Watch the video and choose the statements that are true for you.</h3><p>The video stays visible while you work with the statements.</p></div>
+</div>
+<div class="two-col video-layout">
+<div class="video-sticky">
+<div class="video-frame"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/62_UtYoyWo4" title="Problems in modern cities video"></iframe></div>
+<p class="video-note">Topic: Jakarta and the challenges facing the city.</p>
+</div>
+<div class="panel">
+<div class="statement-list"><button aria-pressed="false" class="statement-card" type="button">
+<span class="statement-mark">✓</span><span>I’ve learnt a lot from this video.</span>
+</button>
+<button aria-pressed="false" class="statement-card" type="button">
+<span class="statement-mark">✓</span><span>I knew about these problems.</span>
+</button>
+<button aria-pressed="false" class="statement-card" type="button">
+<span class="statement-mark">✓</span><span>More people should watch this video, as this is a serious issue.</span>
+</button>
+<button aria-pressed="false" class="statement-card" type="button">
+<span class="statement-mark">✓</span><span>We need more videos like this one about different cities around the globe, especially those that usually don’t get much attention.</span>
+</button>
+<button aria-pressed="false" class="statement-card" type="button">
+<span class="statement-mark">✓</span><span>The idea of moving a capital city doesn’t sound effective to me.</span>
+</button></div>
+<div class="tools"><button class="btn secondary" id="resetStatements" type="button">Reset</button></div>
+</div>
+</div>
+</article>
+<article class="activity">
+<div class="activity-title">
+<span class="num">4</span>
+<div><h3>Which problems might cities of the future face?</h3><p>First discuss whether any are already true where you live. Then select the two with the worst possible consequences.</p></div>
+</div>
+<div class="future-grid"><button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Social scoring</strong>
+<span>Access to housing, work or services is based on a social score.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Automatic penalties</strong>
+<span>People are automatically fined by digital systems.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Age segregation</strong>
+<span>Different age groups live in separate neighbourhoods.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Income segregation</strong>
+<span>People from different income groups live in isolated districts.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Cultural separation</strong>
+<span>Different cultural groups rarely interact with each other.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Tech-dependent ecosystems</strong>
+<span>City ecosystems are maintained entirely by technology.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Climate migration</strong>
+<span>Cities struggle to house large numbers of climate migrants.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Extreme heat</strong>
+<span>Some districts become unsafe to live in during long heatwaves.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>AI-controlled mobility</strong>
+<span>Algorithms decide who can travel, where and at what price.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Water rationing</strong>
+<span>Residents receive strict personal limits on daily water use.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Digital exclusion</strong>
+<span>People without digital access cannot use essential city services.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Delivery congestion</strong>
+<span>Autonomous delivery vehicles crowd streets and pavements.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Urban loneliness</strong>
+<span>People live close together but have fewer real social connections.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Power-grid failure</strong>
+<span>A major blackout stops transport, payments and communication.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Facial recognition everywhere</strong>
+<span>People are constantly identified and tracked in public spaces.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>No private transport</strong>
+<span>Private cars are banned and all mobility is shared or automated.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Vertical living</strong>
+<span>Most residents live, work and socialise inside enormous high-rise complexes.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Permanent surveillance</strong>
+<span>AI systems monitor behaviour to predict crime before it happens.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Subscription-based neighbourhoods</strong>
+<span>People pay monthly fees to access safer or better city districts.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Robot-dominated workplaces</strong>
+<span>Large parts of the urban population struggle to find meaningful work.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Artificial daylight</strong>
+<span>Dense cities use screens and lighting systems instead of natural light.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Climate-controlled districts</strong>
+<span>Only wealthy neighbourhoods can afford protection from heat and pollution.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Cashless exclusion</strong>
+<span>People without digital identity or banking access cannot buy basic services.</span>
+</button>
+<button aria-pressed="false" class="future-card" data-rank="" type="button">
+<span class="future-rank"></span>
+<strong>Housing by algorithm</strong>
+<span>Algorithms decide where people are allowed to rent or buy homes.</span>
+</button></div>
+<div class="tools">
+<button class="btn secondary" id="resetFuture" type="button">Reset ranking</button>
+<button class="btn" id="confirmFuture" type="button">Confirm top two</button>
+</div>
+</article>
+<div class="nav-bottom">
+<button class="prev" data-go="1" type="button">← Previous: City Problems</button>
+<button class="next" id="finishLesson" type="button">Finish lesson ✓</button>
+</div>
+</section>
+<footer>Problems in Modern Cities • Interactive lesson by Viktoriia Pyniv</footer>
+</main>
+<div aria-live="polite" class="toast" id="toast" role="status"></div>
+<script>
+const sections = [...document.querySelectorAll('.lesson-section')];
+const navButtons = [...document.querySelectorAll('.quick-nav button')];
+const progressFill = document.getElementById('progressFill');
+const sectionIndicator = document.getElementById('sectionIndicator');
+const toast = document.getElementById('toast');
+
+function showToast(message) {
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function showSection(number) {
+  sections.forEach((s, i) => s.classList.toggle('active', i === number - 1));
+  navButtons.forEach((b, i) => b.classList.toggle('active', i === number - 1));
+  progressFill.style.width = number === 1 ? '50%' : '100%';
+  sectionIndicator.textContent = `Section ${number} of 2`;
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+navButtons.forEach(btn => btn.addEventListener('click', () => showSection(Number(btn.dataset.section))));
+document.querySelectorAll('[data-go]').forEach(btn => btn.addEventListener('click', () => showSection(Number(btn.dataset.go))));
+
+document.querySelectorAll('.prompt-card').forEach(btn => btn.addEventListener('click', () => btn.classList.toggle('selected')));
+
+const cityCards = [...document.querySelectorAll('.city-card')];
+const cityStatus = document.getElementById('cityStatus');
+function updateCityStatus() {
+  const selected = cityCards.filter(c => c.getAttribute('aria-pressed') === 'true').length;
+  cityStatus.textContent = `${selected} of 3 cities selected`;
+}
+cityCards.forEach(card => card.addEventListener('click', () => {
+  const isSelected = card.getAttribute('aria-pressed') === 'true';
+  const selectedCount = cityCards.filter(c => c.getAttribute('aria-pressed') === 'true').length;
+  if (!isSelected && selectedCount >= 3) {
+    showToast('Choose only three cities.');
+    return;
+  }
+  card.setAttribute('aria-pressed', String(!isSelected));
+  updateCityStatus();
+}));
+document.getElementById('resetCities').addEventListener('click', () => {
+  cityCards.forEach(c => c.setAttribute('aria-pressed','false')); updateCityStatus();
+});
+
+const problemChips = [...document.querySelectorAll('.problem-chip')];
+problemChips.forEach(chip => chip.addEventListener('click', () => {
+  chip.setAttribute('aria-pressed', String(chip.getAttribute('aria-pressed') !== 'true'));
+}));
+document.getElementById('resetProblems').addEventListener('click', () => problemChips.forEach(c => c.setAttribute('aria-pressed','false')));
+
+const statements = [...document.querySelectorAll('.statement-card')];
+statements.forEach(card => card.addEventListener('click', () => {
+  card.setAttribute('aria-pressed', String(card.getAttribute('aria-pressed') !== 'true'));
+}));
+document.getElementById('resetStatements').addEventListener('click', () => statements.forEach(c => c.setAttribute('aria-pressed','false')));
+
+const futureCards = [...document.querySelectorAll('.future-card')];
+function refreshFutureRanks() {
+  const selected = futureCards.filter(c => c.getAttribute('aria-pressed') === 'true');
+  selected.forEach((c, i) => c.querySelector('.future-rank').textContent = i + 1);
+}
+futureCards.forEach(card => card.addEventListener('click', () => {
+  const isSelected = card.getAttribute('aria-pressed') === 'true';
+  const selected = futureCards.filter(c => c.getAttribute('aria-pressed') === 'true');
+  if (!isSelected && selected.length >= 2) {
+    showToast('Select only two problems.');
+    return;
+  }
+  card.setAttribute('aria-pressed', String(!isSelected));
+  refreshFutureRanks();
+}));
+document.getElementById('resetFuture').addEventListener('click', () => {
+  futureCards.forEach(c => c.setAttribute('aria-pressed','false')); refreshFutureRanks();
+});
+document.getElementById('confirmFuture').addEventListener('click', () => {
+  const selected = futureCards.filter(c => c.getAttribute('aria-pressed') === 'true');
+  if (selected.length !== 2) showToast('Please select exactly two problems.');
+  else showToast('Your top two future risks are selected.');
+});
+document.getElementById('finishLesson').addEventListener('click', () => showToast('Lesson complete. Great work!'));
+</script>
+</body>
+</html>
