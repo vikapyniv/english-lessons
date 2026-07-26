@@ -185,6 +185,7 @@ title: "All lessons"
           data-title="{{ lesson.title | downcase | escape }}"
           data-types="{{ lesson.lesson_types | join: '|' | downcase | escape }}"
           data-grammar="{{ lesson.grammar | join: '|' | downcase | escape }}"
+          data-pronunciation="{{ lesson.pronunciation | join: '|' | downcase | escape }}"
           data-functions="{{ lesson.functions | join: '|' | downcase | escape }}"
           data-topics="{{ lesson.topics | join: '|' | downcase | escape }}"
           data-vocabulary="{{ lesson.vocabulary | join: '|' | downcase | escape }}"
@@ -219,6 +220,13 @@ title: "All lessons"
                 {{ lesson.grammar | join: ", " }}
               </p>
             {% endif %}
+
+            {% if lesson.pronunciation %}
+  <div>
+    <strong>Pronunciation:</strong>
+    {{ lesson.pronunciation | join: ", " }}
+  </div>
+{% endif %}
 
             {% if lesson.functions %}
               <p>
@@ -296,6 +304,7 @@ title: "All lessons"
     card.dataset.title || "",
     card.dataset.types || "",
     card.dataset.grammar || "",
+    card.dataset.pronunciation || "",
     card.dataset.functions || "",
     card.dataset.topics || "",
     card.dataset.vocabulary || "",
