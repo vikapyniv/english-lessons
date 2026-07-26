@@ -171,6 +171,33 @@ title: "All lessons"
         {% endfor %}
       </select>
 
+    <label>
+  Grammar
+  <select id="grammar-filter">
+    <option value="">All grammar</option>
+
+    {% for item in site.data.taxonomy.grammar %}
+      <option value="{{ item | downcase | escape }}">
+        {{ item }}
+      </option>
+    {% endfor %}
+  </select>
+
+    </label>
+
+<label>
+  Pronunciation
+  <select id="pronunciation-filter">
+    <option value="">All pronunciation</option>
+
+    {% for item in site.data.taxonomy.pronunciation %}
+      <option value="{{ item | downcase | escape }}">
+        {{ item }}
+      </option>
+    {% endfor %}
+  </select>
+</label>
+
     </section>
 
     {% assign lessons = site.data.lessons %}
@@ -222,10 +249,10 @@ title: "All lessons"
             {% endif %}
 
             {% if lesson.pronunciation %}
-  <div>
+  <p>
     <strong>Pronunciation:</strong>
     {{ lesson.pronunciation | join: ", " }}
-  </div>
+  </p>
 {% endif %}
 
             {% if lesson.functions %}
