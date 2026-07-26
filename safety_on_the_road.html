@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Safety on the Road — Conditionals</title>
+<style>
+:root{
+  --orange:#f97316;
+  --orange-dark:#c2410c;
+  --orange-soft:#fff3e8;
+  --peach:#fed7aa;
+  --ink:#172033;
+  --muted:#64748b;
+  --line:#e7e9ee;
+  --card:#ffffff;
+  --bg:#fffaf6;
+  --good:#15803d;
+  --bad:#b91c1c;
+  --shadow:0 12px 36px rgba(61,38,18,.09);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(180deg,#fffaf6 0%,#fff 34%,#fffaf6 100%);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+button,input,select,textarea{font:inherit}
+a{color:inherit}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(15px);border-bottom:1px solid rgba(231,233,238,.85)}
+.topbar-inner{max-width:1180px;margin:auto;padding:12px 22px;display:grid;grid-template-columns:minmax(220px,1fr) minmax(240px,420px) auto;gap:20px;align-items:center}
+.brand{font-weight:800;letter-spacing:-.02em}.brand span{color:var(--orange)}
+.progress-wrap{display:flex;align-items:center;gap:12px}.progress-track{height:8px;background:#eef0f4;border-radius:999px;overflow:hidden;flex:1}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--orange),#fb923c);transition:width .35s ease}.progress-text,.section-chip{font-size:.82rem;color:var(--muted);white-space:nowrap}.section-chip{padding:7px 11px;background:var(--orange-soft);border:1px solid var(--peach);border-radius:999px;color:var(--orange-dark);font-weight:700}
+.shell{max-width:1180px;margin:auto;padding:30px 22px 80px}
+.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:26px;align-items:stretch;padding:32px 0 22px}.hero-main,.info-card{border:1px solid var(--line);border-radius:30px;background:rgba(255,255,255,.88);box-shadow:var(--shadow)}.hero-main{padding:40px;background:radial-gradient(circle at 12% 10%,#ffedd5 0,transparent 34%),#fff}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 11px;border-radius:999px;background:var(--orange-soft);color:var(--orange-dark);font-weight:800;font-size:.82rem;letter-spacing:.04em;text-transform:uppercase}.hero h1{font-size:clamp(2.4rem,5vw,4.8rem);line-height:.98;letter-spacing:-.055em;margin:20px 0 18px;max-width:760px}.hero h1 span{color:var(--orange)}.lead{font-size:1.08rem;color:var(--muted);max-width:690px}.author{margin-top:28px;padding-top:22px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.92rem;color:var(--muted)}.author strong{color:var(--ink)}.level-badge{margin-left:auto;padding:5px 11px;border-radius:999px;background:var(--orange);color:#fff;font-weight:900;letter-spacing:.04em}.source-link{color:var(--orange-dark);font-weight:700;text-decoration:none}.source-link:hover{text-decoration:underline}
+.info-card{padding:28px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(145deg,#1f2937,#111827);color:white}.info-card h2{margin:0 0 16px;font-size:1.25rem}.objective-list{display:grid;gap:12px}.objective{display:flex;gap:11px;align-items:flex-start;padding:12px;border-radius:15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}.objective b{display:grid;place-items:center;min-width:28px;height:28px;border-radius:10px;background:var(--orange);font-size:.85rem}.objective p{margin:1px 0 0;font-size:.92rem;color:#e5e7eb}.info-note{margin-top:18px;color:#fdba74;font-size:.86rem;font-weight:700}
+.jumpnav{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 34px}.jumpnav a{text-decoration:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:10px 15px;font-weight:750;font-size:.9rem;box-shadow:0 4px 12px rgba(0,0,0,.035);transition:.2s}.jumpnav a:hover{transform:translateY(-2px);border-color:var(--orange);color:var(--orange-dark)}
+.lesson-section{display:block}.block{scroll-margin-top:92px;margin:0 0 26px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);overflow:hidden}.block-head{padding:24px 26px 17px;display:flex;gap:16px;align-items:flex-start}.num{width:38px;height:38px;min-width:38px;display:grid;place-items:center;border-radius:13px;background:var(--orange);color:white;font-weight:900}.block-head h2{margin:0;font-size:1.45rem;letter-spacing:-.025em}.block-head p{margin:5px 0 0;color:var(--muted)}.block-body{padding:0 26px 28px}.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}.panel{padding:20px;border:1px solid var(--line);border-radius:18px;background:#fff}.panel.soft{background:var(--orange-soft);border-color:var(--peach)}.panel h3{margin:0 0 8px;font-size:1.05rem}.muted{color:var(--muted)}
+.responsibility-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.responsibility-card{border:1px solid var(--line);border-radius:18px;padding:18px;background:linear-gradient(180deg,#fff,#fffaf6)}.responsibility-card .icon{font-size:1.7rem}.responsibility-card h3{margin:9px 0 8px}.responsibility-card textarea{width:100%;min-height:100px;border:1px solid #d9dde5;border-radius:13px;padding:12px;resize:vertical;background:white}.responsibility-card textarea:focus,.answer-input:focus,select:focus{outline:3px solid rgba(249,115,22,.16);border-color:var(--orange)}
+.video-frame{border-radius:16px;overflow:hidden;background:#111827;aspect-ratio:16/9}.video-frame video,.video-frame iframe{width:100%;height:100%;display:block;border:0}.statement-list{display:grid;gap:10px;margin-top:14px}.statement{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:white;cursor:pointer;transition:.2s}.statement:hover{border-color:#fdba74;background:#fffaf6}.statement input{margin-top:4px;accent-color:var(--orange)}.feedback{min-height:24px;margin-top:12px;font-weight:700;font-size:.92rem}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{border:0;border-radius:12px;padding:10px 15px;font-weight:800;cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px)}.btn.primary{background:var(--orange);color:white}.btn.secondary{background:#f1f5f9;color:var(--ink)}.btn.ghost{background:white;border:1px solid var(--line)}
+details.discussion{margin-top:20px;border:1px solid var(--line);border-radius:16px;background:#fff}details.discussion summary{cursor:pointer;list-style:none;padding:17px 18px;font-weight:850;display:flex;justify-content:space-between;gap:15px}details.discussion summary::-webkit-details-marker{display:none}details.discussion summary::after{content:'＋';color:var(--orange);font-size:1.2rem}details[open].discussion summary::after{content:'−'}.questions{padding:0 24px 20px;margin:0}.questions li{margin:9px 0;padding-left:4px}
+.scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.scenario{padding:18px;border-radius:17px;border:1px solid var(--line);background:#fff}.scenario-tag{display:inline-block;font-size:.75rem;font-weight:850;text-transform:uppercase;letter-spacing:.04em;padding:5px 8px;border-radius:999px;background:#f1f5f9;color:#475569}.scenario p{margin:12px 0}.scenario select,.rule-row select{width:100%;padding:10px 12px;border:1px solid #d7dce4;border-radius:11px;background:white}.reveal{margin-top:12px;padding:12px;border-left:4px solid var(--orange);background:var(--orange-soft);border-radius:0 12px 12px 0;display:none}.reveal.show{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+.rule-table{display:grid;gap:10px}.rule-row{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:10px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px}.rule-row strong{font-size:.94rem}.mini-note{padding:14px 16px;border-radius:14px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;margin-top:14px;font-weight:650}
+.quiz-list{display:grid;gap:12px}.quiz-item{padding:15px;border:1px solid var(--line);border-radius:14px}.quiz-item label{display:block;font-weight:750;margin-bottom:8px}.quiz-item select,.answer-input{width:100%;padding:10px 12px;border:1px solid #d7dce4;border-radius:11px;background:#fff}.correction{display:none;margin-top:8px;color:var(--good);font-weight:750}.quiz-item.correct{border-color:#86efac;background:#f0fdf4}.quiz-item.incorrect{border-color:#fca5a5;background:#fef2f2}
+.reality-pair{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;padding:16px;border:1px solid var(--line);border-radius:15px;margin-bottom:12px}.arrow{font-size:1.5rem;color:var(--orange)}.sentence-box{padding:12px;border-radius:12px;background:#f8fafc}.reality-box{padding:12px;border-radius:12px;background:var(--orange-soft)}
+.prompt-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.prompt-card{padding:16px;border:1px solid var(--line);border-radius:15px;background:white}.prompt-card h4{margin:0 0 7px}.prompt-card textarea{width:100%;min-height:86px;padding:11px;border:1px solid #d7dce4;border-radius:11px;resize:vertical}.prompt-card .hint{font-size:.82rem;color:var(--muted);margin-top:7px}
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.rung{padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff}.rung b{color:var(--orange-dark)}.rung textarea{width:100%;min-height:110px;margin-top:10px;padding:10px;border:1px solid #d7dce4;border-radius:10px;resize:vertical}
+.law-builder{display:grid;grid-template-columns:.7fr 1.3fr;gap:18px}.law-options{display:grid;gap:10px}.law-option{padding:13px;border:1px solid var(--line);border-radius:13px;cursor:pointer;background:#fff}.law-option:has(input:checked){border-color:var(--orange);background:var(--orange-soft)}.law-option input{accent-color:var(--orange)}.builder-fields{display:grid;gap:11px}.builder-fields label{font-weight:750;font-size:.9rem}.builder-fields textarea,.builder-fields input{width:100%;padding:11px;border:1px solid #d7dce4;border-radius:11px}.output{display:none;margin-top:18px;padding:18px;border-radius:16px;background:#111827;color:#f8fafc}.output.show{display:block}.output h3{color:#fdba74;margin-top:0}.output p{margin:8px 0}
+.footer-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding:18px 0}.footer-nav .status{color:var(--muted);font-size:.9rem}
+
+.match-layout{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+.match-bank,.meaning-bank{display:grid;gap:12px}
+.match-card{padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff;cursor:grab;transition:.2s;box-shadow:0 4px 12px rgba(0,0,0,.03)}
+.match-card:hover{border-color:#fb923c;transform:translateY(-1px)}
+.match-card.selected{outline:3px solid rgba(249,115,22,.22);border-color:var(--orange)}
+.match-card.dragging{opacity:.55}
+.meaning-zone{min-height:106px;padding:14px;border:2px dashed #d7dce4;border-radius:15px;background:#f8fafc;transition:.2s}
+.meaning-zone.dragover{border-color:var(--orange);background:var(--orange-soft)}
+.meaning-zone.correct{border-color:#22c55e;background:#f0fdf4}.meaning-zone.incorrect{border-color:#ef4444;background:#fef2f2}
+.meaning-zone h4{margin:0 0 9px;font-size:.95rem}.match-slot{min-height:48px}
+.reality-grid{display:grid;gap:12px}.grammar-check{display:grid;gap:12px}.grammar-q{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff}.grammar-q p{margin:0 0 8px;font-weight:750}.grammar-q details{margin-top:8px}.grammar-q summary{cursor:pointer;color:var(--orange-dark);font-weight:800}
+.cloze-card{padding:18px;border:1px solid var(--line);border-radius:17px;background:#fff}.cloze-card h3{margin:0 0 6px}.cloze-line{padding:11px 0;border-top:1px solid var(--line)}.cloze-line:first-of-type{border-top:0}.cloze-input{width:125px;max-width:42vw;padding:7px 9px;border:1px solid #cfd5df;border-radius:9px;background:#fff}.cloze-input.ok{border-color:#22c55e;background:#f0fdf4}.cloze-input.no{border-color:#ef4444;background:#fef2f2}
+.prompt-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.prompt-choice{display:flex;gap:12px;align-items:flex-start;padding:15px;border:1px solid var(--line);border-radius:15px;background:#fff;cursor:pointer;transition:.2s}.prompt-choice:hover{border-color:#fb923c;transform:translateY(-1px)}.prompt-choice.active{border-color:var(--orange);background:var(--orange-soft);box-shadow:0 0 0 3px rgba(249,115,22,.12)}.prompt-index{display:grid;place-items:center;min-width:30px;height:30px;border-radius:10px;background:#fff7ed;color:var(--orange-dark);font-weight:900}
+
+@media(max-width:860px){.topbar-inner{grid-template-columns:1fr auto}.progress-wrap{grid-column:1/-1;grid-row:2}.hero{grid-template-columns:1fr}.responsibility-grid,.scenario-grid,.prompt-cards,.match-layout,.prompt-choice-grid{grid-template-columns:1fr}.two-col,.law-builder{grid-template-columns:1fr}.ladder{grid-template-columns:repeat(2,1fr)}.rule-row{grid-template-columns:1fr}.reality-pair{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+@media(max-width:560px){.shell{padding:20px 14px 60px}.hero-main,.info-card{padding:24px}.block-head{padding:20px 18px 14px}.block-body{padding:0 18px 22px}.topbar-inner{padding:10px 14px}.brand{font-size:.92rem}.section-chip{display:none}.ladder{grid-template-columns:1fr}.jumpnav{gap:7px}.jumpnav a{padding:8px 11px;font-size:.83rem}}
+
+/* Verb-form colour coding */
+.verb-present{color:#0284c7;font-weight:850;background:#e0f2fe;padding:1px 4px;border-radius:5px}
+.verb-past{color:#1e3a8a;font-weight:850;background:#dbeafe;padding:1px 4px;border-radius:5px}
+.verb-would{color:#7e22ce;font-weight:850;background:#f3e8ff;padding:1px 4px;border-radius:5px}
+.verb-perfect{color:#b91c1c;font-weight:850;background:#fee2e2;padding:1px 4px;border-radius:5px}
+.verb-future{color:#a16207;font-weight:850;background:#fef3c7;padding:1px 4px;border-radius:5px}
+.grammar-legend{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.grammar-legend span{font-size:.8rem;font-weight:800;padding:6px 9px;border-radius:999px;border:1px solid var(--line);background:#fff}
+.mini-quiz{display:grid;gap:12px}.mini-quiz-item{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fff}.mini-quiz-item p{margin:0 0 10px;font-weight:750}.mini-options{display:grid;gap:7px}.mini-options label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:10px;cursor:pointer}.mini-options label:hover{background:#fff7ed}.mini-quiz-item.correct{border-color:#86efac;background:#f0fdf4}.mini-quiz-item.incorrect{border-color:#fca5a5;background:#fef2f2}
+.law-template-grid{display:grid;grid-template-columns:1fr;gap:18px}.law-template{padding:24px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#fff,#fffaf6);box-shadow:var(--shadow)}.law-template h3{margin:0 0 7px}.law-writing-item{margin:22px 0}.law-writing-item label{display:block;font-size:1.08rem;font-weight:900;color:var(--ink);margin-bottom:8px}.law-writing-item textarea{width:100%;min-height:108px;resize:vertical;border:2px solid #d7dee9;border-radius:18px;padding:18px 20px;font:inherit;font-size:1.02rem;line-height:1.55;background:#fff;transition:.2s}.law-writing-item textarea::placeholder{color:#a3a3a3;font-weight:750}.law-writing-item textarea:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 4px rgba(249,115,22,.12)}
+.prompt-cue{display:inline-flex;margin-bottom:7px;padding:4px 8px;border-radius:999px;font-size:.72rem;font-weight:850;text-transform:uppercase;letter-spacing:.035em;background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+@media(max-width:760px){.law-template-grid{grid-template-columns:1fr}}
+.compact-law-prompts{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.compact-law-prompt{padding:14px;border:1px solid var(--line);border-radius:15px;background:#fff}.compact-law-prompt b{display:block;margin-bottom:6px;color:var(--orange-dark)}.compact-law-prompt p{margin:0;font-size:.93rem}.speaking-instructions{margin:0 0 18px;padding:16px 18px;border:1px solid var(--peach);border-radius:16px;background:var(--orange-soft);font-weight:700}.speaking-instructions ol{margin:0;padding-left:22px}.speaking-instructions li{margin:5px 0}.speaking-instructions strong{color:var(--orange-dark)}
+@media(max-width:980px){.compact-law-prompts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.compact-law-prompts{grid-template-columns:1fr}}
+
+
+
+/* 2026-07-24 lesson revision */
+.hero-clean{display:block;padding-top:24px}.hero-clean .hero-main{max-width:none}.hero-clean .hero-main{padding:34px 40px}.hero-clean h1{margin-top:0}
+.compact-match-layout{grid-template-columns:1fr;gap:14px}.compact-match-layout .compact-bank{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.compact-match-layout .panel{padding:16px}.compact-match-layout .match-card{padding:12px;font-size:.9rem}.compact-match-layout .meaning-zone{min-height:92px;padding:11px}.compact-match-layout .meaning-zone h4{font-size:.86rem}
+.conditional-category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.conditional-category{border:1px solid var(--line);border-radius:20px;background:#fff;overflow:hidden}.category-head{padding:17px 18px;background:var(--orange-soft);border-bottom:1px solid var(--peach)}.category-head h3{margin:0}.category-head p{margin:3px 0 0;color:var(--muted);font-size:.9rem}.category-prompts{display:grid;gap:8px;padding:12px}.category-prompts .prompt-choice{padding:11px 12px;align-items:center}.category-prompts .prompt-index{min-width:28px;height:28px}
+@media(max-width:900px){.compact-match-layout .compact-bank{grid-template-columns:repeat(2,minmax(0,1fr))}.conditional-category-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.hero-clean .hero-main{padding:26px 24px}.compact-match-layout .compact-bank{grid-template-columns:1fr}}
+
+.topbar-inner{grid-template-columns:minmax(220px,1fr) minmax(240px,420px)}
+</style>
+</head>
+<body>
+<header class="topbar">
+<div class="topbar-inner">
+<div class="brand">Safety on the Road <span>· Conditionals</span></div>
+<div aria-label="Lesson progress" class="progress-wrap">
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+<span class="progress-text" id="progressText">0%</span>
+</div>
+
+</div>
+</header>
+<main class="shell">
+<section class="hero hero-clean" id="top">
+<div class="hero-main">
+<h1>Safety on the road: <span>conditionals</span></h1>
+<div class="author">
+<span><strong>Created by Viktoriia Pyniv</strong></span>
+<span>AI-assisted educational resource developed with ChatGPT (OpenAI).</span>
+<a class="source-link" href="https://eslbrains.com/esl-lesson-on-conditionals/" rel="noopener" target="_blank">Source: ESL Brains ↗</a>
+<span class="level-badge">B2</span>
+</div>
+</div>
+</section>
+<section class="lesson-section" id="lesson">
+<article class="block" data-label="Video" id="video">
+<div class="block-head"><div class="num">1</div><div><h2>A new law in 1983</h2><p>Predict public reactions, then watch the video to check.</p></div></div>
+<div class="block-body">
+<div class="two-col">
+<div class="panel">
+<h3>Watch: compulsory front seat belts in the UK</h3>
+<div class="video-frame"><iframe src="https://www.youtube.com/embed/950kIPv3f38" title="Compulsory front seat belts in the UK" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+</div>
+<div class="panel soft">
+<h3>Before you watch</h3>
+<p class="muted">Choose the opinions you think people had at the time.</p>
+<div class="statement-list" id="predictionList">
+<label class="statement"><input type="checkbox" value="A"/><span><b>A.</b> They don’t like wearing them and they’re only doing it because it’s the law.</span></label>
+<label class="statement"><input type="checkbox" value="B"/><span><b>B.</b> They think the law will make the roads safer.</span></label>
+<label class="statement"><input type="checkbox" value="C"/><span><b>C.</b> They are not used to wearing them, so they forget.</span></label>
+<label class="statement"><input type="checkbox" value="D"/><span><b>D.</b> They don’t think there’s enough proof that seat belts reduce the number of accidents.</span></label>
+<label class="statement"><input type="checkbox" value="E"/><span><b>E.</b> They think the government shouldn’t tell them what to do in their own cars.</span></label>
+</div>
+<div class="controls"><button class="btn primary" onclick="checkPredictions()">Check answers</button><button class="btn secondary" onclick="resetPredictions()">Reset</button><button class="btn ghost" onclick="toggleReveal('predictionAnswers')" type="button">Show correct answers</button></div><div class="reveal" id="predictionAnswers"><strong>Correct answers: A, C and D.</strong><br/>People disliked wearing seat belts, often forgot them, and questioned whether there was enough evidence that seat belts reduced accidents.</div>
+<div aria-live="polite" class="feedback" id="predictionFeedback"></div>
+</div>
+</div>
+<details class="discussion">
+<summary>Discuss the video</summary>
+<ul class="questions">
+<li>Were you surprised by any of the reactions? Why or why not?</li>
+<li>Why do you think some people were against the law when it was introduced?</li>
+<li>Do you think attitudes towards seat belts have changed since 1983?</li>
+<li>How strict are seat-belt laws in your country?</li>
+<li>Are there road-safety laws that people in your country often ignore?</li>
+<li>Can you think of a safety law that was unpopular at first but is widely accepted today?</li>
+<li>Is fear of a fine a better motivator than a safety campaign?</li>
+</ul>
+</details>
+</div>
+</article>
+<article class="block" data-label="Grammar discovery" id="discovery">
+<div class="block-head"><div class="num">2</div><div><h2>Discover the four meanings</h2><p>Connect each situation with its meaning. Drag the cards, or click a situation and then click a meaning.</p></div></div>
+<div class="block-body">
+<div class="match-layout compact-match-layout" id="matchingActivity">
+<div class="panel soft"><h3>Situations</h3><div class="match-bank compact-bank" id="matchBank">
+<div class="match-card" data-key="fact" draggable="true"><span class="scenario-tag">Situation A</span><p>Drivers look at their phones. They become less focused on the road.</p></div>
+<div class="match-card" data-key="future" draggable="true"><span class="scenario-tag">Situation B</span><p>The government may introduce stricter speed limits next year. Fewer people may be injured.</p></div>
+<div class="match-card" data-key="present" draggable="true"><span class="scenario-tag">Situation C</span><p>Driving tests are not very difficult now. Imagine they were much more challenging.</p></div>
+<div class="match-card" data-key="past" draggable="true"><span class="scenario-tag">Situation D</span><p>A cyclist didn’t wear a helmet. He suffered a serious head injury.</p></div>
+</div></div>
+<div class="panel"><h3>Meanings</h3><div class="meaning-bank compact-bank">
+<div class="meaning-zone" data-key="future"><h4>A real future possibility</h4><div class="match-slot"></div></div>
+<div class="meaning-zone" data-key="past"><h4>An alternative past that cannot be changed</h4><div class="match-slot"></div></div>
+<div class="meaning-zone" data-key="fact"><h4>A general fact or repeated result</h4><div class="match-slot"></div></div>
+<div class="meaning-zone" data-key="present"><h4>An imaginary present or future</h4><div class="match-slot"></div></div>
+</div></div>
+</div>
+<div class="controls"><button class="btn primary" onclick="checkMatching()">Check matches</button><button class="btn secondary" onclick="resetMatching()">Reset</button><button class="btn ghost" onclick="toggleReveal('matchingModels')">Reveal sentences</button></div>
+<div class="feedback" id="matchingFeedback"></div>
+<div class="reveal" id="matchingModels"><b>Possible sentences:</b><br/><br/>
+<b>Zero:</b> If drivers <span class="verb-present">look</span> at their phones, they <span class="verb-present">become</span> less focused on the road.<br/><br/>
+<b>First:</b> If the government <span class="verb-present">introduces</span> stricter speed limits, fewer people <span class="verb-future">will be injured</span>.<br/><br/>
+<b>Second:</b> If driving tests <span class="verb-past">were</span> more challenging, there <span class="verb-would">would be</span> better drivers on the road.<br/><br/>
+<b>Third:</b> If the cyclist <span class="verb-perfect">had worn</span> a helmet, he <span class="verb-would">wouldn’t</span> <span class="verb-perfect">have suffered</span> a serious head injury.</div>
+</div>
+</article>
+<article class="block" data-label="Grammar discovery">
+<div class="block-head"><div class="num">3</div><div><h2>What is the reality?</h2><p>Compare each conditional with the real situation. Then complete the mini-quiz.</p></div></div>
+<div class="block-body">
+<div class="grammar-legend"><span class="verb-present">Present</span><span class="verb-past">Past Simple</span><span class="verb-would">would</span><span class="verb-perfect">Perfect form</span><span class="verb-future">Future with will</span></div>
+<div class="two-col">
+<div class="reality-grid">
+<div class="reality-pair"><div class="sentence-box"><b>Zero:</b> If drivers <span class="verb-present">use</span> their phones, they <span class="verb-present">become</span> less focused.</div><div class="arrow">→</div><div class="reality-box"><b>Reality:</b> This is a general, repeated result. It can happen whenever drivers use their phones.</div></div>
+<div class="reality-pair"><div class="sentence-box"><b>First:</b> If the government <span class="verb-present">introduces</span> stricter fines, fewer drivers <span class="verb-future">will use</span> their phones.</div><div class="arrow">→</div><div class="reality-box"><b>Possible future:</b> The fines have not been introduced yet, but this is a realistic future result.</div></div>
+<div class="reality-pair"><div class="sentence-box"><b>Second:</b> If drivers <span class="verb-past">were</span> more patient, there <span class="verb-would">would be</span> fewer accidents.</div><div class="arrow">→</div><div class="reality-box"><b>Reality now:</b> Drivers are not patient enough, and there are too many accidents.</div></div>
+<div class="reality-pair"><div class="sentence-box"><b>Third:</b> If the driver <span class="verb-perfect">had slowed down</span>, the accident <span class="verb-would">wouldn’t</span> <span class="verb-perfect">have happened</span>.</div><div class="arrow">→</div><div class="reality-box"><b>Reality in the past:</b> The driver didn’t slow down. The accident happened.</div></div>
+</div>
+<div class="panel soft grammar-check">
+<h3>Grammar check: mini-quiz</h3>
+<div class="mini-quiz" id="grammarMiniQuiz">
+<div class="mini-quiz-item" data-answer="leave">
+<p>Choose the correct answer: Soap dissolves if you ________ it in water.</p>
+<div class="mini-options">
+<label><input name="gq1" type="radio" value="leave"/> leave</label>
+<label><input name="gq1" type="radio" value="will-leave"/> will leave</label>
+</div>
+</div>
+<div class="mini-quiz-item" data-answer="no">
+<p>Do we normally use <i>will</i> directly after <i>if</i> in a real future condition?</p>
+<div class="mini-options">
+<label><input name="gq2" type="radio" value="yes"/> Yes</label>
+<label><input name="gq2" type="radio" value="no"/> No</label>
+</div>
+</div>
+<div class="mini-quiz-item" data-answer="contrast">
+<p>Which description best matches this pattern: <i>if + Past Simple, would + infinitive</i>?</p>
+<div class="mini-options">
+<label><input name="gq3" type="radio" value="likely"/> A realistic future plan whose result is expected to happen</label>
+<label><input name="gq3" type="radio" value="contrast"/> An imagined situation that contrasts with present reality or seems unlikely</label>
+</div>
+</div>
+<div class="mini-quiz-item" data-answer="third">
+<p>In which conditional do we use a perfect form in both clauses?</p>
+<div class="mini-options">
+<label><input name="gq4" type="radio" value="second"/> Second Conditional</label>
+<label><input name="gq4" type="radio" value="third"/> Third Conditional</label>
+</div>
+</div></div>
+<div class="controls"><button class="btn primary" onclick="checkGrammarMiniQuiz()">Check answers</button><button class="btn secondary" onclick="resetGrammarMiniQuiz()">Reset</button></div><div class="feedback" id="grammarMiniFeedback"></div>
+</div>
+</div>
+</div>
+</article>
+<article class="block" data-label="Practice" id="practice">
+<div class="block-head"><div class="num">4</div><div><h2>Design a new road-safety law</h2><p>Use the prompts to discuss one proposal. Form the sentences orally.</p></div></div>
+<div class="block-body">
+<div class="law-template">
+<h3>Drivers should retake the driving test every five years</h3>
+<p class="muted">Imagine that every driver must regularly prove that they still know the rules and can drive safely.</p>
+<div class="compact-law-prompts">
+<div class="compact-law-prompt"><b>General result</b><p>If drivers forget important rules, they…</p></div>
+<div class="compact-law-prompt"><b>Possible future result</b><p>If this law is introduced, drivers will…</p></div>
+<div class="compact-law-prompt"><b>Imaginary situation</b><p>If every driver had to retake the test regularly, roads would…</p></div>
+<div class="compact-law-prompt"><b>Alternative past</b><p>If an unsafe driver had failed the retest, they wouldn’t have…</p></div>
+<div class="compact-law-prompt"><b>Fair consequence</b><p>If a driver refuses to retake the test, they will…</p></div>
+</div>
+</div>
+
+</div>
+</article>
+<article class="block" data-label="Speaking" id="speaking">
+<div class="block-head"><div class="num">5</div><div><h2>Choose a category, create a conditional, discuss</h2><p>Use one situation to start a detailed conversation with your partner.</p></div></div>
+<div class="block-body"><div class="speaking-instructions"><ol><li>Choose one situation from the category.</li><li>Think about whether you have experienced it and form a correct conditional sentence.</li><li>Your partner asks follow-up questions, and you explain the situation in detail.</li><li>Ask your partner whether the same thing has happened to them. They answer using a conditional sentence.</li></ol></div><div class="conditional-category-grid"><section class="conditional-category"><div class="category-head"><h3>Zero Conditional</h3><p>Facts, habits and repeated results</p></div><div class="category-prompts"><div class="prompt-choice"><span class="prompt-index">1</span><div>Using a phone while driving</div></div><div class="prompt-choice"><span class="prompt-index">2</span><div>Driving when you are very tired</div></div><div class="prompt-choice"><span class="prompt-index">3</span><div>Not wearing a seat belt</div></div><div class="prompt-choice"><span class="prompt-index">4</span><div>Driving too fast in bad weather</div></div><div class="prompt-choice"><span class="prompt-index">5</span><div>Listening to very loud music in the car</div></div></div></section><section class="conditional-category"><div class="category-head"><h3>First Conditional</h3><p>Real future possibilities</p></div><div class="category-prompts"><div class="prompt-choice"><span class="prompt-index">6</span><div>You miss the last bus tonight</div></div><div class="prompt-choice"><span class="prompt-index">7</span><div>It rains heavily before your next journey</div></div><div class="prompt-choice"><span class="prompt-index">8</span><div>Your friend asks you to drive after no sleep</div></div><div class="prompt-choice"><span class="prompt-index">9</span><div>Petrol becomes much more expensive next month</div></div><div class="prompt-choice"><span class="prompt-index">10</span><div>The police introduce more speed cameras in your city</div></div></div></section><section class="conditional-category"><div class="category-head"><h3>Second Conditional</h3><p>Imaginary present or future situations</p></div><div class="category-prompts"><div class="prompt-choice"><span class="prompt-index">11</span><div>You had your own car now</div></div><div class="prompt-choice"><span class="prompt-index">12</span><div>Public transport in your city were completely free</div></div><div class="prompt-choice"><span class="prompt-index">13</span><div>You could change one traffic law</div></div><div class="prompt-choice"><span class="prompt-index">14</span><div>Cars could drive themselves everywhere</div></div><div class="prompt-choice"><span class="prompt-index">15</span><div>You lived five minutes from your workplace</div></div></div></section><section class="conditional-category"><div class="category-head"><h3>Third Conditional</h3><p>Alternative past situations</p></div><div class="category-prompts"><div class="prompt-choice"><span class="prompt-index">16</span><div>You were late because you chose the wrong route</div></div><div class="prompt-choice"><span class="prompt-index">17</span><div>You missed a bus or train because you left home late</div></div><div class="prompt-choice"><span class="prompt-index">18</span><div>A journey took longer because of traffic</div></div><div class="prompt-choice"><span class="prompt-index">19</span><div>You forgot something important before a trip</div></div><div class="prompt-choice"><span class="prompt-index">20</span><div>You went somewhere without checking the weather</div></div></div></section></div></div>
+</article>
+
+</section>
+</main>
+<script>
+const $ = (s,root=document)=>root.querySelector(s);
+const $$ = (s,root=document)=>[...root.querySelectorAll(s)];
+function toggleReveal(id){document.getElementById(id).classList.toggle('show');}
+
+function checkPredictions(){
+  const selected=$$('#predictionList input:checked').map(x=>x.value).sort().join('');
+  const fb=$('#predictionFeedback');
+  if(selected==='ACD'){fb.textContent='Correct — the opinions expressed were A, C and D.';fb.className='feedback good';}
+  else{fb.textContent='Not quite. Watch again and listen for dislike, forgetting, and doubts about the evidence.';fb.className='feedback bad';}
+}
+function resetPredictions(){$$('#predictionList input').forEach(x=>x.checked=false);$('#predictionFeedback').textContent='';}
+
+
+
+let selectedMatch=null;
+function placeMatch(card,zone){const slot=zone.querySelector('.match-slot');const existing=slot.querySelector('.match-card');if(existing)document.getElementById('matchBank').appendChild(existing);slot.appendChild(card);selectedMatch=null;document.querySelectorAll('.match-card').forEach(c=>c.classList.remove('selected'));}
+document.querySelectorAll('.match-card').forEach(card=>{
+  card.addEventListener('dragstart',()=>{card.classList.add('dragging');selectedMatch=card});
+  card.addEventListener('dragend',()=>card.classList.remove('dragging'));
+  card.addEventListener('click',()=>{document.querySelectorAll('.match-card').forEach(c=>c.classList.remove('selected'));selectedMatch=card;card.classList.add('selected')});
+});
+document.querySelectorAll('.meaning-zone').forEach(zone=>{
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');const card=document.querySelector('.match-card.dragging')||selectedMatch;if(card)placeMatch(card,zone)});
+  zone.addEventListener('click',()=>{if(selectedMatch)placeMatch(selectedMatch,zone)});
+});
+function checkMatching(){let score=0;document.querySelectorAll('.meaning-zone').forEach(zone=>{const card=zone.querySelector('.match-card');const ok=card&&card.dataset.key===zone.dataset.key;zone.classList.toggle('correct',!!ok);zone.classList.toggle('incorrect',!ok);if(ok)score++});const fb=document.getElementById('matchingFeedback');fb.textContent=`${score}/4 matches correct.`;fb.className='feedback '+(score===4?'good':'bad');}
+function resetMatching(){const bank=document.getElementById('matchBank');document.querySelectorAll('.match-card').forEach(card=>bank.appendChild(card));document.querySelectorAll('.meaning-zone').forEach(z=>z.classList.remove('correct','incorrect','dragover'));document.querySelectorAll('.match-card').forEach(c=>c.classList.remove('selected'));selectedMatch=null;document.getElementById('matchingFeedback').textContent='';}
+
+function checkRules(){let score=0;$$('#ruleTable .rule-row').forEach(row=>{const a=$('.ifForm',row).value===row.dataset.if;const b=$('.resultForm',row).value===row.dataset.result;if(a&&b){score++;row.style.borderColor='#22c55e';row.style.background='#f0fdf4'}else{row.style.borderColor='#ef4444';row.style.background='#fef2f2'}});const fb=$('#ruleFeedback');fb.textContent=`${score}/4 rules complete.`;fb.className='feedback '+(score===4?'good':'bad');}
+function resetRules(){$$('#ruleTable select').forEach(s=>s.value='');$$('#ruleTable .rule-row').forEach(r=>{r.style.borderColor='';r.style.background=''});$('#ruleFeedback').textContent='';}
+
+function checkWillQuiz(){let score=0;$$('#willQuiz .quiz-item').forEach(item=>{const ok=$('select',item).value===item.dataset.answer;item.classList.toggle('correct',ok);item.classList.toggle('incorrect',!ok);$('.correction',item).style.display=ok?'block':'none';if(ok)score++;});const fb=$('#willFeedback');fb.textContent=`${score}/4 correct.`;fb.className='feedback '+(score===4?'good':'bad');}
+function resetWillQuiz(){$$('#willQuiz select').forEach(s=>s.value='');$$('#willQuiz .quiz-item').forEach(i=>{i.classList.remove('correct','incorrect');$('.correction',i).style.display='none'});$('#willFeedback').textContent='';}
+
+
+
+
+function checkGrammarMiniQuiz(){
+  let score=0;
+  document.querySelectorAll('#grammarMiniQuiz .mini-quiz-item').forEach(item=>{
+    const chosen=item.querySelector('input:checked');
+    const ok=chosen && chosen.value===item.dataset.answer;
+    item.classList.toggle('correct',!!ok);
+    item.classList.toggle('incorrect',!ok);
+    if(ok)score++;
+  });
+  const fb=document.getElementById('grammarMiniFeedback');
+  fb.textContent=`${score}/4 correct.`;
+  fb.className='feedback '+(score===4?'good':'bad');
+}
+function resetGrammarMiniQuiz(){
+  document.querySelectorAll('#grammarMiniQuiz input').forEach(i=>i.checked=false);
+  document.querySelectorAll('#grammarMiniQuiz .mini-quiz-item').forEach(i=>i.classList.remove('correct','incorrect'));
+  document.getElementById('grammarMiniFeedback').textContent='';
+}
+
+function normaliseAnswer(v){return v.trim().toLowerCase().replace(/\s+/g,' ');}
+function checkLawCloze(){let score=0;const inputs=document.querySelectorAll('#lawCloze .cloze-input');inputs.forEach(inp=>{const ok=normaliseAnswer(inp.value)===normaliseAnswer(inp.dataset.answer);inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);if(ok)score++});const fb=document.getElementById('lawClozeFeedback');fb.textContent=`${score}/${inputs.length} verb forms correct.`;fb.className='feedback '+(score===inputs.length?'good':'bad');}
+function resetLawCloze(){document.querySelectorAll('#lawCloze .cloze-input').forEach(inp=>{inp.value='';inp.classList.remove('ok','no')});document.getElementById('lawClozeFeedback').textContent='';}
+document.querySelectorAll('.prompt-choice').forEach(card=>card.addEventListener('click',()=>card.classList.toggle('active')));
+
+const blocks=$$('.block');
+function updateProgress(){
+  const doc=document.documentElement;const max=doc.scrollHeight-innerHeight;const pct=max>0?Math.min(100,Math.max(0,(scrollY/max)*100)):100;$('#progressFill').style.width=pct+'%';$('#progressText').textContent=Math.round(pct)+'%';
+}
+addEventListener('scroll',updateProgress,{passive:true});addEventListener('resize',updateProgress);updateProgress();
+</script>
+</body>
+</html>
