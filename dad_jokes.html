@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dad Jokes: Homophones and Homographs</title>
+<style>
+:root{
+  --bg:#f4f7f2;
+  --surface:#ffffff;
+  --surface-2:#eef4eb;
+  --ink:#213129;
+  --muted:#66756d;
+  --accent:#7f9b73;
+  --accent-dark:#496341;
+  --accent-soft:#dfead9;
+  --accent-pale:#edf4e9;
+  --line:#d7e2d2;
+  --good:#3d7a51;
+  --bad:#a94d4d;
+  --warning:#a17835;
+  --shadow:0 14px 36px rgba(48,72,55,.10);
+  --radius:22px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top right, rgba(180,203,169,.28), transparent 28%),
+    linear-gradient(180deg,#f8faf6 0%,var(--bg) 100%);
+  color:var(--ink);
+  min-height:100vh;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:var(--accent-dark)}
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(14px);
+  background:rgba(248,250,246,.92);
+  border-bottom:1px solid rgba(127,155,115,.18);
+}
+.topbar-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:12px 24px;
+  display:grid;
+  grid-template-columns:minmax(220px,1fr) minmax(280px,1.4fr) auto;
+  align-items:center;
+  gap:18px;
+}
+.brand strong{display:block;font-size:15px}
+.brand span{font-size:12px;color:var(--muted)}
+.progress-wrap{display:flex;align-items:center;gap:12px}
+.progress-track{
+  height:10px;
+  border-radius:999px;
+  background:#dfe8db;
+  overflow:hidden;
+  flex:1;
+}
+.progress-fill{
+  width:50%;
+  height:100%;
+  background:linear-gradient(90deg,var(--accent),#a9bf9d);
+  transition:width .35s ease;
+}
+.section-indicator{
+  font-size:13px;
+  color:var(--accent-dark);
+  font-weight:700;
+  white-space:nowrap;
+}
+.top-home{
+  border:0;
+  background:var(--accent-soft);
+  color:var(--accent-dark);
+  padding:9px 13px;
+  border-radius:999px;
+  font-weight:700;
+}
+main{max-width:1200px;margin:auto;padding:34px 24px 70px}
+.hero{
+  display:grid;
+  grid-template-columns:1.35fr .8fr;
+  gap:24px;
+  align-items:stretch;
+  margin-bottom:22px;
+}
+.hero-main,.hero-card{
+  background:var(--surface);
+  border:1px solid rgba(127,155,115,.18);
+  border-radius:30px;
+  box-shadow:var(--shadow);
+}
+.hero-main{padding:42px}
+.eyebrow{
+  display:inline-flex;
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--accent-pale);
+  color:var(--accent-dark);
+  font-weight:800;
+  font-size:13px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+h1{font-size:clamp(38px,6vw,68px);line-height:1.02;margin:18px 0 18px;letter-spacing:-.04em}
+.hero-main p.lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:760px}
+.author{
+  margin-top:28px;
+  padding-top:20px;
+  border-top:1px solid var(--line);
+  font-size:14px;
+  line-height:1.7;
+}
+.hero-card{
+  padding:28px;
+  background:linear-gradient(145deg,#e7f0e2,#f8fbf6);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.hero-card h3{font-size:20px;margin:0 0 12px}
+.objective-list{display:grid;gap:12px;margin-top:16px}
+.objective{
+  background:rgba(255,255,255,.76);
+  border:1px solid rgba(127,155,115,.22);
+  padding:14px;
+  border-radius:16px;
+  display:flex;
+  gap:12px;
+}
+.objective b{
+  display:grid;
+  place-items:center;
+  width:28px;height:28px;border-radius:50%;
+  background:var(--accent);
+  color:white;
+  flex:0 0 auto;
+}
+.hero-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:22px 0 34px;
+}
+.nav-chip{
+  border:1px solid var(--line);
+  background:var(--surface);
+  color:var(--ink);
+  padding:11px 16px;
+  border-radius:999px;
+  font-weight:750;
+  box-shadow:0 4px 14px rgba(48,72,55,.06);
+  transition:.2s ease;
+}
+.nav-chip:hover,.nav-chip.active{
+  transform:translateY(-1px);
+  background:var(--accent-dark);
+  color:white;
+  border-color:var(--accent-dark);
+}
+.lesson-section{display:none;animation:fade .35s ease}
+.lesson-section.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.section-banner{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  margin:14px 0 20px;
+}
+.section-banner h2{font-size:clamp(28px,4vw,42px);margin:0}
+.section-banner p{margin:0;color:var(--muted);max-width:640px;line-height:1.6}
+.activity{
+  background:var(--surface);
+  border:1px solid rgba(127,155,115,.18);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:var(--shadow);
+  margin-bottom:18px;
+}
+.activity-header{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:18px;
+}
+.num{
+  width:38px;height:38px;
+  border-radius:12px;
+  background:var(--accent-dark);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  flex:0 0 auto;
+}
+.activity h3{margin:0 0 6px;font-size:21px}
+.instructions{margin:0;color:var(--muted);line-height:1.55}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fbfcfa;
+}
+.joke-card{
+  min-height:132px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-size:18px;
+  line-height:1.55;
+  transition:.2s ease;
+}
+.joke-card:hover{transform:translateY(-2px);border-color:var(--accent)}
+.prompt-list{display:grid;gap:10px}
+.prompt{
+  border:1px solid var(--line);
+  background:var(--surface-2);
+  border-radius:16px;
+  padding:14px 16px;
+}
+.video-shell{
+  aspect-ratio:16/9;
+  width:100%;
+  border-radius:18px;
+  overflow:hidden;
+  background:#1d2a21;
+  box-shadow:0 10px 24px rgba(0,0,0,.12)
+}
+.video-shell iframe{width:100%;height:100%;border:0}
+.gap-row,.quiz-row,.review-row{
+  display:grid;
+  grid-template-columns:1fr minmax(150px,220px);
+  gap:12px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px dashed var(--line);
+}
+.gap-row:last-child,.quiz-row:last-child,.review-row:last-child{border-bottom:0}
+input[type="text"],select,textarea{
+  width:100%;
+  border:1px solid #cbd8c6;
+  background:white;
+  border-radius:12px;
+  padding:11px 12px;
+  color:var(--ink);
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(127,155,115,.14)}
+textarea{min-height:108px;resize:vertical}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  font-weight:800;
+  transition:.2s ease;
+}
+.btn.primary{background:var(--accent-dark);color:#fff}
+.btn.secondary{background:var(--accent-soft);color:var(--accent-dark)}
+.btn.ghost{background:#f5f7f3;color:var(--ink);border:1px solid var(--line)}
+.btn:hover{transform:translateY(-1px)}
+.feedback{margin-top:12px;font-weight:800;min-height:24px}
+.correct{border-color:var(--good)!important;background:#f1faf3!important}
+.incorrect{border-color:var(--bad)!important;background:#fff4f4!important}
+.answer-box{
+  display:none;
+  margin-top:14px;
+  background:#eef7eb;
+  border:1px solid #cfe0c8;
+  border-radius:14px;
+  padding:14px;
+  line-height:1.6;
+}
+.answer-box.show{display:block}
+.definition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.definition-card{
+  padding:20px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#f4f8f1,#fff);
+  border:1px solid var(--line);
+}
+.definition-card h4{margin:0 0 8px;color:var(--accent-dark)}
+.match-board{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.match-column{display:grid;gap:10px}
+.draggable,.dropzone{
+  padding:13px 14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#fff;
+}
+.draggable{cursor:grab;user-select:none}
+.dropzone{min-height:50px;background:#f5f8f3}
+.dropzone.over{border-color:var(--accent);background:var(--accent-pale)}
+.dropzone.filled{background:#eef6eb}
+details{
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:#fbfcfa;
+  padding:12px 16px;
+}
+details+details{margin-top:10px}
+summary{cursor:pointer;font-weight:800}
+.type-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.type-card{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  background:#fff;
+  min-height:170px;
+}
+.type-card h4{margin:0 0 8px}
+.pill{
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:var(--accent-dark);
+  font-size:12px;
+  font-weight:800;
+}
+.pronunciation{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:#edf3e9;
+  border-radius:8px;
+  padding:3px 7px;
+  font-size:13px;
+}
+.section-controls{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:28px;
+}
+.section-controls .btn{min-width:130px}
+.small-note{font-size:13px;color:var(--muted);line-height:1.5}
+.score-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:var(--accent-soft);
+  color:var(--accent-dark);
+  font-weight:900;
+}
+.choice-list{display:grid;gap:9px}
+.choice{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  background:#fff;
+}
+.choice input{margin-top:3px}
+.speaking-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.speaking-card{
+  background:linear-gradient(150deg,#edf4e9,#fff);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+}
+.footer-note{text-align:center;color:var(--muted);padding:28px 0 0;font-size:13px}
+@media (max-width:900px){
+  .topbar-inner{grid-template-columns:1fr auto}.progress-wrap{grid-column:1/-1;grid-row:2}
+  .hero,.grid-2,.definition-grid,.match-board,.speaking-cards{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .type-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:620px){
+  main{padding:24px 14px 54px}
+  .topbar-inner{padding:10px 14px}
+  .hero-main{padding:28px 22px}
+  .hero-card{padding:22px}
+  .activity{padding:18px}
+  .grid-3,.type-grid{grid-template-columns:1fr}
+  .gap-row,.quiz-row,.review-row{grid-template-columns:1fr}
+  .section-banner{display:block}.section-banner p{margin-top:8px}
+  .section-controls{flex-direction:column}
+  .section-controls .btn{width:100%}
+}
+
+.inline-gap-sentence{line-height:2.1;margin:10px 0}
+.inline-gap{
+  display:inline-block;
+  width:150px!important;
+  max-width:42vw;
+  padding:6px 8px!important;
+  border-radius:8px!important;
+  border:none!important;
+  border-bottom:2px solid var(--accent)!important;
+  background:var(--accent-pale)!important;
+  text-align:center;
+}
+mark{
+  background:#d7efc9;
+  color:var(--accent-dark);
+  padding:2px 6px;
+  border-radius:7px;
+  font-weight:800;
+}
+.example-card{margin-bottom:16px;background:linear-gradient(145deg,#f4f8f1,#fff)}
+.key-phrases{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.key-phrase{
+  border-radius:18px;
+  padding:18px;
+  background:linear-gradient(145deg,#dbeecf,#f5faef);
+  border:1px solid #bfd7b3;
+  box-shadow:0 8px 20px rgba(70,100,70,.08);
+}
+.key-phrase span{
+  display:inline-block;
+  background:var(--accent-dark);
+  color:white;
+  padding:7px 11px;
+  border-radius:10px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+.key-phrase p{margin:0;line-height:1.5;color:#405246}
+.letter-jokes{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.letter-joke{
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:16px;
+  background:#fbfcfa;
+}
+.letter-joke p{margin:0 0 10px;line-height:1.55}
+.letter-boxes{display:inline-flex;gap:5px;vertical-align:middle}
+.letter-boxes input,.fixed-letter{
+  width:34px!important;
+  height:38px;
+  text-align:center;
+  padding:4px!important;
+  border-radius:8px!important;
+  font-weight:900;
+  text-transform:lowercase;
+}
+.fixed-letter{
+  display:grid;
+  place-items:center;
+  background:var(--accent-dark);
+  color:white;
+}
+.punctuation{margin-left:5px}
+.pronunciation-list{display:grid;gap:10px}
+.pronunciation-list p{
+  margin:0;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  background:#fbfcfa;
+  border-radius:14px;
+  line-height:1.55;
+}
+@media (max-width:700px){
+  .key-phrases,.letter-jokes{grid-template-columns:1fr}
+}
+
+
+.discussion-dropdown{
+  margin-top:16px;
+  background:linear-gradient(145deg,#eef6e9,#ffffff);
+  border:1px solid #bfd7b3;
+  box-shadow:0 8px 20px rgba(70,100,70,.08);
+}
+.discussion-dropdown summary{
+  color:var(--accent-dark);
+  font-size:18px;
+}
+.discussion-content{padding-top:14px}
+.humour-types{
+  margin-top:12px;
+  display:grid;
+  gap:8px;
+}
+.humour-types p{
+  margin:0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#fff;
+  border:1px solid var(--line);
+  line-height:1.5;
+}
+
+
+.explained-joke{
+  padding:14px 0;
+  border-bottom:1px dashed var(--line);
+}
+.explained-joke:last-child{border-bottom:0}
+.explained-joke p{
+  margin:0 0 7px;
+  line-height:1.55;
+}
+.explained-joke small{
+  display:block;
+  color:var(--muted);
+  line-height:1.5;
+  background:#f4f8f1;
+  border-left:4px solid var(--accent);
+  border-radius:8px;
+  padding:9px 11px;
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <strong>Dad Jokes</strong>
+      <span>Homophones and homographs</span>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="section-indicator" id="sectionIndicator">Section 1 of 2</div>
+    </div>
+    <button class="top-home" onclick="scrollToTop()">Top</button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-main">
+<h1>Dad jokes:<br>homophones and homographs</h1>
+<div class="author">
+        <strong>Created by Viktoriia Pyniv</strong><br>
+        AI-assisted educational resource developed with ChatGPT (OpenAI).<br>
+        Source: <a href="https://eslbrains.com/homophones-and-homographs/" target="_blank" rel="noopener">ESL Brains – Homophones and homographs</a>
+      </div>
+    </div>
+    <aside class="hero-card">
+      <div>
+        <span class="pill">Lesson objectives</span>
+        <h3>By the end of the lesson, you can:</h3>
+        <div class="objective-list">
+          <div class="objective"><b>1</b><span>identify homophones and homographs in context;</span></div>
+          <div class="objective"><b>2</b><span>explain how wordplay creates humour;</span></div>
+          <div class="objective"><b>3</b><span>pronounce common homographs accurately;</span></div>
+          <div class="objective"><b>4</b><span>deliver and discuss jokes confidently.</span></div>
+        </div>
+      </div>
+      <p class="small-note">Tip: a dad joke is often deliberately simple, predictable or “cheesy”. The language is the real challenge.</p>
+    </aside>
+  </section>
+
+  <nav class="hero-nav" aria-label="Lesson sections">
+    <button class="nav-chip active" data-section="0">Wordplay</button>
+    <button class="nav-chip" data-section="1">Performance</button>
+  </nav>
+
+  <section class="lesson-section active" data-title="Wordplay">
+    <div class="section-banner">
+      <div><h2>Wordplay</h2></div>
+      <p>Start with humour, notice the double meanings and discover the difference between homophones and homographs.</p>
+    </div>
+
+    <article class="activity">
+      <div class="activity-header"><div class="num">1</div><div><h3>Read the jokes and discuss</h3><p class="instructions">Read the jokes. Say what you think of them and explain which one you find the funniest. Then discuss: <strong>Why might jokes be difficult for English learners?</strong></p></div></div>
+      <div class="grid-2">
+          <div class="card joke-card">My grandfather has the heart of a lion… and a lifetime ban from the local zoo.</div>
+          <div class="card joke-card">You can’t trust atoms. They make up everything!</div>
+          <div class="card joke-card">I could tell a joke about pizza, but it’s a little cheesy.</div>
+          <div class="card joke-card">Rest in peace, boiling water! You will be mist.</div>
+        </div>
+      </div>
+    </article>
+
+    <article class="activity">
+      <div class="activity-header"><div class="num">2</div><div><h3>Watch and complete the jokes</h3><p class="instructions">Watch 04:50–05:45. Complete each gap with one word, then choose the funniest joke.</p></div></div>
+      <div class="grid-2">
+        <div>
+          <div class="video-shell">
+            <iframe src="https://www.youtube.com/embed/cpEpmRevbys?start=290" title="Dad jokes video" allowfullscreen></iframe>
+          </div>
+
+          <details class="discussion-dropdown">
+            <summary>Discussion</summary>
+            <div class="discussion-content">
+              <p class="instructions"><strong>Watch 01:40–02:31 and say which homophones the speakers use in each of the three jokes.</strong></p>
+
+              <div class="key-phrases">
+                <div class="key-phrase">
+                  <span>peek-a-boo</span>
+                  <p>a game in which you hide your face and suddenly show it again</p>
+                </div>
+                <div class="key-phrase">
+                  <span>intensive care unit (ICU)</span>
+                  <p>a hospital unit for people who are seriously ill or injured</p>
+                </div>
+              </div>
+
+              <div class="prompt-list" style="margin-top:16px">
+                <div class="prompt">Is it always possible to translate jokes into other languages?</div>
+                <div class="prompt">
+                  <strong>What is your attitude to these types of humour?</strong>
+                  <div class="humour-types">
+                    <p><strong>dark humour</strong> — laughing at taboo and serious subjects like death, illness or disaster</p>
+                    <p><strong>surreal comedy</strong> — based on absurd scenarios, like Monty Python</p>
+                    <p><strong>sarcasm</strong> — using words that clearly mean the opposite in order to criticize something or someone in a humorous way</p>
+                    <p><strong>parody</strong> — copying someone, e.g. the way they speak, in order to be funny</p>
+                    <p><strong>slapstick</strong> — humour based on simple, clumsy actions like falling over</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div>
+          <p class="inline-gap-sentence">A. Not to brag, but I made six <input class="inline-gap" type="text" data-answer="figures" aria-label="Answer A"> last year… I was also named worst employee at the toy factory.</p>
+          <p class="inline-gap-sentence">B. What is the leading cause of dry skin? <input class="inline-gap" type="text" data-answer="towels" aria-label="Answer B">.</p>
+          <p class="inline-gap-sentence">C. I wanted to tell a carpentry joke… but I couldn’t find one that <input class="inline-gap" type="text" data-answer="would" aria-label="Answer C"> work.</p>
+          <div class="actions">
+            <button class="btn primary check-text">Check answers</button>
+            <button class="btn secondary reset-text">Reset</button>
+            <button class="btn ghost toggle-answer">Show answers</button>
+          </div>
+          <div class="answer-box"><strong>A.</strong> figures &nbsp; <strong>B.</strong> towels &nbsp; <strong>C.</strong> would</div>
+          <div class="feedback"></div>
+        </div>
+      </div>
+    </article>
+
+<article class="activity">
+      <div class="activity-header"><div class="num">3</div><div><h3>Choose the punchline</h3><p class="instructions">Choose the ending that completes each wordplay joke. Then explain the homophones.</p></div></div>
+      <div class="grid-2">
+        <div class="card mcq" data-answer="2">
+          <h4>A. What music do mummies listen to?</h4>
+          <div class="choice-list"><label class="choice"><input type="radio" name="qA" value="1"> Pop.</label><label class="choice"><input type="radio" name="qA" value="2"> Rap.</label><label class="choice"><input type="radio" name="qA" value="3"> Classical.</label></div>
+        </div>
+        <div class="card mcq" data-answer="1">
+          <h4>B. What vegetables are a sailor’s enemies?</h4>
+          <div class="choice-list"><label class="choice"><input type="radio" name="qB" value="1"> Leeks.</label><label class="choice"><input type="radio" name="qB" value="2"> Carrots.</label><label class="choice"><input type="radio" name="qB" value="3"> Beetroots.</label></div>
+        </div>
+        <div class="card mcq" data-answer="3">
+          <h4>C. Why don’t astronomers like Orion’s Belt?</h4>
+          <div class="choice-list"><label class="choice"><input type="radio" name="qC" value="1"> Because it’s high in the sky.</label><label class="choice"><input type="radio" name="qC" value="2"> Because it blew their mind.</label><label class="choice"><input type="radio" name="qC" value="3"> Because it’s a big waste of space.</label></div>
+        </div>
+        <div class="card mcq" data-answer="3">
+          <h4>D. Which building in New York has the most storeys?</h4>
+          <div class="choice-list"><label class="choice"><input type="radio" name="qD" value="1"> The tallest skyscraper.</label><label class="choice"><input type="radio" name="qD" value="2"> The one in Manhattan.</label><label class="choice"><input type="radio" name="qD" value="3"> The public library.</label></div>
+        </div>
+        <div class="card mcq" data-answer="1" style="grid-column:1/-1">
+          <h4>E. Which days of the week are the strongest?</h4>
+          <div class="choice-list"><label class="choice"><input type="radio" name="qE" value="1"> Saturdays and Sundays because the rest are weekdays.</label><label class="choice"><input type="radio" name="qE" value="2"> All of them because they are always back the week after.</label><label class="choice"><input type="radio" name="qE" value="3"> Fridays and Saturdays because no one goes to the gym.</label></div>
+        </div>
+      </div>
+      <div class="actions"><button class="btn primary check-mcq">Check answers</button><button class="btn secondary reset-mcq">Reset</button><button class="btn ghost toggle-answer">Show explanations</button></div>
+      <div class="answer-box"><strong>A:</strong> rap/wrap. <strong>B:</strong> leek/leak. <strong>C:</strong> waste/waist. <strong>D:</strong> storeys/stories. <strong>E:</strong> week/weak.</div>
+      <div class="feedback"></div>
+    </article>
+
+    <div class="section-controls">
+      <span></span>
+      <button class="btn primary next-section">Next section</button>
+    </div>
+  </section>
+
+  <section class="lesson-section" data-title="Performance">
+    <div class="section-banner"
+    <div class="section-banner">
+      <div><h2>Performance</h2></div>
+      <p>Complete the wordplay, practise contrasting pronunciations and finish with joke delivery and a final review.</p>
+    </div>
+
+    <article class="activity">
+      <div class="activity-header"><div class="num">4</div><div><h3>Pronounce the homographs</h3><p class="instructions">Watch the video, then read the sentences aloud. Pay special attention to the highlighted homographs.</p></div></div>
+      <div class="grid-2">
+        <div class="video-shell"><iframe src="https://www.youtube.com/embed/fCF7EKxfd6U" title="Homographs pronunciation video" allowfullscreen></iframe></div>
+        <div class="pronunciation-list">
+          <p>He was walking up the stairs, which began to <mark>wind</mark>, as he heard the <mark>wind</mark> outside.</p>
+          <p>I saw the <mark>tear</mark> in my shirt and felt a <mark>tear</mark> coming down my cheek.</p>
+          <p>“Please <mark>close</mark> the door,” she said as she moved <mark>close</mark> to me.</p>
+          <p><mark>Lead</mark> pipes can <mark>lead</mark> to poor water quality.</p>
+          <p>They had a <mark>row</mark> because the chairs had not been put neatly in a <mark>row</mark>.</p>
+          <p>The nurse <mark>wound</mark> a clean strip of cloth around the <mark>wound</mark>.</p>
+          <p>Doctors are confident he’ll <mark>live</mark> to see his band’s next <mark>live</mark> concert.</p>
+        </div>
+      </div>
+    </article>
+
+<article class="activity">
+      <div class="activity-header"><div class="num">5</div><div><h3>Complete the homograph jokes</h3><p class="instructions">Type one letter in each box. The first letter is already provided.</p></div></div>
+      <div class="letter-jokes">
+        <div class="letter-joke" data-word="fans"><p>A. How do celebrities stay cool? They have many</p><div class="letter-boxes"><span class="fixed-letter">f</span><input maxlength="1"><input maxlength="1"><input maxlength="1"></div><span class="punctuation">.</span></div>
+        <div class="letter-joke" data-word="dough"><p>B. I used to be a baker, but I couldn’t make enough</p><div class="letter-boxes"><span class="fixed-letter">d</span><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div><span class="punctuation">.</span></div>
+        <div class="letter-joke" data-word="match"><p>C. Stop looking for the perfect</p><div class="letter-boxes"><span class="fixed-letter">m</span><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div><span class="punctuation">. Use a lighter.</span></div>
+        <div class="letter-joke" data-word="spotted"><p>D. Why can’t a leopard hide? It’s always</p><div class="letter-boxes"><span class="fixed-letter">s</span><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div><span class="punctuation">.</span></div>
+        <div class="letter-joke" data-word="bug"><p>E. I heard buzzing, but the doctor said it’s just a</p><div class="letter-boxes"><span class="fixed-letter">b</span><input maxlength="1"><input maxlength="1"></div><span class="punctuation"> going around.</span></div>
+        <div class="letter-joke" data-word="framed"><p>F. Why did the picture go to prison? Because it was</p><div class="letter-boxes"><span class="fixed-letter">f</span><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div><span class="punctuation">.</span></div>
+        <div class="letter-joke" data-word="stuck"><p>G. I’m writing a book about glue, but I’m</p><div class="letter-boxes"><span class="fixed-letter">s</span><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div><span class="punctuation"> on the first chapter.</span></div>
+      </div>
+      <div class="actions"><button class="btn primary check-letters">Check answers</button><button class="btn secondary reset-letters">Reset</button><button class="btn ghost show-letter-answers">Show answers</button></div>
+      <div class="feedback"></div>
+    </article>
+
+    <article class="activity">
+      <div class="activity-header"><div class="num">6</div><div><h3>Tell the jokes</h3><p class="instructions">Work in pairs. Open only your own list. Read each joke to your partner. If your partner does not understand it, use the short explanation under the joke.</p></div></div>
+      <div class="speaking-cards">
+        <div class="speaking-card">
+          <h4>Student A</h4>
+          <details><summary>Open your joke set</summary>
+
+            <div class="explained-joke">
+              <p><strong>How can you tell a vampire has a cold?</strong><br>He starts <mark>coffin</mark>.</p>
+              <small><strong>Why it is funny:</strong> <em>coffin</em> sounds like <em>coughing</em>. Vampires sleep in coffins, and people with a cold cough.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p><strong>Why couldn’t the bad sailor learn the alphabet?</strong><br>Because he always got lost at <mark>‘C’</mark>.</p>
+              <small><strong>Why it is funny:</strong> the letter <em>C</em> sounds like <em>sea</em>. A bad sailor gets lost at sea.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p><strong>What did one wall say to the other wall?</strong><br>I’ll meet you at the <mark>corner</mark>!</p>
+              <small><strong>Why it is funny:</strong> two walls physically meet at a corner, so the phrase is both literal and conversational.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p>I’m so good at <mark>sleeping</mark> that I do it with my <mark>eyes closed</mark>.</p>
+              <small><strong>Why it is funny:</strong> everyone normally sleeps with their eyes closed, so the “special skill” is not special at all.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p><strong>What did one hat say to the other hat?</strong><br>You stay here, I’ll go on <mark>ahead</mark>!</p>
+              <small><strong>Why it is funny:</strong> <em>ahead</em> sounds like <em>a head</em>. A hat goes on a head.</small>
+            </div>
+
+          </details>
+        </div>
+
+        <div class="speaking-card">
+          <h4>Student B</h4>
+          <details><summary>Open your joke set</summary>
+
+            <div class="explained-joke">
+              <p><strong>Why was six afraid of seven?</strong><br>Because seven <mark>ate</mark> nine.</p>
+              <small><strong>Why it is funny:</strong> <em>eight</em> and <em>ate</em> sound the same, so “seven eight nine” becomes “seven ate nine”.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p><strong>Do you want to hear a joke about construction?</strong><br>I’m still <mark>working on it</mark>.</p>
+              <small><strong>Why it is funny:</strong> <em>working on it</em> means both creating the joke and physically working on a construction project.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p>I was kidnapped by a gang of <mark>mimes</mark> once. They threatened to do <mark>unspeakable</mark> things to me.</p>
+              <small><strong>Why it is funny:</strong> mimes do not speak, so the things they do are literally “unspeakable”.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p>I love telling <mark>Dad jokes</mark>. Sometimes, <mark>he</mark> even laughs.</p>
+              <small><strong>Why it is funny:</strong> <em>Dad jokes</em> usually means a type of joke, but here it is understood as jokes told to the speaker’s actual dad.</small>
+            </div>
+
+            <div class="explained-joke">
+              <p><strong>Can February <mark>March</mark>?</strong><br>No, but April <mark>May</mark>!</p>
+              <small><strong>Why it is funny:</strong> <em>March</em> and <em>May</em> are months, but they can also be verbs.</small>
+            </div>
+
+          </details>
+        </div>
+      </div>
+    </article>
+
+    
+
+    <div class="section-controls">
+      <button class="btn secondary prev-section">Previous section</button>
+      <button class="btn primary" onclick="scrollToTop()">Finish lesson</button>
+    </div>
+  -note">Interactive lesson · Dad jokes: homophones and homographs</div>
+</main>
+
+<script>
+const sections=[...document.querySelectorAll('.lesson-section')];
+const chips=[...document.querySelectorAll('.nav-chip')];
+const progress=document.getElementById('progressFill');
+const indicator=document.getElementById('sectionIndicator');
+let current=0;
+
+function showSection(index){
+  current=Math.max(0,Math.min(index,sections.length-1));
+  sections.forEach((s,i)=>s.classList.toggle('active',i===current));
+  chips.forEach((c,i)=>c.classList.toggle('active',i===current));
+  progress.style.width=((current+1)/sections.length*100)+'%';
+  indicator.textContent=`Section ${current+1} of ${sections.length}`;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+chips.forEach((c,i)=>c.addEventListener('click',()=>showSection(i)));
+document.querySelectorAll('.next-section').forEach(b=>b.addEventListener('click',()=>showSection(current+1)));
+document.querySelectorAll('.prev-section').forEach(b=>b.addEventListener('click',()=>showSection(current-1)));
+function scrollToTop(){window.scrollTo({top:0,behavior:'smooth'})}
+
+function normalise(v){
+  return v.trim().toLowerCase().replace(/[’]/g,"'").replace(/\s+/g,' ');
+}
+function acceptable(input){
+  const target=normalise(input.dataset.answer||'');
+  const alts=(input.dataset.alt||'').split(',').map(normalise).filter(Boolean);
+  const val=normalise(input.value);
+  return val===target || alts.includes(val);
+}
+document.querySelectorAll('.check-text').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    const inputs=[...box.querySelectorAll('input[type="text"][data-answer]')];
+    let score=0;
+    inputs.forEach(i=>{
+      const ok=acceptable(i); score+=ok?1:0;
+      i.classList.toggle('correct',ok); i.classList.toggle('incorrect',!ok);
+    });
+    box.querySelector('.feedback').textContent=`${score} / ${inputs.length} correct`;
+  });
+});
+document.querySelectorAll('.check-text-loose').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    const inputs=[...box.querySelectorAll('input[type="text"][data-answer]')];
+    let completed=0;
+    inputs.forEach(i=>{
+      const ok=i.value.trim().length>3; completed+=ok?1:0;
+      i.classList.toggle('correct',ok); i.classList.toggle('incorrect',!ok);
+    });
+    box.querySelector('.feedback').textContent=`${completed} / ${inputs.length} responses completed. Compare with the revealed answers.`;
+  });
+});
+document.querySelectorAll('.reset-text').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    box.querySelectorAll('input[type="text"]').forEach(i=>{i.value='';i.classList.remove('correct','incorrect')});
+    const f=box.querySelector('.feedback'); if(f)f.textContent='';
+  });
+});
+document.querySelectorAll('.check-select').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    const selects=[...box.querySelectorAll('select[data-answer]')];
+    let score=0;
+    selects.forEach(s=>{
+      const ok=normalise(s.value)===normalise(s.dataset.answer); score+=ok?1:0;
+      s.classList.toggle('correct',ok);s.classList.toggle('incorrect',!ok);
+    });
+    box.querySelector('.feedback').textContent=`${score} / ${selects.length} correct`;
+  });
+});
+document.querySelectorAll('.reset-select').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    box.querySelectorAll('select').forEach(s=>{s.value='';s.classList.remove('correct','incorrect')});
+    const f=box.querySelector('.feedback'); if(f)f.textContent='';
+  });
+});
+document.querySelectorAll('.check-mcq').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    const items=[...box.querySelectorAll('.mcq')];
+    let score=0;
+    items.forEach(item=>{
+      const chosen=item.querySelector('input:checked');
+      const ok=chosen && chosen.value===item.dataset.answer;
+      score+=ok?1:0;
+      item.classList.toggle('correct',!!ok);
+      item.classList.toggle('incorrect',!ok);
+    });
+    box.querySelector('.feedback').textContent=`${score} / ${items.length} correct`;
+  });
+});
+document.querySelectorAll('.reset-mcq').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    box.querySelectorAll('input[type="radio"]').forEach(i=>i.checked=false);
+    box.querySelectorAll('.mcq').forEach(i=>i.classList.remove('correct','incorrect'));
+    box.querySelector('.feedback').textContent='';
+  });
+});
+document.querySelectorAll('.toggle-answer').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    const ans=box.querySelector('.answer-box');
+    if(!ans)return;
+    ans.classList.toggle('show');
+    btn.textContent=ans.classList.contains('show')?'Hide answer':'Show answer';
+  });
+});
+
+document.querySelectorAll('.check-letters').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    const jokes=[...box.querySelectorAll('.letter-joke')];
+    let score=0;
+    jokes.forEach(j=>{
+      const word=j.dataset.word.toLowerCase();
+      const letters=[...j.querySelectorAll('input')].map(i=>i.value.toLowerCase()).join('');
+      const ok=(word[0]+letters)===word;
+      score+=ok?1:0;
+      j.classList.toggle('correct',ok);
+      j.classList.toggle('incorrect',!ok);
+    });
+    box.querySelector('.feedback').textContent=`${score} / ${jokes.length} correct`;
+  });
+});
+document.querySelectorAll('.reset-letters').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    box.querySelectorAll('.letter-joke input').forEach(i=>i.value='');
+    box.querySelectorAll('.letter-joke').forEach(j=>j.classList.remove('correct','incorrect'));
+    box.querySelector('.feedback').textContent='';
+  });
+});
+document.querySelectorAll('.show-letter-answers').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const box=btn.closest('.activity');
+    box.querySelectorAll('.letter-joke').forEach(j=>{
+      const word=j.dataset.word.slice(1);
+      [...j.querySelectorAll('input')].forEach((input,idx)=>input.value=word[idx]||'');
+      j.classList.remove('incorrect');
+      j.classList.add('correct');
+    });
+    box.querySelector('.feedback').textContent='Answers shown';
+  });
+});
+document.querySelectorAll('.letter-boxes input').forEach((input,idx,all)=>{
+  input.addEventListener('input',()=>{
+    input.value=input.value.replace(/[^a-zA-Z]/g,'').slice(0,1);
+    if(input.value){
+      const group=[...input.closest('.letter-boxes').querySelectorAll('input')];
+      const pos=group.indexOf(input);
+      if(group[pos+1]) group[pos+1].focus();
+    }
+  });
+});
+
+</script>
+</body>
+</html>
