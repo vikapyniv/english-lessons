@@ -183,12 +183,11 @@ title: "All lessons"
 
     </section>
 
-    {% assign lessons = site.data.lessons %}
+    {% assign lessons = site.pages | where: "lesson", true | sort: "title" %}
 
     <section class="lesson-grid" id="lesson-grid">
 
-      {% for lesson_entry in lessons %}
-        {% assign lesson = lesson_entry[1] %}
+      {% for lesson in lessons %}
 
         <article
           class="lesson-card"
@@ -204,7 +203,7 @@ title: "All lessons"
         >
 
           <h2>
-            <a href="{{ lesson.url }}">
+            <a href="{{ lesson.url | relative_url }}">
               {{ lesson.title }}
             </a>
           </h2>
@@ -217,9 +216,11 @@ title: "All lessons"
               {% endfor %}
             {% endif %}
 
-            {% for type in lesson.lesson_types %}
-              <span class="tag">{{ type }}</span>
-            {% endfor %}
+            {% if lesson.lesson_types %}
+              {% for type in lesson.lesson_types %}
+                <span class="tag">{{ type }}</span>
+              {% endfor %}
+            {% endif %}
 
           </div>
 
