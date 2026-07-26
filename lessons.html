@@ -39,7 +39,7 @@ title: "All lessons"
 
     .filters {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
       gap: 12px;
       margin-bottom: 30px;
     }
@@ -130,7 +130,7 @@ title: "All lessons"
     <h1>All lessons</h1>
 
     <p class="page-description">
-      Search and filter lessons by level, lesson type and grammar.
+      Search and filter lessons by level, lesson type, grammar and pronunciation.
     </p>
 
     <section class="filters">
@@ -138,14 +138,14 @@ title: "All lessons"
       <input
         type="search"
         id="lesson-search"
-        placeholder="Search by title, topic, grammar or function..."
+        placeholder="Search by title, topic, grammar, pronunciation or function..."
       >
 
       <select id="level-filter">
         <option value="">All levels</option>
 
         {% for level in site.data.taxonomy.levels %}
-          <option value="{{ level | downcase }}">
+          <option value="{{ level | downcase | escape }}">
             {{ level }}
           </option>
         {% endfor %}
@@ -155,7 +155,7 @@ title: "All lessons"
         <option value="">All lesson types</option>
 
         {% for type in site.data.taxonomy.lesson_types %}
-          <option value="{{ type | downcase }}">
+          <option value="{{ type | downcase | escape }}">
             {{ type }}
           </option>
         {% endfor %}
@@ -165,46 +165,30 @@ title: "All lessons"
         <option value="">All grammar</option>
 
         {% for item in site.data.taxonomy.grammar %}
-          <option value="{{ item | downcase }}">
+          <option value="{{ item | downcase | escape }}">
             {{ item }}
           </option>
         {% endfor %}
       </select>
 
-    <label>
-  Grammar
-  <select id="grammar-filter">
-    <option value="">All grammar</option>
+      <select id="pronunciation-filter">
+        <option value="">All pronunciation</option>
 
-    {% for item in site.data.taxonomy.grammar %}
-      <option value="{{ item | downcase | escape }}">
-        {{ item }}
-      </option>
-    {% endfor %}
-  </select>
-
-    </label>
-
-<label>
-  Pronunciation
-  <select id="pronunciation-filter">
-    <option value="">All pronunciation</option>
-
-    {% for item in site.data.taxonomy.pronunciation %}
-      <option value="{{ item | downcase | escape }}">
-        {{ item }}
-      </option>
-    {% endfor %}
-  </select>
-</label>
+        {% for item in site.data.taxonomy.pronunciation %}
+          <option value="{{ item | downcase | escape }}">
+            {{ item }}
+          </option>
+        {% endfor %}
+      </select>
 
     </section>
 
     {% assign lessons = site.data.lessons %}
+
     <section class="lesson-grid" id="lesson-grid">
 
       {% for lesson_entry in lessons %}
-  {% assign lesson = lesson_entry[1] %}
+        {% assign lesson = lesson_entry[1] %}
 
         <article
           class="lesson-card"
@@ -228,10 +212,10 @@ title: "All lessons"
           <div class="tags">
 
             {% if lesson.level %}
-  {% for item_level in lesson.level %}
-    <span class="tag">{{ item_level }}</span>
-  {% endfor %}
-{% endif %}
+              {% for item_level in lesson.level %}
+                <span class="tag">{{ item_level }}</span>
+              {% endfor %}
+            {% endif %}
 
             {% for type in lesson.lesson_types %}
               <span class="tag">{{ type }}</span>
@@ -249,11 +233,11 @@ title: "All lessons"
             {% endif %}
 
             {% if lesson.pronunciation %}
-  <p>
-    <strong>Pronunciation:</strong>
-    {{ lesson.pronunciation | join: ", " }}
-  </p>
-{% endif %}
+              <p>
+                <strong>Pronunciation:</strong>
+                {{ lesson.pronunciation | join: ", " }}
+              </p>
+            {% endif %}
 
             {% if lesson.functions %}
               <p>
@@ -299,6 +283,7 @@ title: "All lessons"
     const levelFilter = document.querySelector("#level-filter");
     const typeFilter = document.querySelector("#type-filter");
     const grammarFilter = document.querySelector("#grammar-filter");
+    const pronunciationFilter = document.querySelector("#pronunciation-filter");
 
     const cards = [
       ...document.querySelectorAll(".lesson-card")
@@ -311,57 +296,67 @@ title: "All lessons"
       const level = levelFilter.value;
       const type = typeFilter.value;
       const grammar = grammarFilter.value;
+      const pronunciation = pronunciationFilter.value;
 
       let visibleLessons = 0;
 
       cards.forEach((card) => {
-  const lessonLevels = (
-    card.dataset.level || ""
-  ).split("|");
+        const lessonLevels = (
+          card.dataset.level || ""
+        ).split("|");
 
-  const lessonTypes = (
-    card.dataset.types || ""
-  ).split("|");
+        const lessonTypes = (
+          card.dataset.types || ""
+        ).split("|");
 
-  const grammarItems = (
-    card.dataset.grammar || ""
-  ).split("|");
+        const grammarItems = (
+          card.dataset.grammar || ""
+        ).split("|");
 
-  const searchableText = [
-    card.dataset.title || "",
-    card.dataset.types || "",
-    card.dataset.grammar || "",
-    card.dataset.pronunciation || "",
-    card.dataset.functions || "",
-    card.dataset.topics || "",
-    card.dataset.vocabulary || "",
-    card.dataset.skills || ""
-  ].join(" ");
+        const pronunciationItems = (
+          card.dataset.pronunciation || ""
+        ).split("|");
 
-  const matchesSearch =
-    !search || searchableText.includes(search);
+        const searchableText = [
+          card.dataset.title || "",
+          card.dataset.types || "",
+          card.dataset.grammar || "",
+          card.dataset.pronunciation || "",
+          card.dataset.functions || "",
+          card.dataset.topics || "",
+          card.dataset.vocabulary || "",
+          card.dataset.skills || ""
+        ].join(" ");
 
-  const matchesLevel =
-    !level || lessonLevels.includes(level);
+        const matchesSearch =
+          !search || searchableText.includes(search);
 
-  const matchesType =
-    !type || lessonTypes.includes(type);
+        const matchesLevel =
+          !level || lessonLevels.includes(level);
 
-  const matchesGrammar =
-    !grammar || grammarItems.includes(grammar);
+        const matchesType =
+          !type || lessonTypes.includes(type);
 
-  const shouldShow =
-    matchesSearch &&
-    matchesLevel &&
-    matchesType &&
-    matchesGrammar;
+        const matchesGrammar =
+          !grammar || grammarItems.includes(grammar);
 
-  card.hidden = !shouldShow;
+        const matchesPronunciation =
+          !pronunciation ||
+          pronunciationItems.includes(pronunciation);
 
-  if (shouldShow) {
-    visibleLessons++;
-  }
-});
+        const shouldShow =
+          matchesSearch &&
+          matchesLevel &&
+          matchesType &&
+          matchesGrammar &&
+          matchesPronunciation;
+
+        card.hidden = !shouldShow;
+
+        if (shouldShow) {
+          visibleLessons++;
+        }
+      });
 
       noResults.style.display =
         visibleLessons === 0 ? "block" : "none";
@@ -371,6 +366,7 @@ title: "All lessons"
     levelFilter.addEventListener("change", filterLessons);
     typeFilter.addEventListener("change", filterLessons);
     grammarFilter.addEventListener("change", filterLessons);
+    pronunciationFilter.addEventListener("change", filterLessons);
   </script>
 
 </body>
