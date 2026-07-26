@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>That’s a Tough Question — Interactive Lesson</title>
+<style>
+    :root{
+      --yellow:#f6c84c;
+      --yellow-soft:#fff7df;
+      --yellow-pale:#fffcf1;
+      --gold:#d89b10;
+      --ink:#24211a;
+      --muted:#6d6658;
+      --line:#eadfbd;
+      --white:#ffffff;
+      --navy:#242a44;
+      --green:#e9f7e8;
+      --red:#fff0ed;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,Arial,sans-serif;
+      background:linear-gradient(180deg,var(--yellow-pale),#fff 24%,#fffdf7);
+      color:var(--ink);
+      line-height:1.5;
+    }
+    header{
+      background:radial-gradient(circle at top left,#fff2bf 0,#f7cf63 38%,#efb83d 100%);
+      color:var(--ink);
+      padding:54px 28px 48px;
+      text-align:center;
+      border-bottom:1px solid rgba(120,80,0,.16);
+    }
+    header h1{font-size:46px;margin:0 0 12px;font-weight:900;letter-spacing:-.03em;color:#2c2616}
+    header p{font-size:18px;margin:4px 0;color:#3d3523}
+    header a{color:#2f2a1a;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+    main{max-width:1180px;margin:0 auto;padding:30px 18px 70px}
+    section{
+      background:rgba(255,255,255,.92);
+      margin:22px 0;
+      padding:28px;
+      border-radius:24px;
+      box-shadow:0 10px 28px rgba(100,74,10,.08);
+      border:1px solid var(--line);
+    }
+    h2{font-size:30px;color:#302810;margin:0 0 18px;letter-spacing:-.02em}
+    h3{font-size:21px;color:#302810;margin:24px 0 12px}
+    p{margin:10px 0 16px}.muted{color:var(--muted)}
+    .grid{display:grid;gap:16px}.two{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}.three{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+    .split{display:grid;grid-template-columns:minmax(320px,1fr) minmax(320px,1fr);gap:20px;align-items:start}
+    @media (max-width:850px){.split{grid-template-columns:1fr} header h1{font-size:36px}}
+    .card{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fffdf7}.card strong{color:#332a11}
+    .question-list{padding-left:24px}.question-list li{margin:10px 0;font-size:18px}
+    .tag{display:inline-block;background:#fff4c7;color:#3a2b00;border:1px solid #edd180;border-radius:999px;padding:8px 12px;margin:5px;font-weight:800}
+    .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:20px;background:#111;margin:18px 0;border:1px solid #d9c785}.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    textarea,input{width:100%;padding:12px;border:1px solid #d8c78f;border-radius:12px;font:inherit;background:#fffef9;color:var(--ink)}
+    .inline-input{display:inline-block;width:190px;margin:0 6px;padding:8px 10px;vertical-align:middle}
+    button{border:0;border-radius:999px;padding:12px 18px;font-weight:900;cursor:pointer;background:#2f2a1a;color:white;transition:.15s transform,.15s opacity}button:hover{transform:translateY(-1px)}button.secondary{background:#fff4ca;color:#332a11;border:1px solid #e1c46a}button.accent{background:var(--gold);color:#211900}
+    details{border:1px solid var(--line);border-radius:16px;padding:14px 16px;background:#fffdf6;margin:12px 0} summary{cursor:pointer;font-weight:900;color:#302810}
+    .phrase-bank{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0}.phrase{padding:10px 13px;border-radius:14px;background:white;border:2px solid #dfcf98;cursor:grab;font-weight:800}.phrase.dragging{opacity:.45}
+    .columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px}.dropzone{min-height:142px;border:2px dashed #d6bf6f;border-radius:18px;padding:13px;background:#fffdf4}.dropzone h4{margin:0 0 8px;color:#302810}.dropzone.correct{border-color:#60a867;background:var(--green)}.dropzone.wrong{border-color:#e38670;background:var(--red)}
+    .mini{font-size:14px;color:var(--muted)}.prompt-box{font-size:25px;font-weight:900;text-align:center;color:#302810;background:#fff5c9;border:1px solid #ead282;border-radius:22px;padding:30px;margin:18px 0;min-height:125px;display:flex;align-items:center;justify-content:center}.timer{font-size:54px;font-weight:900;color:#b67800;text-align:center}.pill-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.hidden{display:none}.answer-key{background:#fff9dd;border:1px solid #e5cf7c;border-radius:14px;padding:12px;margin-top:10px}.fade{animation:fade .25s ease}@keyframes fade{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .box-title{font-size:18px;font-weight:900;margin:0 0 10px;color:#302810}.small-heading{font-size:19px;font-weight:900;color:#302810;margin:22px 0 8px}.phrase-list .card{font-weight:800}
+
+    .meaning-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+    .compact-list{display:grid;gap:10px}.compact-list .card{padding:14px 16px}
+    .matching-panel{background:#fffaf0;border:1px solid var(--line);border-radius:20px;padding:22px}
+    .match-row{display:grid;grid-template-columns:1.1fr 1fr;gap:10px;align-items:center;margin:10px 0}
+    .match-phrase{font-weight:800;font-size:14px}.match-row select{width:100%;padding:10px;border-radius:11px;border:1px solid #d8c78f;background:#fffef9}
+    .input-correct{border-color:#60a867!important;background:#eef9ee!important}.input-wrong{border-color:#e38670!important;background:#fff3ef!important}
+    .practice-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:22px;align-items:start}
+    .practice-column{min-width:0}.sort-panel{background:#fffaf0;border:1px solid var(--line);border-radius:20px;padding:20px}
+    .stacked-practice{display:grid;gap:18px}.practice-card{background:#fffaf0;border:1px solid var(--line);border-radius:20px;padding:20px}
+    .compact-zones{grid-template-columns:repeat(2,minmax(0,1fr))}.compact-zones .dropzone{min-height:120px}.compact-zones .phrase{font-size:13px;padding:8px 10px}
+    .function-buttons{display:flex;flex-wrap:wrap;gap:8px}.function-buttons button{padding:9px 12px;font-size:13px}
+    .speed-inline{display:flex;align-items:baseline;gap:6px;margin:16px 0 0;color:var(--gold);font-weight:900}.speed-inline #miniTimer{font-size:34px}
+    .prompt-box.smaller{font-size:20px;padding:20px;min-height:105px}
+    .slider-head{display:flex;justify-content:flex-end;color:var(--muted);font-weight:900;font-size:14px;margin-bottom:8px}
+    .choice-prompt{font-weight:900;font-size:18px;background:#fff5c9;border:1px solid #ead282;border-radius:16px;padding:18px;min-height:110px;display:flex;align-items:center}
+    .choice-options{display:grid;gap:9px;margin:14px 0}.option{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:13px;padding:11px;background:white;cursor:pointer}.option input{width:auto;margin-top:4px}
+    .battle-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:22px;align-items:start}.battle-topic{min-height:150px}.battle-timer-wrap{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+    .checklist-card{background:#fffaf0;border:1px solid var(--line);border-radius:20px;padding:20px}.checklist-card label{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #eee3bf}.checklist-card label:last-child{border-bottom:0}.checklist-card input{width:auto;margin-top:5px}
+    @media (max-width:980px){.practice-grid,.meaning-layout,.battle-layout{grid-template-columns:1fr}.compact-zones{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}}
+    @media (max-width:600px){.match-row{grid-template-columns:1fr}.practice-card,.sort-panel,.matching-panel{padding:16px}}
+  
+    .section-kicker{font-size:13px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#9b6b00;margin-bottom:7px}
+    .section-intro{font-size:17px;color:var(--muted);margin:-8px 0 22px;max-width:820px}
+    .task{border:1px solid var(--line);border-radius:20px;background:#fffdf7;padding:20px;min-width:0}
+    .task h3{margin:0 0 10px;font-size:21px}
+    .task-number{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--yellow);color:#2c2616;font-size:14px;font-weight:950;margin-right:8px;vertical-align:middle}
+    .section-two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+    .section-two-col > .task{height:100%}
+    .section-three-top{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+    .section-three-top > *{height:100%}
+    .section-three-bottom{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch;margin-top:20px}
+    .section-three-bottom > *{height:100%}
+    .local-video{width:100%;display:block;border-radius:20px;background:#111;border:1px solid #d9c785;margin:18px 0;max-height:620px}
+    .connect-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:15px}
+    .connect-column{display:grid;gap:9px}
+    .connect-item{width:100%;text-align:left;border-radius:14px;padding:12px 13px;background:#fff;color:var(--ink);border:1px solid #dfcf98;font-weight:800;line-height:1.35;transition:.15s ease;position:relative}
+    .connect-item:hover{transform:translateY(-1px);background:#fff9df}
+    .connect-item.selected{outline:3px solid rgba(216,155,16,.28);border-color:var(--gold);background:#fff5c9}
+    .connect-item.matched{background:#f7f1d8;border-color:#cbb45f;padding-left:42px}
+    .connect-item.matched::before{content:attr(data-pair);position:absolute;left:11px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--yellow);color:#2c2616;font-size:12px;font-weight:950}
+    .connect-item.correct{background:var(--green);border-color:#60a867}
+    .connect-item.wrong{background:var(--red);border-color:#e38670}
+    .match-actions{margin-top:15px}
+    .section-three-top .sort-panel{height:100%}
+    @media(max-width:980px){.section-two-col,.section-three-top,.section-three-bottom{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<h1>That’s a Tough Question</h1>
+<p><strong>Created by Viktoriia Pyniv</strong></p>
+<p>AI-assisted educational resource developed with ChatGPT (OpenAI).</p>
+<p>Resource: <a href="https://eslbrains.com/esl-lesson-on-difficult-conversations/" rel="noopener" target="_blank">ESL Brains — That’s a tough question</a></p>
+</header>
+<main>
+
+
+
+
+
+
+<section id="section1">
+<div class="section-kicker">Section 1</div>
+<h2>Difficult questions</h2>
+<p class="section-intro">Recognise what makes a question uncomfortable, complex or difficult to answer.</p>
+<div class="section-two-col">
+<div class="task">
+<h3><span class="task-number">1</span>What makes a question tough?</h3>
+<p>Decide which questions might be difficult to answer and explain why.</p>
+<ul class="question-list">
+<li>How much do you earn?</li>
+<li>Is patriotism always a good thing?</li>
+<li>Are you pregnant?</li>
+<li>Why are you still single?</li>
+<li>How does quantum computing actually work?</li>
+<li>Don’t you think your generation is too dependent on technology?</li>
+</ul>
+</div>
+<div class="task">
+<h3><span class="task-number">2</span>Create tough questions</h3>
+<p>Choose several situations and create two difficult questions for each.</p>
+<div class="phrase-bank">
+<span class="tag">job interview</span><span class="tag">family dinner</span><span class="tag">date</span><span class="tag">business meeting</span><span class="tag">celebrity interview</span><span class="tag">sports press conference</span>
+</div>
+<div class="compact-list">
+<div class="card"><strong>A.</strong> Have you ever been asked one?</div>
+<div class="card"><strong>B.</strong> Could it sound acceptable in a different situation?</div>
+<div class="card"><strong>C.</strong> How would you react: laughter, humour, silence, honesty, annoyance or avoidance?</div>
+</div>
+</div>
+</div>
+</section>
+<section id="section2">
+<div class="section-kicker">Section 2</div>
+<h2>Watch and respond</h2>
+<p class="section-intro">Predict the athlete’s reaction, notice the language she uses and discuss how she handles the question.</p>
+<div class="task">
+<h3><span class="task-number">3</span>Predict the reaction</h3>
+<p>Watch the beginning and discuss why the question makes Eileen Gu laugh.</p>
+<div class="video-wrap"><iframe src="https://www.youtube.com/embed/Bthfcm5R7Eg" title="That’s a Tough Question video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+</div>
+<div class="grid two" style="margin-top:18px">
+<div class="task">
+<h3><span class="task-number">4</span>Complete the phrases</h3>
+<ol class="question-list">
+<li>I think that’s an answer <input aria-label="gap 1" class="inline-input" id="gap1"/> itself.</li>
+<li>So, the “two medals lost” situation, to be <input aria-label="gap 2" class="inline-input" id="gap2"/> with you, I think is kind of a ridiculous perspective to take.</li>
+<li>I think that is more than <input aria-label="gap 3" class="inline-input" id="gap3"/>, but thank you.</li>
+</ol>
+<div class="pill-row"><button class="accent" onclick="checkGaps()">Check answers</button><button class="secondary" onclick="clearGaps()">Clear</button></div>
+<p class="mini" id="gapFeedback"></p>
+</div>
+<div class="task">
+<h3><span class="task-number">5</span>Discuss the response</h3>
+<ul class="question-list">
+<li>What did you think of the interviewer’s question?</li>
+<li>What did you think of the way the athlete handled it?</li>
+<li>Should reporters follow any rules when asking difficult questions?</li>
+<li>How can people deal with questions they do not feel comfortable answering?</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="section3">
+<div class="section-kicker">Section 3</div>
+<h2>Understand and practise</h2>
+<p class="section-intro">Work out what the expressions do, organise them by function and use them in short spoken responses.</p>
+<div class="section-three-top">
+<div class="task">
+<h3><span class="task-number">6</span>Meaning</h3>
+<p><strong>Imagine you hear these expressions for the first time. What do you think each speaker is trying to do?</strong></p>
+<p class="mini">Click a phrase on the left, then click its matching meaning on the right.</p>
+<div class="connect-grid">
+<div class="connect-column" id="connectPhrases"></div>
+<div class="connect-column" id="connectMeanings"></div>
+</div>
+<div class="pill-row match-actions"><button class="accent" onclick="checkConnections()">Check</button><button class="secondary" onclick="resetConnections()">Reset</button></div>
+<p class="mini" id="connectionFeedback"></p>
+</div>
+<div class="practice-card">
+<h3><span class="task-number">7</span>Mini check</h3>
+<p>Read one situation at a time, choose the most natural opening and check your answer.</p>
+<div class="slider-head"><span id="choiceProgress">1 / 8</span></div>
+<div class="choice-prompt" id="choicePrompt"></div>
+<div class="choice-options" id="choiceOptions"></div>
+<p class="mini" id="choiceFeedback"></p>
+<div class="pill-row"><button onclick="checkChoice()">Check</button><button class="secondary" onclick="prevChoice()">Back</button><button class="accent" onclick="nextChoice()">Next</button></div>
+</div>
+</div>
+<div class="section-three-bottom">
+<div class="sort-panel">
+<h3><span class="task-number">8</span>Function</h3>
+<p>Drag each phrase into the correct communicative function.</p>
+<div class="phrase-bank" id="bank"></div>
+<div class="columns compact-zones" id="zones"></div>
+<div class="pill-row" style="margin-top:16px"><button onclick="checkSort()">Check</button><button class="secondary" onclick="resetSort()">Reset</button></div>
+<p class="mini" id="sortFeedback"></p>
+</div>
+<div class="practice-card">
+<h3><span class="task-number">9</span>Situation</h3>
+<p>Choose a function. You have five seconds to begin your response with a suitable phrase.</p>
+<div class="function-buttons">
+<button onclick="setFunction('time')">Buying time</button>
+<button onclick="setFunction('disagree')">Soft disagreement</button>
+<button onclick="setFunction('redirect')">Redirecting</button>
+<button onclick="setFunction('direct')">Being direct</button>
+<button onclick="setFunction('wrap')">Wrapping up</button>
+</div>
+<div class="speed-inline"><span id="miniTimer">5</span><span>seconds</span></div>
+<div class="prompt-box smaller" id="functionBox">Choose a function to start.</div>
+<div class="pill-row"><button class="accent" onclick="startFunctionRound()">Start / next</button><button class="secondary" onclick="showFunctionPhrases()">Show phrases</button></div>
+<div class="answer-key hidden" id="functionPhrases"></div>
+</div>
+</div>
+</section>
+<section id="section4">
+<div class="section-kicker">Section 4</div>
+<h2>Opinion Battle</h2>
+<p class="section-intro">Use the expressions in a sustained conversation and respond directly to your partner’s ideas.</p>
+<div class="task">
+<h3><span class="task-number">10</span>Keep the debate going</h3>
+<p>Work in pairs. Choose a statement and discuss it for two minutes. Every response must begin with one of today’s expressions. Try to use at least four different expressions.</p>
+<div class="battle-layout">
+<div>
+<div class="slider-head"><span id="battleProgress">Topic 1 / 10</span></div>
+<div class="prompt-box battle-topic" id="battleTopic"></div>
+<div class="pill-row"><button class="secondary" onclick="prevBattle()">Previous topic</button><button class="accent" onclick="nextBattle()">Next topic</button></div>
+<div class="battle-timer-wrap">
+<div class="timer" id="battleTimer">02:00</div>
+<div class="pill-row"><button onclick="startBattleTimer()">Start timer</button><button class="secondary" onclick="resetBattleTimer()">Reset</button></div>
+</div>
+</div>
+<div class="checklist-card">
+<h3>Partner used...</h3>
+<label><input type="checkbox"/> Let me collect my thoughts...</label>
+<label><input type="checkbox"/> I don't have the exact answer off the top of my head...</label>
+<label><input type="checkbox"/> That's an interesting perspective to take, but...</label>
+<label><input type="checkbox"/> That doesn't quite align with how I see it...</label>
+<label><input type="checkbox"/> What's arguably more significant is...</label>
+<label><input type="checkbox"/> To be quite frank with you...</label>
+<label><input type="checkbox"/> So that's where I stand on that.</label>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>
+const phrases = [
+ {t:'Let me collect my thoughts on that for a moment...', f:'Buying time', m:'I need a moment to think.'},
+ {t:"I don't have the exact answer off the top of my head...", f:'Buying time', m:"I don't know the answer right now."},
+ {t:"That's an interesting perspective to take, but...", f:'Soft disagreement', m:'I understand your view, but I disagree.'},
+ {t:"That doesn't quite align with how I see it...", f:'Soft disagreement', m:'I politely disagree.'},
+ {t:"What's arguably more significant is...", f:'Redirecting', m:'I want to focus on a more important point.'},
+ {t:'To be quite frank with you...', f:'Being direct', m:"I'll be completely honest."},
+ {t:"So that's where I stand on that.", f:'Wrapping up', m:"That's my final opinion."}
+];
+const functions = ['Buying time','Soft disagreement','Redirecting','Being direct','Wrapping up'];
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+
+let selectedPhrase=null, selectedMeaning=null, connectionCount=0;
+const connectionMap=new Map();
+function makeConnections(){
+ const left=document.getElementById('connectPhrases'); const right=document.getElementById('connectMeanings');
+ left.innerHTML=''; right.innerHTML=''; selectedPhrase=null; selectedMeaning=null; connectionCount=0; connectionMap.clear();
+ shuffle(phrases).forEach((p)=>{
+   const b=document.createElement('button'); b.type='button'; b.className='connect-item'; b.textContent=p.t; b.dataset.answer=p.m; b.dataset.kind='phrase';
+   b.onclick=()=>selectConnectItem(b); left.appendChild(b);
+ });
+ shuffle(phrases.map(p=>p.m)).forEach((m)=>{
+   const b=document.createElement('button'); b.type='button'; b.className='connect-item'; b.textContent=m; b.dataset.value=m; b.dataset.kind='meaning';
+   b.onclick=()=>selectConnectItem(b); right.appendChild(b);
+ });
+}
+function selectConnectItem(el){
+ if(el.classList.contains('matched')) return;
+ if(el.dataset.kind==='phrase'){
+   document.querySelectorAll('#connectPhrases .selected').forEach(x=>x.classList.remove('selected'));
+   selectedPhrase=el; el.classList.add('selected');
+ }else{
+   document.querySelectorAll('#connectMeanings .selected').forEach(x=>x.classList.remove('selected'));
+   selectedMeaning=el; el.classList.add('selected');
+ }
+ if(selectedPhrase && selectedMeaning){
+   connectionCount++; const pair=String(connectionCount);
+   selectedPhrase.classList.remove('selected'); selectedMeaning.classList.remove('selected');
+   selectedPhrase.classList.add('matched'); selectedMeaning.classList.add('matched');
+   selectedPhrase.dataset.pair=pair; selectedMeaning.dataset.pair=pair;
+   connectionMap.set(selectedPhrase,selectedMeaning);
+   selectedPhrase=null; selectedMeaning=null;
+ }
+}
+function checkConnections(){
+ let ok=0;
+ connectionMap.forEach((meaning,phrase)=>{
+   phrase.classList.remove('correct','wrong'); meaning.classList.remove('correct','wrong');
+   const correct=phrase.dataset.answer===meaning.dataset.value;
+   phrase.classList.add(correct?'correct':'wrong'); meaning.classList.add(correct?'correct':'wrong'); if(correct)ok++;
+ });
+ const total=phrases.length;
+ document.getElementById('connectionFeedback').textContent=connectionMap.size<total?`Connect all ${total} pairs before checking.`:(ok===total?'Excellent. All pairs are correct.':`${ok} out of ${total} pairs are correct.`);
+}
+function resetConnections(){makeConnections();document.getElementById('connectionFeedback').textContent=''}
+
+function makeSort(){
+ const bank=document.getElementById('bank'); const zones=document.getElementById('zones'); bank.innerHTML=''; zones.innerHTML='';
+ shuffle(phrases).forEach((p,i)=>{const el=document.createElement('div'); el.className='phrase'; el.draggable=true; el.textContent=p.t; el.dataset.function=p.f; el.id='phrase'+i; addDrag(el); bank.appendChild(el)});
+ functions.forEach(f=>{const z=document.createElement('div'); z.className='dropzone'; z.dataset.function=f; z.innerHTML='<h4>'+f+'</h4><p class="mini">Drop here</p>'; addZone(z); zones.appendChild(z)}); addZone(bank);
+}
+function addDrag(el){el.addEventListener('dragstart',()=>el.classList.add('dragging'));el.addEventListener('dragend',()=>el.classList.remove('dragging'))}
+function addZone(z){z.addEventListener('dragover',e=>e.preventDefault());z.addEventListener('drop',e=>{e.preventDefault();const d=document.querySelector('.dragging'); if(d) z.appendChild(d);})}
+function checkSort(){let ok=0,total=phrases.length; document.querySelectorAll('.dropzone').forEach(z=>{z.classList.remove('correct','wrong'); let zoneOK=true; z.querySelectorAll('.phrase').forEach(p=>{if(p.dataset.function===z.dataset.function) ok++; else zoneOK=false}); if(z.querySelector('.phrase')) z.classList.add(zoneOK?'correct':'wrong')}); document.getElementById('sortFeedback').textContent = ok===total ? 'Excellent. All phrases are sorted correctly.' : ok+' out of '+total+' are in the right column.'}
+function resetSort(){makeSort();document.getElementById('sortFeedback').textContent=''}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,' ')}
+function checkGaps(){const answers=['in and of','quite frank','good enough'];let ok=0;[1,2,3].forEach((n,i)=>{const inp=document.getElementById('gap'+n);inp.style.borderColor='#d8c78f';if(norm(inp.value)===answers[i]){ok++;inp.style.borderColor='#60a867'}else{inp.style.borderColor='#e38670'}});document.getElementById('gapFeedback').textContent=ok===3?'Excellent. All answers are correct.':ok+' out of 3 are correct. Listen again and try once more.'}
+function clearGaps(){[1,2,3].forEach(n=>{const inp=document.getElementById('gap'+n);inp.value='';inp.style.borderColor='#d8c78f'});document.getElementById('gapFeedback').textContent=''}
+
+const prompts={
+ time:['Where do you see yourself in 10 years?','What is the capital of Kyrgyzstan?','Can you explain quantum computing in one sentence?','Why are you still single?'],
+ disagree:['Winter is the best season. Don’t you agree?','You are always on your phone. You are addicted.','Pineapple absolutely belongs on pizza.','Your generation is too dependent on technology.'],
+ redirect:['Did you let your fans down?','Was the online reaction the hardest part?','Did the campaign completely fail?','Why did you arrive late?'],
+ direct:['Did you like the movie I recommended?','Are you leaving already?','Do you actually remember me?','Did you mean to send that message to me?'],
+ wrap:['So, pineapple on pizza: yes or no?','Do you think reporters need rules?','Would you ban AI tools in assignments?','Is summer better than winter?']
+};
+const functionPhrases={time:phrases.filter(p=>p.f==='Buying time').map(p=>p.t),disagree:phrases.filter(p=>p.f==='Soft disagreement').map(p=>p.t),redirect:phrases.filter(p=>p.f==='Redirecting').map(p=>p.t),direct:phrases.filter(p=>p.f==='Being direct').map(p=>p.t),wrap:phrases.filter(p=>p.f==='Wrapping up').map(p=>p.t)};
+let currentFunction=null, miniInterval=null, miniCount=5;
+function setFunction(f){currentFunction=f;document.getElementById('functionPhrases').classList.add('hidden');document.getElementById('functionBox').textContent='Press Start / next.'}
+function startFunctionRound(){if(!currentFunction)return; clearInterval(miniInterval); const arr=prompts[currentFunction]; const box=document.getElementById('functionBox'); box.textContent=arr[Math.floor(Math.random()*arr.length)]; box.classList.remove('fade');void box.offsetWidth;box.classList.add('fade');miniCount=5;document.getElementById('miniTimer').textContent=miniCount;miniInterval=setInterval(()=>{miniCount--;document.getElementById('miniTimer').textContent=Math.max(miniCount,0);if(miniCount<=0)clearInterval(miniInterval)},1000)}
+function showFunctionPhrases(){if(!currentFunction)return;const div=document.getElementById('functionPhrases');div.innerHTML='<strong>Useful phrases:</strong><br>'+functionPhrases[currentFunction].map(x=>'• '+x).join('<br>');div.classList.remove('hidden')}
+
+const choices=[
+ {q:'Your friend says: “Winter is the best season. I don’t understand why anyone would prefer summer!”',o:["That's an interesting perspective to take, but...","So that's where I stand on that.","I don't have the exact answer off the top of my head..."],a:0},
+ {q:'A manager asks: “Where do you see yourself in ten years?”',o:["Let me collect my thoughts on that for a moment...","That doesn't quite align with how I see it...","So that's where I stand on that."],a:0},
+ {q:'Your friend says: “You are always on your phone. You are addicted.”',o:["What's arguably more significant is...","That doesn't quite align with how I see it...","I don't have the exact answer off the top of my head..."],a:1},
+ {q:'Someone asks: “What is the capital of Kyrgyzstan?” You genuinely cannot remember.',o:["To be quite frank with you...","I don't have the exact answer off the top of my head...","So that's where I stand on that."],a:1},
+ {q:'A reporter focuses only on what went wrong, although you achieved a lot.',o:["What's arguably more significant is...","Let me collect my thoughts on that for a moment...","So that's where I stand on that."],a:0},
+ {q:'Your friend asks whether you liked a movie that you strongly disliked.',o:["To be quite frank with you...","I don't have the exact answer off the top of my head...","What's arguably more significant is..."],a:0},
+ {q:'You have finished explaining your opinion on pineapple pizza.',o:["That doesn't quite align with how I see it...","So that's where I stand on that.","Let me collect my thoughts on that for a moment..."],a:1},
+ {q:'Someone gives an opinion you understand, but do not share.',o:["That's an interesting perspective to take, but...","I don't have the exact answer off the top of my head...","So that's where I stand on that."],a:0}
+];
+let choiceIndex=0;
+function renderChoice(){const c=choices[choiceIndex];document.getElementById('choiceProgress').textContent=`${choiceIndex+1} / ${choices.length}`;document.getElementById('choicePrompt').textContent=c.q;document.getElementById('choiceOptions').innerHTML=c.o.map((x,i)=>`<label class="option"><input type="radio" name="choice" value="${i}"><span>${x}</span></label>`).join('');document.getElementById('choiceFeedback').textContent=''}
+function checkChoice(){const picked=document.querySelector('input[name="choice"]:checked');if(!picked){document.getElementById('choiceFeedback').textContent='Choose an answer first.';return}const ok=Number(picked.value)===choices[choiceIndex].a;document.getElementById('choiceFeedback').textContent=ok?'Correct — this is the most natural opening.':'Not quite. Think about the speaker’s communicative goal.'}
+function nextChoice(){choiceIndex=(choiceIndex+1)%choices.length;renderChoice()}
+function prevChoice(){choiceIndex=(choiceIndex-1+choices.length)%choices.length;renderChoice()}
+
+const battleTopics=['AI will replace teachers.','Pineapple belongs on pizza.','University education should be free.','People should work only four days a week.','Social media does more harm than good.','Everyone should live abroad at least once.','Money can buy happiness.','Celebrities deserve their high salaries.','Books are better than films.','Remote work is better than office work.'];
+let battleIndex=0,battleSeconds=120,battleInterval=null;
+function renderBattle(){document.getElementById('battleProgress').textContent=`Topic ${battleIndex+1} / ${battleTopics.length}`;document.getElementById('battleTopic').textContent=battleTopics[battleIndex]}
+function nextBattle(){battleIndex=(battleIndex+1)%battleTopics.length;renderBattle()}
+function prevBattle(){battleIndex=(battleIndex-1+battleTopics.length)%battleTopics.length;renderBattle()}
+function formatTime(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function startBattleTimer(){clearInterval(battleInterval);battleInterval=setInterval(()=>{battleSeconds--;document.getElementById('battleTimer').textContent=formatTime(Math.max(battleSeconds,0));if(battleSeconds<=0)clearInterval(battleInterval)},1000)}
+function resetBattleTimer(){clearInterval(battleInterval);battleSeconds=120;document.getElementById('battleTimer').textContent='02:00'}
+
+makeConnections();makeSort();renderChoice();renderBattle();
+</script>
+</body>
+</html>
