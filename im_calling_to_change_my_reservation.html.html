@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Customer Service Challenge — Functional Language</title>
+<style>
+:root{
+  --ink:#17233e;
+  --muted:#667085;
+  --paper:#fbfaf7;
+  --card:#ffffff;
+  --line:#e7e4de;
+  --accent:#ff625f;
+  --accent-soft:#fff0ef;
+  --green:#5bb89c;
+  --green-soft:#e9f8ef;
+  --red:#e66b67;
+  --red-soft:#fff0ef;
+  --yellow:#ffe27a;
+  --shadow:0 10px 28px rgba(24,34,56,.07);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color:var(--ink);
+  background:var(--paper);
+  line-height:1.55;
+}
+main{max-width:1180px;margin:0 auto;padding:36px 24px 70px}
+h1,h2,h3{letter-spacing:-.025em}
+h1{font-size:clamp(42px,6vw,72px);line-height:.98;margin:0 0 14px}
+h2{font-size:clamp(30px,4vw,46px);margin:0 0 12px}
+h3{margin:0 0 10px}
+p{margin:8px 0}
+.hero{display:none}
+.eyebrow{
+  font-size:13px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+  color:var(--accent);
+}
+.sub{color:var(--muted);max-width:760px}
+.section{margin:0 0 50px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+.phrase-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.phrase{
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px;
+  background:#fff;
+}
+.phrase b{font-size:18px}
+.function{
+  display:none;
+  margin-top:9px;
+  padding:8px 10px;
+  border-radius:10px;
+  background:var(--accent-soft);
+  color:#8b3f3c;
+  font-size:14px;
+}
+.phrase.open .function{display:block}
+.reveal-btn,.choice-btn,.next-btn,.reset-btn{
+  border:0;
+  border-radius:11px;
+  padding:10px 14px;
+  font-weight:800;
+  cursor:pointer;
+}
+.reveal-btn{margin-top:10px;background:#eeece7;color:var(--ink)}
+.choice-btn{
+  width:100%;
+  text-align:left;
+  border:1px solid #dcd8d0;
+  background:#fff;
+  margin:8px 0;
+}
+.choice-btn:hover{border-color:#aaa59b}
+.choice-btn.correct{background:var(--green-soft);border-color:#71b99e}
+.choice-btn.wrong{background:var(--red-soft);border-color:#e88984}
+.next-btn{background:var(--ink);color:#fff;margin-top:12px}
+.reset-btn{background:#eceae5;color:var(--ink);margin-top:12px}
+.micro-situation{
+  border-top:1px dashed var(--line);
+  padding-top:14px;
+  margin-top:14px;
+}
+.tag{
+  display:inline-block;
+  padding:4px 9px;
+  border-radius:999px;
+  background:#f3f1ec;
+  font-size:12px;
+  font-weight:800;
+  margin:3px 4px 3px 0;
+}
+.game-shell{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:20px;
+  align-items:start;
+}
+.scene{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:24px;
+  box-shadow:var(--shadow);
+}
+.scene-title{font-size:26px;font-weight:900;margin-bottom:5px}
+.role{
+  display:inline-block;
+  background:var(--accent-soft);
+  color:#8a413d;
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:12px;
+}
+.message{
+  background:#f7f5f1;
+  border-radius:16px;
+  padding:15px 16px;
+  margin:12px 0 16px;
+}
+.feedback{
+  margin-top:10px;
+  font-weight:800;
+  min-height:24px;
+}
+.score{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:20px;
+}
+.score-big{font-size:46px;font-weight:900;line-height:1}
+.score small{color:var(--muted)}
+.language-box{
+  margin-top:16px;
+  border-top:1px solid var(--line);
+  padding-top:14px;
+}
+.language-box ul{margin:8px 0;padding-left:20px}
+.final{
+  display:none;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:24px;
+}
+.final.show{display:block}
+.result-good{color:#247a61;font-weight:900}
+.result-mid{color:#9a6d22;font-weight:900}
+.result-low{color:#9d4b47;font-weight:900}
+.discuss-box{
+  margin-top:18px;
+  padding:18px;
+  border-radius:18px;
+  background:#f6f4ef;
+}
+@media(max-width:900px){
+  .grid,.game-shell,.phrase-grid{grid-template-columns:1fr}
+}
+
+.match-layout{
+  display:grid;
+  grid-template-columns:minmax(240px,.65fr) minmax(0,1.35fr);
+  gap:20px;
+  align-items:start;
+}
+.phrase-bank{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:var(--card);
+}
+.drag-phrase{
+  border:1px solid #d8d4cc;
+  background:#f6f4ef;
+  color:var(--ink);
+  border-radius:12px;
+  padding:10px 12px;
+  text-align:left;
+  font-weight:800;
+  cursor:grab;
+}
+.drag-phrase.selected{
+  outline:3px solid var(--yellow);
+  background:#fff9dc;
+}
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.drop-category{
+  min-height:128px;
+  border:2px dashed #d4d0c8;
+  border-radius:16px;
+  padding:14px;
+  background:#fff;
+}
+.drop-category.over{border-color:var(--green);background:var(--green-soft)}
+.drop-category.correct{border-color:#67b681;background:#f1fbf6}
+.drop-category.wrong{border-color:#e88984;background:#fff5f4}
+.drop-category h3{font-size:16px;margin:0 0 9px}
+.drop-items{display:flex;flex-wrap:wrap;gap:7px}
+.drop-items .drag-phrase{width:auto;cursor:grab}
+.mini-options{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.mini-choice{
+  border:1px solid #d8d4cc;
+  border-radius:11px;
+  padding:9px 11px;
+  background:#fff;
+  color:var(--ink);
+  font-weight:800;
+  cursor:pointer;
+}
+.mini-choice.correct{background:var(--green-soft);border-color:#71b99e}
+.mini-choice.wrong{background:var(--red-soft);border-color:#e88984}
+@media(max-width:900px){
+  .match-layout,.category-grid{grid-template-columns:1fr}
+}
+
+
+/* Better drag support */
+.drag-phrase{
+  touch-action:none;
+}
+.drag-phrase.dragging{
+  opacity:.45;
+}
+.drag-ghost{
+  position:fixed;
+  z-index:9999;
+  pointer-events:none;
+  padding:10px 12px;
+  border:1px solid #d8d4cc;
+  border-radius:12px;
+  background:#fff;
+  font-weight:800;
+  box-shadow:0 10px 24px rgba(0,0,0,.14);
+  transform:translate(-50%,-50%);
+}
+
+/* Scenario selector */
+.story-browser{
+  margin:18px 0 22px;
+}
+.story-categories{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:12px;
+}
+.category-chip{
+  border:1px solid #d8d4cc;
+  background:#fff;
+  color:var(--ink);
+  border-radius:999px;
+  padding:8px 11px;
+  font-weight:800;
+  cursor:pointer;
+}
+.category-chip.active{
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
+}
+.story-list{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.story-card{
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  border-radius:14px;
+  padding:12px;
+  text-align:left;
+  cursor:pointer;
+}
+.story-card:hover{border-color:#aaa59b}
+.story-card.active{
+  border-color:var(--accent);
+  background:var(--accent-soft);
+}
+.story-card small{
+  display:block;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+.story-card b{
+  display:block;
+}
+.story-stage-label{
+  display:inline-block;
+  margin-bottom:10px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+.story-note{
+  margin:10px 0 14px;
+  color:var(--muted);
+  font-size:14px;
+}
+.final h3{margin-top:18px}
+@media(max-width:900px){
+  .story-list{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .story-list{grid-template-columns:1fr}
+}
+
+
+.lesson-title-bar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(251,250,247,.96);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 0;
+  margin-bottom:30px;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:-.025em;
+}
+.task-instruction{
+  margin:8px 0 16px;
+  padding:12px 14px;
+  border-left:4px solid var(--accent);
+  background:#fff7f6;
+  border-radius:10px;
+  font-weight:700;
+}
+.task-instruction b{font-weight:900}
+.story-step-box{
+  margin-top:14px;
+}
+.story-step-box .message{
+  margin-bottom:10px;
+}
+
+</style>
+</head>
+<body>
+<main>
+  <div class="lesson-title-bar">I’m calling to change my reservation</div>
+
+  
+<section class="section">
+  <div class="eyebrow">Task 1</div>
+  <h2>Match the language to its function</h2>
+  <p class="sub">Sort the phrases into the correct categories. Then check your answers.</p>
+
+  <div class="match-layout">
+    <div>
+      <h3>Functional language</h3>
+      <div class="phrase-bank" id="phraseBank">
+        <button class="drag-phrase" draggable="true" data-value="could">Could you…?</button>
+        <button class="drag-phrase" draggable="true" data-value="possible">Would it be possible to…?</button>
+        <button class="drag-phrase" draggable="true" data-value="afraid">I’m afraid…</button>
+        <button class="drag-phrase" draggable="true" data-value="calling">I’m calling to…</button>
+        <button class="drag-phrase" draggable="true" data-value="notsure">I’m not sure if…</button>
+        <button class="drag-phrase" draggable="true" data-value="letme">Let me…</button>
+        <button class="drag-phrase" draggable="true" data-value="anything">Is there anything…?</button>
+      </div>
+    </div>
+
+    <div class="category-grid">
+      <div class="drop-category" data-accept="could,possible">
+        <h3>Making a request</h3>
+        <div class="drop-items"></div>
+      </div>
+      <div class="drop-category" data-accept="afraid">
+        <h3>Explaining a problem / bad news politely</h3>
+        <div class="drop-items"></div>
+      </div>
+      <div class="drop-category" data-accept="calling">
+        <h3>Explaining why you are calling</h3>
+        <div class="drop-items"></div>
+      </div>
+      <div class="drop-category" data-accept="notsure">
+        <h3>Showing uncertainty</h3>
+        <div class="drop-items"></div>
+      </div>
+      <div class="drop-category" data-accept="letme">
+        <h3>Offering to do / check something</h3>
+        <div class="drop-items"></div>
+      </div>
+      <div class="drop-category" data-accept="anything">
+        <h3>Offering help / asking about another solution</h3>
+        <div class="drop-items"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="next-btn" id="checkMatching">Check</button>
+  <button class="reset-btn" id="resetMatching">Reset</button>
+  <div class="feedback" id="matchingFeedback"></div>
+
+
+  <div class="card" style="margin-top:22px">
+    <h3>Now use the phrases</h3>
+    <p class="sub">For each situation, discuss all three functional-language options and make one complete sentence aloud with each phrase. Then choose which option fits the situation best.</p>
+
+    <div class="micro-situation interactive-situation" data-correct="possible">
+      <p><b>1. You want the hotel to move your check-out from 10 a.m. to 12 p.m.</b></p>
+      <div class="mini-options">
+        <button class="mini-choice" data-value="afraid">I’m afraid…</button>
+        <button class="mini-choice" data-value="possible">Would it be possible to…?</button>
+        <button class="mini-choice" data-value="letme">Let me…</button>
+      </div>
+    </div>
+
+    <div class="micro-situation interactive-situation" data-correct="calling">
+      <p><b>2. You phone the hotel because you want to change your reservation.</b></p>
+      <div class="mini-options">
+        <button class="mini-choice" data-value="calling">I’m calling to…</button>
+        <button class="mini-choice" data-value="anything">Is there anything…?</button>
+        <button class="mini-choice" data-value="notsure">I’m not sure if…</button>
+      </div>
+    </div>
+
+    <div class="micro-situation interactive-situation" data-correct="notsure">
+      <p><b>3. You think breakfast ends at 10 a.m., but you are not certain.</b></p>
+      <div class="mini-options">
+        <button class="mini-choice" data-value="could">Could you…?</button>
+        <button class="mini-choice" data-value="notsure">I’m not sure if…</button>
+        <button class="mini-choice" data-value="calling">I’m calling to…</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<section class="section">
+  <div class="eyebrow">Task 2 · customer-service challenge</div>
+  <h2>Choose a story and solve it</h2>
+  <div class="task-instruction"><b>Choose</b> one story, <b>discuss</b> the three responses with your partner, <b>agree</b> on the best option and <b>justify</b> your choice. The story continues after you choose the strongest response.</div>
+
+  <div class="story-browser">
+    <div class="story-categories" id="storyCategories"></div>
+    <div class="story-list" id="storyList"></div>
+  </div>
+
+  <div class="game-shell">
+    <div>
+      <div class="scene" id="sceneBox">
+        <div class="role" id="roleLabel">YOU ARE THE RECEPTIONIST</div>
+        <div class="scene-title" id="sceneTitle"></div>
+        <div class="story-step-box"><div class="story-stage-label" id="stageLabel">Problem</div>
+        <div class="message" id="sceneMessage"></div>
+        <p class="story-note"><b>Discuss</b> the three responses, <b>choose</b> the most professional and useful one, and <b>explain why</b>.</p>
+        <div id="choices"></div>
+        <div class="feedback" id="feedback" aria-live="polite"></div>
+        <button class="next-btn" id="nextBtn" style="display:none">Continuation of the story →</button></div>
+      </div>
+
+      <div class="final" id="finalBox">
+        <div class="scene-title" id="finalTitle">What happened</div>
+        <div class="message" id="finalOutcome"></div>
+
+        <div class="discuss-box">
+          <h3>Discuss</h3>
+          <ol id="discussionQuestions"></ol>
+        </div>
+
+        <button class="reset-btn" id="restartBtn">Play this story again</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+/* ---------- Task 1: real drag + tap fallback ---------- */
+let selectedPhrase = null;
+let draggedPhrase = null;
+let pointerGhost = null;
+let pointerPhrase = null;
+
+function movePhraseToCategory(phrase, category){
+  if(!phrase || !category) return;
+  category.querySelector('.drop-items').appendChild(phrase);
+  phrase.classList.remove('selected','dragging');
+  selectedPhrase = null;
+}
+
+document.querySelectorAll('.drag-phrase').forEach(phrase=>{
+  phrase.addEventListener('dragstart',()=>{
+    draggedPhrase = phrase;
+    phrase.classList.add('dragging');
+  });
+  phrase.addEventListener('dragend',()=>{
+    draggedPhrase = null;
+    phrase.classList.remove('dragging');
+  });
+
+  phrase.addEventListener('click',()=>{
+    document.querySelectorAll('.drag-phrase').forEach(p=>p.classList.remove('selected'));
+    phrase.classList.add('selected');
+    selectedPhrase = phrase;
+  });
+
+  /* Pointer-drag fallback for touch devices / iPad */
+  phrase.addEventListener('pointerdown',e=>{
+    if(e.pointerType === 'mouse') return;
+    pointerPhrase = phrase;
+    phrase.setPointerCapture(e.pointerId);
+    pointerGhost = document.createElement('div');
+    pointerGhost.className='drag-ghost';
+    pointerGhost.textContent=phrase.textContent;
+    document.body.appendChild(pointerGhost);
+    pointerGhost.style.left=e.clientX+'px';
+    pointerGhost.style.top=e.clientY+'px';
+  });
+  phrase.addEventListener('pointermove',e=>{
+    if(!pointerGhost || pointerPhrase!==phrase) return;
+    pointerGhost.style.left=e.clientX+'px';
+    pointerGhost.style.top=e.clientY+'px';
+  });
+  phrase.addEventListener('pointerup',e=>{
+    if(!pointerGhost || pointerPhrase!==phrase) return;
+    const target=document.elementFromPoint(e.clientX,e.clientY);
+    const category=target && target.closest('.drop-category');
+    if(category) movePhraseToCategory(phrase,category);
+    pointerGhost.remove();
+    pointerGhost=null;
+    pointerPhrase=null;
+  });
+});
+
+document.querySelectorAll('.drop-category').forEach(category=>{
+  category.addEventListener('dragover',e=>{
+    e.preventDefault();
+    category.classList.add('over');
+  });
+  category.addEventListener('dragleave',()=>category.classList.remove('over'));
+  category.addEventListener('drop',e=>{
+    e.preventDefault();
+    category.classList.remove('over');
+    if(draggedPhrase) movePhraseToCategory(draggedPhrase,category);
+  });
+  category.addEventListener('click',e=>{
+    if(e.target.closest('.drag-phrase')) return;
+    if(selectedPhrase) movePhraseToCategory(selectedPhrase,category);
+  });
+});
+
+document.getElementById('checkMatching').addEventListener('click',()=>{
+  let correct=0;
+  document.querySelectorAll('.drop-category').forEach(category=>{
+    category.classList.remove('correct','wrong');
+    const accepted=category.dataset.accept.split(',');
+    const placed=[...category.querySelectorAll('.drag-phrase')];
+    const allCorrect = placed.length > 0 && placed.every(p=>accepted.includes(p.dataset.value));
+    const allNeededPresent = accepted.every(value=>placed.some(p=>p.dataset.value===value));
+    if(allCorrect && allNeededPresent){
+      category.classList.add('correct');
+      correct += placed.length;
+    } else {
+      category.classList.add('wrong');
+    }
+  });
+  const bankLeft=document.querySelectorAll('#phraseBank .drag-phrase').length;
+  document.getElementById('matchingFeedback').textContent =
+    bankLeft===0 && correct===7
+      ? 'Perfect — all 7 phrases are in the correct categories.'
+      : 'Some phrases are in the wrong place. Move them and check again.';
+});
+
+document.getElementById('resetMatching').addEventListener('click',()=>{
+  const bank=document.getElementById('phraseBank');
+  document.querySelectorAll('.drag-phrase').forEach(p=>{
+    bank.appendChild(p);
+    p.classList.remove('selected','dragging');
+  });
+  document.querySelectorAll('.drop-category').forEach(c=>c.classList.remove('correct','wrong','over'));
+  document.getElementById('matchingFeedback').textContent='';
+  selectedPhrase=null;
+});
+
+
+
+document.querySelectorAll('.interactive-situation').forEach(box=>{
+  const correct=box.dataset.correct;
+  box.querySelectorAll('.mini-choice').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      box.querySelectorAll('.mini-choice').forEach(b=>b.classList.remove('correct','wrong'));
+      const ok=btn.dataset.value===correct;
+      btn.classList.add(ok?'correct':'wrong');
+    });
+  });
+});
+
+/* ---------- Task 2: 15 two-step stories ---------- */
+const stories = [{"id": "missing-reservation", "category": "Hotel & accommodation", "title": "The reservation disappeared", "role": "You are the hotel receptionist", "problem": "It is 10:15 p.m. A tired guest arrives with a confirmation email, but the reservation is not in the hotel system. The hotel is almost full.", "problem_options": [["A. “I can see your email, so we must have made a mistake. I’ll give you the best room we have.”", false, "Plausible, but you promise a specific solution before checking what is actually available."], ["B. “I’m sorry about this. Let me check the confirmation number and our booking history first. If the reservation was removed on our side, I’ll look at the rooms we still have.”", true, "Best choice: you acknowledge the problem, verify the facts and avoid promising a solution before checking availability."], ["C. “If the booking is not in our system, I can create a new one for tonight. Could you pay again now and contact the booking site tomorrow?”", false, "It solves tonight’s problem quickly, but it shifts the cost and responsibility to the guest before you know what happened."]], "continuation": "You find that the hotel accidentally cancelled the reservation. There are no double rooms left. One single room and one suite are available.", "continuation_options": [["A. “The suite is available, but it normally costs more. I can ask my manager whether we can reduce the price.”", false, "This is better than doing nothing, but the guest should not have to negotiate extra payment for the hotel’s error."], ["B. “We can put you in the single room tonight and move you tomorrow. It is the only practical option.”", false, "It may be practical for the hotel, but it ignores the fact that a better room is available and the hotel caused the problem."], ["C. “I’m afraid the double rooms are full. We can offer the suite at no extra cost tonight, or a single room with a refund for the difference. Which option would work better for you?”", true, "Best choice: you take responsibility and offer two fair options without making the guest absorb the hotel’s mistake."]], "outcome": "The hotel gives the guest the suite at the original price. The guest is still annoyed about the mistake, but feels the receptionist handled it fairly.", "questions": ["Have you ever arrived somewhere and discovered that a booking had gone wrong? What happened?", "Which matters more after a company makes a mistake: an apology, a quick solution or compensation?", "Would you leave a negative review even if the problem was eventually solved well?"]}, {"id": "noisy-room", "category": "Hotel & accommodation", "title": "The room is too noisy", "role": "You are the hotel receptionist", "problem": "A guest comes downstairs at midnight. Their room is next to a wedding party and they say they cannot sleep. The hotel has only one quiet room left, but it is a smaller room.", "problem_options": [["A. “The wedding should finish around 1 a.m. Would it be possible for you to wait another hour?”", false, "It is polite, but it prioritizes convenience for the hotel over the guest’s need to sleep."], ["B. “We have one quiet room, but it is smaller. I can move you now if you want.”", false, "This may work, but it skips the apology and does not explain whether the price or conditions will change."], ["C. “I’m sorry the noise is disturbing you. Let me check whether we can move you. The only quiet room is smaller, so I’d like to explain the options before you decide.”", true, "Best choice: you acknowledge the complaint, investigate and prepare the guest for a trade-off."]], "continuation": "The guest agrees to move, but then asks whether they will receive any compensation because they booked a larger room.", "continuation_options": [["A. “That’s a fair question. I can move you now and reduce tonight’s rate because the replacement room is smaller. Let me confirm the amount with my manager.”", true, "Best choice: you recognize the downgrade and offer a proportionate remedy while being transparent about what you need to confirm."], ["B. “We are already giving you the quiet room, so normally there would not be compensation as well.”", false, "The hotel is solving one problem by giving the guest a worse room. This response sounds defensive."], ["C. “I can’t promise anything, but you can email customer service after your stay.”", false, "This delays a problem that can probably be addressed now and makes the guest do extra work."]], "outcome": "The guest moves to the quiet room and receives a partial refund for the difference in room category.", "questions": ["What kinds of hotel problems are serious enough to justify a refund or compensation?", "How should staff respond when the customer is angry but has a valid reason?", "Is it better to solve a problem immediately or offer compensation later?"]}, {"id": "late-checkout", "category": "Hotel & accommodation", "title": "The late check-out request", "role": "You are the hotel receptionist", "problem": "A guest asks to check out at 2 p.m. instead of 11 a.m. Their flight is in the evening. The hotel is fully booked, and housekeeping needs the room.", "problem_options": [["A. “I’m afraid 2 p.m. probably won’t be possible because the hotel is full. Let me see whether we can offer 12 p.m. and store your luggage afterwards.”", true, "Best choice: you explain the constraint, check what flexibility exists and offer an alternative."], ["B. “We are fully booked, so late check-out is not available today.”", false, "Clear, but too final. There may still be a smaller compromise."], ["C. “Would it be possible for you to check out at 11 and wait in the lobby until your flight?”", false, "The alternative is weak and does not address luggage, comfort or flexibility."]], "continuation": "The guest says they have an online meeting at 12:30 and need a private place for one hour.", "continuation_options": [["A. “I understand, but check-out time still has to be 11.”", false, "True, but it ignores the guest’s underlying problem."], ["B. “We can’t keep the room until 2, but let me check whether a small meeting room is free from 12 to 1:30.”", true, "Best choice: you identify the real need — privacy for the meeting — and solve that instead of focusing only on the room."], ["C. “You could take the meeting in the lobby if you use headphones.”", false, "This is practical but does not meet the guest’s request for privacy."]], "outcome": "The guest checks out at 12, leaves their luggage with reception and uses a small meeting room for the call.", "questions": ["What is the difference between refusing a request and solving the real problem behind it?", "Have you ever needed a business to be flexible with a rule?", "Do you think good customer service means saying yes whenever possible?"]}, {"id": "overbooking", "category": "Hotel & accommodation", "title": "The hotel is overbooked", "role": "You are the duty manager", "problem": "At 11 p.m., a couple arrives with a valid booking. The hotel has accidentally sold more rooms than it has available. There are no rooms left.", "problem_options": [["A. “I’m afraid we are overbooked. There is another hotel nearby that may still have rooms.”", false, "You identify an alternative, but you leave all the work and cost to the guests."], ["B. “I’m very sorry. We made an overbooking error. Let me arrange and pay for a comparable room at a nearby hotel, including transport there.”", true, "Best choice: you take responsibility, provide a concrete remedy and avoid making the guests solve the hotel’s mistake."], ["C. “The system accepted too many bookings. Would it be possible for you to contact the booking platform for a refund?”", false, "This shifts responsibility to a third party even though the hotel caused the problem."]], "continuation": "The nearby hotel has rooms, but it is a lower category and ten minutes away by taxi.", "continuation_options": [["A. “It is only ten minutes away, and at least they have a room. I can book it for you now.”", false, "It solves the immediate need but does not address the lower standard."], ["B. “We can refund you in full, but you would need to find another hotel yourself.”", false, "A full refund may be fair financially, but at 11 p.m. it leaves the guests with a major practical problem."], ["C. “The alternative hotel is lower category, so we’ll cover the taxi and refund part of your original rate. I can also arrange breakfast there.”", true, "Best choice: the solution is not equivalent, so you compensate for the downgrade."]], "outcome": "The hotel arranges the alternative accommodation, transport and a partial refund. The guests are disappointed but not stranded.", "questions": ["Is overbooking ever acceptable in hotels or airlines?", "Would you prefer a full refund or a replacement service?", "Can excellent service after a serious mistake rebuild trust?"]}, {"id": "airbnb-lockout", "category": "Hotel & accommodation", "title": "Locked out of the apartment", "role": "You are the accommodation host", "problem": "A guest messages at 1 a.m. saying the door code is not working. You are twenty minutes away and there is a spare key in a lockbox downstairs.", "problem_options": [["A. “The code worked earlier today. Could you try it again carefully and send me a video if it still fails?”", false, "Troubleshooting is reasonable, but at 1 a.m. there is already a faster backup solution."], ["B. “I can come over, but it will take about twenty minutes.”", false, "Helpful, but slower than using the available spare key."], ["C. “I’m sorry you’re locked out. Let me send you the lockbox instructions now, and I’ll stay on the phone while you try the spare key.”", true, "Best choice: it gives the fastest practical solution while keeping support available."]], "continuation": "The spare key opens the door, but the guest is worried the electronic lock may fail again tomorrow.", "continuation_options": [["A. “Keep the spare key for tonight. I’ll arrange for the lock to be checked tomorrow morning and message you before anyone comes to the apartment.”", true, "Best choice: you solve the immediate issue and create a clear follow-up plan."], ["B. “Now that you have the spare key, the lock should not be a problem anymore.”", false, "The guest still has a valid concern and the underlying fault remains."], ["C. “I’m not sure when someone can repair it. You can leave the key in the lockbox whenever you go out.”", false, "This creates an insecure and inconvenient workaround instead of addressing the problem."]], "outcome": "The guest gets inside quickly, keeps the spare key overnight and the host arranges a repair the next morning.", "questions": ["What problems are more stressful in an Airbnb than in a hotel?", "How available should a host be outside normal hours?", "Have you ever had to solve an accommodation problem late at night?"]}, {"id": "cancelled-flight", "category": "Travel & transport", "title": "The cancelled flight", "role": "You are an airline service agent", "problem": "A passenger’s evening flight is cancelled. The next direct flight is tomorrow afternoon, but there is an indirect flight tonight with a short connection.", "problem_options": [["A. “I can offer two options: the direct flight tomorrow, or an indirect flight tonight with a tight connection. Let me explain the risks and what the airline can cover before you choose.”", true, "Best choice: you give real options without pushing the passenger into one before explaining the trade-offs."], ["B. “The fastest option is the indirect flight tonight, so I recommend that one.”", false, "It may be fastest, but the short connection adds risk and the passenger needs the full picture."], ["C. “I’m afraid the next direct flight is tomorrow afternoon. I can rebook you on that now.”", false, "Accurate, but incomplete because another viable option exists."]], "continuation": "The passenger has an important meeting tomorrow morning and says missing it could cost them a client.", "continuation_options": [["A. “Then you should definitely take the indirect flight tonight.”", false, "Too strong. The agent should not hide the risk or make the decision for the passenger."], ["B. “Given the meeting, the indirect flight may be worth considering, but the connection is only forty minutes. I can also check flights to a nearby airport tonight.”", true, "Best choice: you respond to the passenger’s priority and widen the search rather than pretending one option is risk-free."], ["C. “Unfortunately the airline cannot guarantee that you will make your meeting.”", false, "True but unhelpful. The passenger needs options, not only a disclaimer."]], "outcome": "The agent finds a flight to a nearby airport that night. The passenger accepts a longer transfer in exchange for arriving before the meeting.", "questions": ["How should staff communicate risk when no option is perfect?", "Would you choose the safer later flight or the riskier earlier one?", "Have you ever had travel plans disrupted at the last minute?"]}, {"id": "lost-luggage", "category": "Travel & transport", "title": "The missing suitcase", "role": "You are the baggage-service agent", "problem": "A passenger’s suitcase did not arrive. They are attending a wedding tomorrow and all their formal clothes are in the bag.", "problem_options": [["A. “Most delayed bags arrive within 24 hours, so it will probably be here tomorrow.”", false, "Reassuring, but too uncertain when the passenger has an important event."], ["B. “I’m sorry. Let me trace the bag first and check the expected delivery time. I’ll also explain what essential purchases the airline may reimburse.”", true, "Best choice: you investigate and address the passenger’s immediate practical need."], ["C. “You can file the report online and keep checking the tracking page.”", false, "That may be part of the process, but it offers little support in the moment."]], "continuation": "The tracking system shows the bag is in another city and is unlikely to arrive before the wedding.", "continuation_options": [["A. “I’m afraid there’s nothing else we can do until the bag arrives.”", false, "The airline may not be able to move the bag faster, but it can still help with expenses and clear information."], ["B. “You should buy what you need and ask for reimbursement later.”", false, "This is directionally useful but too vague; the passenger needs limits and documentation rules."], ["C. “It probably won’t arrive in time. I can show you the reimbursement limits now so you know what you can buy tonight and what receipts to keep.”", true, "Best choice: you are transparent and give actionable information."]], "outcome": "The passenger buys essential clothes within the airline’s allowance and receives the suitcase the following evening.", "questions": ["Would you trust a company more if staff were very honest about bad news?", "Have you ever lost luggage or had something important delayed?", "What information reduces stress most in a situation you cannot control?"]}, {"id": "train-delay", "category": "Travel & transport", "title": "The missed connection", "role": "You are the railway information agent", "problem": "A train delay means a passenger will miss the last connection to their destination. The next train is tomorrow morning.", "problem_options": [["A. “I’m afraid the next connection is tomorrow morning.”", false, "Correct, but it stops at the problem instead of looking for solutions."], ["B. “You could try a taxi from the next station, but it will be expensive.”", false, "It may be useful later, but first you should check what the railway can officially provide."], ["C. “Let me check whether your ticket allows an alternative route tonight and whether the railway can arrange accommodation if it doesn’t.”", true, "Best choice: you investigate both transport and fallback options."]], "continuation": "There is no alternative train tonight. The railway can provide a basic hotel near the station, but the passenger wants to continue by taxi because they have work early tomorrow.", "continuation_options": [["A. “The hotel is covered, but the taxi may not be. Before you decide, let me check whether there is any reimbursement option for onward travel.”", true, "Best choice: you give clear information and check before the passenger spends money."], ["B. “The hotel is free, so I recommend staying there.”", false, "It is sensible but ignores the passenger’s reason for wanting to continue."], ["C. “If you prefer a taxi, that is your choice.”", false, "Technically true but not helpful enough when reimbursement rules may matter."]], "outcome": "The agent confirms partial taxi reimbursement. The passenger chooses the taxi and keeps the receipt.", "questions": ["How much should transport companies do when delays cause missed connections?", "Would you choose free accommodation or pay to continue your journey?", "Have you ever been stranded because of a delay?"]}, {"id": "restaurant-booking", "category": "Restaurants & bookings", "title": "The missing table reservation", "role": "You are the restaurant manager", "problem": "A couple arrives for an anniversary dinner. They show a booking confirmation, but the restaurant has no record of it and is currently full.", "problem_options": [["A. “I’m sorry. Let me check the booking platform and our cancellations. If we can’t seat you immediately, I’ll explain the quickest alternative.”", true, "Best choice: you verify the booking and avoid making promises before knowing what is possible."], ["B. “We are full, but there is usually a table free within forty-five minutes.”", false, "This may be true, but it does not acknowledge or investigate the booking problem."], ["C. “The booking platform sometimes makes mistakes. Could you contact them while you wait?”", false, "This shifts responsibility to the customer during an important occasion."]], "continuation": "You confirm that the booking platform sent the reservation correctly, but the restaurant failed to enter it. A table may become free in 25 minutes.", "continuation_options": [["A. “A table should be free in 25 minutes. Would it be possible for you to wait at the bar?”", false, "Polite, but it does not acknowledge that the restaurant caused the problem."], ["B. “This was our mistake. We can seat you in about 25 minutes, offer you drinks while you wait, and take care of dessert tonight.”", true, "Best choice: you own the mistake, give a realistic wait time and make a proportionate gesture."], ["C. “We can fit you in, but the table will only be available for 90 minutes.”", false, "This imposes another restriction after the restaurant has already made a mistake."]], "outcome": "The couple waits at the bar, is seated after 20 minutes and receives complimentary dessert.", "questions": ["How should a business handle mistakes on special occasions?", "Is a sincere apology enough if the practical problem is fixed?", "What makes a complaint feel reasonable rather than demanding?"]}, {"id": "allergy-order", "category": "Restaurants & bookings", "title": "The allergy mistake", "role": "You are the restaurant supervisor", "problem": "A customer says they told the server about a nut allergy, but their dish appears to contain nuts. They have not eaten it yet.", "problem_options": [["A. “I’m sure the kitchen would not add nuts if the allergy was noted, but I’ll double-check.”", false, "Reassuring language is risky here because you do not yet know whether the dish is safe."], ["B. “Please don’t eat the dish. I’m very sorry. Let me remove it, confirm exactly what happened with the kitchen, and arrange a safe replacement.”", true, "Best choice: you prioritize safety immediately, acknowledge the issue and investigate."], ["C. “Would it be possible for us to remake the dish without nuts?”", false, "A remake may be appropriate, but first you must stop the customer from eating and verify the safety issue."]], "continuation": "The kitchen confirms the dish was prepared incorrectly. The customer is upset and says they no longer trust the kitchen.", "continuation_options": [["A. “We can prepare a fresh dish in a separate pan and I’ll personally check it.”", false, "This may be safe, but the customer has already said they no longer trust the kitchen; pushing another dish is not ideal."], ["B. “I’m afraid mistakes can happen during busy service, but we caught it before you ate anything.”", false, "This minimizes a serious safety failure."], ["C. “I understand. We made a serious mistake. You do not need to order another dish. I’ll remove this from the bill and explain what happened to the manager immediately.”", true, "Best choice: you do not pressure the customer to keep eating and you recognize the seriousness of the error."]], "outcome": "The customer decides not to eat another meal. The restaurant removes the dish from the bill and the manager follows up personally.", "questions": ["How should staff respond differently when a mistake involves safety rather than inconvenience?", "Would you trust the restaurant enough to order another dish?", "When does an apology need to be followed by a concrete action?"]}, {"id": "birthday-cake", "category": "Restaurants & bookings", "title": "The missing birthday cake", "role": "You are the café manager", "problem": "A family pre-ordered a birthday cake for 6 p.m. They arrive and the cake was never made. The child’s birthday party starts in 30 minutes.", "problem_options": [["A. “We can make the cake, but it will take at least ninety minutes.”", false, "Accurate but not enough; the party starts in 30 minutes and alternatives should be explored."], ["B. “I can refund the cake now.”", false, "A refund is necessary, but it does not solve the immediate birthday problem."], ["C. “I’m very sorry. Let me check what we can prepare immediately and whether a nearby partner bakery can help. I’ll give you realistic options within five minutes.”", true, "Best choice: you move quickly, keep expectations realistic and look beyond one solution."]], "continuation": "The café can decorate a smaller ready-made cake in 15 minutes, or a nearby bakery has a larger cake but cannot personalize it.", "continuation_options": [["A. “We have two quick options: a smaller personalized cake here in 15 minutes, or a larger ready-made cake from the bakery. We’ll cover the cost either way.”", true, "Best choice: you present clear trade-offs and take financial responsibility."], ["B. “I think the smaller personalized cake would be better for a birthday.”", false, "It may be a good suggestion, but you should let the family decide which trade-off matters more."], ["C. “The larger cake is available nearby if someone can collect it.”", false, "This creates extra work for the family even though the café made the mistake."]], "outcome": "The family chooses the smaller personalized cake. The café refunds the original order and provides the replacement free of charge.", "questions": ["How should staff handle a mistake when there is almost no time to fix it?", "Have you ever had an important order fail at the last minute?", "What kind of compensation feels meaningful when the occasion itself cannot be repeated?"]}, {"id": "salon-delay", "category": "Services & appointments", "title": "The salon is running late", "role": "You are the salon receptionist", "problem": "A client has a 3 p.m. appointment before an important event at 5 p.m. The stylist is running 45 minutes late.", "problem_options": [["A. “I’m sorry for the delay. Before you wait, let me check whether another stylist can see you sooner and explain the timing of both options.”", true, "Best choice: you recognize that time matters and offer informed alternatives."], ["B. “The stylist should be ready in about 45 minutes. Would you like to wait?”", false, "This gives information but does not explore whether another solution exists."], ["C. “We can reschedule you for another day and waive the cancellation fee.”", false, "The customer needs the service today, so this is not a useful first option."]], "continuation": "Another stylist can start in 15 minutes, but they have never worked with this client before. The original stylist knows exactly what the client wants.", "continuation_options": [["A. “I recommend the other stylist because your event is soon.”", false, "Reasonable advice, but the client should understand the trade-off and decide."], ["B. “You can wait 45 minutes for your usual stylist, or another stylist can start in 15. If you choose the second option, I can ask your usual stylist to explain your preferences first.”", true, "Best choice: you reduce the risk of changing stylist while preserving the customer’s choice."], ["C. “The other stylist is experienced, so it should be fine.”", false, "Too dismissive of the client’s concern about consistency."]], "outcome": "The client chooses the second stylist after a quick handover and leaves in time for the event.", "questions": ["How long would you wait before asking for an alternative?", "Have you ever had an appointment delayed when timing really mattered?", "Is a discount appropriate for a long delay if the service is still good?"]}, {"id": "clinic-appointment", "category": "Services & appointments", "title": "The clinic booked the wrong time", "role": "You are the clinic receptionist", "problem": "A patient arrives at 9 a.m. with an appointment confirmation. The clinic system shows 11 a.m. The patient says they cannot stay until then because of work.", "problem_options": [["A. “Our system says 11 a.m., so that is the appointment time we have to follow.”", false, "Too rigid when the patient has written confirmation showing something different."], ["B. “I’m sorry about the confusion. Let me check the confirmation and today’s schedule before we decide what is possible.”", true, "Best choice: you verify both the patient’s evidence and the clinic’s capacity before assigning blame."], ["C. “Would it be possible for you to come back at 11?”", false, "Polite, but it ignores the patient’s stated constraint."]], "continuation": "The confirmation clearly says 9 a.m. The doctor can see the patient at 9:40 if another patient agrees to switch.", "continuation_options": [["A. “We made the mistake, so I’ll put you into the 9:40 slot.”", false, "You cannot promise a slot that depends on another patient."], ["B. “I’m afraid the earliest guaranteed time is still 11 a.m.”", false, "Technically safe, but it ignores a realistic attempt to solve the clinic’s mistake."], ["C. “The confirmation shows 9 a.m., so this was our error. I can ask whether we can move you to 9:40, but I don’t want to promise until I confirm the switch.”", true, "Best choice: you take responsibility while being honest that the alternative still needs confirmation."]], "outcome": "Another patient agrees to switch. The patient is seen at 9:40 and the clinic corrects the scheduling error.", "questions": ["How should staff communicate uncertainty when they are trying to help?", "Have you ever had an appointment changed or recorded incorrectly?", "What makes communication in healthcare feel respectful?"]}, {"id": "wrong-delivery", "category": "Shopping & subscriptions", "title": "The wrong item was delivered", "role": "You are the online-store support agent", "problem": "A customer ordered a laptop for work but received a cheaper model. They need the correct one within two days for a business trip.", "problem_options": [["A. “We can send the correct model once the wrong one is returned to our warehouse.”", false, "This standard process may be too slow for the customer’s urgent need."], ["B. “You can keep the cheaper laptop and we’ll refund the price difference.”", false, "It is an option, but it does not meet the customer’s stated need for the correct model."], ["C. “I’m sorry. Let me verify the order and stock first. If the correct model is available, I’ll check the fastest replacement option before we arrange the return.”", true, "Best choice: you focus on the time-sensitive replacement as well as the return."]], "continuation": "The correct model is in stock, but standard replacement takes four days. Express shipping can arrive tomorrow but normally costs extra.", "continuation_options": [["A. “Because we sent the wrong item, we’ll cover express shipping and send the correct laptop today. We’ll also arrange collection of the incorrect one.”", true, "Best choice: the company absorbs the extra cost caused by its own mistake."], ["B. “Express shipping is available if you pay the additional fee.”", false, "The customer should not pay extra to correct the store’s error."], ["C. “I can refund the full order today so you can buy the laptop somewhere else.”", false, "A refund may help, but since the correct item is in stock, the store can provide a better solution."]], "outcome": "The correct laptop arrives the next day and the courier collects the wrong one.", "questions": ["Should companies always pay extra costs caused by their own mistakes?", "Have you ever received the wrong item?", "How much effort should customers have to make to correct a company’s error?"]}, {"id": "subscription-charge", "category": "Shopping & subscriptions", "title": "Charged after cancellation", "role": "You are the subscription support agent", "problem": "A customer says they cancelled a subscription last month but were charged again today. The account shows a cancellation attempt, but it was not fully completed.", "problem_options": [["A. “I can see that you started the cancellation last month. Let me check why it did not complete before I explain what we can do about today’s charge.”", true, "Best choice: you acknowledge the evidence without immediately blaming either the system or the customer."], ["B. “The cancellation was not completed, so technically the subscription was still active.”", false, "This may be true, but leading with technical fault sounds defensive and ignores the customer’s intention."], ["C. “I can cancel it now, but today’s charge has already been processed.”", false, "This solves only the future billing issue and does not investigate whether a refund is appropriate."]], "continuation": "The logs show the customer reached the final cancellation screen, but a system error prevented confirmation.", "continuation_options": [["A. “I can refund half of today’s charge because the cancellation was not technically completed.”", false, "The system caused the failure, so partial responsibility is not justified."], ["B. “The system failed at the final step, so we’ll refund today’s charge and confirm the cancellation now. I’ll send you written confirmation as well.”", true, "Best choice: you take responsibility, reverse the charge and give proof that the issue is resolved."], ["C. “The easiest solution is to give you a free month instead of a refund.”", false, "That may be useful to someone who wants the service, but this customer tried to cancel."]], "outcome": "The company refunds the charge, completes the cancellation and emails confirmation.", "questions": ["Why are subscription cancellations often frustrating?", "Have you ever been charged for something you thought you had cancelled?", "What makes a company’s cancellation process feel manipulative?"]}];
+const categories = ['All stories', ...new Set(stories.map(s=>s.category))];
+
+let activeCategory='All stories';
+let activeStory=stories[0];
+let stage=0; // 0 problem, 1 continuation
+let answeredCorrectly=false;
+
+const categoryBox=document.getElementById('storyCategories');
+const storyList=document.getElementById('storyList');
+const roleLabel=document.getElementById('roleLabel');
+const sceneTitle=document.getElementById('sceneTitle');
+const stageLabel=document.getElementById('stageLabel');
+const sceneMessage=document.getElementById('sceneMessage');
+const choices=document.getElementById('choices');
+const feedback=document.getElementById('feedback');
+const nextBtn=document.getElementById('nextBtn');
+const sceneBox=document.getElementById('sceneBox');
+const finalBox=document.getElementById('finalBox');
+const finalTitle=document.getElementById('finalTitle');
+const finalOutcome=document.getElementById('finalOutcome');
+const discussionQuestions=document.getElementById('discussionQuestions');
+const restartBtn=document.getElementById('restartBtn');
+
+function renderCategories(){
+  categoryBox.innerHTML='';
+  categories.forEach(cat=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='category-chip'+(cat===activeCategory?' active':'');
+    btn.textContent=cat;
+    btn.addEventListener('click',()=>{
+      activeCategory=cat;
+      renderCategories();
+      renderStoryList();
+    });
+    categoryBox.appendChild(btn);
+  });
+}
+
+function renderStoryList(){
+  storyList.innerHTML='';
+  const visible=activeCategory==='All stories' ? stories : stories.filter(s=>s.category===activeCategory);
+  visible.forEach((story,index)=>{
+    const btn=document.createElement('button');
+    btn.type='button';
+    btn.className='story-card'+(story.id===activeStory.id?' active':'');
+    const number=stories.findIndex(s=>s.id===story.id)+1;
+    btn.innerHTML='<small>'+story.category+'</small><b>'+number+'. '+story.title+'</b>';
+    btn.addEventListener('click',()=>selectStory(story));
+    storyList.appendChild(btn);
+  });
+}
+
+function selectStory(story){
+  activeStory=story;
+  stage=0;
+    finalBox.classList.remove('show');
+  sceneBox.style.display='block';
+  renderStoryList();
+  renderStage();
+}
+
+function renderStage(){
+  answeredCorrectly=false;
+  feedback.textContent='';
+  nextBtn.style.display='none';
+
+  const isProblem=stage===0;
+  const opts=isProblem ? activeStory.problem_options : activeStory.continuation_options;
+
+  roleLabel.textContent=activeStory.role.toUpperCase();
+  sceneTitle.textContent=activeStory.title;
+  stageLabel.textContent=isProblem ? 'Problem' : 'Continuation of the story';
+  sceneMessage.textContent=isProblem ? activeStory.problem : activeStory.continuation;
+  nextBtn.textContent=isProblem ? 'Continuation of the story →' : 'See what happened →';
+  choices.innerHTML='';
+
+  opts.forEach(option=>{
+    const [text,good,why]=option;
+    const btn=document.createElement('button');
+    btn.className='choice-btn';
+    btn.textContent=text;
+
+    btn.addEventListener('click',()=>{
+      if(answeredCorrectly) return;
+
+      if(good){
+        btn.classList.add('correct');
+        answeredCorrectly=true;
+                feedback.textContent=why;
+        nextBtn.style.display='inline-block';
+      } else {
+        btn.classList.add('wrong');
+        feedback.textContent=why+' Discuss why it is weaker, then choose again.';
+      }
+    });
+    choices.appendChild(btn);
+  });
+}
+
+function showOutcome(){
+  sceneBox.style.display='none';
+  finalBox.classList.add('show');
+  finalTitle.textContent='What happened · '+activeStory.title;
+  finalOutcome.textContent=activeStory.outcome;
+  discussionQuestions.innerHTML='';
+  activeStory.questions.forEach(q=>{
+    const li=document.createElement('li');
+    li.textContent=q;
+    discussionQuestions.appendChild(li);
+  });
+}
+
+nextBtn.addEventListener('click',()=>{
+  if(!answeredCorrectly) return;
+  if(stage===0){
+    stage=1;
+    renderStage();
+  } else {
+    showOutcome();
+  }
+});
+
+restartBtn.addEventListener('click',()=>selectStory(activeStory));
+
+renderCategories();
+renderStoryList();
+selectStory(stories[0]);
+</script>
+</body>
+</html>
