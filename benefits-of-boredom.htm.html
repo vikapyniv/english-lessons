@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benefits of boredom</title>
+<style>
+:root{
+  --ink:#17233e; --muted:#667085; --paper:#fbfaf7; --card:#fff; --line:#e7e4de;
+  --accent:#ff625f; --accent-soft:#fff0ef; --green:#5bb89c; --green-soft:#e9f8ef;
+  --red:#e66b67; --red-soft:#fff0ef; --yellow:#ffe27a; --shadow:0 8px 24px rgba(24,34,56,.06);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.55}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.lesson-title{
+  position:sticky;top:0;z-index:100;background:rgba(251,250,247,.96);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);padding:14px 24px;font-size:24px;font-weight:900;letter-spacing:-.025em
+}
+main{max-width:1220px;margin:0 auto;padding:30px 24px 70px}
+.section{margin:0 0 44px}
+.kicker{font-size:12px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:var(--accent)}
+h2{font-size:clamp(28px,4vw,44px);line-height:1.05;margin:6px 0 10px;letter-spacing:-.035em}
+h3{margin:0 0 10px}
+.sub{color:var(--muted)}
+.card,.article,.task-card{
+  background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)
+}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.read-row{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(290px,.65fr);gap:22px;align-items:start;margin:20px 0 28px}
+.article h3{font-size:28px}
+.article p{font-family:Georgia,"Times New Roman",serif;font-size:18px;line-height:1.78;margin:0 0 14px}
+.article .small{font-family:Inter,sans-serif;color:var(--muted);font-size:14px}
+.article .part{font-family:Inter,sans-serif;color:var(--accent);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.option{display:block;width:100%;text-align:left;border:1px solid #d9d5cd;background:#fff;color:var(--ink);padding:11px 12px;border-radius:12px;margin:8px 0}
+.option.correct{background:var(--green-soft);border-color:#70b69b}
+.option.wrong{background:var(--red-soft);border-color:#e58984}
+.check,.reset{
+  border:0;border-radius:11px;padding:10px 14px;font-weight:800;margin-top:10px
+}
+.check{background:var(--ink);color:#fff}.reset{background:#eceae5;color:var(--ink)}
+.feedback{font-weight:800;margin-top:10px;min-height:22px}
+.inline-select{display:inline-block;width:auto;min-width:118px;max-width:190px;padding:5px 26px 5px 8px;margin:0 4px;border:1px solid #d8d4cc;border-radius:9px;background:#fff}
+.text-input{width:100%;border:1px solid #d8d4cc;border-radius:12px;padding:10px 12px;margin:6px 0}
+textarea{width:100%;min-height:86px;border:1px solid #d8d4cc;border-radius:12px;padding:10px 12px;resize:vertical}
+.match-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:18px}
+.match-left,.match-right{display:grid;gap:10px}
+.match-item{padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.dropzone{min-height:48px;border:2px dashed #cfcac2;border-radius:12px;padding:8px;background:#fff}
+.dropzone.over{border-color:var(--green);background:var(--green-soft)}
+.dropzone.correct{border-color:#67b681;background:#f1fbf6}.dropzone.wrong{border-color:#e88984;background:#fff5f4}
+.drag-item{padding:9px 11px;border:1px solid #d8d4cc;border-radius:10px;background:#f5f3ef;font-weight:750;cursor:grab;user-select:none}
+.drag-bank{display:flex;flex-wrap:wrap;gap:8px}
+.def-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.vocab-list{display:grid;gap:8px}.vocab-chip{padding:8px 10px;border-radius:10px;background:#f6f4ef}
+.discuss{background:var(--ink);color:#fff;border-radius:20px;padding:20px}
+.discuss ol,.discuss ul{margin:0;padding-left:22px}
+.discuss li{margin:8px 0}
+.gap-line{margin:10px 0;line-height:1.8}
+.small-gap{display:inline-block;width:150px;border:1px solid #d8d4cc;border-radius:9px;padding:6px 8px}
+.word-bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 16px}
+.word-bank span{padding:7px 10px;border-radius:999px;background:#f3f1ec;font-weight:800}
+.statement{padding:10px 0;border-bottom:1px solid var(--line)}
+.statement:last-child{border-bottom:0}
+@media(max-width:900px){
+  .grid-2,.read-row,.match-grid,.def-grid{grid-template-columns:1fr}
+}
+
+/* Revised layout */
+.task1-layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(260px,.65fr);
+  gap:22px;
+  align-items:start;
+}
+.pair-grid{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:16px;
+}
+.pair-col{display:grid;gap:9px}
+.pair-btn{
+  border:1px solid #d8d4cc;
+  background:#fff;
+  color:var(--ink);
+  border-radius:12px;
+  padding:11px 12px;
+  text-align:left;
+  cursor:pointer;
+}
+.pair-btn.selected{
+  outline:3px solid var(--yellow);
+  background:#fff9dc;
+}
+.pair-btn.correct{
+  background:var(--green-soft);
+  border-color:#67b681;
+}
+.pair-btn.wrong{
+  background:var(--red-soft);
+  border-color:#e88984;
+}
+.vocab-side{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:20px;
+}
+.vocab-side h3{margin-top:0}
+.vocab-side .vocab-list{display:grid;gap:8px}
+.vocab-side .vocab-chip{
+  padding:9px 10px;
+  border-radius:10px;
+  background:#f6f4ef;
+  font-size:14px;
+}
+.reading-under{
+  display:grid;
+  grid-template-columns:minmax(260px,.72fr) minmax(0,1.28fr);
+  gap:20px;
+  margin-top:18px;
+}
+.question-list{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:20px;
+}
+.question-list ol,.question-list ul{margin:0;padding-left:22px}
+.question-list li{margin:9px 0}
+.comment-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:20px;
+}
+.comment-card .statement{
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+}
+.comment-card .statement:last-child{border-bottom:0}
+.ending-bank{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:14px 0 16px;
+}
+.ending-chip{
+  padding:8px 10px;
+  border:1px solid #d8d4cc;
+  border-radius:10px;
+  background:#f5f3ef;
+  font-weight:700;
+  cursor:grab;
+  user-select:none;
+}
+.text-drop{
+  display:inline-flex;
+  min-width:170px;
+  min-height:38px;
+  align-items:center;
+  justify-content:center;
+  border:2px dashed #cfcac2;
+  border-radius:10px;
+  padding:4px 8px;
+  margin:0 4px;
+  vertical-align:middle;
+  background:#fff;
+}
+.text-drop.over{border-color:var(--green);background:var(--green-soft)}
+.text-drop.correct{border-color:#67b681;background:#f1fbf6}
+.text-drop.wrong{border-color:#e88984;background:#fff5f4}
+@media(max-width:900px){
+  .task1-layout,.pair-grid,.reading-under{grid-template-columns:1fr}
+}
+
+
+.letter-input{
+  width:28px;
+  height:32px;
+  text-align:center;
+  border:1px solid #d8d4cc;
+  border-radius:7px;
+  margin:0 2px;
+  padding:2px;
+  font-weight:800;
+  text-transform:lowercase;
+}
+.letter-task p{
+  line-height:2;
+  font-size:17px;
+}
+
+
+.comment-drop{
+  display:inline-flex;
+  min-width:115px;
+  min-height:36px;
+  align-items:center;
+  justify-content:center;
+  padding:4px 7px;
+  margin:0 4px;
+  border:2px dashed #cfcac2;
+  border-radius:9px;
+  vertical-align:middle;
+  background:#fff;
+}
+.comment-drop.over{border-color:var(--green);background:var(--green-soft)}
+.comment-drop.correct{border-color:#67b681;background:#f1fbf6}
+.comment-drop.wrong{border-color:#e88984;background:#fff5f4}
+.word-spell{
+  display:inline-flex;
+  align-items:center;
+  gap:2px;
+  margin:0 5px;
+}
+.word-spell > span{
+  display:inline-flex;
+  width:28px;
+  height:32px;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+}
+
+</style>
+</head>
+<body>
+<div class="lesson-title">Benefits of boredom</div>
+<main>
+
+
+<section class="section">
+  <div class="kicker">Reading · Part 1</div>
+
+  <div class="read-row">
+    <article class="article">
+      <div class="part">Article · Part 1</div>
+      <h3>It’s more than OK for kids to be bored − it’s good for them</h3>
+      <p class="small">by Margaret Murray, University of Michigan-Dearborn, in The Conversation (article adapted)</p>
+
+      <p>I’m a professor who studies communication and culture. I am currently writing a book about modern parenting, and I’ve noticed that many parents try to help their kids <mark>avoid boredom</mark>.</p>
+
+      <p>There are different reasons parents do that. If they are busy with work and other <mark>daily responsibilities</mark>, they often let their child watch a TV show or play a game. They don’t want to hear the child <mark>complain about</mark> how bored they are.</p>
+
+      <p>Parents may also feel that their child should <mark>do well in school</mark>. Because of that, children nowadays spend less time <mark>playing freely</mark> outside and more time in <mark>organized activities</mark> than they did in the past.</p>
+
+      <p>Many parents had to put their children in front of <mark>screens</mark> during the pandemic to keep them busy during work hours. More recently, some parents have said that people <mark>expect</mark> them to use screens to keep children quiet in public.</p>
+    </article>
+
+    <aside class="task-card">
+      <div class="kicker">Task 1</div>
+      <h3>According to the author,</h3>
+      <button class="option mc-summary" data-correct="true">A. many parents want to make sure their children always have something to do.</button>
+      <button class="option mc-summary" data-correct="false">B. most children use screens too much and parents should help them stop.</button>
+      <button class="option mc-summary" data-correct="false">C. people complain about children’s behaviour more than they did in the past.</button>
+      <div class="feedback" id="summaryFeedback"></div>
+    </aside>
+  </div>
+
+  <div class="reading-under">
+    <div class="question-list">
+      <h3>Discuss</h3>
+      <ol>
+        <li>Why do parents want to keep children busy? Provide three reasons.</li>
+        <li>What do parents tell children to do to keep them busy? Provide at least two activities.</li>
+        <li>Do the parents you know do the same things as described in the article? What exactly do or don’t they do?</li>
+        <li>How different was the situation 20 years ago? What has changed and why?</li>
+        <li>The next part of the article is about the benefits of boredom. What do you think they are?</li>
+      </ol>
+    </div>
+
+    <aside class="vocab-side">
+      <h3>Vocabulary</h3>
+      <div class="vocab-list">
+        <div class="vocab-chip"><b>avoid boredom</b> — try not to be bored</div>
+        <div class="vocab-chip"><b>daily responsibilities</b> — everyday duties</div>
+        <div class="vocab-chip"><b>complain about</b> — say you are unhappy about something</div>
+        <div class="vocab-chip"><b>do well in school</b> — get good results</div>
+        <div class="vocab-chip"><b>play freely</b> — play without organized structure</div>
+        <div class="vocab-chip"><b>organized activities</b> — planned activities/classes</div>
+        <div class="vocab-chip"><b>screens</b> — phones, tablets, TVs, computers</div>
+        <div class="vocab-chip"><b>expect</b> — think someone should do something</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="kicker">Reading · Part 2</div>
+
+  <article class="article">
+    <div class="part">Article · Part 2</div>
+    <h3>Benefits of boredom</h3>
+
+    <p>Although boredom feels bad in the moment, it
+      <select class="inline-select gap-select" data-answer="offers">
+        <option></option><option>deals with</option><option>expects</option><option>offers</option>
+      </select>
+      real benefits for personal growth. It is a sign that a change is needed. Psychologists have found that boredom can lead us to discover new goals and to try new activities.
+    </p>
+
+    <p>Additionally, we need boredom because it gives us time to
+      <select class="inline-select gap-select" data-answer="consider">
+        <option></option><option>consider</option><option>treat</option><option>avoid</option>
+      </select>
+      the big questions in life. Boredom also makes us want to learn things and it makes us creative.
+    </p>
+
+    <p>That is why parents shouldn’t
+      <select class="inline-select gap-select" data-answer="treat">
+        <option></option><option>avoid</option><option>treat</option><option>entertain</option>
+      </select>
+      boredom as a problem that they must solve for their children.
+    </p>
+
+    <p>Research shows that young people who used screens to calm down found it difficult to
+      <select class="inline-select gap-select" data-answer="deal with">
+        <option></option><option>deal with</option><option>expect</option><option>complain about</option>
+      </select>
+      their emotions as they grew older.
+    </p>
+
+    <button class="check" id="checkArticleGaps">Check</button>
+    <div class="feedback" id="articleGapsFeedback"></div>
+  </article>
+
+  <div class="card" style="margin-top:20px">
+    <div class="kicker">Task 2</div>
+    <h3>Look at some comments about the article and complete the gaps with the words in the boxes. Two words are not used. Then discuss the comments with your partner.</h3>
+
+    <div class="drag-bank" id="commentWordBank">
+      <div class="drag-item comment-drag" draggable="true" data-value="avoid">avoid</div>
+      <div class="drag-item comment-drag" draggable="true" data-value="complain">complain</div>
+      <div class="drag-item comment-drag" draggable="true" data-value="expect">expect</div>
+      <div class="drag-item comment-drag" draggable="true" data-value="offer">offer</div>
+      <div class="drag-item comment-drag" draggable="true" data-value="suggest">suggest</div>
+      <div class="drag-item comment-drag" draggable="true" data-value="treat">treat</div>
+      <div class="drag-item comment-drag" draggable="true" data-value="consider">consider</div>
+      <div class="drag-item comment-drag" draggable="true" data-value="deal with">deal with</div>
+    </div>
+
+    <p>A. I don’t care if there are benefits to boredom. I’ll
+      <span class="comment-drop" data-answer="avoid"></span>
+      it as always because I don’t like this feeling.
+    </p>
+
+    <p>B. It’s OK for children to be bored, but I think we should
+      <span class="comment-drop" data-answer="treat"></span>
+      boredom in adults as something negative.
+    </p>
+
+    <p>C. I plan to try to be bored from time to time. I
+      <span class="comment-drop" data-answer="expect"></span>
+      that something interesting might happen.
+    </p>
+
+    <p>D. I’d like to
+      <span class="comment-drop" data-answer="consider"></span>
+      the ideas from the article but I’m too busy to find time for boredom.
+    </p>
+
+    <p>E. I knew boredom is good for us before reading the article. It didn’t
+      <span class="comment-drop" data-answer="offer"></span>
+      any new ideas for me.
+    </p>
+
+    <p>F. I’ll tell children in my family and among friends not to
+      <span class="comment-drop" data-answer="complain"></span>
+      about boredom because it’s good for them.
+    </p>
+
+    <button class="check" id="checkCommentDrag">Check</button>
+    <button class="reset" id="resetCommentDrag">Reset</button>
+    <div class="feedback" id="commentGapsFeedback"></div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="kicker">Reading · Final part</div>
+  <div class="kicker" style="margin-top:8px">Task 3</div>
+  <h2>Read the final part of the article and complete the gaps with the sentence endings.</h2>
+
+  <div class="card">
+    <div class="ending-bank" id="endingBank">
+      <div class="ending-chip" draggable="true" data-value="1">1. it doesn’t feel nice</div>
+      <div class="ending-chip" draggable="true" data-value="2">2. if they don’t want to</div>
+      <div class="ending-chip" draggable="true" data-value="3">3. if they stop feeling responsible for filling every moment of their children’s time</div>
+      <div class="ending-chip" draggable="true" data-value="4">4. suggest learning a new game or cooking a recipe</div>
+      <div class="ending-chip" draggable="true" data-value="5">5. but offering ideas for activities is helpful</div>
+    </div>
+
+    <article class="article" style="box-shadow:none">
+      <h3>It gets easier</h3>
+
+      <p>It takes practice to learn how to handle boredom. To help your child, get them outside,
+        <span class="text-drop" data-answer="4"></span>.
+      </p>
+
+      <p>You do not need to play with them every time they are bored,
+        <span class="text-drop" data-answer="5"></span>.
+      </p>
+
+      <p>Even five minutes of boredom is a good start for the youngest children. Let them know that boredom is just a part of life even if
+        <span class="text-drop" data-answer="1"></span>.
+      </p>
+
+      <p>As children get used to short periods of boredom, it will take them longer to become bored in the future. And parents will feel less stressed
+        <span class="text-drop" data-answer="3"></span>.
+      </p>
+
+      <p>So, the next time a kid complains, “I’m bored!” don’t feel guilty or annoyed. Let children know that a little boredom isn’t just OK – in fact, it’s good for them.</p>
+    </article>
+
+    <button class="check" id="checkEndingsDrag">Check</button>
+    <button class="reset" id="resetEndingsDrag">Reset</button>
+    <div class="feedback" id="endingsDragFeedback"></div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="kicker">Task 4</div>
+  <h2>Complete the gaps to create words.</h2>
+
+  <div class="card">
+    <p class="sub">Write one missing letter in each box. Then check your answers and discuss the sentences with your partner.</p>
+
+    <p><b>Example.</b> People sometimes think that <b>boredom</b> is a negative feeling.</p>
+
+    <div class="letter-task">
+      <p><b>A.</b> If someone often gets annoyed, they might
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="c">
+          <input maxlength="1" class="letter-input" data-letter="o">
+          <span>n</span><span>s</span><span>i</span>
+          <input maxlength="1" class="letter-input" data-letter="d">
+          <input maxlength="1" class="letter-input" data-letter="e">
+          <input maxlength="1" class="letter-input" data-letter="r">
+        </span>
+        meditation.
+      </p>
+    </div>
+
+    <div class="letter-task">
+      <p><b>B.</b> When someone is embarrassed, they should
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="a">
+          <span>v</span><span>o</span>
+          <input maxlength="1" class="letter-input" data-letter="i">
+          <input maxlength="1" class="letter-input" data-letter="d">
+        </span>
+        thinking about it for too long.
+      </p>
+    </div>
+
+    <div class="letter-task">
+      <p><b>C.</b> When someone feels proud, they
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="e">
+          <input maxlength="1" class="letter-input" data-letter="x">
+          <span>p</span><span>e</span><span>c</span>
+          <input maxlength="1" class="letter-input" data-letter="t">
+        </span>
+        that other people will also feel proud.
+      </p>
+    </div>
+
+    <div class="letter-task">
+      <p><b>D.</b> If a child feels bored, you can
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="s">
+          <input maxlength="1" class="letter-input" data-letter="u">
+          <input maxlength="1" class="letter-input" data-letter="g">
+          <span>g</span><span>e</span>
+          <input maxlength="1" class="letter-input" data-letter="s">
+          <input maxlength="1" class="letter-input" data-letter="t">
+        </span>
+        inventing a fun game.
+      </p>
+    </div>
+
+    <div class="letter-task">
+      <p><b>E.</b> If someone
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="c">
+          <input maxlength="1" class="letter-input" data-letter="o">
+          <span>m</span><span>p</span>
+          <input maxlength="1" class="letter-input" data-letter="l">
+          <input maxlength="1" class="letter-input" data-letter="a">
+          <input maxlength="1" class="letter-input" data-letter="i">
+          <span>n</span><span>s</span>
+        </span>
+        about their work, listen and ask if they need advice from you.
+      </p>
+    </div>
+
+    <div class="letter-task">
+      <p><b>F.</b> Talking to a friend is a good way of
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="d">
+          <input maxlength="1" class="letter-input" data-letter="e">
+          <input maxlength="1" class="letter-input" data-letter="a">
+          <span>l</span><span>i</span><span>n</span><span>g</span>
+        </span>
+        with sadness.
+      </p>
+    </div>
+
+    <div class="letter-task">
+      <p><b>G.</b> If someone is worried,
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="o">
+          <input maxlength="1" class="letter-input" data-letter="f">
+          <span>f</span><span>e</span>
+          <input maxlength="1" class="letter-input" data-letter="r">
+        </span>
+        them a cup of tea.
+      </p>
+    </div>
+
+    <div class="letter-task">
+      <p><b>H.</b> Boredom makes you creative so I wouldn’t
+        <span class="word-spell">
+          <input maxlength="1" class="letter-input" data-letter="t">
+          <span>r</span><span>e</span>
+          <input maxlength="1" class="letter-input" data-letter="a">
+          <input maxlength="1" class="letter-input" data-letter="t">
+        </span>
+        it as something negative.
+      </p>
+    </div>
+
+    <button class="check" id="checkLetters">Check</button>
+    <div class="feedback" id="letterFeedback"></div>
+  </div>
+</section>
+
+
+
+
+</main>
+
+<script>
+/* Multiple choice */
+function setupMC(cls, feedbackId){
+  document.querySelectorAll('.'+cls).forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.'+cls).forEach(b=>b.classList.remove('correct','wrong'));
+      const ok=btn.dataset.correct==='true';
+      btn.classList.add(ok?'correct':'wrong');
+      document.getElementById(feedbackId).textContent=ok?'Correct.':'Try again.';
+    });
+  });
+}
+setupMC('mc-summary','summaryFeedback');
+
+/* Task 1 click-to-match */
+let selectedLeft=null;
+let selectedRight=null;
+const matchedPairs=new Set();
+
+function clearSelections(){
+  document.querySelectorAll('.pair-btn').forEach(b=>b.classList.remove('selected'));
+  selectedLeft=null;
+  selectedRight=null;
+}
+
+function tryPair(){
+  if(!selectedLeft || !selectedRight) return;
+  const ok=selectedLeft.dataset.answer===selectedRight.dataset.id;
+
+  if(ok){
+    selectedLeft.classList.remove('selected');
+    selectedRight.classList.remove('selected');
+    selectedLeft.classList.add('correct');
+    selectedRight.classList.add('correct');
+    selectedLeft.disabled=true;
+    selectedRight.disabled=true;
+    matchedPairs.add(selectedLeft.dataset.id);
+    document.getElementById('pairFeedback').textContent=matchedPairs.size+' / 8 matched';
+    selectedLeft=null;
+    selectedRight=null;
+  }else{
+    selectedLeft.classList.add('wrong');
+    selectedRight.classList.add('wrong');
+    setTimeout(()=>{
+      selectedLeft && selectedLeft.classList.remove('wrong','selected');
+      selectedRight && selectedRight.classList.remove('wrong','selected');
+      selectedLeft=null;
+      selectedRight=null;
+    },650);
+  }
+}
+
+document.querySelectorAll('.left-pair').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(btn.disabled) return;
+    document.querySelectorAll('.left-pair').forEach(b=>{if(!b.disabled)b.classList.remove('selected')});
+    selectedLeft=btn;
+    btn.classList.add('selected');
+    tryPair();
+  });
+});
+document.querySelectorAll('.right-pair').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    if(btn.disabled) return;
+    document.querySelectorAll('.right-pair').forEach(b=>{if(!b.disabled)b.classList.remove('selected')});
+    selectedRight=btn;
+    btn.classList.add('selected');
+    tryPair();
+  });
+});
+document.getElementById('resetPairs').addEventListener('click',()=>{
+  document.querySelectorAll('.pair-btn').forEach(b=>{
+    b.disabled=false;
+    b.classList.remove('selected','correct','wrong');
+  });
+  matchedPairs.clear();
+  selectedLeft=null;
+  selectedRight=null;
+  document.getElementById('pairFeedback').textContent='';
+});
+
+/* Inline article gap checks */
+function checkSelectGroup(selector, feedbackId){
+  const items=[...document.querySelectorAll(selector)];
+  let right=0;
+  items.forEach(s=>{
+    const ok=s.value===s.dataset.answer;
+    s.style.borderColor=ok?'#67b681':'#e88984';
+    s.style.background=ok?'#e9f8ef':'#fff0ef';
+    if(ok) right++;
+  });
+  document.getElementById(feedbackId).textContent=right+' / '+items.length+' correct';
+}
+document.getElementById('checkArticleGaps').addEventListener('click',()=>checkSelectGroup('.gap-select','articleGapsFeedback'));
+
+
+/* Task 2: drag words into comments */
+let draggedCommentWord=null;
+
+document.querySelectorAll('.comment-drag').forEach(word=>{
+  word.addEventListener('dragstart',()=>draggedCommentWord=word);
+  word.addEventListener('dragend',()=>draggedCommentWord=null);
+});
+
+document.querySelectorAll('.comment-drop').forEach(zone=>{
+  zone.addEventListener('dragover',e=>{
+    e.preventDefault();
+    zone.classList.add('over');
+  });
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();
+    zone.classList.remove('over');
+    if(!draggedCommentWord) return;
+
+    const existing=zone.querySelector('.comment-drag');
+    if(existing) document.getElementById('commentWordBank').appendChild(existing);
+
+    zone.innerHTML='';
+    zone.appendChild(draggedCommentWord);
+  });
+});
+
+document.getElementById('checkCommentDrag').addEventListener('click',()=>{
+  const zones=[...document.querySelectorAll('.comment-drop')];
+  let right=0;
+
+  zones.forEach(zone=>{
+    zone.classList.remove('correct','wrong');
+    const word=zone.querySelector('.comment-drag');
+    const ok=word && word.dataset.value===zone.dataset.answer;
+    zone.classList.add(ok?'correct':'wrong');
+    if(ok) right++;
+  });
+
+  document.getElementById('commentGapsFeedback').textContent=right+' / '+zones.length+' correct';
+});
+
+document.getElementById('resetCommentDrag').addEventListener('click',()=>{
+  const bank=document.getElementById('commentWordBank');
+
+  document.querySelectorAll('.comment-drop').forEach(zone=>{
+    const word=zone.querySelector('.comment-drag');
+    if(word) bank.appendChild(word);
+    zone.classList.remove('correct','wrong','over');
+    zone.innerHTML='';
+  });
+
+  document.getElementById('commentGapsFeedback').textContent='';
+});
+
+/* Drag endings into the final text */
+let draggedEnding=null;
+document.querySelectorAll('.ending-chip').forEach(chip=>{
+  chip.addEventListener('dragstart',()=>draggedEnding=chip);
+  chip.addEventListener('dragend',()=>draggedEnding=null);
+});
+document.querySelectorAll('.text-drop').forEach(zone=>{
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over')});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();
+    zone.classList.remove('over');
+    if(!draggedEnding) return;
+    const existing=zone.querySelector('.ending-chip');
+    if(existing) document.getElementById('endingBank').appendChild(existing);
+    zone.innerHTML='';
+    zone.appendChild(draggedEnding);
+  });
+});
+document.getElementById('checkEndingsDrag').addEventListener('click',()=>{
+  const zones=[...document.querySelectorAll('.text-drop')];
+  let right=0;
+  zones.forEach(z=>{
+    z.classList.remove('correct','wrong');
+    const chip=z.querySelector('.ending-chip');
+    const ok=chip && chip.dataset.value===z.dataset.answer;
+    z.classList.add(ok?'correct':'wrong');
+    if(ok) right++;
+  });
+  document.getElementById('endingsDragFeedback').textContent=right+' / '+zones.length+' correct';
+});
+document.getElementById('resetEndingsDrag').addEventListener('click',()=>{
+  const bank=document.getElementById('endingBank');
+  document.querySelectorAll('.text-drop').forEach(z=>{
+    const chip=z.querySelector('.ending-chip');
+    if(chip) bank.appendChild(chip);
+    z.classList.remove('correct','wrong');
+    z.innerHTML='';
+  });
+  document.getElementById('endingsDragFeedback').textContent='';
+});
+
+document.getElementById('checkLetters').addEventListener('click',()=>{
+  const inputs=[...document.querySelectorAll('.letter-input')];
+  let right=0;
+  inputs.forEach(input=>{
+    const ok=input.value.trim().toLowerCase()===input.dataset.letter;
+    input.style.borderColor=ok?'#67b681':'#e88984';
+    input.style.background=ok?'#e9f8ef':'#fff0ef';
+    if(ok) right++;
+  });
+  document.getElementById('letterFeedback').textContent=right+' / '+inputs.length+' letters correct';
+});
+
+</script>
+</body>
+</html>
