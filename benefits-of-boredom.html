@@ -628,16 +628,20 @@ document.querySelectorAll('.right-pair').forEach(btn=>{
     tryPair();
   });
 });
-document.getElementById('resetPairs').addEventListener('click',()=>{
-  document.querySelectorAll('.pair-btn').forEach(b=>{
-    b.disabled=false;
-    b.classList.remove('selected','correct','wrong');
+const resetPairsButton=document.getElementById('resetPairs');
+if(resetPairsButton){
+  resetPairsButton.addEventListener('click',()=>{
+    document.querySelectorAll('.pair-btn').forEach(b=>{
+      b.disabled=false;
+      b.classList.remove('selected','correct','wrong');
+    });
+    matchedPairs.clear();
+    selectedLeft=null;
+    selectedRight=null;
+    const pairFeedback=document.getElementById('pairFeedback');
+    if(pairFeedback) pairFeedback.textContent='';
   });
-  matchedPairs.clear();
-  selectedLeft=null;
-  selectedRight=null;
-  document.getElementById('pairFeedback').textContent='';
-});
+}
 
 /* Inline article gap checks */
 function checkSelectGroup(selector, feedbackId){
