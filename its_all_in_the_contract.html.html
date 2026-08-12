@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>It's all in the contract</title>
+<style>
+:root {
+  --bg:#f7f5ef; --paper:#fffdf8; --ink:#1f2937; --muted:#6b7280; --line:#d7d2c7;
+  --accent:#263a5b; --soft:#eef1f5; --ok:#e8f5e9; --bad:#fdecec;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.45}
+header{position:sticky;top:0;z-index:20;background:rgba(255,253,248,.96);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:16px 28px}
+header h1{margin:0;font-size:24px;letter-spacing:.2px}
+main{max-width:1280px;margin:0 auto;padding:26px 22px 60px}
+section{margin:0 0 34px}
+h2{font-size:20px;margin:0 0 14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.035)}
+.instruction{font-weight:700;margin-bottom:14px}
+.drag-bank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.drag-card{background:var(--soft);padding:10px 12px;border:1px solid #cfd5df;border-radius:10px;cursor:grab;display:flex;gap:8px;align-items:center}
+.drag-card.used{opacity:.35}
+.ico,.mini-illus{font-size:20px}
+.def-row{display:grid;grid-template-columns:34px 1fr 140px;gap:10px;align-items:center;padding:10px 0;border-top:1px solid #ece7dd}
+.def-row:first-of-type{border-top:0}
+.dropzone{min-height:38px;border:1.5px dashed #a9b0bb;border-radius:9px;padding:8px 9px;font-size:13px;color:var(--muted);background:#fff}
+.dropzone.correct{background:var(--ok);border-style:solid;color:#255b2a}
+.dropzone.wrong{background:var(--bad);border-color:#bd5252;color:#7d2929}
+ol{padding-left:22px;margin:0}
+li{margin:0 0 12px}
+.questions li{margin-bottom:14px}
+.sentence{padding:11px 0;border-bottom:1px solid #ece7dd}
+.sentence:last-child{border-bottom:0}
+select{font:inherit;padding:6px 8px;border-radius:8px;border:1px solid #b9bec7;background:white}
+.mark{margin-left:8px;font-weight:700}
+.vocab-line{display:flex;gap:8px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid #ece7dd}
+.vocab-line:last-child{border-bottom:0}
+.pref-pair{display:grid;grid-template-columns:1fr 48px 1fr;gap:10px;align-items:stretch;margin-bottom:12px}
+.pref-option{padding:14px;border:1px solid #d7d2c7;border-radius:10px;background:#fff}
+.or{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted)}
+button{border:0;border-radius:9px;padding:9px 13px;font-weight:700;cursor:pointer;background:var(--accent);color:white;margin-top:12px}
+button.secondary{background:#e7e9ed;color:#26313f}
+.revision-q{padding:14px 0;border-bottom:1px solid #ece7dd}
+.word-build{display:inline-flex;align-items:center;gap:2px;white-space:nowrap;margin:0 3px}
+.letter{width:22px;height:28px;text-align:center;border:0;border-bottom:2px solid #88919e;background:#fff;font:700 16px Arial;text-transform:lowercase}
+.letter.correct{background:var(--ok);border-bottom-color:#3d7d43}
+.letter.wrong{background:var(--bad);border-bottom-color:#b24b4b}
+.given-letter,.fixed-char{font-weight:700;display:inline-block;min-width:10px;text-align:center}
+.note{font-size:13px;color:var(--muted);margin-top:8px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}.drag-bank{grid-template-columns:1fr}}
+
+.drag-card.selected{
+  outline:3px solid #263a5b;
+  background:#dde5f1;
+}
+.drag-card, .dropzone{
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.dropzone{
+  cursor:pointer;
+}
+@media (hover:none){
+  .drag-card::after{
+    content:"tap";
+    margin-left:auto;
+    font-size:11px;
+    color:#6b7280;
+    font-weight:700;
+  }
+}
+
+.task-vocab-wrap{
+  margin: 6px 0 20px;
+  padding: 14px;
+  background:#f4f6f8;
+  border:1px solid #d7dce3;
+  border-radius:12px;
+}
+.task-vocab-title{
+  font-weight:700;
+  margin-bottom:10px;
+  font-size:14px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  color:#4b5563;
+}
+.task-vocab-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+}
+.task-vocab-card{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 10px;
+  background:white;
+  border:1px solid #cfd5df;
+  border-radius:9px;
+  font-size:14px;
+  line-height:1.25;
+}
+.task-vocab-term{
+  font-weight:700;
+  color:#263a5b;
+}
+.task-vocab-def{
+  color:#5f6875;
+}
+</style>
+</head>
+<body>
+<header><h1>It's all in the contract</h1></header>
+<main>
+<section class="grid2">
+<div class="panel">
+<h2>1. Contract vocabulary</h2>
+<div class="instruction">Drag the phrases to their definitions. On a tablet, tap a phrase and then tap its definition.</div>
+<div class="drag-bank" id="dragBank"><div class="drag-card" data-key="permanent contract" draggable="true"><span class="ico">📄</span><span>permanent contract</span></div>
+<div class="drag-card" data-key="fixed-term contract" draggable="true"><span class="ico">📅</span><span>fixed-term contract</span></div>
+<div class="drag-card" data-key="apprenticeship" draggable="true"><span class="ico">🛠️</span><span>apprenticeship</span></div>
+<div class="drag-card" data-key="internship" draggable="true"><span class="ico">🎓</span><span>internship</span></div>
+<div class="drag-card" data-key="contract for services" draggable="true"><span class="ico">💼</span><span>contract for services</span></div>
+<div class="drag-card" data-key="zero-hours contract" draggable="true"><span class="ico">⏱️</span><span>zero-hours contract</span></div>
+<div class="drag-card" data-key="non-disclosure agreement (NDA)" draggable="true"><span class="ico">🔒</span><span>non-disclosure agreement (NDA)</span></div>
+<div class="drag-card" data-key="breach of contract" draggable="true"><span class="ico">⚠️</span><span>breach of contract</span></div></div>
+<div><div class="def-row"><div class="mini-illus">📄</div><div class="def-text">no end date</div><div class="dropzone" data-key="permanent contract">Drop here</div></div>
+<div class="def-row"><div class="mini-illus">📅</div><div class="def-text">contract with end date</div><div class="dropzone" data-key="fixed-term contract">Drop here</div></div>
+<div class="def-row"><div class="mini-illus">🛠️</div><div class="def-text">paid work + study</div><div class="dropzone" data-key="apprenticeship">Drop here</div></div>
+<div class="def-row"><div class="mini-illus">🎓</div><div class="def-text">short work experience</div><div class="dropzone" data-key="internship">Drop here</div></div>
+<div class="def-row"><div class="mini-illus">💼</div><div class="def-text">freelance project contract</div><div class="dropzone" data-key="contract for services">Drop here</div></div>
+<div class="def-row"><div class="mini-illus">⏱️</div><div class="def-text">no guaranteed hours</div><div class="dropzone" data-key="zero-hours contract">Drop here</div></div>
+<div class="def-row"><div class="mini-illus">🔒</div><div class="def-text">keeps information secret</div><div class="dropzone" data-key="non-disclosure agreement (NDA)">Drop here</div></div>
+<div class="def-row"><div class="mini-illus">⚠️</div><div class="def-text">breaking contract terms</div><div class="dropzone" data-key="breach of contract">Drop here</div></div></div>
+<button class="secondary" onclick="resetMatching()">Reset</button>
+</div>
+<div class="panel"><h2>2. Discuss the questions</h2><ol class="questions"><li>What are the advantages for both employers and employees of hiring people under a contract for services? Are there any disadvantages?</li><li>Do you think permanent contracts are becoming less common? If yes, in what industries?</li><li>Who benefits more from a fixed-term contract: the employee or the employer? Why?</li><li>Do you think zero-hours contracts should be banned? Why/Why not?</li><li>What consequences might there be for a breach of contract?</li><li>Can you think of some situations when breaking an NDA could be justified?</li><li>How ethical is it for a company to offer unpaid internships?</li><li>Is it common for people to do an apprenticeship where you live? If yes, in which professions?</li></ol></div>
+</section>
+<section class="">
+<div class="panel">
+<h2>3. Choose the correct words</h2><div class="task-vocab-wrap"><div class="task-vocab-title">Vocabulary</div><div class="task-vocab-grid"><div class="task-vocab-card"><span class="task-vocab-term">remuneration package</span><span class="task-vocab-def">— salary + benefits</span></div><div class="task-vocab-card"><span class="task-vocab-term">severance package</span><span class="task-vocab-def">— leaving compensation</span></div><div class="task-vocab-card"><span class="task-vocab-term">overtime provision</span><span class="task-vocab-def">— rules for extra hours</span></div><div class="task-vocab-card"><span class="task-vocab-term">remote work provision</span><span class="task-vocab-def">— work-from-home policy</span></div><div class="task-vocab-card"><span class="task-vocab-term">probationary period</span><span class="task-vocab-def">— trial employment period</span></div><div class="task-vocab-card"><span class="task-vocab-term">notice period</span><span class="task-vocab-def">— time before leaving</span></div><div class="task-vocab-card"><span class="task-vocab-term">termination clause</span><span class="task-vocab-def">— rules for ending contract</span></div><div class="task-vocab-card"><span class="task-vocab-term">non-compete clause</span><span class="task-vocab-def">— limits competitor work</span></div></div></div>
+<div class="sentence" data-answer="probationary">When you start a new role you may need to complete a <select aria-label="Choose correct word"><option value="">choose…</option><option value="probationary">probationary</option><option value="notice">notice</option></select> period.<span class="mark"></span></div>
+<div class="sentence" data-answer="remote work">If you hope to travel while working, you should check the contract for <select aria-label="Choose correct word"><option value="">choose…</option><option value="overtime">overtime</option><option value="remote work">remote work</option></select> provision.<span class="mark"></span></div>
+<div class="sentence" data-answer="termination">If you’re planning on leaving a company, you should read the <select aria-label="Choose correct word"><option value="">choose…</option><option value="non-compete">non-compete</option><option value="termination">termination</option></select> clause in your contract to see what conditions might apply.<span class="mark"></span></div>
+<div class="sentence" data-answer="notice">When you quit, you may need to serve a <select aria-label="Choose correct word"><option value="">choose…</option><option value="probationary">probationary</option><option value="notice">notice</option></select> period.<span class="mark"></span></div>
+<div class="sentence" data-answer="overtime">If you are willing to work extra hours to get some extra money, you should check the contract for its <select aria-label="Choose correct word"><option value="">choose…</option><option value="overtime">overtime</option><option value="remote work">remote work</option></select> provision.<span class="mark"></span></div>
+<div class="sentence" data-answer="remuneration">If the company is relocated abroad, it may offer you a more attractive <select aria-label="Choose correct word"><option value="">choose…</option><option value="severance">severance</option><option value="remuneration">remuneration</option></select> package to motivate you to move with it.<span class="mark"></span></div>
+<div class="sentence" data-answer="severance">If your place of work closes down, you may receive a <select aria-label="Choose correct word"><option value="">choose…</option><option value="severance">severance</option><option value="remuneration">remuneration</option></select> package.<span class="mark"></span></div>
+<div class="sentence" data-answer="non-compete">You may not be able to work for a similar company in your industry for some time if your contract included a <select aria-label="Choose correct word"><option value="">choose…</option><option value="non-compete">non-compete</option><option value="termination">termination</option></select> clause.<span class="mark"></span></div>
+<button onclick="checkChoose()">Check</button>
+<button class="secondary" onclick="resetChoose()">Reset</button>
+</div>
+
+</section>
+<section class="grid2">
+<div class="panel">
+<h2>4. Choose the option you would prefer and say why</h2>
+<div class="pref-pair"><div class="pref-option">a remote work provision that lets you work from anywhere in the world</div><div class="or">OR</div><div class="pref-option">a better remuneration package</div></div>
+<div class="pref-pair"><div class="pref-option">no probationary period or notice period but also no severance package</div><div class="or">OR</div><div class="pref-option">a three-month probationary period, one-month notice period and generous severance package</div></div>
+<div class="pref-pair"><div class="pref-option">a six-month internship at a famous company</div><div class="or">OR</div><div class="pref-option">a permanent contract with a smaller company</div></div>
+<div class="pref-pair"><div class="pref-option">a higher salary with a strict non-compete clause</div><div class="or">OR</div><div class="pref-option">a lower salary with complete freedom to work for competitors</div></div>
+<div class="pref-pair"><div class="pref-option">an overtime provision stating that overtime is voluntary and paid at 150% of the normal hourly rate</div><div class="or">OR</div><div class="pref-option">an overtime provision stating that overtime is obligatory but paid at double the normal hourly rate</div></div>
+</div>
+<div class="panel">
+<h2>5. Add the missing letters to create the words from the lesson</h2>
+<div class="revision-q">Can a high <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="m" maxlength="1"/><span class="given-letter">u</span><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">a</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">i</span><input aria-label="missing letter" class="letter" data-answer="o" maxlength="1"/><span class="given-letter">n</span></span> package compensate for the lack of security in <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="f" maxlength="1"/><span class="given-letter">i</span><input aria-label="missing letter" class="letter" data-answer="x" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="d" maxlength="1"/><span class="fixed-char">-</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">m</span></span> contracts?</div>
+<div class="revision-q">Should <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="o" maxlength="1"/><span class="given-letter">v</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/><span class="given-letter">r</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">i</span><input aria-label="missing letter" class="letter" data-answer="m" maxlength="1"/><span class="given-letter">e</span></span> and <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="m" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">e</span></span> work provision be standard in contracts or should employees and employers be expected to offer some flexibility with these kinds of things?</div>
+<div class="revision-q">Should an <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="a" maxlength="1"/><span class="given-letter">p</span><input aria-label="missing letter" class="letter" data-answer="p" maxlength="1"/><span class="given-letter">r</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/><span class="given-letter">n</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">i</span><input aria-label="missing letter" class="letter" data-answer="c" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="s" maxlength="1"/><span class="given-letter">h</span><input aria-label="missing letter" class="letter" data-answer="i" maxlength="1"/><span class="given-letter">p</span></span> or <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="i" maxlength="1"/><span class="given-letter">n</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">n</span><input aria-label="missing letter" class="letter" data-answer="s" maxlength="1"/><span class="given-letter">h</span><input aria-label="missing letter" class="letter" data-answer="i" maxlength="1"/><span class="given-letter">p</span></span> automatically lead to a job with the company young people are doing them with?</div>
+<div class="revision-q">Should a <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="fixed-char">-</span><input aria-label="missing letter" class="letter" data-answer="d" maxlength="1"/><span class="given-letter">i</span><input aria-label="missing letter" class="letter" data-answer="s" maxlength="1"/><span class="given-letter">c</span><input aria-label="missing letter" class="letter" data-answer="l" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="s" maxlength="1"/><span class="given-letter">u</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">e</span></span> agreement prevent someone from reporting something illegal because they are worried they may be in <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="b" maxlength="1"/><span class="given-letter">r</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/><span class="given-letter">a</span><input aria-label="missing letter" class="letter" data-answer="c" maxlength="1"/><span class="given-letter">h</span></span> of contract?</div>
+<div class="revision-q">What problems may occur in a company if some people are on <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="p" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">m</span><input aria-label="missing letter" class="letter" data-answer="a" maxlength="1"/><span class="given-letter">n</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/><span class="given-letter">n</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/></span> contracts and others are on <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="z" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">o</span><span class="fixed-char">-</span><span class="given-letter">h</span><input aria-label="missing letter" class="letter" data-answer="o" maxlength="1"/><span class="given-letter">u</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/></span> contracts, even though they are doing the same job?</div>
+<div class="revision-q">Should people on contracts for <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="s" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">v</span><input aria-label="missing letter" class="letter" data-answer="i" maxlength="1"/><span class="given-letter">c</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/><span class="given-letter">s</span></span> or temporary contracts be given a <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="s" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="v" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">a</span><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="given-letter">c</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/></span> package or is this something only for long-term or senior employees?</div>
+<div class="revision-q">Do you think a <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">e</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">m</span><input aria-label="missing letter" class="letter" data-answer="i" maxlength="1"/><span class="given-letter">n</span><input aria-label="missing letter" class="letter" data-answer="a" maxlength="1"/><span class="given-letter">t</span><input aria-label="missing letter" class="letter" data-answer="i" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/></span> clause can include a <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="t" maxlength="1"/><span class="given-letter">i</span><input aria-label="missing letter" class="letter" data-answer="c" maxlength="1"/><span class="given-letter">e</span></span> period the company chooses or does it have to follow the law?</div>
+<div class="revision-q">Should an employee be more worried about a <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="fixed-char">-</span><input aria-label="missing letter" class="letter" data-answer="c" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="m" maxlength="1"/><span class="given-letter">p</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/><span class="given-letter">t</span><input aria-label="missing letter" class="letter" data-answer="e" maxlength="1"/></span> clause in their contract or a long <span class="word-build"><input aria-label="missing letter" class="letter" data-answer="p" maxlength="1"/><span class="given-letter">r</span><input aria-label="missing letter" class="letter" data-answer="o" maxlength="1"/><span class="given-letter">b</span><input aria-label="missing letter" class="letter" data-answer="a" maxlength="1"/><span class="given-letter">t</span><input aria-label="missing letter" class="letter" data-answer="i" maxlength="1"/><span class="given-letter">o</span><input aria-label="missing letter" class="letter" data-answer="n" maxlength="1"/><span class="given-letter">a</span><input aria-label="missing letter" class="letter" data-answer="r" maxlength="1"/><span class="given-letter">y</span></span> period?</div>
+<button onclick="checkLetters()">Check</button>
+<button class="secondary" onclick="resetLetters()">Reset</button>
+<div class="note">One box = one missing letter.</div>
+</div>
+</section>
+</main>
+<script>
+let dragged = null;
+let selectedCard = null;
+
+function clearSelected() {
+  document.querySelectorAll('.drag-card').forEach(c => c.classList.remove('selected'));
+  selectedCard = null;
+}
+
+function placeCard(card, zone) {
+  if (!card || !zone) return;
+
+  const old = zone.querySelector('.drag-card');
+  if (old && old !== card) {
+    document.getElementById('dragBank').appendChild(old);
+  }
+
+  zone.innerHTML = '';
+  zone.appendChild(card);
+  zone.classList.remove('correct','wrong');
+
+  if (card.dataset.key === zone.dataset.key) {
+    zone.classList.add('correct');
+  } else {
+    zone.classList.add('wrong');
+  }
+
+  clearSelected();
+  dragged = null;
+}
+
+document.querySelectorAll('.drag-card').forEach(card => {
+  // Desktop drag-and-drop
+  card.addEventListener('dragstart', e => {
+    dragged = card;
+    try { e.dataTransfer.setData('text/plain', card.dataset.key); } catch (_) {}
+  });
+
+  // iPad / touch / click fallback: tap a card, then tap a definition
+  card.addEventListener('click', e => {
+    e.stopPropagation();
+    if (selectedCard === card) {
+      clearSelected();
+      return;
+    }
+    clearSelected();
+    selectedCard = card;
+    card.classList.add('selected');
+  });
+});
+
+document.querySelectorAll('.dropzone').forEach(zone => {
+  zone.addEventListener('dragover', e => e.preventDefault());
+
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    placeCard(dragged, zone);
+  });
+
+  zone.addEventListener('click', e => {
+    e.stopPropagation();
+    if (selectedCard) {
+      placeCard(selectedCard, zone);
+    }
+  });
+});
+
+function resetMatching() {
+  const bank = document.getElementById('dragBank');
+  document.querySelectorAll('.dropzone .drag-card').forEach(c => bank.appendChild(c));
+  document.querySelectorAll('.dropzone').forEach(z => {
+    z.textContent = 'Drop here';
+    z.classList.remove('correct','wrong');
+  });
+  clearSelected();
+}
+
+function checkChoose() {
+  document.querySelectorAll('.sentence').forEach(s => {
+    const sel = s.querySelector('select');
+    const mark = s.querySelector('.mark');
+    if (!sel.value) { mark.textContent = ''; return; }
+    const ok = sel.value === s.dataset.answer;
+    mark.textContent = ok ? '✓' : '✗';
+    mark.style.color = ok ? '#2f6d35' : '#a33b3b';
+  });
+}
+function resetChoose() {
+  document.querySelectorAll('.sentence select').forEach(s => s.value = '');
+  document.querySelectorAll('.sentence .mark').forEach(m => m.textContent = '');
+}
+
+function checkLetters() {
+  document.querySelectorAll('.letter').forEach(inp => {
+    inp.classList.remove('correct','wrong');
+    if (!inp.value) return;
+    inp.classList.add(inp.value.toLowerCase() === inp.dataset.answer ? 'correct' : 'wrong');
+  });
+}
+function resetLetters() {
+  document.querySelectorAll('.letter').forEach(inp => {
+    inp.value = '';
+    inp.classList.remove('correct','wrong');
+  });
+}
+
+document.addEventListener('input', e => {
+  if (e.target.classList.contains('letter') && e.target.value) {
+    const inputs = [...document.querySelectorAll('.letter')];
+    const i = inputs.indexOf(e.target);
+    if (i >= 0 && i < inputs.length - 1) inputs[i+1].focus();
+  }
+});
+</script>
+</body>
+</html>
