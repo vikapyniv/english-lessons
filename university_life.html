@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>University Life</title>
+<style>
+  :root{
+    --bg:#f6f4ef;
+    --card:#ffffff;
+    --ink:#202020;
+    --muted:#666;
+    --line:#dedbd2;
+    --accent:#2f5f54;
+    --soft:#e9f0ed;
+    --wrong:#8f3535;
+    --right:#2e6a4f;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.45;
+  }
+  header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    padding:14px 28px;
+    background:rgba(246,244,239,.96);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(8px);
+  }
+  header h1{
+    margin:0;
+    font-size:24px;
+    letter-spacing:.2px;
+  }
+  main{
+    max-width:1440px;
+    margin:0 auto;
+    padding:24px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:0.74fr 1.26fr;
+    gap:22px;
+    align-items:start;
+    margin-bottom:22px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:0 5px 18px rgba(0,0,0,.035);
+  }
+  .grid-reverse{grid-template-columns:1.12fr 0.88fr}
+  .full{margin-bottom:22px}
+  .eyebrow{
+    margin:0 0 5px;
+    font-size:13px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1.3px;
+    color:var(--accent);
+  }
+  h2{
+    margin:0 0 7px;
+    font-size:22px;
+  }
+  .instruction{
+    margin:0 0 18px;
+    color:#454545;
+  }
+  .not{
+    font-weight:800;
+    text-decoration:underline;
+  }
+  .items{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .item{
+    padding:12px 13px;
+    border:1px solid #e6e3dc;
+    border-radius:11px;
+    background:#fcfcfa;
+  }
+  .row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    flex-wrap:wrap;
+  }
+  .letter{
+    flex:0 0 24px;
+    height:24px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:var(--soft);
+    font-weight:700;
+    color:var(--accent);
+    font-size:13px;
+  }
+  select{
+    font:inherit;
+    padding:7px 30px 7px 9px;
+    border:1px solid #bdb9af;
+    border-radius:8px;
+    background:white;
+    max-width:100%;
+  }
+  select.correct{border-color:var(--right); background:#edf7f1}
+  select.incorrect{border-color:var(--wrong); background:#fbefef}
+  .feedback{
+    min-height:18px;
+    margin-top:5px;
+    font-size:12px;
+    font-weight:700;
+  }
+  .feedback.ok{color:var(--right)}
+  .feedback.no{color:var(--wrong)}
+.vocab-strip{
+    margin-top:17px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .vocab-label{
+    font-size:12px;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .flip{
+    width:150px;
+    height:40px;
+    perspective:700px;
+    cursor:pointer;
+  }
+  .flip-inner{
+    width:100%;
+    height:100%;
+    position:relative;
+    transition:transform .45s;
+    transform-style:preserve-3d;
+  }
+  .flip.flipped .flip-inner{transform:rotateY(180deg)}
+  .flip-face{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    border:1px solid #bfcfc8;
+    border-radius:9px;
+    background:var(--soft);
+    padding:4px 8px;
+    backface-visibility:hidden;
+    font-size:13px;
+    font-weight:700;
+    color:#244d44;
+  }
+  .flip-back{
+    transform:rotateY(180deg);
+    background:#fff;
+    color:#333;
+    font-weight:600;
+  }
+  .discussion{
+    margin-top:16px;
+    padding:13px 15px;
+    border-left:4px solid var(--accent);
+    background:#f1f5f3;
+    border-radius:8px;
+    font-size:14px;
+  }
+  .discussion strong{display:block; margin-bottom:4px}
+  .versus-list{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .versus{
+    display:grid;
+    grid-template-columns:1fr 46px 1fr;
+    gap:8px;
+    align-items:stretch;
+  }
+  .choice{
+    border:1px solid #d7d3ca;
+    border-radius:12px;
+    background:#fcfcfa;
+    padding:14px;
+    cursor:pointer;
+    font:inherit;
+    text-align:center;
+    transition:.18s;
+  }
+  .choice:hover{transform:translateY(-1px); border-color:#9fb4ab}
+  .choice.selected{
+    background:var(--soft);
+    border-color:var(--accent);
+    box-shadow:0 0 0 2px rgba(47,95,84,.08);
+    font-weight:700;
+  }
+  .or{
+    display:grid;
+    place-items:center;
+    font-weight:800;
+    color:#777;
+  }
+  .example{
+    margin-bottom:15px;
+    padding:12px 14px;
+    border-radius:10px;
+    background:#f0eee8;
+  }
+  .example strong{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    letter-spacing:.8px;
+    margin-bottom:4px;
+  }
+  .reset{
+    margin-top:18px;
+    border:0;
+    border-radius:9px;
+    padding:9px 13px;
+    font-weight:700;
+    background:#2f5f54;
+    color:#fff;
+    cursor:pointer;
+  }
+  @media(max-width:900px){
+    .grid,.grid-reverse{grid-template-columns:1fr}
+    .versus{grid-template-columns:1fr}
+    .or{padding:2px}
+    main{padding:15px}
+  }
+
+  /* Clickable vocabulary inside sentences */
+  .word-flip{
+    display:inline-block;
+    position:relative;
+    vertical-align:middle;
+    margin:0 3px;
+    height:30px;
+    perspective:800px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .word-flip[data-size="lg"]{width:160px}
+  .word-flip[data-size="md"]{width:135px}
+
+  .word-flip-inner{
+    position:relative;
+    display:block;
+    width:100%;
+    height:100%;
+    transform-style:preserve-3d;
+    transition:transform .4s ease;
+  }
+  .word-flip.flipped .word-flip-inner{
+    transform:rotateX(180deg);
+  }
+
+  .word-face{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 8px;
+    border-radius:6px;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+
+  .word-front{
+    color:#c62828 !important;
+    font-weight:800 !important;
+    background:#fff0f0 !important;
+    border:1px solid #efb3b3 !important;
+    border-bottom:3px solid #c62828 !important;
+  }
+
+  .word-back{
+    transform:rotateX(180deg);
+    color:#7a1b1b !important;
+    background:#fff7f7 !important;
+    border:1px solid #efb3b3 !important;
+    font-size:11px !important;
+    font-weight:700 !important;
+  }
+
+</style>
+</head>
+<body>
+
+<header><h1>University Life</h1></header>
+
+<main>
+
+<section class="grid">
+  <article class="card">
+    <p class="eyebrow">Vocabulary</p>
+    <h2>1. Collocations</h2>
+    <p class="instruction">Choose the correct word or phrase in each collocation.</p>
+
+    <div class="items">
+      <div class="item"><div class="row"><span class="letter">A</span>
+        <select data-answer="become"><option value="">choose…</option><option>become</option><option>have</option></select>
+        <span>a</span>
+        <span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="postgraduate: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">postgraduate</span>
+        <span class="word-face word-back">(= advanced-degree student)</span>
+      </span>
+    </span>
+      </div></div>
+
+      <div class="item"><div class="row"><span class="letter">B</span>
+        <select data-answer="win"><option value="">choose…</option><option>win</option><option>buy</option></select>
+        <span>a</span>
+        <span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="scholarship: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">scholarship</span>
+        <span class="word-face word-back">(= merit-based funding)</span>
+      </span>
+    </span>
+      </div></div>
+
+      <div class="item"><div class="row"><span class="letter">C</span><span>graduate</span>
+        <select data-answer="from university"><option value="">choose…</option><option>from university</option><option>for top marks</option></select>
+      </div></div>
+
+      <div class="item"><div class="row"><span class="letter">D</span>
+        <select data-answer="apply for"><option value="">choose…</option><option>apply for</option><option>pay for</option></select>
+        <span>a grant</span>
+      </div></div>
+
+      <div class="item"><div class="row"><span class="letter">E</span>
+        <select data-answer="complete"><option value="">choose…</option><option>complete</option><option>make</option></select>
+        <span>a bachelor’s degree</span>
+      </div></div>
+
+      <div class="item"><div class="row"><span class="letter">F</span>
+        <select data-answer="study for"><option value="">choose…</option><option>study for</option><option>graduate</option></select>
+        <span>a master’s degree</span>
+      </div></div>
+
+      <div class="item"><div class="row"><span class="letter">G</span>
+        <select data-answer="become"><option value="">choose…</option><option>become</option><option>complete</option></select>
+        <span>a</span>
+        <span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="postgraduate: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">postgraduate</span>
+        <span class="word-face word-back">(= advanced-degree student)</span>
+      </span>
+    </span>
+      </div></div>
+
+      <div class="item"><div class="row"><span class="letter">H</span>
+        <select data-answer="study for"><option value="">choose…</option><option>study for</option><option>be a</option></select>
+        <span>a PhD</span>
+      </div></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <p class="eyebrow">Vocabulary + Discussion</p>
+    <h2>2. University facts</h2>
+    <p class="instruction">Choose the correct word or phrase in each statement.</p>
+
+    <div class="items">
+      <div class="item"><div class="row"><span class="letter">A</span><span>In the UK, around 20% of</span>
+        <select data-answer="PhD"><option value="">choose…</option><option>PhD</option><option>undergraduate</option><option>postgraduate</option></select>
+        <span>candidates never complete their studies.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">B</span><span>In the US, 18.6% of all</span>
+        <select data-answer="bachelor’s degrees"><option value="">choose…</option><option>scholarships</option><option>bachelor’s degrees</option><option>postgraduates</option></select>
+        <span>are in business.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">C</span><span>All students aged under 25 in Scotland with a low </span><span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="household income: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">household income</span>
+        <span class="word-face word-back">(= total family income)</span>
+      </span>
+    </span><span> can receive a government</span>
+        <select data-answer="grant"><option value="">choose…</option><option>scholarship</option><option>grant</option><option>PhD</option></select>
+        <span>of up to £2,000, which they never have to pay back.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">D</span><span>In the UK, 69% of</span>
+        <select data-answer="undergraduates"><option value="">choose…</option><option>grants</option><option>PhDs</option><option>undergraduates</option></select>
+        <span>choose to move away from home to start university.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">E</span><span>In the UK, people who</span>
+        <select data-answer="graduate"><option value="">choose…</option><option>graduate</option><option>postgraduate</option><option>undergraduate</option></select>
+        <span>from university are more likely to get a job than those who don’t.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">F</span><span>Luxembourg has the highest number of</span>
+        <select data-answer="postgraduates"><option value="">choose…</option><option>postgraduates</option><option>scholarships</option><option>undergraduates</option></select>
+        <span>, with around 40% of people aged 25–34 holding a master’s degree.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">G</span><span>Japan offers many </span><span class="word-flip" data-size="md" tabindex="0" role="button" aria-label="competitive: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">competitive</span>
+        <span class="word-face word-back">(= hard to get)</span>
+      </span>
+    </span>
+        <select data-answer="scholarships"><option value="">choose…</option><option>scholarships</option><option>postgraduates</option><option>undergraduates</option></select>
+        <span>for international students.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">H</span><span>In the UK, completing a</span>
+        <select data-answer="master’s degree"><option value="">choose…</option><option>master’s degree</option><option>grant</option><option>graduate</option></select>
+        <span>can allow you to earn around £3,000 more a year than someone without one.</span></div></div>
+    </div>
+
+    <div class="discussion">
+      <strong>Discuss:</strong>
+      Which situations or statistics surprise you? Do you think they are also true where you live? Why / why not?
+    </div>
+  </article>
+</section>
+
+<section class="grid grid-reverse">
+  <article class="card">
+    <p class="eyebrow">Vocabulary</p>
+    <h2>3. Do you agree?</h2>
+    <p class="instruction">Read the sentences and choose the option you agree with most. Add some detail.</p>
+
+    <div class="items">
+      <div class="item"><div class="row"><span class="letter">A</span><span>It’s better to have</span>
+        <select><option value="">choose…</option><option>lots of small</option><option>a few big</option></select><span class="word-flip" data-size="md" tabindex="0" role="button" aria-label="assignments: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">assignments</span>
+        <span class="word-face word-back">(= coursework tasks)</span>
+      </span>
+    </span><span>during the year.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">B</span><span>I would learn more from a</span>
+        <select><option value="">choose…</option><option>lecture</option><option>seminar</option></select><span>.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">C</span><span>It’s</span>
+        <select><option value="">choose…</option><option>better</option><option>worse</option></select><span>to have all the university buildings on one campus.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">D</span><span>I think </span><span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="lab classes: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">lab classes</span>
+        <span class="word-face word-back">(= practical science classes)</span>
+      </span>
+    </span><span> are</span>
+        <select><option value="">choose…</option><option>more</option><option>less</option></select><span>useful than other types of classes.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">E</span><span>I am more productive when my deadlines are</span>
+        <select><option value="">choose…</option><option>closer</option><option>far away</option></select><span>.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">F</span><span>I think the</span>
+        <select><option value="">choose…</option><option>science</option><option>humanities</option></select><span class="word-flip" data-size="md" tabindex="0" role="button" aria-label="department: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">department</span>
+        <span class="word-face word-back">(= subject division)</span>
+      </span>
+    </span><span>is more popular in most universities.</span></div></div>
+
+      <div class="item"><div class="row"><span class="letter">G</span><span>There’s usually more work to do in the</span>
+        <select><option value="">choose…</option><option>first</option><option>second</option></select><span>semester.</span></div></div>
+    </div></div>
+    </div>
+
+    <div class="discussion"><strong>Discuss:</strong>Choose your answer, explain why, and compare it with your partner’s choice.</div>
+  </article>
+
+  <article class="card">
+    <p class="eyebrow">Speaking</p>
+    <h2>4. What would you prefer?</h2>
+    <p class="instruction">Choose the option you would prefer and say why.</p>
+
+    <div class="versus-list">
+      <div class="versus"><button class="choice">attending a three-hour lecture once a week</button><div class="or">OR</div><button class="choice">attending three one-hour seminars each week</button></div>
+      <div class="versus"><button class="choice">meeting every deadline one month <span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="in advance: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">in advance</span>
+        <span class="word-face word-back">(= before the deadline)</span>
+      </span>
+    </span></button><div class="or">OR</div><button class="choice">meeting every deadline one day before</button></div>
+      <div class="versus"><button class="choice">staying in student accommodation as a <span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="postgraduate: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">postgraduate</span>
+        <span class="word-face word-back">(= advanced-degree student)</span>
+      </span>
+    </span></button><div class="or">OR</div><button class="choice">staying in student accommodation as an <span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="undergraduate: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">undergraduate</span>
+        <span class="word-face word-back">(= bachelor’s student)</span>
+      </span>
+    </span></button></div>
+      <div class="versus"><button class="choice">a course with written <span class="word-flip" data-size="md" tabindex="0" role="button" aria-label="assignments: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">assignments</span>
+        <span class="word-face word-back">(= coursework tasks)</span>
+      </span>
+    </span> only</button><div class="or">OR</div><button class="choice">a course <span class="word-flip" data-size="md" tabindex="0" role="button" aria-label="assessed: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">assessed</span>
+        <span class="word-face word-back">(= evaluated / graded)</span>
+      </span>
+    </span> through oral presentations</button></div>
+      <div class="versus"><button class="choice">having one master’s degree</button><div class="or">OR</div><button class="choice">having two bachelor’s degrees</button></div>
+      <div class="versus"><button class="choice">a system where fewer people go to university, but all students get grants</button><div class="or">OR</div><button class="choice">a system where more people go to university, but only a few students are offered grants or <span class="word-flip" data-size="lg" tabindex="0" role="button" aria-label="scholarships: click for meaning">
+      <span class="word-flip-inner">
+        <span class="word-face word-front">scholarships</span>
+        <span class="word-face word-back">(= merit-based funding)</span>
+      </span>
+    </span></button></div>
+    </div>
+  </article>
+</section>
+
+<section class="card full">
+  <p class="eyebrow">Let’s revise</p>
+  <h2>5. Revision</h2>
+  <p class="instruction">Read the sentences and choose the correct option.</p>
+
+  <div class="example">
+    <strong>EXAMPLE</strong>
+    I contacted the history <b>department</b> to ask for extra time…
+  </div>
+
+  <div class="items">
+    <div class="item"><div class="row"><span class="letter">A</span><span>I just received a</span>
+      <select data-answer="scholarship"><option value="">choose…</option><option>scholarship</option><option>seminar</option></select>
+      <span>from my university so I can do…</span></div></div>
+
+    <div class="item"><div class="row"><span class="letter">B</span><span>The university</span>
+      <select data-answer="campus"><option value="">choose…</option><option>campus</option><option>grant</option></select>
+      <span>is really far from my flat so I’m…</span></div></div>
+
+    <div class="item"><div class="row"><span class="letter">C</span><span>It’s not my first degree, I’m actually a</span>
+      <select data-answer="postgraduate"><option value="">choose…</option><option>postgraduate</option><option>undergraduate</option></select>
+      <span>and I hope to…</span></div></div>
+
+    <div class="item"><div class="row"><span class="letter">D</span><span>I don’t enjoy lectures but I like taking part in</span>
+      <select data-answer="seminars"><option value="">choose…</option><option>departments</option><option>seminars</option></select>
+      <span>. However, I…</span></div></div>
+
+    <div class="item"><div class="row"><span class="letter">E</span><span>I was given a</span>
+      <select data-answer="grant"><option value="">choose…</option><option>postgraduate</option><option>grant</option></select>
+      <span>from the government to…</span></div></div>
+
+    <div class="item"><div class="row"><span class="letter">F</span><span>This</span>
+      <select data-answer="semester"><option value="">choose…</option><option>semester</option><option>campus</option></select>
+      <span>I have to study a lot…</span></div></div>
+
+    <div class="item"><div class="row"><span class="letter">G</span><span>As an</span>
+      <select data-answer="undergraduate"><option value="">choose…</option><option>undergraduate</option><option>scholarship</option></select>
+      <span>, I’m finding my final year quite stressful but…</span></div></div>
+  </div>
+
+  <button class="reset" onclick="resetAll()">Reset answers</button>
+</section>
+
+</main>
+
+<script>
+document.querySelectorAll('select[data-answer]').forEach(sel=>{
+  const feedback=document.createElement('div');
+  feedback.className='feedback';
+  sel.closest('.item').appendChild(feedback);
+
+  sel.addEventListener('change',()=>{
+    sel.classList.remove('correct','incorrect');
+    feedback.className='feedback';
+    if(!sel.value){feedback.textContent=''; return;}
+    if(sel.value===sel.dataset.answer){
+      sel.classList.add('correct');
+      feedback.classList.add('ok');
+      feedback.textContent='Correct';
+    }else{
+      sel.classList.add('incorrect');
+      feedback.classList.add('no');
+      feedback.textContent='Try again';
+    }
+  });
+});
+
+document.querySelectorAll('.flip, .word-flip').forEach(card=>{
+  const doFlip=()=>card.classList.toggle('flipped');
+  card.addEventListener('click',doFlip);
+  card.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      doFlip();
+    }
+  });
+});
+
+document.querySelectorAll('.choice .word-flip').forEach(card=>{
+  card.addEventListener('click',e=>e.stopPropagation());
+  card.addEventListener('keydown',e=>e.stopPropagation());
+});
+
+document.querySelectorAll('.versus').forEach(group=>{
+  const buttons=group.querySelectorAll('.choice');
+  buttons.forEach(btn=>btn.addEventListener('click',()=>{
+    buttons.forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }));
+});
+
+function resetAll(){
+  document.querySelectorAll('select').forEach(s=>{
+    s.value='';
+    s.classList.remove('correct','incorrect');
+  });
+  document.querySelectorAll('.feedback').forEach(f=>{f.textContent='';f.className='feedback';});
+  document.querySelectorAll('.choice').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.flip, .word-flip').forEach(f=>f.classList.remove('flipped'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
