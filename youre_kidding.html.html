@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>You’re kidding! — Interactive Lesson</title>
+<style>
+  :root{
+    --bg:#f7f4ef;
+    --paper:#fffdfa;
+    --ink:#242424;
+    --muted:#6f6a64;
+    --line:#ded8cf;
+    --shadow:0 14px 40px rgba(41,35,28,.08);
+    --surprise:#f0b24b;
+    --surprise-soft:#fff4df;
+    --agree:#72b8a6;
+    --agree-soft:#e9f7f3;
+    --sorry:#9b8bd0;
+    --sorry-soft:#f0ecfb;
+    --accent:#28251f;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.5;
+  }
+
+  .sticky-title{
+    position:sticky;
+    top:0;
+    z-index:100;
+    padding:14px 5vw;
+    background:rgba(247,244,239,.94);
+    backdrop-filter: blur(12px);
+    border-bottom:1px solid rgba(40,37,31,.10);
+    font-size:clamp(22px,3vw,34px);
+    font-weight:900;
+    letter-spacing:-.04em;
+  }
+
+  .page{width:min(1180px,92vw); margin:0 auto; padding:42px 0 80px}
+  .hero{
+    min-height:44vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:44px 0 50px;
+  }
+  .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.16em;
+    font-size:12px;
+    font-weight:800;
+    color:var(--muted);
+  }
+  h1{
+    margin:8px 0 12px;
+    font-size:clamp(58px,10vw,120px);
+    line-height:.87;
+    letter-spacing:-.07em;
+  }
+  .hero p{font-size:20px; max-width:760px; color:var(--muted); margin:10px 0 0}
+
+  section{margin:36px 0 80px}
+  .section-head{margin-bottom:22px}
+  .section-head h2{font-size:clamp(30px,4vw,48px); letter-spacing:-.04em; margin:4px 0}
+  .section-head p{margin:6px 0;color:var(--muted);font-size:17px;max-width:800px}
+
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:24px;
+    box-shadow:var(--shadow);
+  }
+
+  .task-one{
+    display:grid;
+    grid-template-columns:minmax(0,1.55fr) minmax(280px,.75fr);
+    gap:20px;
+    align-items:stretch;
+  }
+  .match-panel{padding:24px}
+  .discussion-panel{padding:26px}
+  .discussion-panel h3,.match-panel h3{margin:0 0 10px;font-size:22px}
+  .discussion-panel p{color:var(--muted);margin-top:0}
+  .discussion-panel ol{padding-left:22px;margin:16px 0 0}
+  .discussion-panel li{margin:0 0 16px;font-size:17px}
+
+  .phrase-pool{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:16px;
+    border:1px dashed #cfc6b9;
+    border-radius:18px;
+    background:#fbf8f3;
+    min-height:86px;
+    margin-bottom:16px;
+  }
+  .phrase{
+    border:1px solid #cfc8be;
+    border-radius:999px;
+    padding:9px 13px;
+    background:white;
+    font-size:14px;
+    font-weight:700;
+    cursor:grab;
+    user-select:none;
+    transition:.15s ease;
+  }
+  .phrase:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
+  .phrase.selected{outline:3px solid #26231f; outline-offset:2px}
+  .phrase.correct{border-color:#43866e;background:#edf8f4}
+  .phrase.wrong{border-color:#bd5d5d;background:#fff0f0}
+
+  .zones{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+  }
+  .zone{
+    min-height:215px;
+    border-radius:20px;
+    padding:14px;
+    border:2px solid transparent;
+    transition:.15s;
+  }
+  .zone.dragover{transform:scale(1.01); filter:brightness(.98)}
+  .zone h4{margin:0 0 12px;font-size:17px}
+  .zone[data-cat="surprise"]{background:var(--surprise-soft);border-color:var(--surprise)}
+  .zone[data-cat="agree"]{background:var(--agree-soft);border-color:var(--agree)}
+  .zone[data-cat="sorry"]{background:var(--sorry-soft);border-color:var(--sorry)}
+  .droparea{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;min-height:145px}
+
+  .buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  button{
+    appearance:none;
+    border:0;
+    border-radius:999px;
+    padding:11px 16px;
+    font:inherit;
+    font-weight:800;
+    cursor:pointer;
+    background:#292621;
+    color:white;
+  }
+  button.secondary{background:#ece7df;color:#2b2824}
+  button.ghost{background:transparent;color:#2b2824;border:1px solid #cfc8be}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .feedback{margin-top:12px;font-weight:800;min-height:24px}
+
+  .video-card{padding:18px}
+  .video-frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:18px;
+    overflow:hidden;
+    background:#111;
+  }
+  .video-frame iframe{width:100%;height:100%;border:0}
+  .video-note{font-size:13px;color:var(--muted);margin:12px 4px 0}
+
+  .practice-shell{padding:22px}
+  .practice-top{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .cat-btn{color:#24211d}
+  .cat-btn[data-cat="surprise"]{background:var(--surprise-soft);border:2px solid var(--surprise)}
+  .cat-btn[data-cat="agree"]{background:var(--agree-soft);border:2px solid var(--agree)}
+  .cat-btn[data-cat="sorry"]{background:var(--sorry-soft);border:2px solid var(--sorry)}
+  .cat-btn.active{box-shadow:inset 0 0 0 2px #2b2824}
+
+  .practice-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.6fr) minmax(260px,.7fr);
+    gap:18px;
+  }
+  .prompt-card{
+    min-height:300px;
+    border-radius:22px;
+    padding:30px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    border:2px solid var(--line);
+    background:#fff;
+  }
+  .prompt-card.surprise{background:var(--surprise-soft);border-color:var(--surprise)}
+  .prompt-card.agree{background:var(--agree-soft);border-color:var(--agree)}
+  .prompt-card.sorry{background:var(--sorry-soft);border-color:var(--sorry)}
+  .prompt-number{font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+  .prompt-text{font-size:clamp(27px,3.5vw,42px);line-height:1.08;letter-spacing:-.04em;font-weight:900;margin:18px 0}
+  .prompt-instruction{font-size:15px;font-weight:700;color:#615b54}
+
+  .language-bank{
+    border-radius:22px;
+    background:#f8f6f1;
+    border:1px solid var(--line);
+    padding:22px;
+  }
+  .language-bank h3{margin:0 0 4px;font-size:20px}
+  .language-bank .mini{font-size:13px;color:var(--muted);margin-bottom:15px}
+  .language-list{display:flex;flex-direction:column;gap:9px}
+  .language-item{
+    background:white;
+    border:1px solid #ddd6cd;
+    border-radius:14px;
+    padding:10px 12px;
+    font-weight:800;
+  }
+  .rule{
+    margin:18px 0 0;
+    padding:15px 17px;
+    border-left:4px solid #292621;
+    background:#f2eee8;
+    border-radius:12px;
+    font-weight:750;
+  }
+  .counter{font-size:13px;color:var(--muted);font-weight:800;margin-left:auto;align-self:center}
+
+  footer{padding-top:30px;color:var(--muted);font-size:13px;border-top:1px solid var(--line)}
+
+  @media (max-width:850px){
+    .task-one,.practice-grid{grid-template-columns:1fr}
+    .zones{grid-template-columns:1fr}
+    .zone{min-height:150px}
+    .droparea{min-height:70px}
+    .hero{min-height:36vh}
+  }
+</style>
+</head>
+<body>
+  <div class="sticky-title">You’re kidding!</div>
+
+  <main class="page">
+    <header class="hero">
+      <h1>You’re<br>kidding!</h1>
+    </header>
+
+    <section id="task1">
+      <div class="section-head">
+        <div class="eyebrow">Task 1</div>
+        <h2>Sort the quick responses</h2>
+        <p>Complete the boxes with the expressions from the list. Drag a phrase, or tap a phrase and then tap a box.</p>
+      </div>
+
+      <div class="task-one">
+        <div class="card match-panel">
+          <h3>Complete the boxes</h3>
+          <div id="pool" class="phrase-pool"></div>
+
+          <div class="zones">
+            <div class="zone" data-cat="surprise">
+              <h4>You’re surprised</h4>
+              <div class="droparea"></div>
+            </div>
+            <div class="zone" data-cat="agree">
+              <h4>You agree</h4>
+              <div class="droparea"></div>
+            </div>
+            <div class="zone" data-cat="sorry">
+              <h4>You’re sorry</h4>
+              <div class="droparea"></div>
+            </div>
+          </div>
+
+          <div class="buttons">
+            <button id="checkBtn">Check answers</button>
+            <button id="showBtn" class="secondary">Show answers</button>
+            <button id="resetBtn" class="ghost">Reset</button>
+          </div>
+          <div id="feedback" class="feedback"></div>
+        </div>
+
+        <aside class="card discussion-panel">
+          <h3>Discuss</h3>
+          <p>Use the expressions you have just sorted.</p>
+          <ol>
+            <li>Choose several expressions. For each one, give a real situation in which you could genuinely use it. Say exactly how you would react.</li>
+            <li>Which of these expressions would you actually use in a real English conversation? Which ones feel less natural to you?</li>
+            <li>Do you react differently when speaking English and when speaking your first language? In what way?</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section id="video">
+      <div class="section-head">
+        <div class="eyebrow">Task 2</div>
+        <h2>Watch and notice the reactions</h2>
+        <p>Listen for short responses. Notice how quickly speakers react and what happens immediately after the reaction.</p>
+      </div>
+      <div class="card video-card">
+        <div class="video-frame">
+          <iframe
+            src="https://www.youtube.com/embed/9DfYA1HNe2s"
+            title="Interactive video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div class="video-note">If the embedded player is unavailable, use the original iSLCollective activity linked by your teacher.</div>
+      </div>
+    </section>
+
+    <section id="practice">
+      <div class="section-head">
+        <div class="eyebrow">Task 3 • 20–25 minutes</div>
+        <h2>Make it real</h2>
+        <p>Choose a category and use only true information. One student shares; the partner reacts naturally, asks a follow-up question and keeps the conversation going.</p>
+      </div>
+
+      <div class="card practice-shell">
+        <div class="practice-top">
+          <button class="cat-btn" data-cat="surprise">You’re surprised</button>
+          <button class="cat-btn" data-cat="agree">You agree</button>
+          <button class="cat-btn" data-cat="sorry">You’re sorry</button>
+          <span class="counter" id="counter">Choose a category</span>
+        </div>
+
+        <div class="practice-grid">
+          <div id="promptCard" class="prompt-card">
+            <div class="prompt-number">Choose a category to start</div>
+            <div class="prompt-text">Share something real. React naturally.</div>
+            <div class="prompt-instruction">No invented stories.</div>
+          </div>
+
+          <aside class="language-bank">
+            <h3>Useful language</h3>
+            <div class="mini">Use a phrase only when it genuinely fits.</div>
+            <div id="languageList" class="language-list">
+              <div class="language-item">You’re kidding!</div>
+              <div class="language-item">Sounds good!</div>
+              <div class="language-item">I’m sorry to hear that.</div>
+            </div>
+            <div class="rule">React → ask one real follow-up question → continue the conversation.</div>
+          </aside>
+        </div>
+
+        <div class="buttons">
+          <button id="nextPrompt" disabled>Start / next</button>
+          <button id="randomPrompt" class="secondary">Random category</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Adapted for classroom use from the functional-language material in ESL Brains, “You’re kidding! and other quick responses”.
+    </footer>
+  </main>
+
+<script>
+const phrases = [
+  {text:"Fine, see you then!", cat:"agree"},
+  {text:"I’m sorry to hear that.", cat:"sorry"},
+  {text:"What a pity!", cat:"sorry"},
+  {text:"You don’t say!", cat:"surprise"},
+  {text:"You’re kidding!", cat:"surprise"},
+  {text:"Sounds good!", cat:"agree"},
+  {text:"That can’t be true!", cat:"surprise"},
+  {text:"It’s OK by/with me!", cat:"agree"},
+  {text:"Sure, why not?", cat:"agree"},
+  {text:"That’s too bad.", cat:"sorry"}
+];
+
+const pool = document.getElementById('pool');
+let selected = null;
+
+function makePhrase(item){
+  const el=document.createElement('div');
+  el.className='phrase';
+  el.textContent=item.text;
+  el.draggable=true;
+  el.dataset.answer=item.cat;
+
+  el.addEventListener('dragstart', e=>{
+    e.dataTransfer.setData('text/plain', item.text);
+    selected=el;
+  });
+
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.phrase').forEach(p=>p.classList.remove('selected'));
+    if(selected===el){selected=null; return;}
+    selected=el; el.classList.add('selected');
+  });
+  return el;
+}
+
+function initPool(){
+  pool.innerHTML='';
+  document.querySelectorAll('.droparea').forEach(a=>a.innerHTML='');
+  phrases.forEach(p=>pool.appendChild(makePhrase(p)));
+  selected=null;
+  document.getElementById('feedback').textContent='';
+}
+
+document.querySelectorAll('.zone').forEach(zone=>{
+  zone.addEventListener('dragover', e=>{e.preventDefault(); zone.classList.add('dragover')});
+  zone.addEventListener('dragleave', ()=>zone.classList.remove('dragover'));
+  zone.addEventListener('drop', e=>{
+    e.preventDefault(); zone.classList.remove('dragover');
+    if(selected){
+      zone.querySelector('.droparea').appendChild(selected);
+      selected.classList.remove('selected','correct','wrong');
+      selected=null;
+    }
+  });
+  zone.addEventListener('click', e=>{
+    if(selected && !e.target.classList.contains('phrase')){
+      zone.querySelector('.droparea').appendChild(selected);
+      selected.classList.remove('selected','correct','wrong');
+      selected=null;
+    }
+  });
+});
+
+pool.addEventListener('click', e=>{
+  if(selected && e.target===pool){
+    pool.appendChild(selected);
+    selected.classList.remove('selected','correct','wrong');
+    selected=null;
+  }
+});
+
+document.getElementById('checkBtn').onclick=()=>{
+  let placed=0, correct=0;
+  document.querySelectorAll('.zone').forEach(zone=>{
+    zone.querySelectorAll('.phrase').forEach(p=>{
+      placed++;
+      const ok=p.dataset.answer===zone.dataset.cat;
+      p.classList.toggle('correct',ok);
+      p.classList.toggle('wrong',!ok);
+      if(ok) correct++;
+    });
+  });
+  const fb=document.getElementById('feedback');
+  if(placed<phrases.length) fb.textContent=`${placed}/${phrases.length} placed. Keep going.`;
+  else if(correct===phrases.length) fb.textContent='Perfect — all responses are in the right category.';
+  else fb.textContent=`${correct}/${phrases.length} correct. Move the red ones and try again.`;
+};
+
+document.getElementById('showBtn').onclick=()=>{
+  document.querySelectorAll('.phrase').forEach(p=>{
+    const target=document.querySelector(`.zone[data-cat="${p.dataset.answer}"] .droparea`);
+    target.appendChild(p);
+    p.classList.remove('selected','wrong');
+    p.classList.add('correct');
+  });
+  document.getElementById('feedback').textContent='Answers shown.';
+};
+document.getElementById('resetBtn').onclick=initPool;
+initPool();
+
+const banks = {
+  surprise:[
+    "You’re kidding!",
+    "You don’t say!",
+    "That can’t be true!",
+    "No way!"
+  ],
+  agree:[
+    "Sounds good!",
+    "Sure, why not?",
+    "It’s OK by/with me!",
+    "Fine, see you then!",
+    "No problem!"
+  ],
+  sorry:[
+    "I’m sorry to hear that.",
+    "What a pity!",
+    "That’s too bad."
+  ]
+};
+
+const prompts = {
+ surprise:[
+  "Tell your partner something that genuinely surprised you this week.",
+  "Share something unexpected you found out recently.",
+  "Tell your partner about a price, bill or cost that surprised you.",
+  "Share a piece of news you heard recently that you found hard to believe.",
+  "Tell your partner about something unexpectedly good that happened to you.",
+  "Share something surprising you noticed about the weather, your city or your neighbourhood.",
+  "Tell your partner about a person who recently did something you did not expect.",
+  "Tell your partner about something online that surprised you recently.",
+  "Share a fact you learned recently that made you think, “Really?”",
+  "Tell your partner about a recent moment when someone completely surprised you."
+ ],
+ sorry:[
+  "Tell your partner about one small thing that went wrong for you this week.",
+  "Share something you planned recently that did not work out.",
+  "Tell your partner about something annoying that happened at work or while studying.",
+  "Share a minor problem you are dealing with at the moment.",
+  "Tell your partner about something you lost, broke, forgot or missed recently.",
+  "Share something disappointing you heard from a friend, colleague or family member.",
+  "Tell your partner about something you wanted to do recently but could not.",
+  "Share a recent situation that made your day more difficult.",
+  "Tell your partner about a plan you had to cancel or change.",
+  "Share something small that has been bothering you lately."
+ ],
+ agree:[
+  "Make a real suggestion for something you and your partner could do after class or another day.",
+  "Recommend a real film, series, book, podcast or video and suggest that your partner tries it.",
+  "Suggest one realistic change that would make your English lessons better.",
+  "Suggest a place in your city or country that your partner should visit.",
+  "Suggest something useful your partner could try this week.",
+  "Make a real plan or arrangement that another student can genuinely accept, change or refuse.",
+  "Suggest a food, café or restaurant your partner should try.",
+  "Suggest one small thing people could do to make weekdays easier.",
+  "Suggest an app, website or tool that is genuinely useful.",
+  "Suggest one simple plan for the coming weekend."
+ ]
+};
+
+let currentCat=null;
+let indexes={surprise:0,sorry:0,agree:0};
+
+function renderBank(cat){
+  const list=document.getElementById('languageList');
+  list.innerHTML='';
+  banks[cat].forEach(t=>{
+    const d=document.createElement('div');
+    d.className='language-item';
+    d.textContent=t;
+    list.appendChild(d);
+  });
+}
+
+function chooseCat(cat){
+  currentCat=cat;
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.toggle('active',b.dataset.cat===cat));
+  document.getElementById('nextPrompt').disabled=false;
+  renderBank(cat);
+  showPrompt();
+}
+
+function showPrompt(){
+  if(!currentCat) return;
+  const arr=prompts[currentCat];
+  const i=indexes[currentCat] % arr.length;
+  const card=document.getElementById('promptCard');
+  card.className='prompt-card '+currentCat;
+  card.innerHTML=`
+    <div class="prompt-number">${currentCat==="surprise"?"You’re surprised":currentCat==="agree"?"You agree":"You’re sorry"} • ${i+1}/${arr.length}</div>
+    <div class="prompt-text">${arr[i]}</div>
+    <div class="prompt-instruction">Speaker: tell the truth. Partner: react + ask + continue.</div>`;
+  document.getElementById('counter').textContent=`${arr.length} prompts in this category`;
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn=>{
+  btn.onclick=()=>chooseCat(btn.dataset.cat);
+});
+
+document.getElementById('nextPrompt').onclick=()=>{
+  if(!currentCat) return;
+  indexes[currentCat]=(indexes[currentCat]+1)%prompts[currentCat].length;
+  showPrompt();
+};
+
+document.getElementById('randomPrompt').onclick=()=>{
+  const cats=['surprise','agree','sorry'];
+  const cat=cats[Math.floor(Math.random()*cats.length)];
+  chooseCat(cat);
+  indexes[cat]=Math.floor(Math.random()*prompts[cat].length);
+  showPrompt();
+};
+</script>
+</body>
+</html>
