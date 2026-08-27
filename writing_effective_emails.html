@@ -120,6 +120,26 @@ h1{font-size:clamp(2.4rem,6vw,5.1rem);line-height:.98;letter-spacing:-.055em;mar
 .feedback.ok{color:var(--success)} .feedback.bad{color:var(--danger)}
 .question-list{display:grid;gap:10px}
 .question{padding:12px 14px;border-left:4px solid var(--accent);background:#f7fbfe;border-radius:0 12px 12px 0}
+.questionnaire{margin:34px 0 24px;padding:30px}
+.questionnaire-kicker{
+  margin:0 0 8px;color:var(--primary-dark);font-size:.82rem;font-weight:850;
+  letter-spacing:.28em;text-transform:uppercase;
+}
+.questionnaire h1{margin:0 0 8px;font-size:clamp(2rem,5vw,3.8rem);line-height:1;letter-spacing:-.045em}
+.questionnaire-intro{margin:0 0 22px;color:var(--muted);font-size:1.05rem}
+.habit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.habit-question{margin:0;padding:17px;border:1px solid var(--line);border-radius:16px;background:#f8fcff}
+.habit-question legend{padding:0 5px;font-weight:800;color:var(--ink)}
+.habit-options{display:grid;gap:8px;margin-top:7px}
+.habit-option{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid transparent;
+  border-radius:11px;background:#fff;cursor:pointer;transition:.18s ease;
+}
+.habit-option:hover{border-color:#a9d5f0;background:#f1f9ff}
+.habit-option:has(input:checked){border-color:var(--primary);background:#eaf6ff;color:var(--primary-dark);font-weight:700}
+.habit-option input{flex:0 0 auto;margin-top:.28em;accent-color:var(--primary)}
+.habit-other{margin-top:8px}
+.pair-prompt{margin:20px 0 0;padding:14px 16px;border-left:4px solid var(--primary);border-radius:0 12px 12px 0;background:#edf7ff;font-weight:750}
 .match-row{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:center;margin:10px 0}
 select,input[type="text"],textarea{
   width:100%;border:1px solid #bcdcf0;border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink);
@@ -167,7 +187,7 @@ textarea{min-height:360px;resize:vertical;line-height:1.6}
 .full{grid-column:1/-1}
 @media(max-width:850px){
   .topbar-inner{grid-template-columns:1fr auto} .progress-track{grid-column:1/-1;grid-row:2}
-  .hero,.grid-2,.email-builder{grid-template-columns:1fr}
+  .hero,.grid-2,.email-builder,.habit-grid{grid-template-columns:1fr}
   .template-box{position:static}
   .hero-main{padding:30px}
 }
@@ -192,25 +212,70 @@ textarea{min-height:360px;resize:vertical;line-height:1.6}
 </header>
 
 <main class="container">
-  <section class="hero">
-    <div class="hero-main">
-      <span class="eyebrow">Business English · Formal and informal language</span>
-      <h1>Writing Effective Emails</h1>
-      <div class="author">
-        <strong>Created by Viktoriia Pyniv</strong><br>
-        AI-assisted educational resource developed with ChatGPT (OpenAI).<br>
-        Source: <a href="https://eslbrains.com/b1-formal-and-informal-emails/" target="_blank" rel="noopener">Writing effective emails – formal and informal language</a>
-      </div>
+  <section class="card questionnaire" aria-labelledby="questionnaire-title">
+    <p class="questionnaire-kicker">Questionnaire · Your email habits</p>
+    <h1 id="questionnaire-title">Your Email Habits</h1>
+    <p class="questionnaire-intro">Complete the questionnaire about your email habits. Tick the answers or add your own.</p>
+
+    <div class="habit-grid">
+      <fieldset class="habit-question">
+        <legend>a) I check my inbox…</legend>
+        <div class="habit-options">
+          <label class="habit-option"><input type="radio" name="habit-a" value="constantly"> <span>constantly.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-a" value="a few times a day"> <span>a few times a day.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-a" value="once a day"> <span>once a day — and that’s enough.</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="habit-question">
+        <legend>b) My inbox right now is…</legend>
+        <div class="habit-options">
+          <label class="habit-option"><input type="radio" name="habit-b" value="inbox zero"> <span>inbox zero.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-b" value="under 100 unread"> <span>under 100 unread.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-b" value="thousands unread"> <span>thousands unread — no shame.</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="habit-question">
+        <legend>c) I usually reply…</legend>
+        <div class="habit-options">
+          <label class="habit-option"><input type="radio" name="habit-c" value="within minutes"> <span>within minutes.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-c" value="the same day"> <span>the same day.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-c" value="when I remember"> <span>when I remember…</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="habit-question">
+        <legend>d) Writing emails in English feels…</legend>
+        <div class="habit-options">
+          <label class="habit-option"><input type="radio" name="habit-d" value="fine"> <span>fine.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-d" value="OK, but it takes me long"> <span>OK, but it takes me long.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-d" value="stressful"> <span>stressful — for now!</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="habit-question">
+        <legend>e) My biggest email sin is…</legend>
+        <div class="habit-options">
+          <label class="habit-option"><input type="radio" name="habit-e" value="writing too much"> <span>writing too much.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-e" value="writing too little"> <span>writing too little.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-e" value="forgetting the attachment"> <span>forgetting the attachment.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-e" value="other"> <span>other:</span></label>
+        </div>
+        <input class="habit-other" type="text" aria-label="Other email sin" placeholder="Add your own answer…">
+      </fieldset>
+
+      <fieldset class="habit-question">
+        <legend>f) After work, I…</legend>
+        <div class="habit-options">
+          <label class="habit-option"><input type="radio" name="habit-f" value="still check my email"> <span>still check my email.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-f" value="switch notifications off"> <span>switch notifications off.</span></label>
+          <label class="habit-option"><input type="radio" name="habit-f" value="it depends"> <span>it depends on the week.</span></label>
+        </div>
+      </fieldset>
     </div>
-    <aside class="info-card">
-      <h2>Email success checklist</h2>
-      <div class="tip-list">
-        <div class="tip"><b>01</b><span>Write a brief, descriptive subject line.</span></div>
-        <div class="tip"><b>02</b><span>State your purpose early and clearly.</span></div>
-        <div class="tip"><b>03</b><span>Use an appropriate greeting and sign-off.</span></div>
-        <div class="tip"><b>04</b><span>Request action politely and professionally.</span></div>
-      </div>
-    </aside>
+
+    <p class="pair-prompt">Discuss your answers with a partner. What do you have in common? Which answers are different?</p>
   </section>
 
   <nav class="section-tabs" aria-label="Lesson sections">
@@ -251,10 +316,12 @@ textarea{min-height:360px;resize:vertical;line-height:1.6}
           <details>
             <summary><span class="activity-label" style="display:inline-flex;margin:0"><span class="num">3</span><span class="instruction">Discuss the questions.</span></span></summary>
             <div class="question-list" style="margin-top:14px">
-              <div class="question">How many emails do you get every day? Are they all important?</div>
-              <div class="question">Do you feel that people overuse emails?</div>
-              <div class="question">Do you set up an autoresponder when you are out of the office?</div>
-              <div class="question">When are emails a necessary means of communication?</div>
+              <div class="question">How many emails do you get on a typical day? And how many do you actually read?</div>
+              <div class="question">Do you like writing emails in English? What is the hardest part?</div>
+              <div class="question">Are you team “inbox zero” or team “3,000 unread — no shame”?</div>
+              <div class="question">How quickly do you expect a reply to a work email: hours or days?</div>
+              <div class="question">Email, chat (Teams / Slack) or a phone call — what do you use for what?</div>
+              <div class="question">What is the worst email mistake you have ever made or seen?</div>
             </div>
           </details>
         </article>
