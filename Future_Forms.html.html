@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Future Forms — Lesson</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f6f7fb;
+    color: #20242c;
+  }
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 34px 28px 60px;
+  }
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(246, 247, 251, 0.96);
+    backdrop-filter: blur(10px);
+    padding: 18px 0 16px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  h1 {
+    margin: 0;
+    font-size: 38px;
+    letter-spacing: -0.5px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 28px rgba(30, 41, 59, 0.08);
+    margin-bottom: 26px;
+  }
+  .top-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
+  }
+  .story {
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .questions h3, .section-title {
+    margin-top: 0;
+  }
+  .questions {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .questions ol {
+    margin: 0;
+    padding-left: 22px;
+    line-height: 1.65;
+  }
+
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+
+  .sentence-bank {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .draggable {
+    background: white;
+    border: 2px solid #d0d5dd;
+    padding: 12px 14px;
+    border-radius: 12px;
+    cursor: grab;
+    font-size: 16px;
+    transition: 0.2s;
+  }
+  .draggable:hover { transform: translateY(-1px); }
+  .draggable.dragging { opacity: .5; }
+
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .dropzone {
+    min-height: 180px;
+    border-radius: 16px;
+    padding: 14px;
+    border: 2px dashed transparent;
+  }
+  .dropzone h4 {
+    margin: 0 0 6px;
+    font-size: 17px;
+  }
+  .will { background: #fff3cd; border-color: #e6b800; }
+  .going { background: #dff5e1; border-color: #5eb86b; }
+  .pc { background: #dfeeff; border-color: #6da8e8; }
+  .ps { background: #f2e2ff; border-color: #a977d2; }
+
+  .dropzone.correct { box-shadow: inset 0 0 0 3px rgba(34,197,94,.28); }
+  .dropzone.wrong { box-shadow: inset 0 0 0 3px rgba(239,68,68,.28); }
+
+  .exercise-row {
+    padding: 12px 0;
+    border-bottom: 1px solid #eaecf0;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .exercise-row:last-child { border-bottom: none; }
+  select {
+    padding: 7px 9px;
+    border-radius: 8px;
+    border: 1px solid #b8c0cc;
+    font-size: 15px;
+    background: white;
+  }
+  .feedback {
+    margin-left: 8px;
+    font-weight: 700;
+  }
+  .correct-text { color: #15803d; }
+  .wrong-text { color: #b42318; }
+
+  .buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  button {
+    border: none;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .primary { background: #111827; color: white; }
+  .secondary { background: #e9edf3; color: #20242c; }
+
+  .legend {
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:12px;
+    color:#667085;
+    font-size:13px;
+  }
+
+
+  .speaking-intro {
+    margin: -4px 0 18px;
+    color: #667085;
+    font-size: 15px;
+  }
+
+  .speaking-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .flip-card {
+    background: transparent;
+    perspective: 1000px;
+    height: 190px;
+    cursor: pointer;
+  }
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.55s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-card.flipped .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 6px 20px rgba(30, 41, 59, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .flip-card-front {
+    background: #ffffff;
+    border: 2px solid #d7dce5;
+  }
+
+  .flip-card-back {
+    background: #eef3ff;
+    border: 2px solid #9eb8ee;
+    transform: rotateY(180deg);
+  }
+
+  .card-number {
+    font-size: 12px;
+    font-weight: 700;
+    color: #98a2b3;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .card-question {
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 700;
+  }
+
+  .card-verb {
+    font-size: 14px;
+    color: #667085;
+    font-style: italic;
+  }
+
+  .answer-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #4f6fae;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .answer-question {
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 700;
+  }
+
+  .flip-hint {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #98a2b3;
+  }
+
+  @media (max-width: 900px) {
+    .top-grid { grid-template-columns: 1fr; }
+    .columns { grid-template-columns: 1fr 1fr; }
+    .speaking-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 620px) {
+    .columns { grid-template-columns: 1fr; }
+    .speaking-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 30px; }
+    .page { padding: 22px 14px 40px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="sticky-header">
+    <h1>Future Forms: Plans & Arrangements</h1>
+  </div>
+
+  <section class="card top-grid">
+    <div>
+      <h2 class="section-title">A Busy Weekend Ahead</h2>
+      <div class="story">
+        <p>
+          Maya has a busy weekend ahead. On Saturday morning, her train leaves at 8:15,
+          so she needs to get up early. She is meeting her friend Leo at the station at 7:45,
+          and they already have their tickets.
+        </p>
+        <p>
+          They are going to spend the day in Brighton because they want to relax by the sea.
+          They haven't planned every detail yet, but Maya wants to visit the pier and try a new restaurant.
+        </p>
+        <p>
+          Just before leaving home, Leo calls and says he has forgotten to bring a charger.
+          Maya looks at the one on her desk and says, “No problem, I'll bring mine.”
+        </p>
+      </div>
+    </div>
+
+    <div class="questions">
+      <h3>Discuss</h3>
+      <ol>
+        <li>Do you usually plan your weekends in advance, or do you prefer to decide at the last minute?</li>
+        <li>Have you ever had a plan change because someone forgot something or something unexpected happened?</li>
+        <li>If you could plan a perfect weekend away right now, where would you go and what would you do?</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">Sort the sentences</h2>
+    <div class="sentence-bank" id="bank">
+      <div class="draggable" draggable="true" data-answer="ps">Her train leaves at 8:15.</div>
+      <div class="draggable" draggable="true" data-answer="pc">She is meeting Leo at the station at 7:45.</div>
+      <div class="draggable" draggable="true" data-answer="going">They are going to spend the day in Brighton.</div>
+      <div class="draggable" draggable="true" data-answer="will">I'll bring mine.</div>
+    </div>
+
+    <div class="columns">
+      <div class="dropzone will" data-zone="will">
+        <h4>Future Simple — will</h4>
+      </div>
+      <div class="dropzone going" data-zone="going">
+        <h4>be going to</h4>
+      </div>
+      <div class="dropzone pc" data-zone="pc">
+        <h4>Present Continuous</h4>
+      </div>
+      <div class="dropzone ps" data-zone="ps">
+        <h4>Present Simple</h4>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="primary" onclick="checkSorting()">Check</button>
+      <button class="secondary" onclick="resetSorting()">Reset</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">Choose the best future form</h2>
+
+    <div class="exercise-row">
+      1. The webinar
+      <select data-correct="starts">
+        <option value="">— choose —</option>
+        <option value="will start">will start</option>
+        <option value="is going to start">is going to start</option>
+        <option value="is starting">is starting</option>
+        <option value="starts">starts</option>
+      </select>
+      at 10:00 tomorrow morning.
+      <span class="feedback"></span>
+    </div>
+
+    <div class="exercise-row">
+      2. I
+      <select data-correct="am meeting">
+        <option value="">— choose —</option>
+        <option value="will meet">will meet</option>
+        <option value="am going to meet">am going to meet</option>
+        <option value="am meeting">am meeting</option>
+        <option value="meet">meet</option>
+      </select>
+      my manager after work. We arranged it yesterday.
+      <span class="feedback"></span>
+    </div>
+
+    <div class="exercise-row">
+      3. We
+      <select data-correct="are going to redecorate">
+        <option value="">— choose —</option>
+        <option value="will redecorate">will redecorate</option>
+        <option value="are going to redecorate">are going to redecorate</option>
+        <option value="are redecorating">are redecorating</option>
+        <option value="redecorate">redecorate</option>
+      </select>
+      the living room this autumn. We've already decided to do it.
+      <span class="feedback"></span>
+    </div>
+
+    <div class="exercise-row">
+      4. “I can't carry all these bags.” — “Don't worry, I
+      <select data-correct="will help">
+        <option value="">— choose —</option>
+        <option value="will help">will help</option>
+        <option value="am going to help">am going to help</option>
+        <option value="am helping">am helping</option>
+        <option value="help">help</option>
+      </select>
+      you.”
+      <span class="feedback"></span>
+    </div>
+
+    <div class="exercise-row">
+      5. Our flight
+      <select data-correct="lands">
+        <option value="">— choose —</option>
+        <option value="will land">will land</option>
+        <option value="is going to land">is going to land</option>
+        <option value="is landing">is landing</option>
+        <option value="lands">lands</option>
+      </select>
+      at 18:40 according to the schedule.
+      <span class="feedback"></span>
+    </div>
+
+    <div class="exercise-row">
+      6. I
+      <select data-correct="am having">
+        <option value="">— choose —</option>
+        <option value="will have">will have</option>
+        <option value="am going to have">am going to have</option>
+        <option value="am having">am having</option>
+        <option value="have">have</option>
+      </select>
+      dinner with Julia on Friday. The table is already booked.
+      <span class="feedback"></span>
+    </div>
+
+    <div class="buttons">
+      <button class="primary" onclick="checkGapFill()">Check answers</button>
+      <button class="secondary" onclick="resetGapFill()">Reset</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2 class="section-title">Speaking: Make the Question & Answer</h2>
+    <div class="speaking-intro">
+      Complete the question with the correct future form. Answer it, then click the card to check.
+    </div>
+    <div class="speaking-grid">
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 1">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 1</div>
+            <div class="card-question">Who ______ you ______ after work tomorrow?</div>
+            <div class="card-verb">(meet)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">Who are you meeting after work tomorrow?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 2">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 2</div>
+            <div class="card-question">What ______ you ______ if you suddenly get a free evening this week?</div>
+            <div class="card-verb">(do)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What will you do if you suddenly get a free evening this week?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 3">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 3</div>
+            <div class="card-question">What time ______ your next English lesson ______?</div>
+            <div class="card-verb">(start)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What time does your next English lesson start?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 4">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 4</div>
+            <div class="card-question">What habit ______ you ______ this year?</div>
+            <div class="card-verb">(change)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What habit are you going to change this year?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 5">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 5</div>
+            <div class="card-question">Who ______ you ______ dinner with on Saturday?</div>
+            <div class="card-verb">(have)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">Who are you having dinner with on Saturday?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 6">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 6</div>
+            <div class="card-question">What ______ you ______ if a friend asks you for help tonight?</div>
+            <div class="card-verb">(say)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What will you say if a friend asks you for help tonight?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 7">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 7</div>
+            <div class="card-question">What time ______ your train or bus ______ tomorrow morning?</div>
+            <div class="card-verb">(leave)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What time does your train or bus leave tomorrow morning?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 8">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 8</div>
+            <div class="card-question">What new skill ______ you ______ in the near future?</div>
+            <div class="card-verb">(learn)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What new skill are you going to learn in the near future?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 9">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 9</div>
+            <div class="card-question">Where ______ you ______ on your next business trip?</div>
+            <div class="card-verb">(stay)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">Where are you staying on your next business trip?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 10">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 10</div>
+            <div class="card-question">What ______ you ______ if your plans for the weekend suddenly change?</div>
+            <div class="card-verb">(do)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What will you do if your plans for the weekend suddenly change?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 11">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 11</div>
+            <div class="card-question">When ______ your next holiday ______?</div>
+            <div class="card-verb">(begin)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">When does your next holiday begin?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 12">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 12</div>
+            <div class="card-question">______ you ______ anything about your daily routine this year?</div>
+            <div class="card-verb">(change)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">Are you going to change anything about your daily routine this year?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 13">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 13</div>
+            <div class="card-question">What ______ you ______ on Monday evening?</div>
+            <div class="card-verb">(do)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What are you doing on Monday evening?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 14">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 14</div>
+            <div class="card-question">What ______ you ______ if someone invites you on a spontaneous trip tomorrow?</div>
+            <div class="card-verb">(say)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What will you say if someone invites you on a spontaneous trip tomorrow?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 15">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 15</div>
+            <div class="card-question">Who ______ you ______ your next English lesson with?</div>
+            <div class="card-verb">(have)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">Who are you having your next English lesson with?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flip-card" onclick="this.classList.toggle('flipped')" tabindex="0" role="button" aria-label="Speaking card 16">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="card-number">Card 16</div>
+            <div class="card-question">What ______ you ______ to improve your English over the next few months?</div>
+            <div class="card-verb">(do)</div>
+          </div>
+          <div class="flip-card-back">
+            <div>
+              <div class="answer-label">Correct question</div>
+              <div class="answer-question">What are you going to do to improve your English over the next few months?</div>
+            </div>
+            <div class="flip-hint">Answer the question, then click to flip back.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+let dragged = null;
+
+document.querySelectorAll('.draggable').forEach(el => {
+  el.addEventListener('dragstart', () => {
+    dragged = el;
+    el.classList.add('dragging');
+  });
+  el.addEventListener('dragend', () => {
+    el.classList.remove('dragging');
+    dragged = null;
+  });
+});
+
+document.querySelectorAll('.dropzone, #bank').forEach(zone => {
+  zone.addEventListener('dragover', e => e.preventDefault());
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    if (dragged) zone.appendChild(dragged);
+  });
+});
+
+function checkSorting() {
+  document.querySelectorAll('.dropzone').forEach(zone => {
+    zone.classList.remove('correct', 'wrong');
+    const cards = zone.querySelectorAll('.draggable');
+    if (!cards.length) return;
+    let allCorrect = true;
+    cards.forEach(card => {
+      if (card.dataset.answer !== zone.dataset.zone) allCorrect = false;
+    });
+    zone.classList.add(allCorrect ? 'correct' : 'wrong');
+  });
+}
+
+function resetSorting() {
+  const bank = document.getElementById('bank');
+  document.querySelectorAll('.draggable').forEach(card => bank.appendChild(card));
+  document.querySelectorAll('.dropzone').forEach(z => z.classList.remove('correct','wrong'));
+}
+
+function checkGapFill() {
+  document.querySelectorAll('select[data-correct]').forEach(sel => {
+    const feedback = sel.parentElement.querySelector('.feedback');
+    if (sel.value === sel.dataset.correct) {
+      feedback.textContent = '✓';
+      feedback.className = 'feedback correct-text';
+    } else {
+      feedback.textContent = sel.value ? '✗' : 'Choose an answer';
+      feedback.className = 'feedback wrong-text';
+    }
+  });
+}
+
+function resetGapFill() {
+  document.querySelectorAll('select[data-correct]').forEach(sel => {
+    sel.value = '';
+    const feedback = sel.parentElement.querySelector('.feedback');
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+  });
+}
+
+document.querySelectorAll('.flip-card').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.classList.toggle('flipped');
+    }
+  });
+});
+</script>
+</body>
+</html>
