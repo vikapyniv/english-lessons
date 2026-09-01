@@ -37,6 +37,9 @@ h2{margin:5px 0 10px;font-size:24px;letter-spacing:-.025em} h3{margin:14px 0 8px
 .word-card:hover,.word-card.selected{border-color:var(--pink);background:#fff3f6} .word-card.used{opacity:.35} .word-card img{width:74px;height:58px;object-fit:contain} .word-card span{font-size:13px;font-weight:800;text-align:center}
 .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px} button{border:0;border-radius:12px;padding:11px 15px;font:inherit;font-weight:800;cursor:pointer} .primary{background:var(--ink);color:white} .secondary{background:#f0edf6;color:var(--ink)} .feedback{margin-top:12px;font-weight:800;min-height:22px}
 .brainstorm{background:linear-gradient(135deg,#ff5f7e,#ff8a72);color:white;padding:16px 18px;border-radius:16px;font-size:18px;font-weight:900;margin-bottom:16px}
+.warm-up-prompts{display:grid;gap:10px;margin:0 0 20px}
+.warm-up-question{padding:12px 14px;border-left:4px solid var(--pink);border-radius:0 13px 13px 0;background:#fff4f6;color:var(--ink);font-weight:750}
+.warm-up-question strong{color:#b52f4c}
 .video-wrap{position:relative;padding-top:56.25%;border-radius:18px;overflow:hidden;background:#111} .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .task-title{font-weight:900;font-size:18px;margin-bottom:12px} .methods{display:grid;gap:9px} .method{display:grid;grid-template-columns:auto 35px 1fr;gap:10px;align-items:start;border:1px solid var(--line);border-radius:13px;padding:11px;background:#fcfbfe;cursor:pointer} .method input{margin-top:5px;width:18px;height:18px;accent-color:var(--pink)} .letter{width:28px;height:28px;border-radius:8px;background:#eeeaf5;display:grid;place-items:center;font-weight:900} .method.correct-answer{border-color:#81ccaa;background:#effaf5} .method.incorrect-choice{border-color:#e39aaa;background:#fff0f3} .method.missed{border-color:#e8c75f;background:#fff9df}
 details{margin-top:20px;border:1px solid var(--line);border-radius:16px;background:#fcfbfe;overflow:hidden} summary{padding:16px 18px;font-weight:900;cursor:pointer;background:#f4f1f8} .discussion-content{padding:18px} .advice-list{margin:10px 0 20px;padding-left:22px;display:grid;gap:7px} .question-list{display:grid;gap:12px} .question-item{padding:12px 14px;border-radius:12px;background:#fff;border:1px solid var(--line)}
@@ -383,6 +386,29 @@ details{margin-top:20px;border:1px solid var(--line);border-radius:16px;backgrou
   opacity:0;
   pointer-events:none;
 }
+#dentistVideoTask .task-title{
+  position:relative;
+  margin:0 0 16px;
+  padding:18px 18px 18px 54px;
+  border:1px solid #ffd0d9;
+  border-radius:16px;
+  background:linear-gradient(135deg,#fff2f5,#fffaf1);
+  color:#3b2740;
+  font-size:17px;
+  line-height:1.5;
+  box-shadow:0 8px 20px rgba(181,61,84,.08);
+}
+#dentistVideoTask .task-title::before{
+  content:'▶';
+  position:absolute;
+  left:17px;top:17px;
+  width:26px;height:26px;
+  display:grid;place-items:center;
+  border-radius:9px;
+  background:var(--pink);
+  color:#fff;
+  font-size:12px;
+}
 #dentistVideoTask .action-label{
   display:inline-flex;
   align-items:center;
@@ -481,7 +507,11 @@ details{margin-top:20px;border:1px solid var(--line);border-radius:16px;backgrou
 <section class="card" id="cssMatching">
   <div class="kicker">01 · Vocabulary</div>
   <h2>Match the sentences with the pictures.</h2>
-  <p class="instructions">Click a sentence on the left, then click the matching picture and word on the right. Correct pairs turn green and stay green.</p>
+  <div class="instructions warm-up-prompts">
+    <div class="warm-up-question"><strong>1.</strong> Do you remember your last visit to the dentist? Give some details.</div>
+    <div class="warm-up-question"><strong>2.</strong> Brainstorm reasons why some people dislike going to the dentist.</div>
+    <div>Then click a sentence on the left and the matching picture and word on the right. Correct pairs turn green and stay green.</div>
+  </div>
 
   <div class="css-controls"><input class="match-toggle sentence-toggle" type="checkbox" id="s1"><input class="match-toggle sentence-toggle" type="checkbox" id="s2"><input class="match-toggle sentence-toggle" type="checkbox" id="s3"><input class="match-toggle sentence-toggle" type="checkbox" id="s4"><input class="match-toggle sentence-toggle" type="checkbox" id="s5"><input class="match-toggle sentence-toggle" type="checkbox" id="s6"><input class="match-toggle sentence-toggle" type="checkbox" id="s7"><input class="match-toggle sentence-toggle" type="checkbox" id="s8"><input class="match-toggle sentence-toggle" type="checkbox" id="s9"><input class="match-toggle card-toggle" type="checkbox" id="c-cavity"><input class="match-toggle card-toggle" type="checkbox" id="c-wisdom-tooth"><input class="match-toggle card-toggle" type="checkbox" id="c-filling"><input class="match-toggle card-toggle" type="checkbox" id="c-gums"><input class="match-toggle card-toggle" type="checkbox" id="c-braces"><input class="match-toggle card-toggle" type="checkbox" id="c-root-canal"><input class="match-toggle card-toggle" type="checkbox" id="c-extract"><input class="match-toggle card-toggle" type="checkbox" id="c-toothache"><input class="match-toggle card-toggle" type="checkbox" id="c-floss"></div>
 
@@ -585,7 +615,6 @@ details{margin-top:20px;border:1px solid var(--line);border-radius:16px;backgrou
 
   <div class="video-grid">
     <div>
-      <div class="brainstorm">Brainstorm reasons why some people dislike going to the dentist.</div>
       <div class="video-wrap"><iframe src="https://www.youtube.com/embed/EdKkZe8IHn8" title="Fear of the dentist" allowfullscreen></iframe></div>
       <details>
         <summary>Discuss the questions</summary>
