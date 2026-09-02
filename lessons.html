@@ -148,7 +148,7 @@ title: "All lessons"
 
     .filters {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      grid-template-columns: 2fr repeat(6, minmax(130px, 1fr));
       gap: 12px;
       margin-bottom: 30px;
     }
@@ -443,7 +443,7 @@ title: "All lessons"
     <h1>All lessons</h1>
 
     <p class="page-description">
-      Search and filter lessons by level, lesson type, grammar and pronunciation.
+      Search and filter lessons by level, lesson type, grammar, vocabulary, pronunciation and topic.
     </p>
 
     <section
@@ -534,10 +534,30 @@ title: "All lessons"
         {% endfor %}
       </select>
 
+      <select id="vocabulary-filter">
+        <option value="">All vocabulary</option>
+
+        {% for item in site.data.taxonomy.vocabulary %}
+          <option value="{{ item | downcase | escape }}">
+            {{ item }}
+          </option>
+        {% endfor %}
+      </select>
+
       <select id="pronunciation-filter">
         <option value="">All pronunciation</option>
 
         {% for item in site.data.taxonomy.pronunciation %}
+          <option value="{{ item | downcase | escape }}">
+            {{ item }}
+          </option>
+        {% endfor %}
+      </select>
+
+      <select id="topic-filter">
+        <option value="">All topics</option>
+
+        {% for item in site.data.taxonomy.topics %}
           <option value="{{ item | downcase | escape }}">
             {{ item }}
           </option>
@@ -664,8 +684,14 @@ title: "All lessons"
     const grammarFilter =
       document.querySelector("#grammar-filter");
 
+    const vocabularyFilter =
+      document.querySelector("#vocabulary-filter");
+
     const pronunciationFilter =
       document.querySelector("#pronunciation-filter");
+
+    const topicFilter =
+      document.querySelector("#topic-filter");
 
     const cards = [
       ...document.querySelectorAll(".lesson-card")
@@ -862,8 +888,14 @@ title: "All lessons"
       const grammar =
         grammarFilter.value;
 
+      const vocabulary =
+        vocabularyFilter.value;
+
       const pronunciation =
         pronunciationFilter.value;
+
+      const topic =
+        topicFilter.value;
 
       let visibleLessons = 0;
 
@@ -877,10 +909,16 @@ title: "All lessons"
         const grammarItems =
           getItems(card.dataset.grammar);
 
+        const vocabularyItems =
+          getItems(card.dataset.vocabulary);
+
         const pronunciationItems =
           getItems(
             card.dataset.pronunciation
           );
+
+        const topicItems =
+          getItems(card.dataset.topics);
 
         const searchableText = [
           card.dataset.title || "",
@@ -909,18 +947,28 @@ title: "All lessons"
           !grammar ||
           grammarItems.includes(grammar);
 
+        const matchesVocabulary =
+          !vocabulary ||
+          vocabularyItems.includes(vocabulary);
+
         const matchesPronunciation =
           !pronunciation ||
           pronunciationItems.includes(
             pronunciation
           );
 
+        const matchesTopic =
+          !topic ||
+          topicItems.includes(topic);
+
         const shouldShow =
           matchesSearch &&
           matchesLevel &&
           matchesType &&
           matchesGrammar &&
-          matchesPronunciation;
+          matchesVocabulary &&
+          matchesPronunciation &&
+          matchesTopic;
 
         card.hidden = !shouldShow;
 
@@ -960,7 +1008,17 @@ title: "All lessons"
       filterLessons
     );
 
+    vocabularyFilter.addEventListener(
+      "change",
+      filterLessons
+    );
+
     pronunciationFilter.addEventListener(
+      "change",
+      filterLessons
+    );
+
+    topicFilter.addEventListener(
       "change",
       filterLessons
     );
