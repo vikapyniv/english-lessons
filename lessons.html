@@ -471,13 +471,28 @@ title: "All lessons"
       </span>
 
       <span class="stat-item">
-        Speaking:
-        <strong id="count-speaking">0</strong>
+        Reading:
+        <strong id="count-reading">0</strong>
+      </span>
+
+      <span class="stat-item">
+        Listening:
+        <strong id="count-listening">0</strong>
+      </span>
+
+      <span class="stat-item">
+        Functional Language:
+        <strong id="count-functional-language">0</strong>
       </span>
 
       <span class="stat-item">
         Pronunciation:
         <strong id="count-pronunciation">0</strong>
+      </span>
+
+      <span class="stat-item">
+        Writing:
+        <strong id="count-writing">0</strong>
       </span>
 
       <span class="stat-item level-a-stat">
@@ -712,11 +727,20 @@ title: "All lessons"
     const countVocabulary =
       document.querySelector("#count-vocabulary");
 
-    const countSpeaking =
-      document.querySelector("#count-speaking");
+    const countReading =
+      document.querySelector("#count-reading");
+
+    const countListening =
+      document.querySelector("#count-listening");
+
+    const countFunctionalLanguage =
+      document.querySelector("#count-functional-language");
 
     const countPronunciation =
       document.querySelector("#count-pronunciation");
+
+    const countWriting =
+      document.querySelector("#count-writing");
 
     const countA =
       document.querySelector("#count-a");
@@ -784,8 +808,11 @@ title: "All lessons"
     function updateLessonStats() {
       let grammarLessons = 0;
       let vocabularyLessons = 0;
-      let speakingLessons = 0;
+      let readingLessons = 0;
+      let listeningLessons = 0;
+      let functionalLanguageLessons = 0;
       let pronunciationLessons = 0;
+      let writingLessons = 0;
 
       let aLevelLessons = 0;
       let bLevelLessons = 0;
@@ -806,12 +833,24 @@ title: "All lessons"
           vocabularyLessons++;
         }
 
-        if (types.includes("speaking")) {
-          speakingLessons++;
+        if (types.includes("reading")) {
+          readingLessons++;
+        }
+
+        if (types.includes("listening")) {
+          listeningLessons++;
+        }
+
+        if (types.includes("functional language")) {
+          functionalLanguageLessons++;
         }
 
         if (types.includes("pronunciation")) {
           pronunciationLessons++;
+        }
+
+        if (types.includes("writing")) {
+          writingLessons++;
         }
 
         if (
@@ -857,11 +896,20 @@ title: "All lessons"
       countVocabulary.textContent =
         vocabularyLessons;
 
-      countSpeaking.textContent =
-        speakingLessons;
+      countReading.textContent =
+        readingLessons;
+
+      countListening.textContent =
+        listeningLessons;
+
+      countFunctionalLanguage.textContent =
+        functionalLanguageLessons;
 
       countPronunciation.textContent =
         pronunciationLessons;
+
+      countWriting.textContent =
+        writingLessons;
 
       countA.textContent =
         aLevelLessons;
