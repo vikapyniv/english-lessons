@@ -67,10 +67,15 @@ title: "All lessons"
     /* Lesson statistics */
 
     .lesson-stats {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 24px;
+    }
+
+    .stats-row {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin: 0 0 24px;
     }
 
     .stat-item {
@@ -109,9 +114,25 @@ title: "All lessons"
       color: #ffffff;
     }
 
-    .stat-item.showing-stat {
-      background: #ffffff;
-      border-color: #aaaab4;
+    .type-grammar { background: #173b6c !important; border-color: #173b6c !important; color: #ffffff !important; }
+    .type-vocabulary { background: #25734a !important; border-color: #25734a !important; color: #ffffff !important; }
+    .type-reading { background: #626b76 !important; border-color: #626b76 !important; color: #ffffff !important; }
+    .type-listening { background: #7040a0 !important; border-color: #7040a0 !important; color: #ffffff !important; }
+    .type-functional-language { background: #f2c230 !important; border-color: #d6a914 !important; color: #352b00 !important; }
+    .type-pronunciation { background: #7b4d2e !important; border-color: #7b4d2e !important; color: #ffffff !important; }
+    .type-writing { background: #ffffff !important; border-color: #aaaab4 !important; color: #292930 !important; }
+
+    .stat-item.type-grammar strong,
+    .stat-item.type-vocabulary strong,
+    .stat-item.type-reading strong,
+    .stat-item.type-listening strong,
+    .stat-item.type-pronunciation strong {
+      color: #ffffff;
+    }
+
+    .stat-item.type-functional-language strong,
+    .stat-item.type-writing strong {
+      color: inherit;
     }
 
     .stat-item.level-a-stat {
@@ -450,51 +471,51 @@ title: "All lessons"
       class="lesson-stats"
       aria-label="Lesson statistics"
     >
-      <span class="stat-item total-stat">
-        Total:
-        <strong id="count-total">0</strong>
-      </span>
+      <div class="stats-row">
+        <span class="stat-item total-stat">
+          Total:
+          <strong id="count-total">0</strong>
+        </span>
+      </div>
 
-      <span class="stat-item showing-stat">
-        Showing:
-        <strong id="count-showing">0</strong>
-      </span>
-
-      <span class="stat-item">
+      <div class="stats-row">
+      <span class="stat-item type-grammar">
         Grammar:
         <strong id="count-grammar">0</strong>
       </span>
 
-      <span class="stat-item">
+      <span class="stat-item type-vocabulary">
         Vocabulary:
         <strong id="count-vocabulary">0</strong>
       </span>
 
-      <span class="stat-item">
+      <span class="stat-item type-reading">
         Reading:
         <strong id="count-reading">0</strong>
       </span>
 
-      <span class="stat-item">
+      <span class="stat-item type-listening">
         Listening:
         <strong id="count-listening">0</strong>
       </span>
 
-      <span class="stat-item">
+      <span class="stat-item type-functional-language">
         Functional Language:
         <strong id="count-functional-language">0</strong>
       </span>
 
-      <span class="stat-item">
+      <span class="stat-item type-pronunciation">
         Pronunciation:
         <strong id="count-pronunciation">0</strong>
       </span>
 
-      <span class="stat-item">
+      <span class="stat-item type-writing">
         Writing:
         <strong id="count-writing">0</strong>
       </span>
+      </div>
 
+      <div class="stats-row">
       <span class="stat-item level-a-stat">
         A1–A2:
         <strong id="count-a">0</strong>
@@ -509,6 +530,7 @@ title: "All lessons"
         C1–C2:
         <strong id="count-c">0</strong>
       </span>
+      </div>
     </section>
 
     <section class="filters">
@@ -621,7 +643,7 @@ title: "All lessons"
 
             {% if lesson.lesson_types %}
               {% for type in lesson.lesson_types %}
-                <span class="tag type-tag">
+                <span class="tag type-tag type-{{ type | slugify }}">
                   {{ type }}
                 </span>
               {% endfor %}
@@ -717,9 +739,6 @@ title: "All lessons"
 
     const countTotal =
       document.querySelector("#count-total");
-
-    const countShowing =
-      document.querySelector("#count-showing");
 
     const countGrammar =
       document.querySelector("#count-grammar");
@@ -887,9 +906,6 @@ title: "All lessons"
       countTotal.textContent =
         cards.length;
 
-      countShowing.textContent =
-        cards.length;
-
       countGrammar.textContent =
         grammarLessons;
 
@@ -1024,9 +1040,6 @@ title: "All lessons"
           visibleLessons++;
         }
       });
-
-      countShowing.textContent =
-        visibleLessons;
 
       noResults.style.display =
         visibleLessons === 0
