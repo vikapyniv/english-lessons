@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Did you sleep well? — Interactive ESL Lesson</title>
+<style>
+:root{
+  --blue:#002fa7; --blue2:#174ac6; --blue3:#dce8ff; --ice:#f5f9ff;
+  --ink:#0d1b3e; --muted:#5e6b88; --line:#c9d8f7; --white:#fff;
+  --good:#087f5b; --bad:#c92a2a; --gold:#f2c94c; --shadow:0 14px 38px rgba(0,47,167,.12);
+  --radius:22px;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(180deg,#f9fbff 0%,#edf4ff 100%);line-height:1.6}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.12;background-image:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,47,167,.08) 3px 4px),repeating-linear-gradient(90deg,transparent 0 5px,rgba(0,47,167,.05) 5px 6px);mix-blend-mode:multiply}
+a{color:var(--blue);font-weight:750}.shell{width:min(1500px,94vw);margin:auto}.hero{min-height:82vh;display:grid;place-items:center;padding:40px 0 24px}.hero-card{position:relative;overflow:hidden;width:100%;padding:clamp(32px,6vw,88px);border-radius:34px;color:white;background:linear-gradient(135deg,var(--blue),#001d6e 78%);box-shadow:0 30px 80px rgba(0,37,130,.28)}
+.hero-card:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 18%,rgba(255,255,255,.24),transparent 25%),repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 2px,transparent 2px 8px)}
+.hero-content{position:relative;z-index:1;max-width:900px}.eyebrow{display:inline-flex;gap:10px;align-items:center;padding:7px 12px;border:1px solid rgba(255,255,255,.34);border-radius:999px;background:rgba(255,255,255,.1);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800}.hero h1{font-size:clamp(3rem,8vw,7.5rem);line-height:.92;margin:.28em 0 .2em;letter-spacing:-.06em}.hero p{font-size:clamp(1rem,2vw,1.35rem);max-width:700px;color:#eaf0ff}.hero-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}.hero-links a{color:white;text-decoration:none;border:1px solid rgba(255,255,255,.38);padding:10px 15px;border-radius:13px;background:rgba(255,255,255,.08)}
+.sticky{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(247,250,255,.9);border-bottom:1px solid rgba(0,47,167,.12)}.nav{display:flex;align-items:center;gap:10px;overflow:auto;padding:10px 0}.nav a{white-space:nowrap;text-decoration:none;padding:8px 12px;border-radius:11px;font-size:.92rem}.nav a:hover,.nav a:focus{background:var(--blue3)}.progress{margin-left:auto;min-width:150px;height:8px;background:#dce6fb;border-radius:99px;overflow:hidden}.progress i{display:block;width:0;height:100%;background:var(--blue);transition:.2s}
+main{padding:30px 0 80px}.section{scroll-margin-top:80px;margin:42px 0 72px}.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:25px;margin-bottom:22px}.section-kicker{font-size:.8rem;letter-spacing:.11em;text-transform:uppercase;font-weight:900;color:var(--blue)}h2{font-size:clamp(2rem,4vw,4rem);line-height:1;margin:.12em 0;letter-spacing:-.045em}.section-head p{max-width:560px;color:var(--muted)}
+.card{background:rgba(255,255,255,.93);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(18px,2.5vw,30px)}.warm-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:14px}.warm-grid .card{min-height:100%}.term{background:var(--blue);color:white}.term strong{display:block;font-size:1.45rem;font-style:italic}.prompt{padding:13px 0;border-top:1px solid var(--line)}.prompt:first-child{border-top:0}.num{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--blue3);color:var(--blue);font-weight:900;margin-right:8px}
+.read-unit{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(320px,.85fr);gap:18px;align-items:start;margin:22px 0}.read-unit.balanced{align-items:stretch}.read-unit.balanced>.card{height:100%}.article{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.02rem,1.35vw,1.2rem)}.article h3{font-family:Inter,ui-sans-serif,system-ui,sans-serif;font-size:1.35rem;line-height:1.25;margin-top:0}.article .byline{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:var(--muted);font-size:.92rem}.article p{margin:1em 0}.third-reading .article{line-height:1.52}.lex{background:linear-gradient(transparent 58%,#bdd1ff 58%);font-weight:700}.part{display:inline-flex;padding:5px 9px;border-radius:9px;background:var(--blue);color:white;font:800 .75rem Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:11px}.task{position:sticky;top:72px}.task h4{margin:.1em 0 .7em;font-size:1.15rem;line-height:1.35}.instruction{font-weight:800}.options{display:grid;gap:9px}.option{width:100%;text-align:left;border:1px solid var(--line);background:white;border-radius:14px;padding:12px 14px;color:var(--ink);font:inherit;cursor:pointer;transition:.18s}.option:hover{transform:translateY(-2px);border-color:var(--blue)}.option.selected{border-color:var(--blue);background:var(--blue3)}.option.correct{border-color:var(--good);background:#e7f7f1}.option.wrong{border-color:var(--bad);background:#fff0f0}.feedback{min-height:28px;margin-top:10px;font-weight:800}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.btn{border:0;border-radius:12px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:850;cursor:pointer}.btn.secondary{background:var(--blue3);color:var(--blue)}.btn.ghost{background:white;color:var(--blue);border:1px solid var(--line)}.reveal{display:none;margin-top:12px;padding:12px 14px;border-radius:13px;background:#eff4ff;border-left:4px solid var(--blue)}.reveal.show{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.discuss{border-left:5px solid var(--blue);background:linear-gradient(100deg,#edf4ff,#fff)}.discuss h4{margin:0 0 8px}.mini-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.referent-row,.vocab-row{padding:12px 0;border-top:1px solid var(--line)}.referent-row:first-child,.vocab-row:first-child{border-top:0}.dropzone{min-height:48px;border:2px dashed #adc1ed;border-radius:12px;padding:8px;display:flex;align-items:center;gap:8px;margin-top:6px;background:#fbfdff}.bank{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.chip{border:1px solid #9ab3e9;background:#edf3ff;border-radius:999px;padding:7px 11px;cursor:grab;font-weight:760}.chip.used{opacity:.35}.dropzone.correct{border-color:var(--good);background:#edf9f4}.dropzone.wrong{border-color:var(--bad);background:#fff2f2}
+.one-at-a-time .item{display:none}.one-at-a-time .item.active{display:block;animation:fade .2s}.stepper{display:flex;align-items:center;justify-content:space-between;margin-top:15px}.dots{font-weight:800;color:var(--muted)}.gap{display:inline-flex;min-width:125px;min-height:34px;vertical-align:middle;border-bottom:2px solid var(--blue);align-items:center;justify-content:center;padding:0 6px;color:var(--blue);font-weight:900}.pair-grid{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;gap:10px;margin:12px 0}.pair{border:1px solid var(--line);border-radius:15px;background:white;padding:16px;cursor:pointer;font-weight:800;text-align:center}.pair.chosen{background:var(--blue);color:#fff;transform:translateY(-2px)}.or{display:grid;place-items:center;font-weight:900;color:var(--muted)}input.answer-input{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font:inherit;background:#fff}input.answer-input.correct{border-color:var(--good);background:#edf9f4}input.answer-input.wrong{border-color:var(--bad);background:#fff2f2}.short-response{min-height:58px;margin:7px 0 11px}.ref{display:inline;padding:2px 6px;border-radius:7px;background:#dce8ff;color:var(--blue);font-weight:850;box-decoration-break:clone;-webkit-box-decoration-break:clone}.question-box{font-family:Inter,ui-sans-serif,system-ui,sans-serif;background:#eef4ff;border-left:4px solid var(--blue);border-radius:14px;padding:14px 16px;margin-bottom:18px}.question-box h4{margin:0 0 7px}.practice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.practice-item{padding:14px;border:1px solid var(--line);border-radius:14px;background:#fbfdff}.inline-answer{display:inline-block;width:150px;max-width:100%;margin:0 4px;vertical-align:middle}.final-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}.final-grid>.card{margin-top:0!important}.vocab-answer{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.8fr);gap:12px;align-items:center}.vocab-answer .answer-input{margin:0}textarea{width:100%;min-height:85px;border:1px solid var(--line);border-radius:12px;padding:11px;font:inherit;resize:vertical}.revision-item{padding:18px 0;border-top:1px solid var(--line)}.revision-item:first-child{border-top:0}.box{padding:14px;border-radius:14px;background:#eef4ff;margin:10px 0}.credits{border-top:1px solid var(--line);padding:28px 0 45px;color:var(--muted);font-size:.92rem}.credits strong{color:var(--ink)}
+@media(max-width:1050px){.warm-grid{grid-template-columns:repeat(2,1fr)}.read-unit{grid-template-columns:1fr}.task{position:static}.mini-grid,.final-grid{grid-template-columns:1fr}.practice-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.shell{width:min(94vw,700px)}.hero{min-height:auto;padding:12px 0}.hero-card{padding:35px 22px;border-radius:24px}.warm-grid{grid-template-columns:1fr}.section-head{display:block}.progress{display:none}.pair-grid{grid-template-columns:1fr}.or{height:22px}.card{border-radius:17px}.article{font-size:1rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+.task-no{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--blue);color:#fff;font-size:.9rem;font-weight:900;margin-right:7px;vertical-align:middle}.second-reading{grid-template-columns:minmax(0,.82fr) minmax(430px,1.18fr)}.compact-writing textarea.short-response{min-height:42px;height:42px;padding:7px 9px;resize:none}.compact-writing .prompt,.compact-writing .referent-row{padding:7px 0}.compact-writing h4{margin-bottom:7px}.practice-duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start;margin-bottom:18px}.practice-duo>.card{height:100%;margin:0}.practice-duo .vocab-row{padding:7px 0}.practice-duo .vocab-answer{grid-template-columns:minmax(0,1fr) minmax(105px,.55fr);gap:8px}.practice-duo .practice-grid{grid-template-columns:1fr;gap:8px}.practice-duo .practice-item{padding:10px 12px}.letter-pattern{display:inline-flex;align-items:center;white-space:nowrap;font-weight:800;letter-spacing:.08em}.letter-input{display:inline-block!important;width:calc(var(--letters,4)*.78em + 20px)!important;min-width:54px;max-width:100px;padding:4px 6px!important;margin:0 4px;border-width:0 0 2px!important;border-radius:0!important;text-align:center;letter-spacing:.12em;font-weight:900}.compact-revision .revision-item{padding:10px 0}.compact-revision .box{padding:9px 11px;margin:6px 0;font-size:.92rem}.revision-answer{min-height:46px!important;height:46px;padding:7px 9px;margin-top:6px;resize:none}.final-grid{align-items:stretch}.final-grid>.card{height:100%}#pairs .pair-grid{margin:8px 0;gap:7px}#pairs .pair{padding:10px 8px;font-size:.92rem}.hero-content>p{line-height:1.7}@media(max-width:1050px){.second-reading,.practice-duo{grid-template-columns:1fr}}
+
+/* requested layout refinements */
+.third-reading{grid-template-columns:minmax(0,1.08fr) minmax(430px,.92fr);align-items:stretch}
+.third-reading>.card{height:100%}
+.practice-duo{grid-template-columns:minmax(0,.82fr) minmax(470px,1.18fr)}
+.final-grid{grid-template-columns:minmax(0,.72fr) minmax(540px,1.28fr)}
+#pairs .pair-grid{grid-template-columns:1fr;gap:5px;margin:10px 0;padding:10px;border:1px solid var(--line);border-radius:14px;background:#fbfdff}
+#pairs .or{height:auto;min-height:24px}
+#pairs .pair{width:100%;padding:10px 12px}
+@media(max-width:1050px){.third-reading,.practice-duo,.final-grid{grid-template-columns:1fr}}
+
+/* updated three-task layout */
+.third-reading{
+  grid-template-columns:minmax(0,1.08fr) minmax(440px,.92fr);
+  align-items:start;
+}
+.third-reading>.card{height:auto}
+.third-reading .task{
+  position:sticky;
+  top:72px;
+  max-height:calc(100vh - 92px);
+  overflow:auto;
+  scrollbar-width:thin;
+}
+.sidebar-divider{
+  height:1px;
+  background:var(--line);
+  margin:20px 0;
+}
+.vocab-section .vocab-row{padding:8px 0}
+.vocab-section .vocab-answer{
+  grid-template-columns:minmax(0,1fr) minmax(130px,.68fr);
+  gap:8px;
+}
+.vocab-section .answer-input{padding:7px 9px}
+.practice-visible-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(420px,.92fr);
+  gap:18px;
+  align-items:start;
+}
+.practice-visible-grid>.card{height:100%}
+#gapPractice .practice-grid{grid-template-columns:1fr 1fr}
+#pairs .pair-grid{
+  grid-template-columns:1fr auto 1fr;
+  padding:0;
+  border:0;
+  background:transparent;
+}
+#pairs .or{min-height:auto}
+@media(max-width:1150px){
+  .third-reading,.practice-visible-grid{grid-template-columns:1fr}
+  .third-reading .task{position:static;max-height:none;overflow:visible}
+}
+@media(max-width:760px){
+  #gapPractice .practice-grid{grid-template-columns:1fr}
+  #pairs .pair-grid{grid-template-columns:1fr}
+  #pairs .or{height:22px}
+}
+
+
+/* final lead-in refinement */
+.warm-grid{
+  grid-template-columns:minmax(240px,.72fr) minmax(0,1.8fr);
+}
+.lead-main-question{
+  display:flex;
+  align-items:center;
+  min-height:100%;
+}
+.lead-main-question .prompt{
+  font-size:clamp(1.05rem,1.45vw,1.25rem);
+}
+@media(max-width:760px){
+  .warm-grid{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<header class="hero shell">
+<div class="hero-card">
+<div class="hero-content">
+<span class="eyebrow">ESL Brains · C1 · Reading worksheet about sleep</span>
+<h1>Did you sleep well?</h1>
+<p><strong>Created by Viktoriia Pyniv.</strong><br/>AI-assisted educational resource developed with ChatGPT (OpenAI).<br/>Original lesson: ESL Brains — “Did you sleep well?”</p>
+<div class="hero-links">
+<a href="https://eslbrains.com/reading-worksheet-about-sleep/" rel="noopener" target="_blank">Original ESL Brains lesson ↗</a>
+<a href="https://theconversation.com/sleep-divorce-could-separate-beds-improve-your-health-278055" rel="noopener" target="_blank">Original article ↗</a>
+</div>
+</div>
+</div>
+</header>
+<nav class="sticky"><div class="shell nav">
+<a href="#start">Discuss</a><a href="#reading">Reading 1</a><a href="#continuation">Reading 2</a><a href="#post">Practice</a>
+<div aria-label="Page progress" class="progress"><i id="progressBar"></i></div>
+</div></nav>
+<main class="shell">
+<section class="section" id="start">
+<div class="section-head"><div><h2>Discuss</h2></div></div>
+<div class="warm-grid">
+<div class="card term"><strong>sleeping arrangement:</strong>the way people organize where and how they sleep</div>
+<div class="card lead-main-question"><div class="prompt"><span class="num">1</span>What do sleeping arrangements include, and why is it important for people who live together to discuss their sleeping habits, needs and preferences?</div></div>
+</div>
+</section>
+<section class="section" id="reading">
+<div class="section-head"><div><h2>Reading 1</h2></div></div>
+<div class="read-unit">
+<article class="card article">
+<div class="question-box"><h4 class="instruction"><span class="task-no">1</span> Look at the text again and answer the questions.</h4><div class="prompt"><strong>A.</strong> What caused sleeping arrangements to change in the past?</div><div class="prompt"><strong>B.</strong> What trend is affecting sleeping arrangements today?</div></div>
+<h3>‘Sleep divorce’: could separate beds improve your health?</h3>
+<div class="byline">by Laura Boubert, University of Westminster, in <a href="https://theconversation.com/sleep-divorce-could-separate-beds-improve-your-health-278055" rel="noopener" target="_blank">The Conversation</a> (article abridged)</div>
+<p><strong class="lex">[First sentence missing]</strong></p>
+<p>In the US, it’s estimated that 82% of couples <span class="lex">share a bed</span>. Sharing a bed with your partner is often seen as an essential part of a romantic relationship. But have you ever wondered whether <span class="lex">sleeping apart</span> might actually be better for your health?</p>
+<p><span class="lex">Good quality sleep</span> is essential for both physical and mental health. As most adults spend between six and nine hours asleep in every 24-hour period, our <span class="lex">sleeping arrangements</span> can have a major effect on well-being.</p>
+<p>Sleeping arrangements have also <span class="lex">evolved over time and across cultures</span>. Until the early 20th century, sleeping together with a partner, children, extended family members or even pets was common. However, the discovery of germs and growing concerns about hygiene led to fears about <span class="lex">disease transmission</span>. Sleeping in <span class="lex">close proximity</span> began to be seen as a potential health risk, and a new trend emerged for couples to sleep in separate beds or even separate rooms. More recently, we have seen <span class="lex">a surge in celebrities announcing their ‘sleep divorces’</span> from their partners – but are they right?</p>
+<p>Sleeping together does appear to bring several benefits. It can <span class="lex">strengthen closeness and attachment</span> within a couple and support intimacy. Research suggests it may also have physical effects: couples’ breathing and heart rates can <span class="lex">synchronize during sleep</span>, which may contribute to feelings of <span class="lex">safety and security</span>. Sleeping together can also <span class="lex">reduce stress</span> and increase the production of the hormone oxytocin, sometimes referred to as the ‘love hormone’.</p>
+</article>
+<aside class="card task" data-quiz="sentence">
+<h4 class="instruction"><span class="task-no">2</span> Read the first part of the article and choose the correct first sentence below. Explain your choice.</h4>
+<div class="options">
+<button class="option" data-value="A">A. Two people can fall asleep in the same bed and still spend the night worlds apart.</button>
+<button class="option" data-value="B">B. Does sharing always mean caring?</button>
+<button class="option" data-value="C">C. They say love conquers all, but it doesn’t always conquer snoring.</button>
+</div>
+<div aria-live="polite" class="feedback"></div>
+<div class="actions"><button class="btn check" data-answer="C">Check answer</button><button class="btn secondary reset">Reset</button></div>
+</aside>
+</div>
+
+</section>
+<section class="section" id="continuation">
+<div class="section-head"><div><h2>Reading 2</h2></div><p>The next article part, comprehension work and key vocabulary.</p></div>
+<div class="read-unit third-reading">
+<article class="card article">
+<h3>When sharing a bed disrupts sleep</h3>
+<p>However, what happens if your sleep is actually <span class="lex">disrupted by your partner</span> rather than improved? There can be many reasons for this.</p>
+<p><strong>[paragraph 1]</strong> A partner may snore, get up several times during the night to use the bathroom, read with the light on, or watch television in bed. […] Pregnancy, caring for an infant, or different work schedules and shift patterns can also disrupt sleep.</p>
+<p><strong>[paragraph 2]</strong> When <span class="ref">these disturbances</span> occur frequently, they <span class="lex">interfere with</span> fundamental sleep processes, including how quickly you fall asleep (known as <span class="lex">sleep onset</span>), how often you wake during the night and how long you remain asleep. Disruption to <span class="ref">these processes</span> can have a range of <span class="lex">detrimental effects</span> on general physical health.</p>
+<p><strong>[paragraph 3]</strong> Poor sleep can <span class="lex">impair</span> the immune system, increasing <span class="lex">susceptibility to</span> infections such as coughs and colds. It can also disrupt digestion and metabolism, increasing the risk of weight gain and conditions such as diabetes by affecting insulin regulation.</p>
+<p><strong>[paragraph 4]</strong> In <span class="ref">situations like these</span>, sleeping apart may help. Separate sleeping arrangements allow each person to <span class="lex">optimize</span> their own sleep environment. This might include choosing different mattresses or <span class="lex">bedding</span>, adjusting light levels, controlling room temperature, or even changing scents and air quality in the bedroom.</p>
+<p><strong>[paragraph 5]</strong> Sleeping apart can also support better <span class="lex">sleep hygiene</span>. Each partner can adapt their habits around their own sleep patterns, such as going to bed at different times, reading before sleep, or avoiding screens in bed. <span class="ref">This behaviour</span> is known to <span class="lex">promote better sleep</span> and, in turn, better overall health. […]</p>
+</article>
+<aside class="card task compact-writing">
+<h4 class="instruction"><span class="task-no">3</span> Read the third part of the article and summarize the purpose of the paragraphs (1–5).</h4>
+<div class="prompt"><strong>A. paragraph 1:</strong><textarea aria-label="Purpose of paragraph 1" class="short-response" rows="1"></textarea></div>
+<div class="prompt"><strong>B. paragraphs 2–3:</strong><textarea aria-label="Purpose of paragraphs 2 and 3" class="short-response" rows="1"></textarea></div>
+<div class="prompt"><strong>C. paragraphs 4–5:</strong><textarea aria-label="Purpose of paragraphs 4 and 5" class="short-response" rows="1"></textarea></div>
+<div class="sidebar-divider"></div><div class="vocab-section" id="vocabWrite">
+<h4 class="instruction"><span class="task-no">4</span> Look at the text from the previous exercise again and in each paragraph find the words or phrases that mean the following.</h4>
+<div class="vocab-row vocab-answer"><span>A. affect (paragraph 2)</span><input aria-label="Answer A" class="answer-input" data-answer="interfere with"/></div>
+<div class="vocab-row vocab-answer"><span>B. harmful impact (paragraph 2)</span><input aria-label="Answer B" class="answer-input" data-answer="detrimental effects"/></div>
+<div class="vocab-row vocab-answer"><span>C. weaken (paragraph 3)</span><input aria-label="Answer C" class="answer-input" data-answer="impair"/></div>
+<div class="vocab-row vocab-answer"><span>D. state or quality of being easily affected by (paragraph 3)</span><input aria-label="Answer D" class="answer-input" data-answer="susceptibility to"/></div>
+<div class="vocab-row vocab-answer"><span>E. make something as effective or efficient as possible (paragraph 4)</span><input aria-label="Answer E" class="answer-input" data-answer="optimize"/></div>
+<div class="vocab-row vocab-answer"><span>F. soft materials used on a bed, such as sheets or blankets (paragraph 4)</span><input aria-label="Answer F" class="answer-input" data-answer="bedding"/></div>
+<div class="vocab-row vocab-answer"><span>G. healthy sleep habits (paragraph 5)</span><input aria-label="Answer G" class="answer-input" data-answer="sleep hygiene"/></div>
+<div class="vocab-row vocab-answer"><span>H. help improve sleep quality (paragraph 5)</span><input aria-label="Answer H" class="answer-input" data-answer="promote better sleep"/></div>
+<div class="actions"><button class="btn" id="checkVocabWrite">Check answers</button><button class="btn secondary" id="resetVocabWrite">Reset</button></div>
+<div aria-live="polite" class="feedback" id="vocabWriteFeedback"></div>
+</div>
+</aside>
+</div>
+
+</section>
+<section class="section" id="post">
+<div class="section-head"><div><h2>Practice</h2></div><p>Use the target vocabulary in guided and freer speaking.</p></div>
+<div class="practice-visible-grid">
+  <div class="card" id="gapPractice">
+<h4 class="instruction"><span class="task-no">5</span> Complete the words with the missing letters.</h4>
+<div class="practice-grid"><div class="practice-item letter-task"><strong>A.</strong> Do you think sleeping separately can <span class="letter-pattern">p r <input aria-label="Missing letters for promote" autocomplete="off" class="answer-input letter-input" data-answer="omote" maxlength="5"/></span> a good relationship or <span class="letter-pattern"><input aria-label="Missing letters for impair" autocomplete="off" class="answer-input letter-input" data-answer="imp" maxlength="3"/></span>a i r it? Explain.</div><div class="practice-item letter-task"><strong>B.</strong> In your opinion, is sleep more of a personal or a shared responsibility in a relationship? How can partners make sure they do not <span class="letter-pattern">i n t e r <input aria-label="Missing letters for interfere" autocomplete="off" class="answer-input letter-input" data-answer="fere" maxlength="4"/></span> with each other’s sleeping routines, apart from choosing a ‘sleep divorce’?</div><div class="practice-item letter-task"><strong>C.</strong> How high is your <span class="letter-pattern">s u s c e p t i <input aria-label="Missing letters for susceptibility" autocomplete="off" class="answer-input letter-input" data-answer="bility" maxlength="6"/></span> to sleep interruptions? How do you usually deal with them easily?</div><div class="practice-item letter-task"><strong>D.</strong> Do you have any preferences for your <span class="letter-pattern">b e d <input aria-label="Missing letters for bedding" autocomplete="off" class="answer-input letter-input" data-answer="ding" maxlength="4"/></span>? Have you noticed if it affects your sleep?</div><div class="practice-item letter-task"><strong>E.</strong> Which of the <span class="letter-pattern">d e t r i <input aria-label="Missing letters for detrimental" autocomplete="off" class="answer-input letter-input" data-answer="mental" maxlength="6"/></span> effects of disrupted sleep have you personally experienced?</div><div class="practice-item letter-task"><strong>F.</strong> How would you define good sleep <span class="letter-pattern">h y <input aria-label="Missing letters for hygiene" autocomplete="off" class="answer-input letter-input" data-answer="giene" maxlength="5"/></span>? How can one <span class="letter-pattern">o p t i <input aria-label="Missing letters for optimize" autocomplete="off" class="answer-input letter-input" data-answer="mize" maxlength="4"/></span> their sleep environment?</div></div>
+<div class="actions"><button class="btn" id="checkGapWrite">Check answers</button><button class="btn secondary" id="resetGapWrite">Reset</button></div>
+<div aria-live="polite" class="feedback" id="gapWriteFeedback"></div>
+</div>
+  <div class="card" id="pairs"><h4 class="instruction"><span class="task-no">6</span> Decide which of the options in each pair is more likely to interfere with good sleep or have detrimental effects on sleep quality. Explain your opinion.</h4>
+<div class="pair-grid"><button class="pair">sleeping with a pet next to you</button><div class="or">OR</div><button class="pair">sleeping next to a snoring person</button></div>
+<div class="pair-grid"><button class="pair">sleeping with the lights on</button><div class="or">OR</div><button class="pair">sleeping with music on</button></div>
+<div class="pair-grid"><button class="pair">sleeping on a bus/train/plane</button><div class="or">OR</div><button class="pair">sleeping in a hostel</button></div>
+<div class="pair-grid"><button class="pair">having a very soft mattress</button><div class="or">OR</div><button class="pair">having a firm pillow</button></div>
+<div class="pair-grid"><button class="pair">sleeping in a very cold room</button><div class="or">OR</div><button class="pair">sleeping in a hot room</button></div>
+<div class="pair-grid"><button class="pair">adapting sleep routines after moving to a different time zone</button><div class="or">OR</div><button class="pair">adapting to working night shifts</button></div>
+</div>
+</div>
+</section>
+</main>
+<footer class="shell credits"><strong>Created by Viktoriia Pyniv.</strong><br/>AI-assisted educational resource developed with ChatGPT (OpenAI).<br/>Original lesson: <a href="https://eslbrains.com/reading-worksheet-about-sleep/" rel="noopener" target="_blank">ESL Brains — “Did you sleep well?”</a></footer>
+<script>
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+window.addEventListener('scroll',()=>{const max=document.documentElement.scrollHeight-innerHeight;$('#progressBar').style.width=(max?scrollY/max*100:0)+'%'});
+$$('[data-quiz]').forEach(q=>{
+  $$('.option',q).forEach(o=>o.addEventListener('click',()=>{$$('.option',q).forEach(x=>x.classList.remove('selected'));o.classList.add('selected');q.dataset.selected=o.dataset.value}));
+  $('.check',q).addEventListener('click',()=>{const chosen=q.dataset.selected, ans=$('.check',q).dataset.answer, fb=$('.feedback',q);$$('.option',q).forEach(o=>{o.classList.remove('correct','wrong');if(o.dataset.value===ans)o.classList.add('correct');else if(o.dataset.value===chosen)o.classList.add('wrong')});fb.textContent=!chosen?'Choose an option first.':chosen===ans?'Correct.':'Not quite. Check the highlighted answer.';const map=$('.answer-map',q);if(map)map.classList.add('show')});
+  $('.reset',q).addEventListener('click',()=>{delete q.dataset.selected;$$('.option',q).forEach(o=>o.classList.remove('selected','correct','wrong'));$('.feedback',q).textContent='';const map=$('.answer-map',q);if(map)map.classList.remove('show')});
+});
+$$('.reveal-btn').forEach(b=>b.addEventListener('click',()=>{const r=b.nextElementSibling;r.classList.toggle('show');b.textContent=r.classList.contains('show')?'Hide answer':(b.dataset.original||(b.dataset.original=b.textContent))}));
+function normalize(v){return v.trim().toLowerCase().replace(/\s+/g,' ')}
+function checkInputs(container,feedback){
+  const inputs=$$('input.answer-input',container);
+  let filled=0,correct=0;
+  inputs.forEach(i=>{const value=normalize(i.value),answer=normalize(i.dataset.answer);i.classList.remove('correct','wrong');if(value){filled++;if(value===answer){correct++;i.classList.add('correct')}else{i.classList.add('wrong')}}});
+  feedback.textContent=filled===0?'Write your answers first.':correct===inputs.length?'All answers are correct.':`${correct} of ${inputs.length} correct.`;
+}
+function resetInputs(container,feedback){$$('input.answer-input',container).forEach(i=>{i.value='';i.classList.remove('correct','wrong')});feedback.textContent=''}
+const vocabWrite=$('#vocabWrite');
+if(vocabWrite){$('#checkVocabWrite').addEventListener('click',()=>checkInputs(vocabWrite,$('#vocabWriteFeedback')));$('#resetVocabWrite').addEventListener('click',()=>resetInputs(vocabWrite,$('#vocabWriteFeedback')))}
+const gapPractice=$('#gapPractice');
+if(gapPractice){$('#checkGapWrite').addEventListener('click',()=>checkInputs(gapPractice,$('#gapWriteFeedback')));$('#resetGapWrite').addEventListener('click',()=>resetInputs(gapPractice,$('#gapWriteFeedback')))}
+$$('#pairs .pair-grid').forEach(row=>$$('.pair',row).forEach(p=>p.addEventListener('click',()=>{$$('.pair',row).forEach(x=>x.classList.remove('chosen'));p.classList.add('chosen')})));
+</script>
+</body>
+</html>
