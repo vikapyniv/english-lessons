@@ -755,6 +755,10 @@ title: "All lessons"
               <p><strong>Grammar:</strong> {{ lesson.grammar | join: ", " }}</p>
             {% endif %}
 
+            {% if lesson.vocabulary %}
+              <p><strong>Vocabulary:</strong> {{ lesson.vocabulary | join: ", " }}</p>
+            {% endif %}
+
             {% if lesson.topics %}
               <p><strong>Topics:</strong> {{ lesson.topics | join: ", " }}</p>
             {% endif %}
