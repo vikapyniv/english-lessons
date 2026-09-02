@@ -319,6 +319,21 @@ title: "All lessons"
       font-weight: 820;
     }
 
+    .resource-label {
+      display: block;
+      margin: 0 0 9px;
+      color: #777780;
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .resource-label.baamboozle-label {
+      color: #b34b21;
+    }
+
     .lesson-card h2 a {
       color: #1f1f25;
       text-decoration: none;
@@ -625,6 +640,8 @@ title: "All lessons"
           data-skills="{{ lesson.skills | join: '|' | downcase | escape }}"
         >
 
+          <span class="resource-label">HTML lesson</span>
+
           <h2>
             <a href="{{ lesson.url | relative_url }}">
               {{ lesson.title }}
@@ -694,6 +711,53 @@ title: "All lessons"
               </p>
             {% endif %}
 
+          </div>
+
+        </article>
+
+      {% endfor %}
+
+      {% for lesson in site.data.baamboozle_games %}
+
+        <article
+          class="lesson-card"
+          data-level="{{ lesson.level | join: '|' | downcase | escape }}"
+          data-title="{{ lesson.title | append: ' baamboozle' | downcase | escape }}"
+          data-types="{{ lesson.lesson_types | join: '|' | downcase | escape }}"
+          data-grammar="{{ lesson.grammar | join: '|' | downcase | escape }}"
+          data-pronunciation="{{ lesson.pronunciation | join: '|' | downcase | escape }}"
+          data-functions="{{ lesson.functions | join: '|' | downcase | escape }}"
+          data-topics="{{ lesson.topics | join: '|' | downcase | escape }}"
+          data-vocabulary="{{ lesson.vocabulary | join: '|' | downcase | escape }}"
+          data-skills="{{ lesson.skills | join: '|' | downcase | escape }}"
+        >
+
+          <span class="resource-label baamboozle-label">Baamboozle</span>
+
+          <h2>
+            <a href="{{ lesson.url }}" target="_blank" rel="noopener noreferrer">
+              {{ lesson.title }}
+            </a>
+          </h2>
+
+          <div class="tags">
+            {% for item_level in lesson.level %}
+              <span class="tag level-tag">{{ item_level }}</span>
+            {% endfor %}
+
+            {% for type in lesson.lesson_types %}
+              <span class="tag type-tag type-{{ type | slugify }}">{{ type }}</span>
+            {% endfor %}
+          </div>
+
+          <div class="lesson-details">
+            {% if lesson.grammar %}
+              <p><strong>Grammar:</strong> {{ lesson.grammar | join: ", " }}</p>
+            {% endif %}
+
+            {% if lesson.topics %}
+              <p><strong>Topics:</strong> {{ lesson.topics | join: ", " }}</p>
+            {% endif %}
           </div>
 
         </article>
