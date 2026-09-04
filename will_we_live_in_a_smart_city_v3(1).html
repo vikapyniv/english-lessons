@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will we live in a smart city?</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--text:#17202a;--muted:#667085;--line:#dce3eb;--accent:#22395d;--will:#dceeff;--going:#e4f7e8;--pc:#fff0d6;--ps:#efe6ff;--good:#dff5e7;--bad:#fde5e5;--shadow:0 8px 24px rgba(25,39,52,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);line-height:1.45}.top{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);padding:14px 22px;box-shadow:0 2px 10px rgba(0,0,0,.04)}.top h1{margin:0;font-size:clamp(26px,3.5vw,36px)}main{max-width:1180px;margin:auto;padding:26px 18px 70px}.section{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;margin-bottom:24px;box-shadow:var(--shadow)}h2{margin:0 0 10px;font-size:30px}.instruction{margin:0 0 18px;color:var(--muted);font-size:18px}.grid2{display:grid;grid-template-columns:1.08fr .92fr;gap:20px;align-items:start}.video{position:relative;padding-top:56.25%;border-radius:16px;overflow:hidden;background:#000}.video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}.service-list{display:grid;gap:8px}.service{width:100%;text-align:left;border:1px solid var(--line);background:#fafbfd;border-radius:12px;padding:14px 15px;cursor:pointer;font-weight:650;font-size:17px}.service.selected{outline:2px solid #5e82b3;background:#eef5ff}.service.correct{background:var(--good);outline:2px solid #67b785}.service.wrong{background:var(--bad);outline:2px solid #d97a7a}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.btn{border:0;background:var(--accent);color:white;border-radius:10px;padding:12px 16px;font-weight:750;font-size:16px;cursor:pointer}.btn.secondary{background:#eef2f7;color:#26384c}.feedback{min-height:22px;font-weight:700;margin-top:8px}.discuss{margin-top:14px}.discuss>button{width:100%;display:flex;justify-content:space-between;align-items:center}.discuss-box{display:none;margin-top:10px;border:1px solid var(--line);border-radius:14px;padding:14px;background:#fbfcfe}.discuss-box.open{display:block}.discuss-box div{padding:11px 0;border-bottom:1px solid #edf0f4;font-size:17px}.discuss-box div:last-child{border:0}.survey-intro{background:#f7f9fc;border-left:4px solid var(--accent);padding:17px 19px;border-radius:12px;margin-bottom:18px;font-size:18px}.survey-q{border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}.survey-q h3{margin:0 0 12px;font-size:21px}.options{display:grid;gap:8px}.option{border:1px solid var(--line);background:white;border-radius:11px;padding:14px 15px;cursor:pointer;text-align:left;font-weight:600;font-size:17px}.option.selected{outline:2px solid #5e82b3;background:#eef5ff}.tense-tag{display:inline-block;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:4px 8px;margin-bottom:8px}.tag-will{background:var(--will)}.tag-going{background:var(--going)}.tag-pc{background:var(--pc)}.tag-ps{background:var(--ps)}.columns{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.col{min-height:190px;border:2px dashed #bbc5d1;border-radius:16px;padding:13px}.col[data-type="will"]{background:var(--will)}.col[data-type="going"]{background:var(--going)}.col[data-type="pc"]{background:var(--pc)}.col[data-type="ps"]{background:var(--ps)}.col h3{margin:0 0 6px;font-size:20px}.col small{color:#566174;font-size:14px}.dropzone{min-height:110px;margin-top:10px}.bank{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.chip{background:#fff;border:1px solid #cfd7e2;border-radius:12px;padding:14px;cursor:grab;font-weight:650;font-size:17px}.chip.correct{outline:3px solid #70bd8c}.chip.wrong{outline:3px solid #dd8484}.practice-head{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tab{border:1px solid var(--line);background:white;border-radius:999px;padding:11px 15px;font-weight:750;font-size:16px;cursor:pointer}.tab.active[data-type="will"]{background:var(--will)}.tab.active[data-type="going"]{background:var(--going)}.tab.active[data-type="pc"]{background:var(--pc)}.tab.active[data-type="ps"]{background:var(--ps)}.carousel{border:1px solid var(--line);border-radius:18px;padding:20px;min-height:180px;background:#fbfcfe;display:flex;flex-direction:column;justify-content:space-between}.carousel .counter{font-size:14px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.carousel .prompt{font-size:27px;font-weight:750;margin:15px 0}.carousel .cue{color:var(--muted);font-size:17px}.carousel-controls{display:flex;justify-content:space-between;gap:10px;margin-top:16px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.flip{perspective:1000px;min-height:180px;cursor:pointer}.flip-inner{position:relative;width:100%;height:100%;min-height:180px;transition:transform .5s;transform-style:preserve-3d}.flip.revealed .flip-inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border:1px solid var(--line);border-radius:16px;padding:14px;background:white;box-shadow:0 3px 12px rgba(0,0,0,.04);display:flex;flex-direction:column;justify-content:space-between}.back{transform:rotateY(180deg);background:#f7fafc}.n{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.qtext{font-weight:750;font-size:18px}.cuebox{font-size:15px;color:#5d6878}.answer{font-weight:800;font-size:18px}.answer small{display:block;margin-top:8px;color:var(--muted);font-weight:600}.note{font-size:15px;color:var(--muted);margin-top:12px}
+@media(max-width:900px){.grid2,.columns{grid-template-columns:1fr 1fr}.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:620px){.grid2,.columns,.bank,.cards{grid-template-columns:1fr}.section{padding:17px}main{padding:16px 12px 50px}}
+</style>
+</head>
+<body>
+<header class="top"><h1>Will we live in a smart city?</h1></header>
+<main>
+<section class="section">
+<h2>1. Watch the video</h2>
+<div class="grid2">
+  <div>
+    <p class="instruction"><strong>Watch the video and say which three of the services are not mentioned.</strong></p>
+    <div class="video"><iframe src="https://www.youtube.com/embed/XJVWQEr4Eao" title="Smart city video" allowfullscreen></iframe></div>
+    <div class="discuss">
+      <button class="btn secondary" onclick="toggleDiscuss()">Discuss the questions <span>▾</span></button>
+      <div class="discuss-box" id="discussBox">
+        <div>1. What do you think about the video? Would you like to live in a smart city like that?</div>
+        <div>2. Which of the services from the video would you like to use the most? Which one would you not want to use?</div>
+        <div>3. What other services do you think should be available in a smart city?</div>
+        <div>4. Are any of the services from the video available where you live now?</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p class="instruction"><strong>Choose the three services that are NOT mentioned.</strong></p>
+    <div class="service-list" id="services">
+      <button class="service" data-id="A">Robots that clean the streets and throw away rubbish</button>
+      <button class="service" data-id="B">An app that shows traffic information and suggests the best route</button>
+      <button class="service" data-id="C">Online medical advice so that you can talk to your doctor from home</button>
+      <button class="service" data-id="D">Smart vehicles that pick you up and drive you to work</button>
+      <button class="service" data-id="E">Free public Wi-Fi so that everyone can be connected at all times</button>
+      <button class="service" data-id="F">Personal footprint information so that you can check how much fuel you are using</button>
+      <button class="service" data-id="G">Opportunities to take an active role in city issues by suggesting ideas</button>
+      <button class="service" data-id="H">Mobility hubs where you can find bikes, scooters or cars to rent</button>
+      <button class="service" data-id="I">Phone charging stations so that you don’t need to worry about your battery</button>
+    </div>
+    <div class="row" style="margin-top:12px"><button class="btn" onclick="checkServices()">Check</button><button class="btn secondary" onclick="resetServices()">Reset</button></div>
+    <div class="feedback" id="serviceFeedback"></div>
+  </div>
+</div>
+</section>
+
+<section class="section">
+<h2>2. Mobility Hub Survey</h2>
+<div class="survey-intro"><strong>Imagine the government wants to introduce mobility hubs in your city or town, but you must do a survey first.</strong><br>Choose the answer that is closest to your opinion. Then compare your choices with a partner and explain why.</div>
+
+<div class="survey-q"><span class="tense-tag tag-will">Future Simple — prediction/opinion</span><h3>1. How do you think mobility hubs will change daily life in your city?</h3><div class="options">
+<button class="option">They’ll make travelling around the city much quicker.</button>
+<button class="option">They’ll reduce the number of private cars on the roads.</button>
+<button class="option">They won’t make a big difference to my daily routine.</button>
+</div></div>
+
+<div class="survey-q"><span class="tense-tag tag-ps">Present Simple — timetable/schedule</span><h3>2. Which timetable would work best for you?</h3><div class="options">
+<button class="option">The first electric bus leaves at 5:30 a.m. and the hub closes at midnight.</button>
+<button class="option">The first electric bus leaves at 6:30 a.m. and the hub closes at 11 p.m.</button>
+<button class="option">The first electric bus leaves at 7 a.m. and the hub closes at 10 p.m.</button>
+</div></div>
+
+<div class="survey-q"><span class="tense-tag tag-going">Be going to — plan/intention</span><h3>3. Which change are you most likely to make if the hubs open?</h3><div class="options">
+<button class="option">I’m going to use a bike or scooter for short journeys.</button>
+<button class="option">I’m going to stop driving into the city centre whenever I can.</button>
+<button class="option">I’m going to try the new system first and decide later.</button>
+</div></div>
+
+<div class="survey-q"><span class="tense-tag tag-pc">Present Continuous — arranged future</span><h3>4. The city is holding events about the new hubs next week. Which arrangement suits you best?</h3><div class="options">
+<button class="option">I’m meeting a city representative on Tuesday evening.</button>
+<button class="option">I’m attending the public demonstration on Thursday at 6 p.m.</button>
+<button class="option">I’m visiting the new mobility hub with a friend on Saturday morning.</button>
+</div></div>
+</section>
+
+<section class="section">
+<h2>3. Discover the difference</h2>
+<p class="instruction">Drag the four answers from the survey into the correct future-form column. Then explain what makes each sentence different.</p>
+<div class="columns">
+  <div class="col" data-type="will"><h3>WILL</h3><small>prediction / opinion / instant decision</small><div class="dropzone"></div></div>
+  <div class="col" data-type="going"><h3>BE GOING TO</h3><small>plan / intention / evidence</small><div class="dropzone"></div></div>
+  <div class="col" data-type="pc"><h3>PRESENT CONTINUOUS</h3><small>arrangement already organised</small><div class="dropzone"></div></div>
+  <div class="col" data-type="ps"><h3>PRESENT SIMPLE</h3><small>timetable / official schedule</small><div class="dropzone"></div></div>
+</div>
+<div class="bank" id="bank">
+  <div class="chip" draggable="true" data-answer="ps">The first electric bus leaves at 6:30 a.m. and the hub closes at 11 p.m.</div>
+  <div class="chip" draggable="true" data-answer="will">They’ll reduce the number of private cars on the roads.</div>
+  <div class="chip" draggable="true" data-answer="pc">I’m attending the public demonstration on Thursday at 6 p.m.</div>
+  <div class="chip" draggable="true" data-answer="going">I’m going to use a bike or scooter for short journeys.</div>
+</div>
+<div class="row" style="margin-top:12px"><button class="btn" onclick="checkSort()">Check</button><button class="btn secondary" onclick="resetSort()">Reset</button></div><div class="feedback" id="sortFeedback"></div>
+</section>
+
+<section class="section">
+<h2>4. Fast future-form practice</h2>
+<p class="instruction">Choose a future form. Read one situation at a time and answer quickly in one sentence. Use the tense named in the category.</p>
+<div class="practice-head">
+<button class="tab active" data-type="will" onclick="setPractice('will')">WILL</button>
+<button class="tab" data-type="going" onclick="setPractice('going')">BE GOING TO</button>
+<button class="tab" data-type="pc" onclick="setPractice('pc')">PRESENT CONTINUOUS</button>
+<button class="tab" data-type="ps" onclick="setPractice('ps')">PRESENT SIMPLE</button>
+</div>
+<div class="carousel"><div class="counter" id="practiceCounter"></div><div class="prompt" id="practicePrompt"></div><div class="cue" id="practiceCue"></div><div class="carousel-controls"><button class="btn secondary" onclick="prevPractice()">← Previous</button><button class="btn" onclick="nextPractice()">Next →</button></div></div>
+</section>
+
+<section class="section">
+<h2>5. Final speaking — build the question</h2>
+<p class="instruction">Choose a card. Use the context clue to decide which future form is needed, build the question with the verb in brackets, and ask your partner. Click the card to reveal the intended correct question.</p>
+<div class="cards" id="cards"></div>
+<div class="row" style="margin-top:14px"><button class="btn secondary" onclick="shuffleCards()">Shuffle cards</button><button class="btn secondary" onclick="hideAnswers()">Hide all answers</button></div>
+<p class="note">Some future forms can overlap in real English. Each card gives a specific context so that one form is the intended answer.</p>
+</section>
+</main>
+<script>
+function toggleDiscuss(){document.getElementById('discussBox').classList.toggle('open')}
+const serviceBtns=[...document.querySelectorAll('.service')];serviceBtns.forEach(b=>b.onclick=()=>{if(!b.classList.contains('correct')&&!b.classList.contains('wrong'))b.classList.toggle('selected')});
+function checkServices(){const correct=['C','E','I'];const selected=serviceBtns.filter(b=>b.classList.contains('selected')).map(b=>b.dataset.id);serviceBtns.forEach(b=>{b.classList.remove('correct','wrong');if(b.classList.contains('selected'))b.classList.add(correct.includes(b.dataset.id)?'correct':'wrong')});document.getElementById('serviceFeedback').textContent=selected.length===3&&correct.every(x=>selected.includes(x))?'Correct — C, E and I are not mentioned.':'Choose exactly three. Green = correct choice; red = incorrect choice.'}
+function resetServices(){serviceBtns.forEach(b=>b.classList.remove('selected','correct','wrong'));document.getElementById('serviceFeedback').textContent=''}
+document.querySelectorAll('.survey-q .option').forEach(btn=>btn.addEventListener('click',()=>{const box=btn.closest('.options');box.querySelectorAll('.option').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected')}));
+let dragged=null;const chips=[...document.querySelectorAll('.chip')];chips.forEach(ch=>ch.addEventListener('dragstart',()=>dragged=ch));document.querySelectorAll('.dropzone,#bank').forEach(z=>{z.addEventListener('dragover',e=>e.preventDefault());z.addEventListener('drop',e=>{e.preventDefault();if(dragged)z.appendChild(dragged)})});
+function checkSort(){let n=0;chips.forEach(ch=>{const col=ch.closest('.col');ch.classList.remove('correct','wrong');if(col&&col.dataset.type===ch.dataset.answer){ch.classList.add('correct');n++}else ch.classList.add('wrong')});document.getElementById('sortFeedback').textContent=n===4?'Perfect. Now explain why each form is used.':`${n}/4 correct.`}
+function resetSort(){const bank=document.getElementById('bank');chips.forEach(ch=>{bank.appendChild(ch);ch.classList.remove('correct','wrong')});document.getElementById('sortFeedback').textContent=''}
+const practice={
+will:[
+['Think about your life five years from now. What do you think will be different?','Give a personal prediction. Explain why you think so.'],
+['Imagine you suddenly get an unexpected free day tomorrow. What will you do with it?','Make an instant decision and add one reason.'],
+['What do you think will become easier in everyday life because of technology?','Share your own prediction based on your opinion.'],
+['Which part of your current routine do you think will change most in the future?','Use WILL to speculate about your own future.'],
+['Your plans for this evening suddenly get cancelled. What will you do instead?','Respond naturally with a decision made now.']],
+going:[
+['What is one thing you are going to improve or change in your life in the next few months?','Talk about a real intention you have already considered.'],
+['What are you going to do the next time you have a completely free weekend?','Describe a plan or intention that feels realistic for you.'],
+['Is there anything you are going to buy, learn or start soon? Why?','Choose something from your own life and explain your intention.'],
+['Look at your current week. Is anything clearly going to be difficult, busy or stressful? Why?','Make a prediction based on evidence you already have.'],
+['What is one habit you are definitely going to keep or stop this autumn?','Talk about a prior decision or intention.']],
+pc:[
+['What are you doing this weekend that you have already arranged?','Talk about a real fixed arrangement in your life.'],
+['Who are you meeting or spending time with in the next seven days?','Use a confirmed social or personal arrangement.'],
+['Are you going anywhere after class or later today?','Answer from your real schedule if you can.'],
+['What are you doing next week that already has a specific day or time?','Describe an arrangement that is already fixed.'],
+['Are you attending, visiting or doing anything special this month?','Use Present Continuous for something genuinely arranged.']],
+ps:[
+['Think about a place or service you use regularly. What time does it usually open or close?','Use Present Simple to talk about a real timetable or opening hours you know.'],
+['What time does your usual workday, class or morning routine officially start?','Answer with a fixed schedule from your own life.'],
+['Is there a bus, train, flight, class or programme you use often? When does it start, leave or finish?','Use Present Simple for a timetable you actually know.'],
+['Think of an event, course, film, shop or service you plan to use soon. When does it begin, open, close or finish?','Talk about a published or fixed schedule, not a personal arrangement.'],
+['What happens at a fixed time every week in your life — a class, meeting, shop closing time, train, programme?','Use Present Simple to describe a recurring schedule from your experience.']]};
+let pType='will',pIndex=0;function renderPractice(){const item=practice[pType][pIndex];document.getElementById('practiceCounter').textContent=`${pType==='will'?'WILL':pType==='going'?'BE GOING TO':pType==='pc'?'PRESENT CONTINUOUS':'PRESENT SIMPLE'} · ${pIndex+1}/5`;document.getElementById('practicePrompt').textContent=item[0];document.getElementById('practiceCue').textContent=item[1]}
+function setPractice(t){pType=t;pIndex=0;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.type===t));renderPractice()}function nextPractice(){pIndex=(pIndex+1)%5;renderPractice()}function prevPractice(){pIndex=(pIndex+4)%5;renderPractice()}renderPractice();
+const cardData=[
+['You and your partner are imagining what everyday life may be like when you are 40.','What ______ your everyday life ______ like in the future? (be)','What will your everyday life be like in the future?','WILL — personal prediction/opinion'],
+['You have been thinking about changing one part of your routine for a while.','What ______ you ______ in your routine soon? (change)','What are you going to change in your routine soon?','BE GOING TO — prior intention'],
+['You already made plans with someone for this weekend.','Who ______ you ______ this weekend? (see)','Who are you seeing this weekend?','PRESENT CONTINUOUS — fixed arrangement'],
+['You are talking about a café, gym, shop or service you often use.','What time ______ it usually ______? (close)','What time does it usually close?','PRESENT SIMPLE — regular/fixed schedule'],
+['Your friend has packed a suitcase, booked a taxi and put their passport on the table.','Where ______ your friend ______? (go)','Where is your friend going to go?','BE GOING TO — prediction from present evidence'],
+['You are discussing how people may work differently in ten years.','How ______ people ______ differently in ten years? (work)','How will people work differently in ten years?','WILL — prediction based on opinion'],
+['You have a confirmed plan with a friend or colleague next week.','What ______ you ______ together next week? (do)','What are you doing together next week?','PRESENT CONTINUOUS — arranged activity'],
+['You want to recommend a real place or service to your partner.','What time ______ it ______ on weekdays? (open)','What time does it open on weekdays?','PRESENT SIMPLE — opening hours/timetable'],
+['Your original plan for tonight has just fallen through.','What ______ you ______ instead? (do)','What will you do instead?','WILL — spontaneous decision'],
+['You have recently decided to learn, buy or try something new.','What ______ you ______ next? (try)','What are you going to try next?','BE GOING TO — intention decided before speaking'],
+['You already have one specific plan for tomorrow.','What ______ you ______ tomorrow? (do)','What are you doing tomorrow?','PRESENT CONTINUOUS — fixed personal arrangement'],
+['You often use some kind of transport in your city.','What time ______ the last bus/train ______? (leave)','What time does the last bus/train leave?','PRESENT SIMPLE — transport timetable'],
+['Imagine you could look at your life ten years from now.','What ______ you ______ most about your life then? (enjoy)','What will you enjoy most about your life then?','WILL — future speculation'],
+['You have already made one decision about this autumn.','What ______ you ______ this autumn? (start)','What are you going to start this autumn?','BE GOING TO — prior plan/intention'],
+['There is one appointment, event or visit already in your calendar.','Who ______ you ______ or where ______ you ______? (meet / go)','Who are you meeting or where are you going?','PRESENT CONTINUOUS — scheduled personal arrangement'],
+['Think of a real course, event, cinema, shop, office or public place.','When ______ it ______ or ______? (start / finish)','When does it start or finish?','PRESENT SIMPLE — fixed published schedule'],
+['You and your partner are discussing whether people will still own cars in the future.','______ people still ______ private cars in 30 years? (own)','Will people still own private cars in 30 years?','WILL — prediction/opinion'],
+['You have a free weekend coming up and already have an idea of what you want to do.','What ______ you ______ with your free time? (do)','What are you going to do with your free time?','BE GOING TO — intention'],
+['You have already agreed on a plan with someone for the next few days.','Where ______ you ______ together? (go)','Where are you going together?','PRESENT CONTINUOUS — confirmed arrangement'],
+['Think of something in your real weekly schedule: a class, shift, programme or service.','When ______ it usually ______? (begin)','When does it usually begin?','PRESENT SIMPLE — regular timetable']];
+function buildCards(){const wrap=document.getElementById('cards');wrap.innerHTML='';cardData.forEach((c,i)=>{const el=document.createElement('div');el.className='flip';el.onclick=()=>el.classList.toggle('revealed');el.innerHTML=`<div class="flip-inner"><div class="face front"><span class="n">Card ${String(i+1).padStart(2,'0')}</span><div class="cuebox">${c[0]}</div><div class="qtext">${c[1]}</div><span class="n">Click to reveal</span></div><div class="face back"><span class="n">Answer</span><div class="answer">${c[2]}<small>${c[3]}</small></div><span class="n">Click to hide</span></div></div>`;wrap.appendChild(el)})}buildCards();
+function shuffleCards(){const wrap=document.getElementById('cards');[...wrap.children].sort(()=>Math.random()-.5).forEach(x=>wrap.appendChild(x))}function hideAnswers(){document.querySelectorAll('.flip').forEach(x=>x.classList.remove('revealed'))}
+</script>
+</body>
+</html>
