@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Abbreviations & Slang</title>
+<style>
+:root {
+  --bg: #f7f7fb;
+  --panel: #ffffff;
+  --ink: #1f2330;
+  --muted: #717784;
+  --line: #e7e8ee;
+  --soft: #f1f2f7;
+  --accent: #6f6be8;
+  --accent2: #918df0;
+  --shadow: 0 8px 24px rgba(31,35,48,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  color:var(--ink);
+  background:var(--bg);
+}
+header{
+  position:sticky; top:0; z-index:20;
+  background:rgba(247,247,251,.95);
+  backdrop-filter: blur(12px);
+  border-bottom:1px solid var(--line);
+  padding:20px 28px 14px;
+}
+h1{margin:0; font-size:32px; letter-spacing:-.7px}
+.subtitle{margin-top:6px;color:var(--muted);font-size:14px}
+
+.instruction{
+  font-size:14px;
+  color:var(--muted);
+  margin-top:6px;
+}
+.discussion-questions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 18px;
+  margin-top:9px;
+  font-size:13px;
+  color:var(--ink);
+}
+.discussion-questions span{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:7px 10px;
+}
+
+.progress-wrap{margin-top:14px; display:flex; align-items:center; gap:12px}
+.progress{height:8px; background:#e9e9f1; border-radius:99px; overflow:hidden; flex:1}
+.progress > div{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:.25s}
+.counter{font-size:13px;color:var(--muted); min-width:76px;text-align:right}
+main{
+  display:grid;
+  grid-template-columns:minmax(320px, 39%) minmax(520px, 61%);
+  gap:18px;
+  padding:18px;
+  min-height:calc(100vh - 120px);
+}
+.panel{
+  background:var(--panel); border:1px solid var(--line); border-radius:22px; box-shadow:var(--shadow);
+}
+.left{padding:18px; height:calc(100vh - 145px); position:sticky; top:128px; overflow:hidden; display:flex; flex-direction:column}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.section-title h2{margin:0;font-size:18px}
+.tip{font-size:12px;color:var(--muted)}
+#messageBank{overflow:auto;padding-right:6px;display:grid;gap:10px}
+.prompt-card{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:16px;
+  padding:13px 14px;
+  cursor:grab;
+  transition:.18s ease;
+  user-select:none;
+}
+.prompt-card:hover{transform:translateY(-1px); box-shadow:0 6px 16px rgba(31,35,48,.08); border-color:#d6d5f3}
+.prompt-card.dragging{opacity:.45}
+.prompt-card.used{opacity:.42; filter:grayscale(.25)}
+.prompt-num{font-size:11px;color:var(--muted);margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase}
+.prompt-text{font-size:15px;line-height:1.38}
+
+.right{padding:18px}
+.chat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.chat-shell{perspective:1000px; min-height:205px}
+.chat-card{
+  position:relative; width:100%; height:205px; transform-style:preserve-3d;
+  transition:transform .55s cubic-bezier(.2,.75,.2,1);
+}
+.chat-shell.flipped .chat-card{transform:rotateY(180deg)}
+.face{
+  position:absolute; inset:0; backface-visibility:hidden;
+  border:1px dashed #d9d9e5; border-radius:18px; background:#fcfcfe;
+  overflow:hidden;
+}
+.front{display:flex; flex-direction:column}
+.back{
+  transform:rotateY(180deg);
+  border-style:solid;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:18px;text-align:center;background:linear-gradient(145deg,#ffffff,#f4f3ff);
+}
+.dropzone.active{outline:3px solid rgba(111,107,232,.17); border-color:var(--accent); background:#faf9ff}
+.chat-head{
+  padding:10px 12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px;min-height:48px;background:#fff;
+}
+.avatar{width:27px;height:27px;border-radius:50%;background:linear-gradient(145deg,#d9d8fb,#8e89ee)}
+.chat-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chat-status{font-size:10px;color:var(--muted)}
+.chat-body{padding:11px;display:flex;flex-direction:column;gap:8px;overflow:auto;flex:1}
+.bubble{max-width:87%;padding:8px 10px;border-radius:14px;font-size:12px;line-height:1.35}
+.mine{align-self:flex-end;background:#e8e7ff;border-bottom-right-radius:5px}
+.theirs{align-self:flex-start;background:#eceef3;border-bottom-left-radius:5px}
+.typing{display:inline-flex;gap:4px;align-items:center;min-width:44px}
+.dot{width:6px;height:6px;background:#9297a3;border-radius:50%;animation:bounce 1s infinite ease-in-out}
+.dot:nth-child(2){animation-delay:.14s} .dot:nth-child(3){animation-delay:.28s}
+@keyframes bounce{0%,70%,100%{transform:translateY(0);opacity:.55}35%{transform:translateY(-5px);opacity:1}}
+.empty{
+  flex:1;display:flex;align-items:center;justify-content:center;text-align:center;
+  padding:18px;color:#9a9eaa;font-size:12px;line-height:1.45
+}
+.flip-hint{position:absolute;right:8px;bottom:7px;font-size:10px;color:#9da1ad;background:rgba(255,255,255,.8);padding:3px 6px;border-radius:99px}
+.abbr-big{font-size:30px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--accent)}
+.meaning{margin-top:9px;font-size:15px;font-weight:700}
+.small-note{margin-top:8px;color:var(--muted);font-size:11px}
+.controls{display:flex;justify-content:flex-end;gap:8px;margin-bottom:12px}
+button{
+ border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:11px;padding:8px 11px;font-size:12px;cursor:pointer
+}
+button:hover{border-color:#cfcfea;background:#fafaff}
+
+.target-highlight{
+  display:inline-block;
+  padding:1px 5px;
+  margin:0 1px;
+  border-radius:6px;
+  background:#dcd9ff;
+  color:#3e39a8;
+  font-weight:800;
+  letter-spacing:.15px;
+}
+
+@media (max-width:1050px){
+  main{grid-template-columns:1fr}
+  .left{position:relative;top:auto;height:auto;max-height:480px}
+  .chat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:680px){.chat-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Abbreviations &amp; Slang</h1>
+  <div class="subtitle">
+    <div class="instruction">Complete the chat boxes.</div>
+    <div class="discussion-questions">
+      <span>1. Did you know or guess the meaning of the abbreviation or slang?</span>
+      <span>2. Would you use it in real life? Where or in what situations?</span>
+    </div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress"><div id="bar"></div></div>
+    <div class="counter" id="counter">0 / 65</div>
+  </div>
+</header>
+
+<main>
+  <section class="panel left">
+    <div class="section-title">
+      <div>
+        <h2>Message Bank</h2>
+        <div class="tip">Drag any message into any chat.</div>
+      </div>
+      <button id="shuffleBtn">Shuffle</button>
+    </div>
+    <div id="messageBank"></div>
+  </section>
+
+  <section class="panel right">
+    <div class="controls">
+      <button id="resetBtn">Reset chats</button>
+    </div>
+    <div class="chat-grid" id="chatGrid"></div>
+  </section>
+</main>
+
+<script>
+const DATA = [{"abbr": "btw", "meaning": "by the way", "title": "Dinner split", "prompt": "Hey, thanks again for last night. How much do I owe you for the drinks?", "reply": "Nothing! I got them btw."}, {"abbr": "atm", "meaning": "at the moment", "title": "Can you talk?", "prompt": "Can I call you for a minute?", "reply": "Can’t atm, I’m in a meeting."}, {"abbr": "idc", "meaning": "I don't care", "title": "Bad weather", "prompt": "It’s absolutely pouring. Still want to go out?", "reply": "Yeah, idc 😭 I need to get out of the house."}, {"abbr": "imo", "meaning": "in my opinion", "title": "New series", "prompt": "Be honest — is that new series actually worth watching?", "reply": "The first episode is slow imo, but it gets better."}, {"abbr": "rn", "meaning": "right now", "title": "Spontaneous coffee", "prompt": "Random question: are you anywhere near the city centre?", "reply": "Yeah, I’m there rn. Coffee?"}, {"abbr": "bc", "meaning": "because", "title": "Running late", "prompt": "Are you still coming? We’re already here.", "reply": "Yes 😭 Running late bc the bus never showed up."}, {"abbr": "ofc", "meaning": "of course", "title": "Small favour", "prompt": "Could you send me the notes from yesterday when you have a sec?", "reply": "Ofc! I’ll send them after lunch."}, {"abbr": "tbh", "meaning": "to be honest", "title": "Honest opinion", "prompt": "Do you actually like this outfit or are you just being nice?", "reply": "The jacket is great, but I’d change the shoes tbh."}, {"abbr": "lmk", "meaning": "let me know", "title": "Friday plans", "prompt": "We might go for drinks after work on Friday. Want to join?", "reply": "Maybe! Lmk where you decide to go."}, {"abbr": "sth", "meaning": "something", "title": "Birthday idea", "prompt": "I have no idea what to get Anna for her birthday.", "reply": "Let’s get her sth for her new flat."}, {"abbr": "dw", "meaning": "don't worry", "title": "Late arrival", "prompt": "I’m so sorry, I’m going to be about 15 minutes late.", "reply": "Dw, I haven’t ordered yet."}, {"abbr": "nvm", "meaning": "never mind", "title": "Lost charger", "prompt": "Have you seen my charger anywhere?", "reply": "Nvm, found it under the sofa 😭"}, {"abbr": "aka", "meaning": "also known as", "title": "Nickname", "prompt": "Wait, is Robert Downey Jr. the guy who plays Iron Man?", "reply": "Yep — Tony Stark, aka Iron Man."}, {"abbr": "gf", "meaning": "girlfriend", "title": "Who is she?", "prompt": "Okay, who’s Katie? You keep mentioning her 👀", "reply": "She’s my gf 😂"}, {"abbr": "bff", "meaning": "best friend forever", "title": "Emergency contact", "prompt": "Who would you call first if something amazing happened?", "reply": "My bff, 100%."}, {"abbr": "fyi", "meaning": "for your information", "title": "Meeting update", "prompt": "I’m about to leave for the office. Same meeting time as usual?", "reply": "FYI, they moved it to 10:30."}, {"abbr": "l8r", "meaning": "later", "title": "Busy now", "prompt": "Can I ask you something quickly?", "reply": "I’m driving — text you l8r."}, {"abbr": "ttyl", "meaning": "talk to you later", "title": "End chat", "prompt": "Okay, I need to get back to work 😭", "reply": "Same here. TTYL!"}, {"abbr": "yolo", "meaning": "you only live once", "title": "Last-minute trip", "prompt": "Flights are cheap for this weekend. This is a terrible idea, right?", "reply": "Book it 😂 YOLO."}, {"abbr": "irl", "meaning": "in real life", "title": "Online friend", "prompt": "You two talk all the time — have you actually met?", "reply": "Yeah! We finally met IRL last month."}, {"abbr": "idk", "meaning": "I don't know", "title": "Food decision", "prompt": "Pizza, sushi or Thai? Pick one.", "reply": "Idk 😭 I’m terrible at choosing."}, {"abbr": "faq", "meaning": "frequently asked questions", "title": "Course info", "prompt": "Do you know whether we can change groups after the course starts?", "reply": "Not sure — check the FAQ first."}, {"abbr": "asap", "meaning": "as soon as possible", "title": "Urgent task", "prompt": "When do you need the final version of the slides?", "reply": "ASAP if possible — the client moved the meeting."}, {"abbr": "pov", "meaning": "point of view", "title": "TikTok caption", "prompt": "Why does every video suddenly start with ‘POV’?", "reply": "POV means you’re supposed to imagine the situation from that perspective."}, {"abbr": "gr8", "meaning": "great", "title": "Exam result", "prompt": "I passed the exam!!!", "reply": "That’s gr8 😭 Congrats!"}, {"abbr": "2moro", "meaning": "tomorrow", "title": "Meet up", "prompt": "I can’t do tonight. Are you free another day?", "reply": "2moro after work?"}, {"abbr": "b4", "meaning": "before", "title": "Deadline", "prompt": "What time do you need the document?", "reply": "Anytime b4 3 is fine."}, {"abbr": "thx", "meaning": "thanks / thank you", "title": "Notes", "prompt": "Just sent you everything from today’s class.", "reply": "Thx 4 that 🙏"}, {"abbr": "cu", "meaning": "see you", "title": "On the way", "prompt": "I’m leaving now. Should be there in ten.", "reply": "Perfect, CU soon."}, {"abbr": "ooo", "meaning": "out of office", "title": "No reply", "prompt": "I emailed Marta yesterday and she still hasn’t replied.", "reply": "She’s OOO this week."}, {"abbr": "lol", "meaning": "laughing out loud", "title": "Meme", "prompt": "Please tell me you saw the video I sent you 😂", "reply": "LOL yes, that is literally you."}, {"abbr": "hr", "meaning": "human resources", "title": "Work question", "prompt": "Who do I speak to about changing the bank account for my salary?", "reply": "I’d ask HR."}, {"abbr": "brb", "meaning": "be right back", "title": "Quick break", "prompt": "Where are you going?", "reply": "BRB, just grabbing coffee."}, {"abbr": "rip", "meaning": "rest in peace", "title": "Broken phone", "prompt": "My phone fell out of my pocket and the screen is completely dead.", "reply": "RIP 😭"}, {"abbr": "fomo", "meaning": "fear of missing out", "title": "Going out tired", "prompt": "You said you were exhausted, so why are you still coming tonight?", "reply": "FOMO, obviously 😂"}, {"abbr": "qotd", "meaning": "quote of the day", "title": "Instagram story", "prompt": "Why does she post ‘QOTD’ every morning?", "reply": "It’s her QOTD — quote of the day."}, {"abbr": "goat", "meaning": "greatest of all time", "title": "Best ever", "prompt": "Okay, no neutral answer: who’s the best footballer ever?", "reply": "Messi is the GOAT for me."}, {"abbr": "np", "meaning": "no problem", "title": "Cover shift", "prompt": "Seriously, thanks for covering my shift tomorrow.", "reply": "NP! You can save me next time 😂"}, {"abbr": "pls", "meaning": "please", "title": "Link", "prompt": "Can you send me that restaurant you mentioned?", "reply": "Yep — remind me tonight pls."}, {"abbr": "xoxo", "meaning": "hugs and kisses", "title": "Message ending", "prompt": "Why does my aunt finish every message with XOXO?", "reply": "XOXO is basically hugs and kisses."}, {"abbr": "wknd", "meaning": "weekend", "title": "Weekend", "prompt": "Any plans for Saturday or Sunday?", "reply": "Nothing yet for the wknd."}, {"abbr": "thnx", "meaning": "thanks", "title": "Payment", "prompt": "Just sent you the money for the tickets.", "reply": "Thnx! Got it."}, {"abbr": "omg", "meaning": "oh my God / oh my gosh", "title": "Big news", "prompt": "I GOT THE JOB 😭", "reply": "OMG!!! I knew you would."}, {"abbr": "diy", "meaning": "do it yourself", "title": "Home project", "prompt": "That shelf looks good. Where did you buy it?", "reply": "Didn’t buy it — DIY 😎"}, {"abbr": "sry", "meaning": "sorry", "title": "Late reply", "prompt": "You vanished in the middle of our conversation 😂", "reply": "Sry, my phone died."}, {"abbr": "?4u", "meaning": "I have a question for you", "title": "Question", "prompt": "Why did you just send me ‘?4U’ 😂", "reply": "?4U — are you free this weekend?"}, {"abbr": "uok", "meaning": "are you OK?", "title": "Check-in", "prompt": "You’ve barely said anything today.", "reply": "UOK?"}, {"abbr": "ngl", "meaning": "not gonna lie", "title": "Feedback", "prompt": "Did my presentation make sense or was it confusing?", "reply": "Ngl, the middle part was a bit hard to follow."}, {"abbr": "tho", "meaning": "though", "title": "Expensive café", "prompt": "That café was ridiculously expensive.", "reply": "True. The cake was amazing tho."}, {"abbr": "sns", "meaning": "social networking sites", "title": "Article", "prompt": "This article keeps talking about SNS. What is that?", "reply": "SNS means social networking sites."}, {"abbr": "ppl", "meaning": "people", "title": "Concert", "prompt": "Was it crowded last night?", "reply": "So many ppl 😭 We could barely move."}, {"abbr": "iq", "meaning": "intelligence quotient", "title": "Quiz", "prompt": "What exactly is an IQ test supposed to measure?", "reply": "It gives you an IQ score based on certain cognitive tasks."}, {"abbr": "peace out", "meaning": "see you later / goodbye", "title": "Going home", "prompt": "I’m done for today. I’m heading home.", "reply": "Peace out ✌️"}, {"abbr": "that's fire", "meaning": "that's awesome / excellent", "title": "New jacket", "prompt": "Look what I bought today 👀", "reply": "That’s fire 🔥"}, {"abbr": "that's sick", "meaning": "that's awesome / impressive", "title": "Cool skill", "prompt": "I finally landed that trick I’ve been practising.", "reply": "That’s sick!!"}, {"abbr": "boujee", "meaning": "fancy, luxurious, expensive-looking", "title": "Fancy place", "prompt": "Would you pay 20 euros for coffee just because the place looks like this?", "reply": "That place is so boujee 😂"}, {"abbr": "rizz", "meaning": "charisma or flirting charm", "title": "Flirting", "prompt": "How does he manage to flirt with literally everyone?", "reply": "He’s got ridiculous rizz."}, {"abbr": "extra", "meaning": "over the top / doing too much", "title": "Birthday drama", "prompt": "She booked a photographer for a tiny birthday dinner 😭", "reply": "She’s being so extra."}, {"abbr": "heated", "meaning": "angry / annoyed", "title": "Argument", "prompt": "Why did you leave the group chat?", "reply": "I was too heated to keep replying."}, {"abbr": "sus", "meaning": "suspicious / questionable", "title": "Excuse", "prompt": "He said he couldn’t reply for three days because his charger was missing.", "reply": "That sounds sus."}, {"abbr": "lit", "meaning": "exciting / very good", "title": "Party", "prompt": "Was last night actually fun or are people exaggerating?", "reply": "It was lit."}, {"abbr": "cap", "meaning": "a lie / not true", "title": "Wild story", "prompt": "He says he randomly met Drake at a supermarket.", "reply": "That’s cap 😂"}, {"abbr": "crashing out", "meaning": "freaking out / having a meltdown", "title": "Deadline stress", "prompt": "Why is she sending twenty messages in five minutes?", "reply": "She’s crashing out over the deadline."}, {"abbr": "ghosting", "meaning": "suddenly stopping replies / ignoring someone", "title": "No replies", "prompt": "He was texting me every day and now nothing for a week.", "reply": "Sounds like he’s ghosting you."}, {"abbr": "i'm down", "meaning": "I’m interested / willing to do it", "title": "Weekend idea", "prompt": "Escape room on Saturday?", "reply": "I’m down."}];
+const bank = document.getElementById('messageBank');
+const grid = document.getElementById('chatGrid');
+const counter = document.getElementById('counter');
+const bar = document.getElementById('bar');
+const total = DATA.length;
+let used = new Set();
+
+function renderBank(order = DATA.map((_,i)=>i)) {
+  bank.innerHTML = '';
+  order.forEach(i => {
+    const item = DATA[i];
+    const c = document.createElement('div');
+    c.className = 'prompt-card' + (used.has(i) ? ' used' : '');
+    c.draggable = true;
+    c.dataset.index = i;
+    c.innerHTML = `<div class="prompt-num">Message ${String(i+1).padStart(2,'0')}</div><div class="prompt-text">${item.prompt}</div>`;
+    c.addEventListener('dragstart', e => {
+      c.classList.add('dragging');
+      e.dataTransfer.setData('text/plain', i);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    c.addEventListener('dragend', ()=>c.classList.remove('dragging'));
+    c.addEventListener('click', ()=> {
+      // handy on touch / trackpad: place into first empty chat
+      const empty = [...document.querySelectorAll('.chat-shell')].find(x => !x.dataset.filled);
+      if (empty) fillChat(empty, i);
+    });
+    bank.appendChild(c);
+  });
+}
+
+function makeChats(n) {
+  grid.innerHTML='';
+  for(let i=0;i<n;i++) {
+    const shell = document.createElement('div');
+    shell.className='chat-shell';
+    shell.dataset.slot=i;
+    shell.innerHTML = `
+      <div class="chat-card">
+        <div class="face front dropzone">
+          <div class="chat-head">
+            <div class="avatar"></div>
+            <div>
+              <div class="chat-title">Chat ${String(i+1).padStart(2,'0')}</div>
+              <div class="chat-status">drop a message here</div>
+            </div>
+          </div>
+          <div class="chat-body"><div class="empty">Drop any message from the left here.</div></div>
+          <div class="flip-hint">click to flip</div>
+        </div>
+        <div class="face back">
+          <div class="abbr-big">—</div>
+          <div class="meaning">No abbreviation yet</div>
+          <div class="small-note">Click again to return to the chat.</div>
+        </div>
+      </div>`;
+    const front = shell.querySelector('.front');
+    front.addEventListener('dragover', e => {e.preventDefault(); front.classList.add('active')});
+    front.addEventListener('dragleave', ()=>front.classList.remove('active'));
+    front.addEventListener('drop', e => {
+      e.preventDefault(); front.classList.remove('active');
+      const idx = Number(e.dataTransfer.getData('text/plain'));
+      fillChat(shell, idx);
+    });
+    shell.addEventListener('click', e => {
+      if(shell.dataset.filled) shell.classList.toggle('flipped');
+    });
+    grid.appendChild(shell);
+  }
+}
+
+
+function escapeHTML(str) {
+  return str.replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+  })[ch]);
+}
+
+function highlightTarget(reply, target) {
+  const safeReply = escapeHTML(reply);
+  const safeTarget = escapeHTML(target);
+  const escaped = safeTarget.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(escaped, 'i');
+  return safeReply.replace(re, match => `<span class="target-highlight">${match}</span>`);
+}
+
+function fillChat(shell, idx) {
+  if (Number.isNaN(idx)) return;
+  const item = DATA[idx];
+  shell.classList.remove('flipped');
+  shell.dataset.filled='1';
+  shell.dataset.index=idx;
+
+  const title = shell.querySelector('.chat-title');
+  const status = shell.querySelector('.chat-status');
+  const body = shell.querySelector('.chat-body');
+  const back = shell.querySelector('.back');
+
+  title.textContent = item.title;
+  status.textContent = 'online';
+  body.innerHTML = `<div class="bubble mine">${item.prompt}</div>
+                    <div class="bubble theirs typing" aria-label="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+  back.querySelector('.abbr-big').textContent = item.abbr;
+  back.querySelector('.meaning').textContent = item.meaning;
+  back.querySelector('.small-note').textContent = 'Click again to return to the conversation.';
+
+  used.add(idx);
+  refreshUsedState();
+  updateProgress();
+
+  // Realistic typing delay
+  const delay = 900 + Math.floor(Math.random()*900);
+  setTimeout(()=>{
+    const typing = body.querySelector('.typing');
+    if(typing) {
+      typing.className='bubble theirs';
+      typing.innerHTML=highlightTarget(item.reply, item.abbr);
+    }
+  }, delay);
+}
+
+function refreshUsedState() {
+  document.querySelectorAll('.prompt-card').forEach(el => {
+    el.classList.toggle('used', used.has(Number(el.dataset.index)));
+  });
+}
+
+function updateProgress() {
+  counter.textContent = `${used.size} / ${total}`;
+  bar.style.width = `${(used.size/total)*100}%`;
+}
+
+document.getElementById('shuffleBtn').addEventListener('click', ()=> {
+  const order = DATA.map((_,i)=>i).sort(()=>Math.random()-.5);
+  renderBank(order);
+});
+document.getElementById('resetBtn').addEventListener('click', ()=> {
+  used.clear();
+  makeChats(DATA.length);
+  renderBank();
+  updateProgress();
+});
+
+makeChats(DATA.length);
+renderBank();
+updateProgress();
+</script>
+</body>
+</html>
