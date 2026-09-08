@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articles</title>
+<style>
+:root{
+  --bg:#f5f5f7;
+  --ink:#222;
+  --muted:#666;
+  --line:#d9d9df;
+
+  --a-bg:#fff8d8;
+  --a-accent:#d8aa00;
+  --a-card:#fffdf3;
+
+  --the-bg:#e9f8ee;
+  --the-accent:#2f8f52;
+  --the-card:#f7fff9;
+
+  --zero-bg:#f0e9fb;
+  --zero-accent:#7b58b0;
+  --zero-card:#fbf8ff;
+
+  --ok:#dff5e7;
+  --bad:#fde4e4;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+}
+
+.header-inner{
+  max-width:1500px;
+  margin:0 auto;
+  padding:18px 28px;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+}
+
+h1{
+  margin:0;
+  font-size:42px;
+  letter-spacing:-.03em;
+}
+
+.header-note{
+  margin:4px 0 0;
+  color:var(--muted);
+}
+
+button{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px 15px;
+  border-radius:10px;
+  font-size:15px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+button:hover{filter:brightness(.98)}
+
+main{
+  max-width:1500px;
+  margin:0 auto;
+  padding:28px;
+}
+
+.intro{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px 20px;
+  margin-bottom:26px;
+  font-size:17px;
+}
+
+.article-section{
+  border-radius:22px;
+  padding:22px;
+  margin:0 0 30px;
+  border:2px solid transparent;
+}
+
+.section-a{
+  background:var(--a-bg);
+  border-color:#efd766;
+}
+
+.section-the{
+  background:var(--the-bg);
+  border-color:#9fd8b1;
+}
+
+.section-zero{
+  background:var(--zero-bg);
+  border-color:#c8b3e9;
+}
+
+.section-top{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+  margin-bottom:18px;
+}
+
+.section-title{
+  margin:0;
+  font-size:32px;
+}
+
+.section-a .section-title{color:#8b6c00}
+.section-the .section-title{color:#216f3d}
+.section-zero .section-title{color:#654194}
+
+.section-desc{
+  margin:5px 0 0;
+  color:var(--muted);
+}
+
+.section-buttons{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.section-a .primary{background:var(--a-accent);color:white;border-color:var(--a-accent)}
+.section-the .primary{background:var(--the-accent);color:white;border-color:var(--the-accent)}
+.section-zero .primary{background:var(--zero-accent);color:white;border-color:var(--zero-accent)}
+
+.workspace{
+  display:grid;
+  grid-template-columns:minmax(300px,.85fr) minmax(620px,1.65fr);
+  gap:20px;
+  align-items:start;
+}
+
+.examples-panel,
+.rules-panel{
+  background:rgba(255,255,255,.82);
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:16px;
+  padding:16px;
+}
+
+.panel-title{
+  margin:0 0 12px;
+  font-size:18px;
+  font-weight:800;
+}
+
+.bank{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  min-height:110px;
+}
+
+.sentence{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:13px 14px;
+  font-size:17px;
+  cursor:grab;
+  user-select:none;
+  box-shadow:0 1px 4px rgba(0,0,0,.04);
+}
+
+.sentence:hover{transform:translateY(-1px)}
+.sentence.dragging{opacity:.45}
+
+.article-mark{
+  font-weight:900;
+  text-decoration:underline;
+  text-decoration-thickness:3px;
+  text-underline-offset:3px;
+}
+
+.zero-mark{
+  font-weight:900;
+  text-decoration:underline dotted;
+  text-underline-offset:3px;
+}
+
+.rules-grid{
+  display:grid;
+  gap:12px;
+}
+
+.rules-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.rules-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+.rule{
+  background:#fff;
+  border:2px dashed var(--line);
+  border-radius:14px;
+  padding:14px;
+  min-height:230px;
+}
+
+.section-a .rule{background:var(--a-card)}
+.section-the .rule{background:var(--the-card)}
+.section-zero .rule{background:var(--zero-card)}
+
+.rule.dragover{outline:3px solid rgba(0,0,0,.12)}
+.rule h3{
+  margin:0 0 6px;
+  font-size:17px;
+}
+.rule p{
+  margin:0 0 12px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.dropzone{
+  min-height:135px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.dropzone .sentence{
+  font-size:15px;
+  padding:10px 11px;
+}
+
+.correct{
+  background:var(--ok)!important;
+  border-color:#83c99a!important;
+}
+
+.incorrect{
+  background:var(--bad)!important;
+  border-color:#d88f8f!important;
+}
+
+.feedback{
+  margin-top:14px;
+  font-weight:800;
+  min-height:22px;
+}
+
+.answers{
+  display:none;
+  margin-top:16px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+}
+
+.answers.show{display:block}
+
+.answers h3{margin:0 0 12px}
+.answer-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:10px;
+}
+.answer-card{
+  background:#fafafa;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:12px;
+}
+.answer-card b{
+  display:block;
+  margin-bottom:7px;
+}
+.answer-card div+div{margin-top:6px}
+
+@media(max-width:1100px){
+  .workspace{grid-template-columns:1fr}
+  .rules-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:760px){
+  .header-inner,.section-top{flex-direction:column}
+  .rules-3,.rules-4{grid-template-columns:1fr}
+  main{padding:16px}
+  h1{font-size:34px}
+}
+</style>
+
+<style>
+  .difference-section{
+    margin:48px auto 24px;
+    padding:28px;
+    max-width:1200px;
+    border-radius:22px;
+    background:#fafafa;
+    border:1px solid #e7e7e7;
+  }
+  .difference-header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  .difference-header h2{
+    margin:0 0 8px;
+    font-size:30px;
+  }
+  .difference-header p{
+    margin:0;
+    font-size:18px;
+    line-height:1.45;
+  }
+  .difference-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+  }
+  .difference-card{
+    background:white;
+    border:1px solid #dedede;
+    border-radius:16px;
+    padding:18px 20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+  }
+  .difference-label{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    margin-bottom:10px;
+  }
+  .difference-card p{
+    margin:7px 0;
+    font-size:18px;
+    line-height:1.45;
+  }
+  @media (max-width:800px){
+    .difference-grid{grid-template-columns:1fr;}
+  }
+</style>
+
+
+<style>
+  .practice-section{
+    max-width:1200px;
+    margin:28px auto 56px;
+    padding:0 28px;
+  }
+  .practice-card{
+    text-align:center;
+    padding:34px 24px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#fff7d6,#f4efff);
+    border:1px solid #e4ddf2;
+    box-shadow:0 4px 16px rgba(0,0,0,.06);
+  }
+  .practice-kicker{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.12em;
+    margin-bottom:8px;
+  }
+  .practice-card h2{
+    margin:0 0 10px;
+    font-size:30px;
+  }
+  .practice-card p{
+    max-width:700px;
+    margin:0 auto 22px;
+    font-size:18px;
+    line-height:1.5;
+  }
+  .practice-button{
+    display:inline-block;
+    padding:14px 24px;
+    border-radius:999px;
+    background:#222;
+    color:#fff !important;
+    text-decoration:none;
+    font-size:18px;
+    font-weight:700;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .practice-button:hover{
+    transform:translateY(-1px);
+    opacity:.9;
+  }
+</style>
+
+
+<style>
+  .flip-card{
+    appearance:none;
+    -webkit-appearance:none;
+    width:100%;
+    min-height:220px;
+    border:0;
+    padding:0;
+    background:transparent;
+    cursor:pointer;
+    perspective:1000px;
+    font:inherit;
+    text-align:left;
+  }
+  .flip-card-inner{
+    position:relative;
+    display:block;
+    width:100%;
+    min-height:220px;
+    transition:transform .5s ease;
+    transform-style:preserve-3d;
+  }
+  .flip-card.flipped .flip-card-inner{
+    transform:rotateY(180deg);
+  }
+  .flip-card-front,
+  .flip-card-back{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    border:1px solid #dedede;
+    border-radius:16px;
+    padding:20px;
+    background:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+  }
+  .flip-card-back{
+    transform:rotateY(180deg);
+    text-align:center;
+    font-size:18px;
+    line-height:1.55;
+    background:#fffdf6;
+  }
+  .difference-sentence{
+    display:block;
+    margin:7px 0;
+    font-size:18px;
+    line-height:1.45;
+  }
+  .flip-hint{
+    display:block;
+    margin-top:14px;
+    font-size:13px;
+    font-weight:700;
+    opacity:.55;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+</style>
+
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div>
+      <h1>Articles</h1>
+      <p class="header-note">Match the examples with the correct use of A/AN, THE or zero article.</p>
+    </div>
+    <button onclick="resetAll()">Reset all</button>
+  </div>
+</header>
+
+<main>
+
+<div class="intro">
+  <strong>Task:
+
+<!-- A / AN -->
+<section class="article-section section-a" data-section="a">
+  <div class="section-top">
+    <div>
+      <h2 class="section-title">A / AN</h2>
+      <p class="section-desc">Indefinite article</p>
+    </div>
+    <div class="section-buttons">
+      <button onclick="toggleAnswers('a')">Show answers</button>
+      <button class="primary" onclick="checkSection('a')">Check answers</button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <div class="examples-panel">
+      <h3 class="panel-title">Examples</h3>
+      <div class="bank" id="bank-a">
+
+        <div class="sentence" draggable="true" data-answer="a-first">
+          I bought <span class="article-mark">a</span> book yesterday.
+        </div>
+
+        
+        <div class="sentence" draggable="true" data-answer="a-first">
+          I ordered <span class="article-mark">a</span> coffee after lunch.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="a-one">
+          Tim sat down on <span class="article-mark">a</span> chair.
+        </div>
+
+        
+        
+        <div class="sentence" draggable="true" data-answer="a-one">
+          There is <span class="article-mark">a</span> hospital near the station.
+        </div>
+
+        
+        <div class="sentence" draggable="true" data-answer="a-type">
+          She is <span class="article-mark">a</span> dentist.
+        </div>
+
+        
+      </div>
+    </div>
+
+    <div class="rules-panel">
+      <h3 class="panel-title">Uses</h3>
+      <div class="rules-grid rules-3">
+
+        <div class="rule" data-rule="a-first">
+          <h3>New / first mention</h3>
+          <p>We introduce one singular countable thing or person for the first time.</p>
+          <div class="dropzone"></div>
+        </div>
+
+        <div class="rule" data-rule="a-one">
+          <h3>Any one / not specific</h3>
+          <p>We mean one example from a larger group, not one particular known item.</p>
+          <div class="dropzone"></div>
+        </div>
+
+        <div class="rule" data-rule="a-type">
+          <h3>Type / profession</h3>
+          <p>We say what kind of person or thing someone or something is.</p>
+          <div class="dropzone"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback"></div>
+
+  <div class="answers" id="answers-a">
+    <h3>Correct answers — A / AN</h3>
+    <div class="answer-grid">
+      <div class="answer-card">
+        <b>New / first mention</b>
+        <div>I bought <strong>a book</strong> yesterday.</div>
+                <div>I ordered <strong>a coffee</strong> after lunch.</div>
+      </div>
+      <div class="answer-card">
+        <b>Any one / not specific</b>
+        <div>Tim sat down on <strong>a chair</strong>.</div>
+                        <div>There is <strong>a hospital</strong> near the station.</div>
+              </div>
+      <div class="answer-card">
+        <b>Type / profession</b>
+        <div>She is <strong>a dentist</strong>.</div>
+              </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE -->
+<section class="article-section section-the" data-section="the">
+  <div class="section-top">
+    <div>
+      <h2 class="section-title">THE</h2>
+      <p class="section-desc">Definite article</p>
+    </div>
+    <div class="section-buttons">
+      <button onclick="toggleAnswers('the')">Show answers</button>
+      <button class="primary" onclick="checkSection('the')">Check answers</button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <div class="examples-panel">
+      <h3 class="panel-title">Examples</h3>
+      <div class="bank" id="bank-the">
+
+        <div class="sentence" draggable="true" data-answer="the-mentioned">
+          I bought a book yesterday. <span class="article-mark">The</span> book is on my desk now.
+        </div>
+
+        
+        
+        <div class="sentence" draggable="true" data-answer="the-specific">
+          Tim sat on <span class="article-mark">the</span> chair nearest the door.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="the-specific">
+          I like <span class="article-mark">the</span> people I work with.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="the-specific">
+          <span class="article-mark">The</span> coffee we had after dinner wasn’t very good.
+        </div>
+
+        
+        <div class="sentence" draggable="true" data-answer="the-context">
+          I’d like to speak to <span class="article-mark">the</span> manager.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="the-context">
+          I’m going to <span class="article-mark">the</span> bank after work.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="the-context">
+          She has gone to <span class="article-mark">the</span> dentist.
+        </div>
+
+        
+        <div class="sentence" draggable="true" data-answer="the-place">
+          I went to <span class="article-mark">the</span> university to meet a professor.
+        </div>
+
+        
+        <div class="sentence" draggable="true" data-answer="the-place">
+          I left my phone on <span class="article-mark">the</span> bed.
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rules-panel">
+      <h3 class="panel-title">Uses</h3>
+      <div class="rules-grid rules-4">
+
+        <div class="rule" data-rule="the-mentioned">
+          <h3>Mentioned before</h3>
+          <p>The noun was introduced earlier, so both speakers know which one is meant.</p>
+          <div class="dropzone"></div>
+        </div>
+
+        <div class="rule" data-rule="the-specific">
+          <h3>Specified / identified</h3>
+          <p>Extra information identifies exactly which person or thing we mean.</p>
+          <div class="dropzone"></div>
+        </div>
+
+        <div class="rule" data-rule="the-context">
+          <h3>Clear from context</h3>
+          <p>The context makes it clear which person or thing is meant.</p>
+          <div class="dropzone"></div>
+        </div>
+
+        <div class="rule" data-rule="the-place">
+          <h3>Specific place / object</h3>
+          <p>We mean the physical place or object, not its usual institutional function.</p>
+          <div class="dropzone"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback"></div>
+
+  <div class="answers" id="answers-the">
+    <h3>Correct answers — THE</h3>
+    <div class="answer-grid">
+
+      <div class="answer-card">
+        <b>Mentioned before</b>
+        <div>I bought a book yesterday. <strong>The book</strong> is on my desk now.</div>
+                      </div>
+
+      <div class="answer-card">
+        <b>Specified / identified</b>
+        <div>Tim sat on <strong>the chair nearest the door</strong>.</div>
+        <div>I like <strong>the people I work with</strong>.</div>
+        <div><strong>The coffee we had after dinner</strong> wasn’t very good.</div>
+      </div>
+
+      <div class="answer-card">
+        <b>Clear from context</b>
+                <div>I’d like to speak to <strong>the manager</strong>.</div>
+        <div>I’m going to <strong>the bank</strong> after work.</div>
+        <div>She has gone to <strong>the dentist</strong>.</div>
+      </div>
+
+      <div class="answer-card">
+        <b>Specific place / object</b>
+                <div>I went to <strong>the university</strong> to meet a professor.</div>
+                <div>I left my phone on <strong>the bed</strong>.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ZERO -->
+<section class="article-section section-zero" data-section="zero">
+  <div class="section-top">
+    <div>
+      <h2 class="section-title">Zero article Ø</h2>
+      <p class="section-desc">No article</p>
+    </div>
+    <div class="section-buttons">
+      <button onclick="toggleAnswers('zero')">Show answers</button>
+      <button class="primary" onclick="checkSection('zero')">Check answers</button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <div class="examples-panel">
+      <h3 class="panel-title">Examples</h3>
+      <div class="bank" id="bank-zero">
+
+        
+        <div class="sentence" draggable="true" data-answer="zero-general">
+          I love <span class="zero-mark">coffee</span>.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="zero-general">
+          I like working with <span class="zero-mark">people who say what they think</span>.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="zero-purpose">
+          Children go to <span class="zero-mark">school</span> every day.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="zero-purpose">
+          He was taken to <span class="zero-mark">hospital</span> after the accident.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="zero-purpose">
+          She wants to go to <span class="zero-mark">university</span> next year.
+        </div>
+
+        
+        <div class="sentence" draggable="true" data-answer="zero-fixed">
+          I’m going to <span class="zero-mark">bed</span> now.
+        </div>
+
+        <div class="sentence" draggable="true" data-answer="zero-fixed">
+          What time do you finish <span class="zero-mark">work</span>?
+        </div>
+
+        
+        
+      </div>
+    </div>
+
+    <div class="rules-panel">
+      <h3 class="panel-title">Uses</h3>
+      <div class="rules-grid rules-3">
+
+        <div class="rule" data-rule="zero-general">
+          <h3>General meaning</h3>
+          <p>Plural countable nouns and uncountable nouns used in a general sense.</p>
+          <div class="dropzone"></div>
+        </div>
+
+        <div class="rule" data-rule="zero-purpose">
+          <h3>Institution / normal purpose</h3>
+          <p>school, university and hospital when we mean their usual function.</p>
+          <div class="dropzone"></div>
+        </div>
+
+        <div class="rule" data-rule="zero-fixed">
+          <h3>Fixed expressions</h3>
+          <p>go to bed, go to work, be at work.</p>
+          <div class="dropzone"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="feedback"></div>
+
+  <div class="answers" id="answers-zero">
+    <h3>Correct answers — Zero article Ø</h3>
+    <div class="answer-grid">
+
+      <div class="answer-card">
+        <b>General meaning</b>
+                <div>I love <strong>coffee</strong>.</div>
+        <div>I like working with <strong>people who say what they think</strong>.</div>
+      </div>
+
+      <div class="answer-card">
+        <b>Institution / normal purpose</b>
+        <div>Children go to <strong>school</strong> every day.</div>
+        <div>He was taken to <strong>hospital</strong> after the accident.</div>
+        <div>She wants to go to <strong>university</strong> next year.</div>
+              </div>
+
+      <div class="answer-card">
+        <b>Fixed expressions</b>
+        <div>I’m going to <strong>bed</strong> now.</div>
+        <div>What time do you finish <strong>work</strong>?</div>
+                      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+let selectedCard = null;
+
+function initDragAndDrop(){
+  document.querySelectorAll('.sentence').forEach(card=>{
+    card.addEventListener('dragstart', function(){
+      selectedCard = card;
+      card.classList.add('dragging');
+    });
+
+    card.addEventListener('dragend', function(){
+      card.classList.remove('dragging');
+    });
+
+    card.addEventListener('click', function(e){
+      e.stopPropagation();
+      document.querySelectorAll('.sentence').forEach(c=>c.style.outline='');
+      selectedCard = card;
+      card.style.outline = '3px solid rgba(70,70,70,.35)';
+    });
+  });
+
+  document.querySelectorAll('.rule').forEach(rule=>{
+    rule.addEventListener('dragover', function(e){
+      e.preventDefault();
+      rule.classList.add('dragover');
+    });
+
+    rule.addEventListener('dragleave', function(){
+      rule.classList.remove('dragover');
+    });
+
+    rule.addEventListener('drop', function(e){
+      e.preventDefault();
+      rule.classList.remove('dragover');
+      const card = document.querySelector('.sentence.dragging') || selectedCard;
+      if(card){
+        rule.querySelector('.dropzone').appendChild(card);
+        card.classList.remove('correct','incorrect');
+        card.style.outline='';
+        selectedCard=null;
+      }
+    });
+
+    rule.addEventListener('click', function(){
+      if(selectedCard){
+        rule.querySelector('.dropzone').appendChild(selectedCard);
+        selectedCard.classList.remove('correct','incorrect');
+        selectedCard.style.outline='';
+        selectedCard=null;
+      }
+    });
+  });
+}
+
+function checkSection(id){
+  const section = document.querySelector(`[data-section="${id}"]`);
+  const cards = section.querySelectorAll('.sentence');
+  let placed = 0;
+  let correct = 0;
+
+  cards.forEach(card=>{
+    card.classList.remove('correct','incorrect');
+    const rule = card.closest('.rule');
+
+    if(rule){
+      placed++;
+      if(rule.dataset.rule === card.dataset.answer){
+        correct++;
+        card.classList.add('correct');
+      }else{
+        card.classList.add('incorrect');
+      }
+    }
+  });
+
+  const feedback = section.querySelector('.feedback');
+
+  if(placed === 0){
+    feedback.textContent = 'Place the examples into the rule columns first.';
+  }else if(placed < cards.length){
+    feedback.textContent = `${correct}/${placed} placed correctly. ${cards.length - placed} example(s) are still on the left.`;
+  }else if(correct === cards.length){
+    feedback.textContent = `Excellent — ${correct}/${cards.length} correct.`;
+  }else{
+    feedback.textContent = `${correct}/${cards.length} correct. Red cards need another look.`;
+  }
+}
+
+function toggleAnswers(id){
+  const panel = document.getElementById(`answers-${id}`);
+  panel.classList.toggle('show');
+}
+
+function resetAll(){
+  const banks = {
+    a: document.getElementById('bank-a'),
+    the: document.getElementById('bank-the'),
+    zero: document.getElementById('bank-zero')
+  };
+
+  document.querySelectorAll('.article-section').forEach(section=>{
+    const id = section.dataset.section;
+    section.querySelectorAll('.sentence').forEach(card=>{
+      card.classList.remove('correct','incorrect');
+      card.style.outline='';
+      banks[id].appendChild(card);
+    });
+
+    section.querySelector('.feedback').textContent='';
+    document.getElementById(`answers-${id}`).classList.remove('show');
+  });
+
+  selectedCard=null;
+}
+
+initDragAndDrop();
+</script>
+
+
+
+<section class="difference-section">
+  <div class="difference-header">
+    <h2>What’s the difference?</h2>
+    <p>Compare the sentences. Click a card to check the meaning.</p>
+  </div>
+
+  <div class="difference-grid">
+
+    <button class="flip-card" type="button" aria-label="Education: click to see the difference">
+      <span class="flip-card-inner">
+        <span class="flip-card-front">
+          <span class="difference-label">EDUCATION</span>
+          <span class="difference-sentence"><strong>Education</strong> is important.</span>
+          <span class="difference-sentence"><strong>The education</strong> I received at university was very practical.</span>
+          <span class="flip-hint">Click to check</span>
+        </span>
+        <span class="flip-card-back">
+          <strong>education</strong> = education in general<br>
+          <strong>the education</strong> = specific education
+        </span>
+      </span>
+    </button>
+
+    <button class="flip-card" type="button" aria-label="Hospital: click to see the difference">
+      <span class="flip-card-inner">
+        <span class="flip-card-front">
+          <span class="difference-label">HOSPITAL</span>
+          <span class="difference-sentence">He was taken to <strong>hospital</strong> after the accident.</span>
+          <span class="difference-sentence">I went to <strong>the hospital</strong> to visit a friend.</span>
+          <span class="flip-hint">Click to check</span>
+        </span>
+        <span class="flip-card-back">
+          <strong>hospital</strong> = as a patient / normal purpose<br>
+          <strong>the hospital</strong> = the specific building
+        </span>
+      </span>
+    </button>
+
+    <button class="flip-card" type="button" aria-label="University: click to see the difference">
+      <span class="flip-card-inner">
+        <span class="flip-card-front">
+          <span class="difference-label">UNIVERSITY</span>
+          <span class="difference-sentence">She wants to go to <strong>university</strong> next year.</span>
+          <span class="difference-sentence">I went to <strong>the university</strong> to meet a professor.</span>
+          <span class="flip-hint">Click to check</span>
+        </span>
+        <span class="flip-card-back">
+          <strong>university</strong> = to study there<br>
+          <strong>the university</strong> = the specific place/building
+        </span>
+      </span>
+    </button>
+
+    <button class="flip-card" type="button" aria-label="Dentist: click to see the difference">
+      <span class="flip-card-inner">
+        <span class="flip-card-front">
+          <span class="difference-label">DENTIST</span>
+          <span class="difference-sentence">She is <strong>a dentist</strong>.</span>
+          <span class="difference-sentence">She has gone to <strong>the dentist</strong>.</span>
+          <span class="flip-hint">Click to check</span>
+        </span>
+        <span class="flip-card-back">
+          <strong>a dentist</strong> = profession / one dentist<br>
+          <strong>the dentist</strong> = the dentist relevant to the situation
+        </span>
+      </span>
+    </button>
+
+    <button class="flip-card" type="button" aria-label="Coffee: click to see the difference">
+      <span class="flip-card-inner">
+        <span class="flip-card-front">
+          <span class="difference-label">COFFEE</span>
+          <span class="difference-sentence">I love <strong>coffee</strong>.</span>
+          <span class="difference-sentence"><strong>The coffee</strong> we had after dinner wasn’t very good.</span>
+          <span class="flip-hint">Click to check</span>
+        </span>
+        <span class="flip-card-back">
+          <strong>coffee</strong> = coffee in general<br>
+          <strong>the coffee</strong> = specific coffee
+        </span>
+      </span>
+    </button>
+
+    <button class="flip-card" type="button" aria-label="People: click to see the difference">
+      <span class="flip-card-inner">
+        <span class="flip-card-front">
+          <span class="difference-label">PEOPLE</span>
+          <span class="difference-sentence">I like working with <strong>people who say what they think</strong>.</span>
+          <span class="difference-sentence">I like <strong>the people I work with</strong>.</span>
+          <span class="flip-hint">Click to check</span>
+        </span>
+        <span class="flip-card-back">
+          <strong>people who...</strong> = a general type of people<br>
+          <strong>the people I work with</strong> = a specific group
+        </span>
+      </span>
+    </button>
+
+  </div>
+</section>
+
+
+
+<section class="practice-section">
+  <div class="practice-card">
+    <div class="practice-kicker">READY TO USE IT?</div>
+    <h2>Let’s practise speaking!</h2>
+    <p>Use <strong>a/an, the</strong> and <strong>no article</strong> naturally while answering the speaking prompts.</p>
+    <a class="practice-button"
+       href="https://www.baamboozle.com/game/4752884"
+       target="_blank"
+       rel="noopener noreferrer">
+      Let’s practise →
+    </a>
+  </div>
+</section>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.flip-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      card.classList.toggle('flipped');
+    });
+  });
+});
+</script>
+
+</body>
+</html>
