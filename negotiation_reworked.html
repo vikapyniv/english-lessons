@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The 6 Most Important Negotiation Skills</title>
+<style>
+:root{
+  --bg:#f6f7fb;
+  --card:#ffffff;
+  --ink:#172033;
+  --muted:#667085;
+  --line:#d9dee8;
+  --accent:#4b57d6;
+  --accent-soft:#eef0ff;
+  --good:#16794f;
+  --bad:#b42318;
+  --shadow:0 10px 30px rgba(24,32,51,.08);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,Arial,Helvetica,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(180deg,#eef1ff 0,var(--bg) 240px);
+}
+header,.wrap{max-width:1180px;margin:0 auto}
+header{padding:34px 22px 12px}
+h1{margin:0;font-size:clamp(30px,5vw,48px);letter-spacing:-.045em}
+.subtitle{margin-top:10px;color:var(--muted);line-height:1.55;max-width:850px}
+.wrap{padding:14px 22px 48px}
+.section{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin:18px 0;
+}
+.section h2{margin:0 0 8px;font-size:27px}
+.intro{color:var(--muted);line-height:1.5;margin:0 0 18px}
+.technique{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);
+  gap:18px;
+  border-top:1px solid #e6e9f0;
+  padding:20px 0;
+}
+.technique:first-of-type{border-top:0;padding-top:0}
+.text-card,.match-card{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fbfcff;
+  padding:17px;
+}
+.technique h3{margin:0 0 10px;font-size:21px}
+.technique p,.technique li{line-height:1.56}
+.technique ul{margin:8px 0 0 20px;padding:0}
+.target{
+  display:inline-block;
+  padding:1px 7px;
+  border:1px solid #c9d0e2;
+  border-radius:9px;
+  background:white;
+  color:var(--accent);
+  font-weight:800;
+}
+.match-card h4{margin:0 0 10px}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.word-chip{
+  border:1px solid #cbd2e3;
+  background:white;
+  border-radius:999px;
+  padding:8px 11px;
+  font-weight:800;
+  color:var(--accent);
+  cursor:pointer;
+  user-select:none;
+}
+.word-chip.selected{outline:3px solid rgba(75,87,214,.22);background:var(--accent-soft)}
+.match-row{
+  display:grid;
+  grid-template-columns:1fr 145px;
+  gap:9px;
+  align-items:center;
+  border-top:1px solid #e6e9f0;
+  padding:10px 0;
+}
+.match-row:first-of-type{border-top:0}
+.definition{font-size:14px;line-height:1.35}
+.slot{
+  min-height:38px;
+  border:1px dashed #aeb7ca;
+  border-radius:10px;
+  background:white;
+  padding:7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:700;
+}
+.slot.correct{border-color:var(--good);background:#f1fbf7}
+.slot.wrong{border-color:var(--bad);background:#fff5f4}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+button,select{
+  font:inherit;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:white;
+  color:var(--ink);
+}
+button{padding:10px 13px;font-weight:800;cursor:pointer}
+button:hover{transform:translateY(-1px)}
+.primary{background:var(--accent);border-color:var(--accent);color:white}
+.feedback{margin-top:10px;font-weight:800;font-size:14px}
+details{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fbfcff;
+  overflow:hidden;
+}
+summary{
+  cursor:pointer;
+  list-style:none;
+  padding:16px 18px;
+  font-size:18px;
+  font-weight:900;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"＋";float:right;color:var(--accent)}
+details[open] summary::after{content:"–"}
+.questions{padding:0 20px 18px 38px}
+.questions li{margin:10px 0;line-height:1.45}
+.lab-head{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  align-items:end;
+}
+label{display:block;font-weight:800;margin-bottom:6px}
+select{width:100%;padding:11px 12px}
+.scenario{
+  margin-top:14px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:#fbfcff;
+  padding:18px;
+}
+.scenario h3{margin:0 0 7px}
+.scenario p{margin:0;line-height:1.5}
+.mission{
+  margin-top:13px;
+  padding:12px 14px;
+  border-left:4px solid var(--accent);
+  border-radius:12px;
+  background:var(--accent-soft);
+  line-height:1.45;
+}
+.vocab-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-top:18px;
+}
+.speak-card{
+  border:1px solid #cfd5e3;
+  background:white;
+  border-radius:15px;
+  padding:12px;
+  cursor:pointer;
+  min-height:92px;
+  box-shadow:0 4px 14px rgba(24,32,51,.06);
+}
+.speak-card strong{display:block;line-height:1.3}
+.speak-card small{display:block;color:var(--muted);margin-top:6px;line-height:1.35}
+.speak-card.active{border-color:var(--accent);background:var(--accent-soft)}
+.speak-card .meaning{display:none;margin-top:7px;color:var(--muted);font-size:13px;line-height:1.35}
+.speak-card.show-meaning .meaning{display:block}
+.selected-zone{
+  margin-top:18px;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  background:#fbfcff;
+}
+.selected-zone h3{margin:0 0 10px}
+.selected-empty{color:var(--muted)}
+.speaking-item{
+  border-top:1px solid #e5e8ef;
+  padding:13px 0;
+}
+.speaking-item:first-of-type{border-top:0}
+.speaking-item strong{color:var(--accent)}
+.speaking-prompts{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:9px;
+}
+.prompt{
+  background:white;
+  border:1px solid #dfe3ec;
+  border-radius:11px;
+  padding:9px;
+  font-size:13px;
+  line-height:1.35;
+}
+.challenge{
+  margin-top:16px;
+  border:1px dashed #aeb7ca;
+  border-radius:14px;
+  padding:13px;
+  background:white;
+}
+.challenge strong{display:block;margin-bottom:5px}
+.credit{margin-top:20px;color:var(--muted);font-size:13px;line-height:1.45}
+@media(max-width:900px){
+  .technique{grid-template-columns:1fr}
+  .vocab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .speaking-prompts{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .lab-head{grid-template-columns:1fr}
+  .vocab-grid{grid-template-columns:1fr}
+  .match-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>The 6 Most Important Negotiation Skills</h1>
+  <p class="subtitle">Read each technique and match only the vocabulary from that section to its definitions. Then use the language in discussion and a guided negotiation speaking task.</p>
+</header>
+
+<main class="wrap">
+
+<section class="section" id="vocabulary">
+  <h2>Vocabulary in context</h2>
+  <p class="intro">Work section by section. Click a word, then click the definition you think it matches. You only work with the vocabulary from that paragraph.</p>
+
+  <div id="techniques"></div>
+</section>
+
+<section class="section">
+  <details>
+    <summary>Discuss the Questions</summary>
+    <ol class="questions">
+      <li>Describe the last negotiation that you pulled off. What was the final result of it?</li>
+      <li>When was the last time you said something rash and then regretted it?</li>
+      <li>How do you assess if a project or a task is feasible?</li>
+      <li>When was the last time you haggled about the price of something? What did you want to buy?</li>
+      <li>What is something you’re constantly striving to improve?</li>
+      <li>How often do you succumb to pressure to work overtime?</li>
+    </ol>
+  </details>
+</section>
+
+<section class="section">
+  <h2>Negotiation Lab</h2>
+  <p class="intro">Choose a situation. Then select 3–4 vocabulary cards that would genuinely help you handle it. There is no single “correct” strategy: your job is to justify your choices and use the new vocabulary naturally.</p>
+
+  <div class="lab-head">
+    <div>
+      <label for="scenarioSelect">Choose a situation</label>
+      <select id="scenarioSelect"></select>
+    </div>
+    <button id="randomBtn" type="button">Random situation</button>
+  </div>
+
+  <div class="scenario">
+    <h3 id="scenarioTitle"></h3>
+    <p id="scenarioProblem"></p>
+    <div class="mission"><strong>Your mission:</strong> choose 3–4 phrases below. For every phrase you choose, explain what you would actually say or do in this situation, why it could work, and what result you want to achieve.</div>
+  </div>
+
+  <div class="actions">
+    <button class="primary" id="toggleMeanings" type="button">Show / hide meanings</button>
+    <button id="clearSelected" type="button">Clear choices</button>
+  </div>
+
+  <div class="vocab-grid" id="vocabGrid"></div>
+
+  <div class="selected-zone">
+    <h3>Your speaking plan</h3>
+    <div id="selectedPlan" class="selected-empty">Choose 3–4 phrases above.</div>
+  </div>
+
+  <div class="challenge">
+    <strong>Partner challenge</strong>
+    <span id="challengeText">Try to use at least three target phrases while speaking.</span>
+    <div class="actions">
+      <button id="newChallenge" type="button">New challenge</button>
+    </div>
+  </div>
+</section>
+
+<p class="credit">Created by Viktoriia Pyniv. AI-assisted educational resource developed with ChatGPT (OpenAI). Based on educational material: “The 6 most important negotiation skills”.</p>
+</main>
+
+<script>
+const techniques = [
+  {
+    title:'1) Build rapport',
+    html:`<p>If you form a human connection with the other party, they are less likely to view you as the enemy. You will have an easier time reaching an agreement that makes you both satisfied. They will also be more receptive to your initial offer.</p>
+    <p><strong>Quick tips:</strong></p>
+    <ul><li>Show up with coffee and/or snacks to share.</li><li>Spend a few minutes beforehand on lighter topics.</li><li>Sit on the same side of the table as the other negotiator(s).</li></ul>`,
+    words:[
+      {w:'build rapport',d:'create a friendly human connection'}
+    ]
+  },
+  {
+    title:'2) Active listening',
+    html:`<p>The quickest way to lose a deal? Monopolize the conversation and ignore the other person every time they do get a spare word in. Even eager-to-sign prospects will be <span class="target">turned off</span> by your aggressive behavior. In contrast, listening closely will show respect and give you valuable insight into their priorities.</p>
+    <p><strong>Quick tips:</strong></p>
+    <ul><li>Listen just as much, if not more than, you speak.</li><li>Pause before responding. You might think the person has finished their thought, but they may just be taking a breath.</li></ul>`,
+    words:[
+      {w:'turn off',d:'make someone lose interest'}
+    ]
+  },
+  {
+    title:'3) Mirroring',
+    html:`<p>Imitating the words, gestures, and expressions the other person is using will make you appear more trustworthy. It takes some skill to <span class="target">pull this off</span> without them noticing.</p>
+    <p><strong>Quick tips:</strong></p>
+    <ul><li>Pay attention to the phrases they repeatedly use and use them, too.</li><li>After they change position, wait 5 to 10 seconds and then match them.</li></ul>`,
+    words:[
+      {w:'mirroring',d:'copy the other person’s style'},
+      {w:'pull off',d:'succeed in doing something difficult'}
+    ]
+  },
+  {
+    title:'4) Emotional objectivity',
+    html:`<p>As soon as you demonstrate emotion during a negotiation, whether it is excitement, frustration, anxiety, or impatience, you reveal your <span class="target">vulnerabilities</span>. Also, getting flustered hinders your decision-making skills. <span class="target">Strive</span> to stay calm and unemotional.</p>
+    <p><strong>Quick tips:</strong></p>
+    <ul><li>If you can sense you are <span class="target">losing your grip</span>, request a five-minute break to get something to drink or visit the bathroom. Take a few deep breaths.</li><li>Pause before speaking so you do not accidentally <span class="target">say anything rash</span>.</li></ul>`,
+    words:[
+      {w:'emotional objectivity',d:'staying calm and not letting emotions control the negotiation'},
+      {w:'vulnerability',d:'a weak or exposed point'},
+      {w:'strive',d:'try very hard to achieve something'},
+      {w:'lose your grip',d:'lose control of yourself or the situation'},
+      {w:'say something rash',d:'say something too quickly without thinking'}
+    ]
+  },
+  {
+    title:'5) Ability to walk away',
+    html:`<p>Any agreement is not always better than no agreement. In other words, you need to recognize when you are compromising so much that the deal is no longer worth it. Come knowing your <span class="target">minimum acceptable offer</span> and be prepared to walk away if the other party will not meet that.</p>
+    <p><strong>Quick tips:</strong></p>
+    <ul><li>Make sure you do not <span class="target">succumb</span> to the pressure of the moment by writing down the lowest price or deal you will accept on a piece of paper.</li><li>Practice politely saying, “Unfortunately, I cannot go below X. Let me know if that is not <span class="target">feasible</span> for you.”</li></ul>`,
+    words:[
+      {w:'minimum acceptable offer',d:'the lowest price or terms you are willing to accept'},
+      {w:'succumb',d:'give in to pressure or temptation'},
+      {w:'feasible',d:'possible and realistic'}
+    ]
+  },
+  {
+    title:'6) Creativity',
+    html:`<p>Successfully crafting a <span class="target">win-win agreement</span> usually requires getting creative. Try to <span class="target">think outside the box</span> so you are not limited to standard price <span class="target">haggling</span>.</p>
+    <p><strong>Quick tips:</strong></p>
+    <ul><li>Ask the other party, “What is important to you besides cost?”</li><li>Brainstorm <span class="target">non-monetary</span> <span class="target">concessions</span>, like extended support, early access to new features, free consultations, or regular check-ins.</li></ul>`,
+    words:[
+      {w:'win-win agreement',d:'an agreement that benefits both sides'},
+      {w:'think outside the box',d:'consider unusual or creative solutions'},
+      {w:'haggle',d:'argue or negotiate about the price'},
+      {w:'non-monetary',d:'not involving money'},
+      {w:'concession',d:'something you agree to give in order to reach an agreement'}
+    ]
+  }
+];
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+const techniqueRoot = document.getElementById('techniques');
+techniques.forEach((t, idx)=>{
+  const wrap=document.createElement('div');
+  wrap.className='technique';
+
+  const left=document.createElement('div');
+  left.className='text-card';
+  left.innerHTML=`<h3>${t.title}</h3>${t.html}`;
+
+  const right=document.createElement('div');
+  right.className='match-card';
+  right.dataset.index=idx;
+  right.innerHTML=`<h4>Match the vocabulary</h4><div class="bank"></div><div class="rows"></div>
+    <div class="actions"><button class="primary check-local" type="button">Check</button><button class="reset-local" type="button">Reset</button></div>
+    <div class="feedback"></div>`;
+
+  const bank=right.querySelector('.bank');
+  shuffle(t.words).forEach(item=>{
+    const b=document.createElement('div');
+    b.className='word-chip';
+    b.textContent=item.w;
+    b.dataset.word=item.w;
+    bank.appendChild(b);
+  });
+
+  const rows=right.querySelector('.rows');
+  shuffle(t.words).forEach(item=>{
+    const row=document.createElement('div');
+    row.className='match-row';
+    row.innerHTML=`<div class="definition">${item.d}</div><div class="slot" data-answer="${item.w}">click here</div>`;
+    rows.appendChild(row);
+  });
+
+  wrap.append(left,right);
+  techniqueRoot.appendChild(wrap);
+});
+
+let chosenWord=null;
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('word-chip')){
+    const card=e.target.closest('.match-card');
+    card.querySelectorAll('.word-chip').forEach(x=>x.classList.remove('selected'));
+    e.target.classList.add('selected');
+    chosenWord={card,word:e.target.dataset.word};
+  }
+  if(e.target.classList.contains('slot') && chosenWord && chosenWord.card===e.target.closest('.match-card')){
+    e.target.textContent=chosenWord.word;
+    e.target.dataset.chosen=chosenWord.word;
+    chosenWord.card.querySelectorAll('.word-chip').forEach(x=>x.classList.remove('selected'));
+    chosenWord=null;
+  }
+  if(e.target.classList.contains('check-local')){
+    const card=e.target.closest('.match-card');
+    let ok=0,total=0;
+    card.querySelectorAll('.slot').forEach(slot=>{
+      total++;
+      slot.classList.remove('correct','wrong');
+      if(slot.dataset.chosen===slot.dataset.answer){slot.classList.add('correct');ok++;}
+      else if(slot.dataset.chosen){slot.classList.add('wrong');}
+    });
+    card.querySelector('.feedback').textContent=`${ok}/${total} correct`;
+  }
+  if(e.target.classList.contains('reset-local')){
+    const card=e.target.closest('.match-card');
+    card.querySelectorAll('.slot').forEach(slot=>{
+      slot.textContent='click here';
+      delete slot.dataset.chosen;
+      slot.classList.remove('correct','wrong');
+    });
+    card.querySelector('.feedback').textContent='';
+    card.querySelectorAll('.word-chip').forEach(x=>x.classList.remove('selected'));
+    chosenWord=null;
+  }
+});
+
+const vocab = [
+  ['Succumb to pressure','fail to resist pressure or temptation'],
+  ['Turn the other person off','make someone lose interest'],
+  ['Lose your grip','lose control of yourself or the situation'],
+  ['Show vulnerability','show that you are emotionally exposed'],
+  ['Haggle over the price','negotiate about the price'],
+  ['Say something rash','say something without thinking first'],
+  ['Pull off a difficult compromise','succeed in doing something difficult'],
+  ['Suggest a feasible option','suggest something possible and realistic'],
+  ['Offer a concession','give something up to help reach agreement'],
+  ['Strive for a fair outcome','make a strong effort to achieve something'],
+  ['Build rapport','create a friendly human connection'],
+  ['Use active listening','listen carefully and avoid interrupting'],
+  ['Use mirroring','copy key words, tone, or body language'],
+  ['Stay emotionally objective','stay calm and control your emotions'],
+  ['Be ready to walk away','leave the deal if the terms are unacceptable'],
+  ['Offer non-monetary concessions','offer value that is not money'],
+  ['Aim for a win-win agreement','look for an outcome that benefits both sides'],
+  ['Think outside the box','consider unconventional solutions'],
+  ['Know your minimum acceptable offer','know the lowest terms you will accept']
+];
+
+const scenarios = [
+  ['Buying a Second-Hand Laptop','You found a used laptop online. The price is high, the seller says other people are interested, and you must decide quickly.'],
+  ['Unpaid Overtime','Your manager regularly asks you to stay late, but you are not paid for overtime. You want to protect your time without damaging the relationship.'],
+  ['Salary Raise Conversation','You have taken on more responsibility at work, but your salary has not changed. Your manager says the budget is tight.'],
+  ['Freelance Scope Creep','A client keeps asking for extra work that was not included in the original agreement. You want to keep the client but protect your time.'],
+  ['Landlord Delays Repairs','Your apartment has a serious repair problem. The landlord keeps saying they will fix it “soon,” but nothing happens.'],
+  ['Vacation with Friends','Your friends want an expensive trip, but you cannot afford it. You still want to spend time together without feeling embarrassed.'],
+  ['Work Schedule Swap','You need to swap a shift because of an important appointment, but your coworker does not want extra inconvenience.'],
+  ['Customer Refund Dispute','You bought an expensive product that broke after one week. The store refuses a refund and offers only a small discount on your next purchase.'],
+  ['Group Project Problem','One teammate contributes almost nothing but expects the same result as everyone else. The deadline is close.'],
+  ['Noisy Neighbours','Your neighbours play loud music late at night. You already asked them to stop once, but they ignored you.']
+];
+
+const select=document.getElementById('scenarioSelect');
+scenarios.forEach((s,i)=>{
+  const o=document.createElement('option');
+  o.value=i;o.textContent=`${i+1}. ${s[0]}`;select.appendChild(o);
+});
+function renderScenario(){
+  const s=scenarios[Number(select.value)];
+  document.getElementById('scenarioTitle').textContent=s[0];
+  document.getElementById('scenarioProblem').textContent=s[1];
+}
+select.addEventListener('change',renderScenario);
+document.getElementById('randomBtn').addEventListener('click',()=>{
+  let next=Math.floor(Math.random()*scenarios.length);
+  if(scenarios.length>1 && next===Number(select.value)) next=(next+1)%scenarios.length;
+  select.value=next; renderScenario();
+});
+
+const grid=document.getElementById('vocabGrid');
+vocab.forEach(([term,meaning],i)=>{
+  const c=document.createElement('div');
+  c.className='speak-card';
+  c.dataset.id=i;
+  c.innerHTML=`<strong>${term}</strong><small>Click to choose</small><div class="meaning">${meaning}</div>`;
+  c.addEventListener('click',ev=>{
+    if(ev.altKey) return;
+    c.classList.toggle('active');
+    updatePlan();
+  });
+  grid.appendChild(c);
+});
+function updatePlan(){
+  const selected=[...document.querySelectorAll('.speak-card.active')];
+  const plan=document.getElementById('selectedPlan');
+  if(!selected.length){plan.className='selected-empty';plan.textContent='Choose 3–4 phrases above.';return;}
+  plan.className='';
+  plan.innerHTML=selected.map(c=>`
+    <div class="speaking-item">
+      <strong>${c.querySelector('strong').textContent}</strong>
+      <div class="speaking-prompts">
+        <div class="prompt"><b>1. What would you say or do?</b><br>Give one concrete example.</div>
+        <div class="prompt"><b>2. Why this phrase?</b><br>Explain why it fits the situation.</div>
+        <div class="prompt"><b>3. What result do you want?</b><br>Describe your ideal outcome.</div>
+      </div>
+    </div>`).join('');
+}
+document.getElementById('toggleMeanings').addEventListener('click',()=>{
+  document.querySelectorAll('.speak-card').forEach(c=>c.classList.toggle('show-meaning'));
+});
+document.getElementById('clearSelected').addEventListener('click',()=>{
+  document.querySelectorAll('.speak-card').forEach(c=>c.classList.remove('active'));
+  updatePlan();
+});
+const challenges=[
+  'Use at least three target phrases while speaking.',
+  'Give your opening sentence and your final “walk-away” sentence.',
+  'Your partner must challenge one of your choices. Defend it using the target vocabulary.',
+  'Find one win-win solution and one solution you would reject.',
+  'Use one phrase you would normally avoid, but make it sound natural in context.',
+  'After your plan, your partner changes one condition. Adapt your strategy without starting again.'
+];
+document.getElementById('newChallenge').addEventListener('click',()=>{
+  document.getElementById('challengeText').textContent=challenges[Math.floor(Math.random()*challenges.length)];
+});
+renderScenario();
+updatePlan();
+</script>
+</body>
+</html>
