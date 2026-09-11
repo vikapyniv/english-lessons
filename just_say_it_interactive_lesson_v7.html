@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Just say it!</title>
+<style>
+  :root{
+    --bg:#f5f2ea;
+    --card:#ffffff;
+    --ink:#202020;
+    --muted:#6c6c6c;
+    --line:#ded8cc;
+    --soft:#ece7dc;
+    --accent:#202020;
+    --good:#e8f4ea;
+    --bad:#f7e8e8;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.45;
+  }
+
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:rgba(245,242,234,.96);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+
+  .topbar-inner{
+    max-width:1180px;
+    margin:0 auto;
+    padding:14px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+  }
+
+  .brand{
+    font-size:clamp(22px,3vw,34px);
+    font-weight:850;
+    letter-spacing:-.04em;
+  }
+
+  .brand span{
+    font-weight:500;
+    color:var(--muted);
+  }
+
+  .nav{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .nav a{
+    text-decoration:none;
+    color:var(--ink);
+    font-size:14px;
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:999px;
+    padding:8px 12px;
+  }
+
+  main{
+    max-width:1180px;
+    margin:0 auto;
+    padding:26px 24px 70px;
+  }
+
+  section{
+    margin:28px 0 54px;
+  }
+
+  .section-head{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    align-items:flex-end;
+    margin-bottom:18px;
+  }
+
+  h2{
+    font-size:clamp(28px,4vw,48px);
+    letter-spacing:-.04em;
+    margin:0;
+    line-height:1;
+  }
+
+  .eyebrow{
+    text-transform:uppercase;
+    font-weight:800;
+    letter-spacing:.13em;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+
+  .instruction{
+    max-width:660px;
+    color:var(--muted);
+    font-size:17px;
+    margin:8px 0 0;
+  }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:22px;
+    box-shadow:0 12px 30px rgba(0,0,0,.04);
+  }
+
+  /* Matching */
+  .match-layout{
+    display:grid;
+    grid-template-columns:440px 1fr;
+    gap:20px;
+  }
+
+  .word-bank{
+    background:#171717;
+    color:white;
+    border-radius:22px;
+    padding:18px;
+    min-height:520px;
+  }
+
+  .word-bank h3{
+    margin:0 0 14px;
+    font-size:18px;
+  }
+
+  .terms{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+
+  .term{
+    border:1px solid rgba(255,255,255,.23);
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    padding:13px 14px;
+    border-radius:12px;
+    cursor:grab;
+    user-select:none;
+    font-size:15px;
+    line-height:1.25;
+    min-height:54px;
+    display:flex;
+    align-items:center;
+  }
+
+  .term.dragging{opacity:.45}
+  .term.matched{display:none}
+
+  .drop-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+  }
+
+  .dropzone{
+    border:2px dashed var(--line);
+    background:#faf9f5;
+    border-radius:20px;
+    min-height:520px;
+    padding:14px;
+    transition:.2s ease;
+  }
+
+  .dropzone.drag-over{
+    border-color:#777;
+    background:#f1eee5;
+  }
+
+  .dropzone h3{
+    margin:0 0 12px;
+    font-size:20px;
+    text-align:center;
+  }
+
+  .dropped-item{
+    padding:10px 11px;
+    background:white;
+    border:1px solid var(--line);
+    border-radius:11px;
+    margin:7px 0;
+    font-size:14px;
+    cursor:pointer;
+  }
+
+  .matching-controls{
+    margin-top:16px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  button{
+    border:none;
+    border-radius:14px;
+    background:#1f1f1f;
+    color:#fff;
+    padding:11px 16px;
+    font-weight:750;
+    cursor:pointer;
+    font-size:15px;
+  }
+
+  button.secondary{
+    background:#fff;
+    color:#1f1f1f;
+    border:1px solid var(--line);
+  }
+
+  .match-feedback{
+    margin-top:12px;
+    font-weight:700;
+  }
+
+  /* Quiz */
+  .quiz-list{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .quiz-card{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:16px;
+    padding:14px;
+  }
+
+  .quiz-card p{
+    font-size:15px;
+    margin:0 0 10px;
+    font-weight:650;
+    line-height:1.35;
+  }
+
+  .choice-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .choice{
+    flex:1;
+    min-width:95px;
+    background:#f4f1ea;
+    color:#222;
+    border:1px solid var(--line);
+    padding:9px 12px;
+    font-size:14px;
+  }
+
+  .choice.correct{
+    background:var(--good);
+    color:#173d20;
+    border-color:#b7d5bc;
+  }
+
+  .choice.wrong{
+    background:var(--bad);
+    color:#5a1e1e;
+    border-color:#ddbbbb;
+  }
+
+  .mini-explanation{
+    display:none;
+    margin-top:8px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.35;
+  }
+
+  .mini-explanation.show{display:block}
+
+  .rule-reveal{
+    margin-top:18px;
+    padding:18px;
+    border-radius:18px;
+    background:#171717;
+    color:#fff;
+    display:none;
+  }
+
+  .rule-reveal.show{display:block}
+
+  .rule-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-top:12px;
+  }
+
+  .rule{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:14px;
+    padding:14px;
+  }
+
+  .rule strong{
+    display:block;
+    font-size:20px;
+    margin-bottom:6px;
+  }
+
+  /* Video */
+  .video-grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:18px;
+    align-items:stretch;
+  }
+
+  .video-wrap{
+    position:relative;
+    aspect-ratio:16/9;
+    border-radius:22px;
+    overflow:hidden;
+    background:#111;
+  }
+
+  .video-wrap iframe{
+    width:100%;
+    height:100%;
+    border:0;
+  }
+
+  .discussion-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:14px;
+  }
+
+  .discussion-q{
+    padding:14px 15px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:#faf9f5;
+    font-size:16px;
+  }
+
+  /* Speaking */
+  .speak-shell{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:18px;
+  }
+
+  .category-menu{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .category-btn{
+    width:100%;
+    text-align:left;
+    background:#fff;
+    color:#222;
+    border:1px solid var(--line);
+    padding:14px 15px;
+    font-size:18px;
+  }
+
+  .category-btn.active{
+    background:#1f1f1f;
+    color:#fff;
+  }
+
+  .prompt-stage{
+    min-height:390px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:24px;
+  }
+
+  .prompt-label{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:var(--muted);
+    font-weight:800;
+  }
+
+  .prompt-text{
+    font-size:clamp(25px,4vw,46px);
+    line-height:1.08;
+    letter-spacing:-.035em;
+    margin:24px 0;
+    font-weight:800;
+  }
+
+  .partner-task{
+    padding:14px 16px;
+    border-radius:16px;
+    background:#f4f1ea;
+    color:#3c3c3c;
+    font-size:16px;
+  }
+
+  .stage-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:center;
+    margin-top:18px;
+  }
+
+  .counter{
+    color:var(--muted);
+    font-weight:700;
+  }
+
+  footer{
+    color:var(--muted);
+    text-align:center;
+    padding:18px 0 30px;
+    font-size:13px;
+  }
+
+  @media (max-width:900px){
+    .match-layout,.video-grid,.speak-shell{grid-template-columns:1fr}
+    .drop-grid{grid-template-columns:1fr 1fr}
+    .word-bank{min-height:auto}
+    .dropzone{min-height:300px}
+    .quiz-list{grid-template-columns:1fr}
+    .rule-grid{grid-template-columns:1fr 1fr}
+    .category-menu{display:grid;grid-template-columns:1fr 1fr}
+  }
+
+  @media (max-width:560px){
+    main{padding:20px 14px 50px}
+    .topbar-inner{padding:12px 14px}
+    .nav{display:none}
+    .drop-grid,.rule-grid,.category-menu,.terms{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Just say it! <span>say · tell · speak · talk</span></div>
+      <div class="nav">
+        <a href="#match">Match</a>
+        <a href="#video">Watch</a>
+        <a href="#discover">Discover</a>
+        <a href="#speak">Speak</a>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <section id="match">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">01 · Notice the patterns</div>
+          <h2>Match the phrases</h2>
+          <p class="instruction">Drag each phrase into the verb it naturally goes with. Click an item in a column to move it back.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="match-layout">
+          <aside class="word-bank">
+            <h3>Phrases</h3>
+            <div class="terms" id="termBank"></div>
+          </aside>
+
+          <div class="drop-grid">
+            <div class="dropzone" data-verb="speak"><h3>SPEAK</h3><div class="dropped"></div></div>
+            <div class="dropzone" data-verb="talk"><h3>TALK</h3><div class="dropped"></div></div>
+            <div class="dropzone" data-verb="say"><h3>SAY</h3><div class="dropped"></div></div>
+            <div class="dropzone" data-verb="tell"><h3>TELL</h3><div class="dropped"></div></div>
+          </div>
+        </div>
+        <div class="matching-controls">
+          <button onclick="checkMatching()">Check</button>
+          <button class="secondary" onclick="resetMatching()">Reset</button>
+        </div>
+        <div class="match-feedback" id="matchFeedback"></div>
+      </div>
+    </section>
+
+    <section id="video">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">02 · Watch & notice</div>
+          <h2>Watch and spot the way these words are used</h2>
+          <p class="instruction">Listen for <strong>say</strong>, <strong>tell</strong>, <strong>speak</strong> and <strong>talk</strong>, and notice what comes after each verb.</p>
+        </div>
+      </div>
+
+      <div class="video-grid">
+        <div class="video-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/oA-jvMLJ48w"
+            title="Just say it! video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
+
+        <div class="panel discussion-card">
+          <div class="discussion-q"><strong>1.</strong> Which examples made the difference between <em>say</em> and <em>tell</em> especially clear?</div>
+          <div class="discussion-q"><strong>2.</strong> When would you naturally choose <em>speak</em> instead of <em>talk</em>?</div>
+          <div class="discussion-q"><strong>3.</strong> Which verb is still the easiest to confuse? Give one example.</div>
+          <div class="discussion-q"><strong>4.</strong> Create one short real-life situation for each verb.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="discover">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">03 · Discover the rule</div>
+          <h2>What do you notice?</h2>
+          <p class="instruction">Answer the questions first. Don’t explain the rule yet — let the pattern emerge from the examples.</p>
+        </div>
+      </div>
+
+      <div class="quiz-list" id="quizList"></div>
+
+      <div class="rule-reveal" id="ruleReveal">
+        <div class="eyebrow" style="color:#cfcfcf">Pattern unlocked</div>
+        <div style="font-size:24px;font-weight:800">So what is the core difference?</div>
+        <div class="rule-grid">
+          <div class="rule"><strong>SPEAK</strong>Languages, more formal communication, public speaking, or the act/ability of speaking.</div>
+          <div class="rule"><strong>TALK</strong>Conversation and interaction, usually more informal and often about a topic.</div>
+          <div class="rule"><strong>SAY</strong>Focus on the words/message. A listener is optional; if named, use <em>say to someone</em>.</div>
+          <div class="rule"><strong>TELL</strong>Focus on giving information to a person. It normally needs a listener: <em>tell someone something</em>.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="speak">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">04 · Final speaking</div>
+          <h2>Choose. Ask. Respond.</h2>
+          <p class="instruction">Choose a category. The prompt gives you the content of the question. Add the target verb and build a natural question. Your partner answers and should use the same verb naturally.</p>
+        </div>
+      </div>
+
+      <div class="speak-shell">
+        <div class="category-menu">
+          <button class="category-btn active" data-cat="speak">SPEAK</button>
+          <button class="category-btn" data-cat="talk">TALK</button>
+          <button class="category-btn" data-cat="say">SAY</button>
+          <button class="category-btn" data-cat="tell">TELL</button>
+        </div>
+
+        <div class="prompt-stage">
+          <div>
+            <div class="prompt-label" id="promptLabel">SPEAK · topic 1</div>
+            <div class="prompt-text" id="promptText"></div>
+            <div class="partner-task" id="partnerTask"></div>
+          </div>
+
+          <div class="stage-actions">
+            <div class="counter" id="counter">1 / 10</div>
+            <div style="display:flex;gap:10px">
+              <button class="secondary" onclick="prevPrompt()">Previous</button>
+              <button onclick="nextPrompt()">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Just say it! · interactive lesson</footer>
+
+<script>
+const matchItems = [
+  {text:"German", verb:"speak"},
+  {text:"highly of somebody / something", verb:"speak"},
+  {text:"for somebody", verb:"speak"},
+  {text:"up for somebody / something", verb:"speak"},
+  {text:"nonsense", verb:"talk"},
+  {text:"politics", verb:"talk"},
+  {text:"business", verb:"talk"},
+  {text:"about your personal life", verb:"talk"},
+  {text:"goodbye", verb:"say"},
+  {text:"no", verb:"say"},
+  {text:"cheese", verb:"say"},
+  {text:"something out loud", verb:"say"},
+  {text:"the truth", verb:"tell"},
+  {text:"a joke", verb:"tell"},
+  {text:"a lie", verb:"tell"},
+  {text:"the difference", verb:"tell"}
+];
+
+const bank = document.getElementById("termBank");
+let dragged = null;
+
+function makeTerm(item, index){
+  const el = document.createElement("div");
+  el.className = "term";
+  el.draggable = true;
+  el.textContent = item.text;
+  el.dataset.index = index;
+  el.addEventListener("dragstart", () => {
+    dragged = el;
+    setTimeout(()=>el.classList.add("dragging"),0);
+  });
+  el.addEventListener("dragend", () => {
+    el.classList.remove("dragging");
+    dragged = null;
+  });
+  return el;
+}
+
+function loadBank(){
+  bank.innerHTML = "";
+  matchItems.forEach((item,i)=>bank.appendChild(makeTerm(item,i)));
+  document.querySelectorAll(".dropped").forEach(x=>x.innerHTML="");
+  document.getElementById("matchFeedback").textContent="";
+}
+
+document.querySelectorAll(".dropzone").forEach(zone=>{
+  zone.addEventListener("dragover",e=>{
+    e.preventDefault();
+    zone.classList.add("drag-over");
+  });
+  zone.addEventListener("dragleave",()=>zone.classList.remove("drag-over"));
+  zone.addEventListener("drop",e=>{
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+    if(!dragged) return;
+    const idx = dragged.dataset.index;
+    const item = matchItems[idx];
+    const chip = document.createElement("div");
+    chip.className="dropped-item";
+    chip.textContent=item.text;
+    chip.dataset.index=idx;
+    chip.dataset.chosen=zone.dataset.verb;
+    chip.title="Click to move back";
+    chip.addEventListener("click",()=>{
+      bank.appendChild(makeTerm(item,idx));
+      chip.remove();
+    });
+    zone.querySelector(".dropped").appendChild(chip);
+    dragged.remove();
+  });
+});
+
+function checkMatching(){
+  const placed = [...document.querySelectorAll(".dropped-item")];
+  if(placed.length < matchItems.length){
+    document.getElementById("matchFeedback").textContent =
+      `You have matched ${placed.length} of ${matchItems.length} phrases.`;
+    return;
+  }
+  let correct = 0;
+  placed.forEach(chip=>{
+    const expected = matchItems[chip.dataset.index].verb;
+    const ok = chip.dataset.chosen === expected;
+    chip.style.background = ok ? "var(--good)" : "var(--bad)";
+    chip.style.borderColor = ok ? "#b7d5bc" : "#ddbbbb";
+    if(ok) correct++;
+  });
+  document.getElementById("matchFeedback").textContent =
+    correct === matchItems.length
+      ? "Perfect — all patterns matched."
+      : `${correct} / ${matchItems.length} correct. Recheck the red items.`;
+}
+function resetMatching(){ loadBank(); }
+loadBank();
+
+const quizData = [
+  {
+    q:"Which verb normally focuses on the exact words or message?",
+    options:["say","tell"],
+    answer:"say",
+    note:"We usually say something. The listener is not required. Example: “She said she was tired.”"
+  },
+  {
+    q:"Which verb normally needs a person after it: ___ me / ___ her / ___ them?",
+    options:["say","tell"],
+    answer:"tell",
+    note:"Tell normally takes a listener: tell me, tell her, tell them. Example: “Tell me the truth.”"
+  },
+  {
+    q:"Which sounds natural: “I said him the truth.”",
+    options:["Yes","No"],
+    answer:"No",
+    note:"We say something, but tell someone something. Example: “I told him the truth.”"
+  },
+  {
+    q:"Which sounds natural: “She said goodbye to me.”",
+    options:["Yes","No"],
+    answer:"Yes",
+    note:"With say + person, use “to”: say something to someone. Example: “She said hello to me.”"
+  },
+  {
+    q:"For a language, which verb is the normal choice?",
+    options:["speak","talk"],
+    answer:"speak",
+    note:"We speak English, German, Polish, etc. Example: “He speaks German fluently.”"
+  },
+  {
+    q:"Which verb is usually more conversational and informal?",
+    options:["speak","talk"],
+    answer:"talk",
+    note:"Talk often refers to everyday conversation. Example: “We talked for hours.”"
+  },
+  {
+    q:"For formal communication or a public presentation, which is more typical?",
+    options:["speak","talk"],
+    answer:"speak",
+    note:"Speak is common in formal, professional, and public-speaking contexts. Example: “She spoke at the conference.”"
+  },
+  {
+    q:"Which is more natural for a topic: “We need to ___ about money.”",
+    options:["speak","talk"],
+    answer:"talk",
+    note:"Talk about + topic is a very common pattern. Example: “We talked about work.”"
+  }
+];
+
+const quizList = document.getElementById("quizList");
+let answered = 0;
+
+quizData.forEach((item,idx)=>{
+  const card = document.createElement("div");
+  card.className = "quiz-card";
+  const p = document.createElement("p");
+  p.textContent = `${idx+1}. ${item.q}`;
+  const row = document.createElement("div");
+  row.className="choice-row";
+  const expl = document.createElement("div");
+  expl.className="mini-explanation";
+  expl.textContent=item.note;
+
+  item.options.forEach(opt=>{
+    const btn = document.createElement("button");
+    btn.className="choice";
+    btn.textContent=opt;
+    btn.addEventListener("click",()=>{
+      if(card.dataset.done==="1") return;
+      card.dataset.done="1";
+      answered++;
+      [...row.children].forEach(b=>{
+        if(b.textContent===item.answer) b.classList.add("correct");
+      });
+      if(opt!==item.answer) btn.classList.add("wrong");
+      expl.classList.add("show");
+      if(answered===quizData.length){
+        document.getElementById("ruleReveal").classList.add("show");
+      }
+    });
+    row.appendChild(btn);
+  });
+
+  card.appendChild(p);
+  card.appendChild(row);
+  card.appendChild(expl);
+  quizList.appendChild(card);
+});
+
+const prompts = {
+  speak:[
+    "a foreign language you would like to learn",
+    "English + confidently",
+    "in public + comfortably",
+    "at work meetings + often",
+    "to strangers + easily",
+    "more slowly + when necessary",
+    "for yourself + in an argument",
+    "about your job + confidently",
+    "in front of a large audience + without stress",
+    "on someone’s behalf + at work"
+  ],
+  talk:[
+    "for hours + about one topic",
+    "to your best friend + every day",
+    "about money + openly",
+    "business + outside work",
+    "to strangers + easily",
+    "about your personal life + openly",
+    "on the phone + for a long time",
+    "during a movie + often",
+    "about politics + with friends",
+    "to yourself + sometimes"
+  ],
+  say:[
+    "goodbye + when leaving",
+    "no + without feeling guilty",
+    "something out loud + in public",
+    "hello + to a stranger",
+    "sorry + first",
+    "thank you + often",
+    "the same thing + twice",
+    "something nice + to a colleague",
+    "your name + slowly",
+    "what you really think + directly"
+  ],
+  tell:[
+    "the truth + even when it is difficult",
+    "a joke + at a party",
+    "a lie + to protect someone",
+    "the difference + between two people",
+    "someone + a secret",
+    "your friend + some important news",
+    "a story + from your childhood",
+    "someone + what happened",
+    "your parents + everything",
+    "someone + to wait"
+  ]
+};
+
+const partnerInstructions = {
+  speak:"Student A: make your own question with SPEAK. Partner: answer naturally and use SPEAK too.",
+  talk:"Student A: make your own question with TALK. Partner: answer naturally and use TALK too.",
+  say:"Student A: make your own question with SAY. Partner: answer naturally and use SAY too.",
+  tell:"Student A: make your own question with TELL. Partner: answer naturally and use TELL too."
+};
+
+let currentCat = "speak";
+let currentIndex = 0;
+
+function renderPrompt(){
+  const arr = prompts[currentCat];
+  document.getElementById("promptText").textContent = arr[currentIndex];
+  document.getElementById("promptLabel").textContent =
+    `${currentCat.toUpperCase()} · topic ${currentIndex+1}`;
+  document.getElementById("counter").textContent = `${currentIndex+1} / ${arr.length}`;
+  document.getElementById("partnerTask").textContent = partnerInstructions[currentCat];
+}
+
+document.querySelectorAll(".category-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentCat = btn.dataset.cat;
+    currentIndex = 0;
+    renderPrompt();
+  });
+});
+
+function nextPrompt(){
+  const arr = prompts[currentCat];
+  currentIndex = (currentIndex + 1) % arr.length;
+  renderPrompt();
+}
+function prevPrompt(){
+  const arr = prompts[currentCat];
+  currentIndex = (currentIndex - 1 + arr.length) % arr.length;
+  renderPrompt();
+}
+renderPrompt();
+</script>
+</body>
+</html>
