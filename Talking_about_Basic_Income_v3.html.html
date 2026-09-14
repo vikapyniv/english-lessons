@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Talking about Basic Income</title>
+<style>
+  :root{
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --ink:#1f2937;
+    --muted:#667085;
+    --line:#dce3ef;
+    --accent:#6c63ff;
+    --accent-soft:#eeecff;
+    --vocab:#0f8b8d;
+    --vocab-soft:#e7f7f7;
+    --good:#18794e;
+    --bad:#b42318;
+    --shadow:0 12px 30px rgba(31,41,55,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height:1.6;
+  }
+  .page{
+    width:min(1500px, 96vw);
+    margin:0 auto;
+    padding:28px 0 60px;
+  }
+  header{
+    background:linear-gradient(135deg,#ffffff,#f0efff);
+    border:1px solid var(--line);
+    border-radius:26px;
+    padding:34px 38px;
+    box-shadow:var(--shadow);
+    margin-bottom:26px;
+  }
+  h1{
+    margin:0;
+    font-size:clamp(34px,4vw,58px);
+    letter-spacing:-1.5px;
+  }
+  .subtitle{
+    margin-top:8px;
+    color:var(--muted);
+    font-size:19px;
+  }
+  .legend{
+    display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;
+  }
+  .tag{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 12px; border-radius:999px;
+    background:#fff; border:1px solid var(--line);
+    font-size:14px; font-weight:700;
+  }
+  .dot{width:11px;height:11px;border-radius:50%}
+  .dot.vocab{background:var(--vocab)}
+  .dot.grammar{background:#111827}
+
+  .grid{
+    display:grid;
+    grid-template-columns:1.25fr .75fr;
+    gap:22px;
+    align-items:start;
+    margin:22px 0;
+  }
+  .grid.equal{grid-template-columns:1fr 1fr}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:28px;
+    box-shadow:var(--shadow);
+  }
+  .card h2{
+    margin:0 0 16px;
+    font-size:28px;
+    letter-spacing:-.5px;
+  }
+  .card h3{
+    margin:0 0 12px;
+    font-size:21px;
+  }
+  .eyebrow{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:8px;
+  }
+  .article{
+    font-size:18px;
+  }
+  .article p{margin:0 0 15px}
+  .vocab{
+    color:var(--vocab);
+    background:var(--vocab-soft);
+    font-weight:800;
+    padding:0 .18em;
+    border-radius:.25em;
+  }
+  .grammar{
+    font-weight:900;
+    color:#111827;
+  }
+  .question-list{
+    display:grid;
+    gap:14px;
+  }
+  .q{
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:#fafbff;
+    font-size:18px;
+    font-weight:650;
+  }
+  .q small{
+    display:block;
+    margin-top:6px;
+    color:var(--muted);
+    font-weight:500;
+    font-size:14px;
+  }
+  .match-row{
+    display:grid;
+    grid-template-columns:1fr 220px;
+    gap:12px;
+    align-items:center;
+    padding:11px 0;
+    border-bottom:1px dashed var(--line);
+    font-size:17px;
+  }
+  .match-row:last-child{border-bottom:none}
+  select{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid #cbd5e1;
+    border-radius:14px;
+    background:#fff;
+    font-size:16px;
+  }
+  .controls{
+    display:flex; gap:10px; flex-wrap:wrap; margin-top:18px;
+  }
+  button{
+    border:0;
+    border-radius:14px;
+    padding:13px 18px;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .primary{background:var(--accent); color:#fff}
+  .secondary{background:var(--accent-soft); color:#4d46c8}
+  .feedback{
+    margin-top:12px;
+    font-weight:800;
+    min-height:24px;
+  }
+
+  .mcq{
+    display:grid; gap:18px;
+  }
+  .mcq-card{
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:18px;
+    background:#fbfcff;
+  }
+  .mcq-card h4{
+    margin:0 0 12px;
+    font-size:18px;
+  }
+  .options{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+  .option{
+    text-align:left;
+    background:#fff;
+    border:1px solid #cfd7e6;
+    color:var(--ink);
+    min-height:54px;
+  }
+  .option:hover{border-color:var(--accent)}
+  .option.selected{
+    background:var(--accent-soft);
+    border:2px solid var(--accent);
+    color:#3f39a7;
+  }
+  .discuss{
+    margin-top:12px;
+    padding:12px 14px;
+    border-left:4px solid var(--accent);
+    background:#f7f6ff;
+    border-radius:12px;
+    font-size:15px;
+  }
+  .section-title{
+    margin:34px 0 14px;
+    font-size:33px;
+    letter-spacing:-.7px;
+  }
+  .footer-note{
+    color:var(--muted);
+    text-align:center;
+    margin-top:28px;
+    font-size:14px;
+  }
+  @media (max-width: 980px){
+    .grid,.grid.equal{grid-template-columns:1fr}
+    .match-row{grid-template-columns:1fr}
+    .options{grid-template-columns:1fr}
+  }
+
+  .pair-board{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-top:12px;
+  }
+  .pair-col{
+    display:grid;
+    gap:10px;
+  }
+  .pair-label{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:2px;
+  }
+  .pair-btn{
+    width:100%;
+    text-align:left;
+    background:#fff;
+    border:1px solid #cfd7e6;
+    color:var(--ink);
+    min-height:54px;
+    transition:.18s ease;
+  }
+  .pair-btn:hover{
+    border-color:var(--accent);
+    transform:translateY(-1px);
+  }
+  .pair-btn.active{
+    border:2px solid var(--accent);
+    background:var(--accent-soft);
+    color:#3f39a7;
+  }
+  .pair-btn.matched{
+    background:#eefbf4;
+    border:2px solid #18794e;
+    color:#14633f;
+    cursor:default;
+  }
+  .pair-btn.wrong{
+    background:#fff4f2;
+    border:2px solid #b42318;
+    color:#8f1d14;
+  }
+  .final-task .mcq-card{
+    background:#fff;
+  }
+  .grammar-chip{
+    display:inline-block;
+    margin-top:10px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#f3f4f6;
+    font-size:13px;
+    font-weight:800;
+    color:#4b5563;
+  }
+  @media(max-width:700px){
+    .pair-board{grid-template-columns:1fr}
+  }
+
+  .compact-title{
+    font-size:24px !important;
+    line-height:1.25;
+  }
+  .mini-speaking{
+    margin-top:22px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+<header>
+<h1>Talking about Basic Income</h1>
+<div class="subtitle">Read, notice the language, and use the grammar to discuss Universal Basic Income.</div>
+<div class="legend">
+<span class="tag"><span class="dot vocab"></span> New vocabulary</span>
+<span class="tag"><span class="dot grammar"></span> Grammar / quantifiers</span>
+</div>
+</header>
+<section class="grid">
+<article class="card article">
+<div class="eyebrow">Reading 1</div>
+<h2>What happened when Irish taxpayers paid artists £280 a week for a year</h2>
+<p>The last few years haven’t been easy for Conor Matthews. As a writer and creative <span class="vocab">struggling to meet his basic needs</span>, he found himself <span class="vocab">on benefits</span>. He couldn’t find <span class="grammar">any job</span> in his profession, so he started working as a <span class="vocab">night porter</span> at a hotel. The job was so tiring that he had <span class="grammar">little energy</span> left to follow his passions. “I was feeling extremely stressed,” he says. But he got a second chance. The Irish government chose him to take part in a <span class="vocab">basic income pilot programme</span> for artists.</p>
+<p><span class="grammar">More than 9,000 people</span> applied and 2,000 were randomly chosen to receive £280 (€325/$375) a week for three years, from August 2022 to 2025. There were <span class="grammar">no rules</span> about how the money should be spent.</p>
+<p>When Matthews started getting the money, he quit his job as a porter and was able to spend <span class="grammar">more time</span> on his projects. He says the past year has been the “most <span class="vocab">productive</span>, <span class="vocab">educational</span> and <span class="vocab">hopeful</span>” of his life.</p>
+<p>Reports published by the Irish government showed that people who received the <span class="vocab">payments</span> felt <span class="grammar">less stress</span> and depression. They worked <span class="grammar">fewer hours</span> in other jobs and spent <span class="grammar">more time and money</span> on their art.</p>
+</article>
+<aside class="card">
+<div class="eyebrow">Grammar focus</div>
+<h2>Look at the phrases in bold and match them.</h2>
+<div class="match-row">
+<span>1. We use <strong>few / fewer</strong> with…</span>
+<select data-answer="countable nouns">
+<option value="">Choose…</option>
+<option>countable nouns</option>
+<option>uncountable nouns</option>
+</select>
+</div>
+<div class="match-row">
+<span>2. We use <strong>little / less</strong> with…</span>
+<select data-answer="uncountable nouns">
+<option value="">Choose…</option>
+<option>countable nouns</option>
+<option>uncountable nouns</option>
+</select>
+</div>
+<div class="match-row">
+<span>3. We use <strong>any</strong> in…</span>
+<select data-answer="negative sentences with not">
+<option value="">Choose…</option>
+<option>negative sentences with not</option>
+<option>negative sentences without not</option>
+</select>
+</div>
+<div class="match-row">
+<span>4. We use <strong>no</strong> in…</span>
+<select data-answer="negative sentences without not">
+<option value="">Choose…</option>
+<option>negative sentences with not</option>
+<option>negative sentences without not</option>
+</select>
+</div>
+<div class="controls">
+<button class="primary" onclick="checkMatches(this)">Check answers</button>
+<button class="secondary" onclick="resetMatches(this)">Reset</button>
+</div>
+<div class="feedback"></div>
+</aside>
+</section>
+<section class="card mini-speaking">
+<div class="eyebrow">Speaking practice 1</div>
+<h2>Choose one option, then explain your answer.</h2>
+<p style="color:var(--muted);margin-top:-4px;">
+    Focus only on the grammar from Reading 1:
+    <strong>few, fewer, little, less, any, no</strong>.
+  </p>
+<div class="mcq">
+<div class="mcq-card">
+<h4>1. If you had a basic income, would you work…</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">fewer hours</button>
+<button class="option" onclick="selectOption(this)">the same number of hours</button>
+</div>
+<span class="grammar-chip">Use: fewer</span>
+<div class="discuss">Explain what you would do with the extra time.</div>
+</div>
+<div class="mcq-card">
+<h4>2. Which would improve people’s lives more?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">less stress</button>
+<button class="option" onclick="selectOption(this)">fewer financial problems</button>
+</div>
+<span class="grammar-chip">Use: less / fewer</span>
+<div class="discuss">Give one concrete example.</div>
+</div>
+<div class="mcq-card">
+<h4>3. Should people receiving UBI have…</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">no rules about spending it</button>
+<button class="option" onclick="selectOption(this)">a few basic rules</button>
+</div>
+<span class="grammar-chip">Use: no / few</span>
+<div class="discuss">What rules, if any, would be reasonable?</div>
+</div>
+<div class="mcq-card">
+<h4>4. If a person cannot find any job in their profession, what is better?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">take any available job</button>
+<button class="option" onclick="selectOption(this)">wait for a better opportunity</button>
+</div>
+<span class="grammar-chip">Use: any / no</span>
+<div class="discuss">Explain what factors matter most.</div>
+</div>
+<div class="mcq-card">
+<h4>5. What is a bigger problem for creative workers?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">too little money</button>
+<button class="option" onclick="selectOption(this)">too few opportunities</button>
+</div>
+<span class="grammar-chip">Use: little / few</span>
+<div class="discuss">Do you think this is true in your country?</div>
+</div>
+</div>
+</section>
+
+<h2 class="section-title">More ideas about UBI</h2>
+<section class="grid">
+<article class="card article">
+<div class="eyebrow">Reading 2</div>
+<h2>Why might UBI become more relevant?</h2>
+<p>Cleo Goodman, a basic income expert at the Autonomy think tank, says that the growth of AI has created <span class="vocab">worries</span> that robots could <span class="vocab">replace</span> <span class="grammar">many jobs</span>. According to Goodman, if people received a basic income, they would have <span class="grammar">more freedom</span> to choose work that matters and have <span class="grammar">more flexibility</span> in their lives.</p>
+<p>Guy Standing, an economist and co-founder of the Basic Income Earth Network, says the world of work has changed in the last several decades. <span class="grammar">Many people</span> have <span class="vocab">temporary work contracts</span> and don’t have <span class="grammar">as much security</span> as workers in the past.</p>
+<p>He says the biggest and most common result of UBI programmes around the world is that people feel <span class="grammar">less stressed</span> and <span class="grammar">less depressed</span>. Another finding is that people who take part in the programme work <span class="grammar">more, not less</span>. In Ireland, people did more of the work they were <span class="vocab">trained and qualified</span> to do and <span class="grammar">fewer things</span> that they did “just to survive”.</p>
+<p><span class="grammar">Most people</span> who support the programmes hope they will lead to a universal basic income, where <span class="grammar">every adult</span> receives a regular monthly payment which they can spend however they like. <span class="vocab">Critics</span> worry that giving <span class="grammar">all members of society</span> free money could make them buy <span class="grammar">more products and services</span>, <span class="vocab">causing prices to rise</span>. However, Standing says that if businesses are able to produce <span class="grammar">enough goods</span>, prices might not go up.</p>
+</article>
+<aside class="card">
+<div class="eyebrow">Grammar &amp; vocabulary</div>
+<h2 class="compact-title">Look at the definitions and match them with the words from the text.</h2>
+<div class="pair-board" data-pair-board="">
+<div class="pair-col">
+<div class="pair-label">Definitions</div>
+<button class="pair-btn" data-pair="much" onclick="pairClick(this)">a lot of — used with uncountable nouns</button>
+<button class="pair-btn" data-pair="many" onclick="pairClick(this)">a lot of — used with countable nouns</button>
+<button class="pair-btn" data-pair="most" onclick="pairClick(this)">more than a half</button>
+<button class="pair-btn" data-pair="several" onclick="pairClick(this)">more than two</button>
+<button class="pair-btn" data-pair="another" onclick="pairClick(this)">one more</button>
+<button class="pair-btn" data-pair="enough" onclick="pairClick(this)">as much as you need</button>
+<button class="pair-btn" data-pair="every" onclick="pairClick(this)">each</button>
+<button class="pair-btn" data-pair="all" onclick="pairClick(this)">the whole number of</button>
+</div>
+<div class="pair-col">
+<div class="pair-label">Words</div>
+<button class="pair-btn" data-pair="every" onclick="pairClick(this)">every</button>
+<button class="pair-btn" data-pair="several" onclick="pairClick(this)">several</button>
+<button class="pair-btn" data-pair="all" onclick="pairClick(this)">all</button>
+<button class="pair-btn" data-pair="many" onclick="pairClick(this)">many</button>
+<button class="pair-btn" data-pair="enough" onclick="pairClick(this)">enough</button>
+<button class="pair-btn" data-pair="much" onclick="pairClick(this)">much</button>
+<button class="pair-btn" data-pair="another" onclick="pairClick(this)">another</button>
+<button class="pair-btn" data-pair="most" onclick="pairClick(this)">most</button>
+</div>
+</div>
+<div class="controls">
+<button class="secondary" onclick="resetPairs(this)">Reset</button>
+</div>
+<div class="feedback"></div>
+</aside>
+</section>
+
+<section class="card final-task" style="margin-top:26px;">
+<div class="eyebrow">Final speaking task</div>
+<h2>Choose one option, then explain your answer using the grammar from both readings.</h2>
+<p style="color:var(--muted);margin-top:-4px;">
+    Try to use:
+    <strong>few, fewer, little, less, any, no, much, many, most, several, another, enough, every, all</strong>.
+  </p>
+<div class="mcq">
+<div class="mcq-card">
+<h4>1. Who should receive UBI?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">every adult</button>
+<button class="option" onclick="selectOption(this)">only a few groups</button>
+</div>
+<span class="grammar-chip">Use: every / few / all / most</span>
+<div class="discuss">Explain who should be included and who should not.</div>
+</div>
+<div class="mcq-card">
+<h4>2. What would happen to working hours?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">people would work fewer hours</button>
+<button class="option" onclick="selectOption(this)">people would not work any less</button>
+</div>
+<span class="grammar-chip">Use: fewer / less / any</span>
+<div class="discuss">Would that be a positive change?</div>
+</div>
+<div class="mcq-card">
+<h4>3. How much money should UBI provide?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">enough for all basic needs</button>
+<button class="option" onclick="selectOption(this)">only a little support</button>
+</div>
+<span class="grammar-chip">Use: much / enough / little / all</span>
+<div class="discuss">Name the costs that should be covered.</div>
+</div>
+<div class="mcq-card">
+<h4>4. Which result is more likely?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">less stress and more freedom</button>
+<button class="option" onclick="selectOption(this)">higher prices and more spending</button>
+</div>
+<span class="grammar-chip">Use: less / more / much / many</span>
+<div class="discuss">Use ideas from the readings.</div>
+</div>
+<div class="mcq-card">
+<h4>5. If UBI were tested on one group first, who should it be?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">artists and creative workers</button>
+<button class="option" onclick="selectOption(this)">another group</button>
+</div>
+<span class="grammar-chip">Use: another / several / most / many</span>
+<div class="discuss">Explain why that group should be prioritised.</div>
+</div>
+<div class="mcq-card">
+<h4>6. Should there be rules about how UBI is spent?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">no rules</button>
+<button class="option" onclick="selectOption(this)">a few clear rules</button>
+</div>
+<span class="grammar-chip">Use: no / few / any</span>
+<div class="discuss">What rules would be acceptable?</div>
+</div>
+<div class="mcq-card">
+<h4>7. Which statement is closer to your opinion?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">most people would use UBI responsibly</button>
+<button class="option" onclick="selectOption(this)">many people would become dependent on it</button>
+</div>
+<span class="grammar-chip">Use: most / many / few / no</span>
+<div class="discuss">Why do you think so?</div>
+</div>
+<div class="mcq-card">
+<h4>8. If a UBI programme caused problems, what should happen?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">change several parts of it</button>
+<button class="option" onclick="selectOption(this)">stop the whole programme</button>
+</div>
+<span class="grammar-chip">Use: several / all / another / no</span>
+<div class="discuss">What would you change first?</div>
+</div>
+<div class="mcq-card">
+<h4>9. Which problem is more serious today?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">too few secure jobs</button>
+<button class="option" onclick="selectOption(this)">too little financial stability</button>
+</div>
+<span class="grammar-chip">Use: few / little / fewer / less</span>
+<div class="discuss">Give an example from real life.</div>
+</div>
+<div class="mcq-card">
+<h4>10. Would UBI work in your country?</h4>
+<div class="options">
+<button class="option" onclick="selectOption(this)">yes, with a few changes</button>
+<button class="option" onclick="selectOption(this)">no, there are too many risks</button>
+</div>
+<span class="grammar-chip">Use: few / many / enough / most / all</span>
+<div class="discuss">Give at least two concrete reasons.</div>
+</div>
+</div>
+</section>
+
+<div class="footer-note">Talking about Basic Income · speaking-focused lesson</div>
+</div>
+<script>
+function selectOption(btn){
+  const group = btn.closest('.options');
+  group.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function getCard(el){
+  return el.closest('.card');
+}
+
+function checkMatches(btn){
+  const card = getCard(btn);
+  const selects = card.querySelectorAll('select[data-answer]');
+  let correct = 0;
+  selects.forEach(s => {
+    const ok = s.value === s.dataset.answer;
+    if(ok) correct++;
+    s.style.borderColor = ok ? '#18794e' : '#b42318';
+    s.style.background = ok ? '#eefbf4' : '#fff4f2';
+  });
+  const fb = card.querySelector('.feedback');
+  fb.textContent = `${correct} / ${selects.length} correct`;
+  fb.style.color = correct === selects.length ? '#18794e' : '#b42318';
+}
+
+function resetMatches(btn){
+  const card = getCard(btn);
+  card.querySelectorAll('select[data-answer]').forEach(s => {
+    s.value = '';
+    s.style.borderColor = '#cbd5e1';
+    s.style.background = '#fff';
+  });
+  const fb = card.querySelector('.feedback');
+  fb.textContent = '';
+}
+
+let firstPairButton = null;
+
+function pairClick(btn){
+  if(btn.classList.contains('matched')) return;
+
+  const board = btn.closest('[data-pair-board]');
+  const clickedCol = btn.parentElement;
+
+  if(!firstPairButton){
+    board.querySelectorAll('.pair-btn.active').forEach(b => b.classList.remove('active'));
+    firstPairButton = btn;
+    btn.classList.add('active');
+    return;
+  }
+
+  if(firstPairButton === btn){
+    btn.classList.remove('active');
+    firstPairButton = null;
+    return;
+  }
+
+  if(firstPairButton.parentElement === clickedCol){
+    firstPairButton.classList.remove('active');
+    firstPairButton = btn;
+    btn.classList.add('active');
+    return;
+  }
+
+  const first = firstPairButton;
+  first.classList.remove('active');
+
+  if(first.dataset.pair === btn.dataset.pair){
+    first.classList.add('matched');
+    btn.classList.add('matched');
+    const fb = board.parentElement.querySelector('.feedback');
+    const total = board.querySelectorAll('.pair-btn.matched').length / 2;
+    fb.textContent = total === 8 ? 'Perfect — all pairs matched!' : `${total} / 8 pairs matched`;
+    fb.style.color = '#18794e';
+  } else {
+    first.classList.add('wrong');
+    btn.classList.add('wrong');
+    setTimeout(() => {
+      first.classList.remove('wrong');
+      btn.classList.remove('wrong');
+    }, 550);
+  }
+
+  firstPairButton = null;
+}
+
+function resetPairs(btn){
+  const card = btn.closest('.card');
+  card.querySelectorAll('.pair-btn').forEach(b => {
+    b.classList.remove('active','matched','wrong');
+  });
+  const fb = card.querySelector('.feedback');
+  if(fb) fb.textContent = '';
+  firstPairButton = null;
+}
+</script></body>
+</html>
