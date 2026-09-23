@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The right age to get a smartphone</title>
+<style>
+  :root{
+    --bg:#f6f7fb;
+    --card:#ffffff;
+    --ink:#182033;
+    --muted:#667085;
+    --accent:#6c63ff;
+    --accent-soft:#eceaff;
+    --vocab:#c23c8b;
+    --vocab-soft:#ffe8f5;
+    --line:#e5e7eb;
+    --good:#1f8a70;
+    --shadow:0 10px 30px rgba(23,31,56,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  .sticky-title{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    padding:16px 24px;
+    font-weight:800;
+    font-size:clamp(20px,3vw,30px);
+    text-align:center;
+    letter-spacing:-.02em;
+  }
+  main{
+    max-width:1200px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+  .section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:26px;
+    margin:0 0 26px;
+    box-shadow:var(--shadow);
+  }
+  .task-title{
+    font-size:clamp(20px,2.4vw,28px);
+    line-height:1.2;
+    margin:0 0 8px;
+  }
+  .task-instruction{
+    color:var(--muted);
+    margin:0 0 22px;
+    font-size:16px;
+  }
+  .sentence-list{
+    display:grid;
+    gap:12px;
+  }
+  .sentence{
+    border:1px solid var(--line);
+    background:#fbfbfe;
+    border-radius:16px;
+    padding:15px 17px;
+  }
+  .vocab{
+    display:inline-block;
+    color:var(--vocab);
+    background:var(--vocab-soft);
+    border:1px solid #f6b9dc;
+    border-radius:9px;
+    padding:1px 7px 2px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.18s ease;
+    user-select:none;
+  }
+  .vocab:hover{transform:translateY(-1px)}
+  .vocab.revealed{
+    color:#ffffff;
+    background:var(--vocab);
+    border-color:var(--vocab);
+  }
+  .hint{
+    margin-top:14px;
+    color:var(--muted);
+    font-size:14px;
+  }
+
+  .two-col{
+    display:grid;
+    grid-template-columns:minmax(0,1.6fr) minmax(300px,.8fr);
+    gap:22px;
+    align-items:start;
+  }
+  @media (max-width:850px){
+    .two-col{grid-template-columns:1fr}
+  }
+
+  .word-bank{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin:14px 0 20px;
+    padding:14px;
+    background:#f8f7ff;
+    border:1px dashed #bbb6ff;
+    border-radius:16px;
+    min-height:62px;
+  }
+  .drag-word{
+    background:var(--accent);
+    color:white;
+    border-radius:999px;
+    padding:8px 13px;
+    font-weight:700;
+    cursor:grab;
+    box-shadow:0 4px 12px rgba(108,99,255,.18);
+  }
+  .drag-word:active{cursor:grabbing}
+  .article{
+    font-size:17px;
+  }
+  .article h3{
+    font-size:22px;
+    margin:0 0 12px;
+  }
+  .article p{
+    margin:0 0 16px;
+  }
+  .gap{
+    display:inline-flex;
+    min-width:125px;
+    min-height:34px;
+    align-items:center;
+    justify-content:center;
+    padding:3px 10px;
+    margin:0 3px;
+    border:2px dashed #aaa4ff;
+    border-radius:10px;
+    background:#faf9ff;
+    vertical-align:middle;
+    font-weight:800;
+    color:var(--accent);
+  }
+  .gap.correct{
+    border-style:solid;
+    border-color:#6fc9b4;
+    background:#e8f7f3;
+    color:var(--good);
+  }
+  .gap.wrong{
+    border-color:#ea7a7a;
+    background:#fff0f0;
+    color:#b33c3c;
+  }
+  .small-def{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:-6px;
+    margin-bottom:12px;
+  }
+
+  .discussion{
+    position:sticky;
+    top:86px;
+    background:#fcfcff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:20px;
+  }
+  @media (max-width:850px){.discussion{position:static}}
+  .discussion h3{
+    margin:0 0 12px;
+    font-size:20px;
+  }
+  .discussion ol{
+    padding-left:22px;
+    margin:0;
+  }
+  .discussion li{
+    margin:0 0 14px;
+  }
+
+  .blank-box{
+    min-height:330px;
+    border:2px dashed #d5d7df;
+    border-radius:18px;
+    background:
+      linear-gradient(#fcfcfd,#fcfcfd) padding-box,
+      repeating-linear-gradient(135deg,#fafafa 0,#fafafa 10px,#f4f4f5 10px,#f4f4f5 20px) border-box;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#9aa0ad;
+    text-align:center;
+    padding:24px;
+  }
+  .reset{
+    margin-top:14px;
+    border:none;
+    background:#111827;
+    color:#fff;
+    border-radius:10px;
+    padding:10px 14px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  .vocab-guide{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+    margin:14px 0 18px;
+  }
+  .vocab-guide div{
+    padding:9px 11px;
+    border-radius:10px;
+    background:#f8f7ff;
+    border:1px solid #e0ddff;
+    font-size:14px;
+  }
+  .vocab-guide strong{color:var(--accent)}
+  .quiz-grid{
+    display:grid;
+    gap:18px;
+    margin-top:18px;
+  }
+  .quiz-card{
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px;
+    background:#fcfcff;
+  }
+  .quiz-card h3{
+    margin:0 0 12px;
+    font-size:18px;
+    line-height:1.35;
+  }
+  .options{
+    display:grid;
+    gap:9px;
+  }
+  .option{
+    border:1px solid #d9dce5;
+    background:white;
+    border-radius:12px;
+    padding:11px 13px;
+    cursor:pointer;
+    transition:.18s ease;
+  }
+  .option:hover{
+    border-color:#aaa4ff;
+    transform:translateY(-1px);
+  }
+  .option.selected{
+    border-color:var(--accent);
+    background:var(--accent-soft);
+    font-weight:700;
+  }
+  .use-words{
+    margin-top:11px;
+    font-size:13px;
+    color:var(--muted);
+  }
+
+
+  .intro-article{
+    max-width:680px;
+    margin:0 auto 26px;
+    padding:20px 22px;
+    background:#fbfbfe;
+    border:1px solid var(--line);
+    border-radius:18px;
+  }
+  .intro-article h3{
+    margin:0 0 10px;
+    font-size:22px;
+  }
+  .intro-article p{margin:0 0 10px}
+  .intro-article p:last-child{margin-bottom:0}
+
+
+  .intro-article{
+    max-width:none;
+    margin:0 0 18px;
+    padding:0;
+    background:transparent;
+    border:none;
+    border-radius:0;
+  }
+  .intro-article h3{
+    margin:0 0 10px;
+    font-size:22px;
+  }
+  .optional-discussion{
+    margin:14px 0 28px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    background:#fbfbfe;
+  }
+  .optional-discussion summary{
+    cursor:pointer;
+    list-style:none;
+    padding:13px 16px;
+    font-weight:800;
+    background:#f4f3ff;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .optional-discussion summary::-webkit-details-marker{display:none}
+  .optional-discussion summary::after{
+    content:"＋";
+    font-size:20px;
+    line-height:1;
+  }
+  .optional-discussion[open] summary::after{content:"−"}
+  .optional-discussion .optional-content{
+    padding:14px 18px 16px;
+  }
+  .optional-discussion ol{
+    margin:0;
+    padding-left:22px;
+  }
+  .optional-discussion li{
+    margin:0 0 10px;
+  }
+
+</style>
+</head>
+<body>
+  <header class="sticky-title">The right age to get a smartphone</header>
+
+  <main>
+    <section class="section">
+      <h2 class="task-title">1. How old should kids be to get phones?</h2>
+      <p class="task-instruction">Read the main idea from the first part of the article.</p>
+
+      <div class="intro-article">
+        <h3>How old should kids be to get phones?</h3>
+        <p>A 2019 report found that by age <strong>11</strong>, more than half of children in the U.S. had their own smartphone. By <strong>12</strong>, more than two-thirds did, and by <strong>14</strong>, most teenagers had one. Nearly <strong>20% of 8-year-olds</strong> already had their own smartphone.</p>
+        <p>Still, there is no single “right” age. The best time depends on whether both the child and the parents feel that the child is ready.</p>
+      </div>
+
+      <details class="optional-discussion">
+        <summary>Discuss the questions</summary>
+        <div class="optional-content">
+          <ol>
+            <li>How old were you when you got your first phone, and do you think that was the right age for you?</li>
+            <li>Do you think children today need smartphones earlier than children did in the past? Why or why not?</li>
+            <li>Is it reasonable for parents to forbid a child from having a smartphone? In what situations?</li>
+            <li>What has changed most between childhood now and childhood before smartphones became common?</li>
+            <li>Why do you think people care so much about finding the “right age” for a first smartphone?</li>
+          </ol>
+        </div>
+      </details>
+
+      <h2 class="task-title" style="margin-top:8px;">Discuss the arguments</h2>
+      <p class="task-instruction">
+        Read the sentences and discuss each one. Do you think it is a reasonable argument for not giving a child a smartphone? Why or why not?
+      </p>
+
+      <div class="sentence-list">
+        <div class="sentence">You don’t always show <span class="vocab" data-front="respect" data-back="polite behaviour">respect</span> for our family rules, so you’re not getting a phone yet.</div>
+        <div class="sentence">I’m afraid your screen time will <span class="vocab" data-front="increase" data-back="become bigger">increase</span>.</div>
+        <div class="sentence">I don’t think you’re <span class="vocab" data-front="responsible" data-back="able to take care">responsible</span> enough to look after an expensive phone.</div>
+        <div class="sentence">If I need to <span class="vocab" data-front="reach" data-back="contact someone">reach</span> you, I can call your teacher or another parent.</div>
+        <div class="sentence">I’m worried that other children might <span class="vocab" data-front="treat" data-back="behave towards">treat</span> you badly online.</div>
+        <div class="sentence">I think too much time on a phone can be <span class="vocab" data-front="harmful" data-back="bad for you">harmful</span> for your eyes.</div>
+        <div class="sentence">I don’t want social media to have a bad <span class="vocab" data-front="influence" data-back="power to affect">influence</span> on you.</div>
+        <div class="sentence">I know you won’t <span class="vocab" data-front="put your phone away" data-back="stop using it">put your phone away</span> when it’s time to study or sleep.</div>
+      </div>
+      <div class="hint">Click the highlighted vocabulary to flip between the word and a short meaning.</div>
+    </section>
+
+    <section class="section">
+      <div class="two-col">
+        <div>
+          <h2 class="task-title">2. Read the article and complete the gaps with the words in the boxes.</h2>
+
+          <div class="word-bank" id="wordBank">
+            <div class="drag-word" draggable="true" data-word="responsible">responsible</div>
+            <div class="drag-word" draggable="true" data-word="reach">reach</div>
+            <div class="drag-word" draggable="true" data-word="treat">treat</div>
+            <div class="drag-word" draggable="true" data-word="respect">respect</div>
+            <div class="drag-word" draggable="true" data-word="harmful">harmful</div>
+            <div class="drag-word" draggable="true" data-word="increase">increase</div>
+            <div class="drag-word" draggable="true" data-word="influence">influence</div>
+            <div class="drag-word" draggable="true" data-word="put away">put away</div>
+          </div>
+
+          <article class="article">
+            <h3>Are you ready for a smartphone?</h3>
+
+            <p>Before getting a smartphone, ask yourself a few questions. Are you generally
+              <span class="gap" data-answer="responsible"></span>?
+              Can you look after your things and understand the value of money?
+            </p>
+
+            <p>A phone can also become a real need if you travel without an adult and your parents need to
+              <span class="gap" data-answer="reach"></span>
+              you directly.
+            </p>
+
+            <p>You should also know how to
+              <span class="gap" data-answer="treat"></span>
+              people online with
+              <span class="gap" data-answer="respect"></span>.
+              Things posted online can have lasting
+              <span class="gap" data-answer="harmful"></span>
+              effects, and cyberbullying may
+              <span class="gap" data-answer="increase"></span>
+              when more children use smartphones.
+            </p>
+
+            <p>Parents also have a strong
+              <span class="gap" data-answer="influence"></span>
+              on children’s phone habits. If they regularly
+              <span class="gap" data-answer="put away"></span>
+              their phones during meals and set reasonable rules, children are more likely to develop healthy smartphone habits too.
+            </p>
+          </article>
+
+          <button class="reset" id="resetDrag">Reset gaps</button>
+        </div>
+
+        <aside>
+          <h3 class="task-title" style="font-size:20px;">Vocabulary guide</h3>
+          <div class="vocab-guide">
+            <div><strong>responsible</strong> — takes care</div>
+            <div><strong>reach</strong> — contact someone</div>
+            <div><strong>treat</strong> — behave towards</div>
+            <div><strong>respect</strong> — polite behaviour</div>
+            <div><strong>harmful</strong> — bad for you</div>
+            <div><strong>increase</strong> — become bigger</div>
+            <div><strong>influence</strong> — affect someone</div>
+            <div><strong>put away</strong> — stop using</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="task-title">3. Smartphone Dilemma Quiz</h2>
+      <p class="task-instruction">
+        Choose the option closest to your opinion. There are no correct answers — explain your choice, compare it with other people’s answers and use the vocabulary from the lesson.
+      </p>
+
+      <div class="quiz-grid">
+        <div class="quiz-card">
+          <h3>1. A 12-year-old is responsible at school but constantly loses personal things. Should they get a smartphone?</h3>
+          <div class="options">
+            <div class="option">A. Yes — responsibility is more important than being perfect.</div>
+            <div class="option">B. Maybe — start with a cheaper or simpler phone.</div>
+            <div class="option">C. No — losing things shows they are not ready yet.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>responsible, harmful</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>2. You message someone and they do not reply for six hours, even though they were clearly online. What is the most reasonable reaction?</h3>
+          <div class="options">
+            <div class="option">A. Nothing — nobody has to be reachable all the time.</div>
+            <div class="option">B. Ask why they ignored you.</div>
+            <div class="option">C. It depends on how urgent the message was.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>reach, respect</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>3. A friend checks their phone several times while you are telling them something personal. What would bother you most?</h3>
+          <div class="options">
+            <div class="option">A. The lack of respect.</div>
+            <div class="option">B. The fact that phones have become such a strong influence.</div>
+            <div class="option">C. Nothing — this is normal now.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>respect, influence, put away</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>4. Someone writes a harsh comment, deletes it five minutes later and says, “It’s fine, nobody will remember it.” Do you agree?</h3>
+          <div class="options">
+            <div class="option">A. Yes — deleting it solves the problem.</div>
+            <div class="option">B. No — harmful things can still have an effect.</div>
+            <div class="option">C. It depends on who saw it and what was written.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>harmful, treat</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>5. Your screen time increases from two hours to five hours a day after downloading one new app. What would you do first?</h3>
+          <div class="options">
+            <div class="option">A. Delete the app immediately.</div>
+            <div class="option">B. Set a limit and see whether you can control it.</div>
+            <div class="option">C. Do nothing — five hours is not necessarily a problem.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>increase, responsible, harmful</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>6. Parents tell their child to put the phone away during dinner, but they keep checking work messages themselves. Is the rule still fair?</h3>
+          <div class="options">
+            <div class="option">A. Yes — adults have different responsibilities.</div>
+            <div class="option">B. No — parents should follow the same rule.</div>
+            <div class="option">C. Only if they explain why they need to check.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>influence, put away, respect</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>7. A child says, “Everyone in my class has a smartphone, so I need one too.” How strong is that argument?</h3>
+          <div class="options">
+            <div class="option">A. Strong — social life matters.</div>
+            <div class="option">B. Weak — wanting to fit in is not the same as needing one.</div>
+            <div class="option">C. It depends on how much the class communicates online.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>influence, responsible</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>8. A friend sends you screenshots of a private conversation with another person. What is your first reaction?</h3>
+          <div class="options">
+            <div class="option">A. Read them — it was their choice to send them.</div>
+            <div class="option">B. Feel uncomfortable because it may be disrespectful.</div>
+            <div class="option">C. It depends on why they sent them.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>respect, treat, harmful</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>9. You are on holiday with friends and one person spends most of the trip filming and posting everything. Is that a problem?</h3>
+          <div class="options">
+            <div class="option">A. Yes — they should put the phone away and enjoy the moment.</div>
+            <div class="option">B. No — documenting the trip is part of the experience.</div>
+            <div class="option">C. Only if it affects the other people in the group.</div>
+          </div>
+          <div class="use-words">Try to use: <strong>put away, influence, treat</strong></div>
+        </div>
+
+        <div class="quiz-card">
+          <h3>10. What should matter most when deciding whether someone is ready for a smartphone?</h3>
+          <div class="options">
+            <div class="option">A. Age and maturity.</div>
+            <div class="option">B. Safety and being reachable.</div>
+            <div class="option">C. Their ability to use it responsibly and respectfully.</div>
+          </div>
+          <div class="use-words">Defend your choice using at least <strong>three words from the lesson</strong>.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<script>
+  // Click-to-flip vocabulary
+  document.querySelectorAll('.vocab').forEach(el => {
+    el.addEventListener('click', () => {
+      const showingBack = el.classList.toggle('revealed');
+      el.textContent = showingBack ? el.dataset.back : el.dataset.front;
+    });
+  });
+
+  // Drag and drop gap fill
+  let dragged = null;
+
+  document.querySelectorAll('.drag-word').forEach(word => {
+    word.addEventListener('dragstart', () => {
+      dragged = word;
+      setTimeout(() => word.style.opacity = '.45', 0);
+    });
+    word.addEventListener('dragend', () => {
+      word.style.opacity = '1';
+      dragged = null;
+    });
+  });
+
+  document.querySelectorAll('.gap').forEach(gap => {
+    gap.addEventListener('dragover', e => e.preventDefault());
+    gap.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragged) return;
+
+      // Return any existing word in this gap to the bank
+      if (gap.dataset.current) {
+        const old = document.querySelector('.drag-word[data-word="' + gap.dataset.current + '"]');
+        if (old) {
+          old.style.display = 'inline-block';
+          document.getElementById('wordBank').appendChild(old);
+        }
+      }
+
+      const word = dragged.dataset.word;
+      gap.textContent = word;
+      gap.dataset.current = word;
+      dragged.style.display = 'none';
+
+      gap.classList.remove('correct','wrong');
+      gap.classList.add(word === gap.dataset.answer ? 'correct' : 'wrong');
+    });
+  });
+
+  document.getElementById('resetDrag').addEventListener('click', () => {
+    document.querySelectorAll('.gap').forEach(gap => {
+      gap.textContent = '';
+      gap.dataset.current = '';
+      gap.classList.remove('correct','wrong');
+    });
+    document.querySelectorAll('.drag-word').forEach(word => {
+      word.style.display = 'inline-block';
+      document.getElementById('wordBank').appendChild(word);
+    });
+  });
+
+  // Select quiz options
+  document.querySelectorAll('.quiz-card').forEach(card => {
+    card.querySelectorAll('.option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        card.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+      });
+    });
+  });
+
+</script>
+</body>
+</html>
