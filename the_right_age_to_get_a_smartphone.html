@@ -353,6 +353,12 @@ topics:
     margin:0 0 10px;
   }
 
+
+  .task-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+  .task-actions .reset{margin-top:0}
+  .check-answers{background:var(--accent)}
+  .show-answers{background:#ffffff!important;color:var(--accent)!important;border:2px solid var(--accent)!important}
+  .task-result{font-weight:800;color:var(--accent);min-height:24px;margin-top:10px}
 </style>
 </head>
 <body>
@@ -448,7 +454,12 @@ topics:
             </p>
           </article>
 
-          <button class="reset" id="resetDrag">Reset gaps</button>
+          <div class="task-actions">
+            <button class="reset check-answers" id="checkDrag" type="button">Check answers</button>
+            <button class="reset show-answers" id="showDrag" type="button">Show correct answers</button>
+            <button class="reset" id="resetDrag" type="button">Reset gaps</button>
+          </div>
+          <div class="task-result" id="dragResult" aria-live="polite"></div>
         </div>
 
         <aside>
@@ -588,8 +599,12 @@ topics:
 
   // Drag and drop gap fill
   let dragged = null;
+  const wordBank = document.getElementById('wordBank');
+  const gaps = [...document.querySelectorAll('.gap')];
+  const dragWords = [...document.querySelectorAll('.drag-word')];
+  const dragResult = document.getElementById('dragResult');
 
-  document.querySelectorAll('.drag-word').forEach(word => {
+  dragWords.forEach(word => {
     word.addEventListener('dragstart', () => {
       dragged = word;
       setTimeout(() => word.style.opacity = '.45', 0);
@@ -600,18 +615,17 @@ topics:
     });
   });
 
-  document.querySelectorAll('.gap').forEach(gap => {
+  gaps.forEach(gap => {
     gap.addEventListener('dragover', e => e.preventDefault());
     gap.addEventListener('drop', e => {
       e.preventDefault();
       if (!dragged) return;
 
-      // Return any existing word in this gap to the bank
       if (gap.dataset.current) {
         const old = document.querySelector('.drag-word[data-word="' + gap.dataset.current + '"]');
         if (old) {
           old.style.display = 'inline-block';
-          document.getElementById('wordBank').appendChild(old);
+          wordBank.appendChild(old);
         }
       }
 
@@ -619,23 +633,66 @@ topics:
       gap.textContent = word;
       gap.dataset.current = word;
       dragged.style.display = 'none';
-
       gap.classList.remove('correct','wrong');
-      gap.classList.add(word === gap.dataset.answer ? 'correct' : 'wrong');
+      dragResult.textContent = '';
     });
   });
 
-  document.getElementById('resetDrag').addEventListener('click', () => {
-    document.querySelectorAll('.gap').forEach(gap => {
+  function resetGapExercise(){
+    gaps.forEach(gap => {
       gap.textContent = '';
       gap.dataset.current = '';
       gap.classList.remove('correct','wrong');
     });
-    document.querySelectorAll('.drag-word').forEach(word => {
+    dragWords.forEach(word => {
       word.style.display = 'inline-block';
-      document.getElementById('wordBank').appendChild(word);
+      word.style.opacity = '1';
+      wordBank.appendChild(word);
     });
+    dragged = null;
+    dragResult.textContent = '';
+  }
+
+  document.getElementById('checkDrag').addEventListener('click', () => {
+    let correct = 0;
+    let completed = 0;
+
+    gaps.forEach(gap => {
+      gap.classList.remove('correct','wrong');
+      if (gap.dataset.current) {
+        completed++;
+        if (gap.dataset.current === gap.dataset.answer) {
+          gap.classList.add('correct');
+          correct++;
+        } else {
+          gap.classList.add('wrong');
+        }
+      }
+    });
+
+    if (completed < gaps.length) {
+      dragResult.textContent = correct + ' / ' + gaps.length + ' correct — complete all the gaps.';
+    } else {
+      dragResult.textContent = correct + ' / ' + gaps.length + ' correct';
+    }
   });
+
+  document.getElementById('showDrag').addEventListener('click', () => {
+    resetGapExercise();
+
+    gaps.forEach(gap => {
+      const answer = gap.dataset.answer;
+      const word = document.querySelector('.drag-word[data-word="' + answer + '"]');
+      gap.textContent = answer;
+      gap.dataset.current = answer;
+      gap.classList.add('correct');
+      if (word) word.style.display = 'none';
+    });
+
+    dragResult.textContent = 'Correct answers are shown.';
+  });
+
+  document.getElementById('resetDrag').addEventListener('click', resetGapExercise);
 
   // Select quiz options
   document.querySelectorAll('.quiz-card').forEach(card => {
