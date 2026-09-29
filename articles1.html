@@ -511,13 +511,13 @@ main{
   .mini-result{min-height:22px;margin:10px 0 18px;font-weight:850;color:#216f3d}
   .speaking-title{margin:18px 0 6px;font-size:19px}
   .speaking-instruction{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.45}
-  .speaking-patterns{display:grid;gap:10px}
-  .speaking-card,.speaking-card .flip-card-inner{min-height:118px}
-  .speaking-card .flip-card-front,.speaking-card .flip-card-back{padding:13px}
+  .speaking-patterns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .speaking-card,.speaking-card .flip-card-inner{min-height:82px}
+  .speaking-card .flip-card-front,.speaking-card .flip-card-back{padding:8px}
   .speaking-card .difference-label{color:#654194;margin-bottom:6px}
   .speaking-card .flip-card-front{justify-content:center;text-align:center}
-  .speaking-card .flip-card-back{font-size:14px;line-height:1.4}
-  .speaking-card .flip-hint{margin-top:8px;font-size:11px}
+  .speaking-card .flip-card-front{font-size:10px;line-height:1.25}.speaking-card .flip-card-back{font-size:10px;line-height:1.3}
+  .speaking-card .difference-label{font-size:9px}.speaking-card strong{font-size:10px}
   @media(max-width:900px){.mini-tests-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:600px){.mini-tests-grid{grid-template-columns:1fr}.mini-tests-section{padding:18px}}
 </style>
@@ -1047,87 +1047,753 @@ initDragAndDrop();
 
 <section class="mini-tests-section">
   <div class="mini-tests-header">
-    <h2>Mini test &amp; speaking practice</h2>
-    <p>Complete the test, check your answers, and then make the examples personal.</p>
+    <h2>Mini tests &amp; speaking practice</h2>
+    <p>Complete each set, check your answers, and then make the speaking patterns personal.</p>
   </div>
-
   <div class="mini-tests-grid">
-    <article class="mini-test-card" data-mini-test>
-      <h3>University</h3>
-      <p class="mini-test-note">Write <strong>a</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
-
-      <label class="mini-question">
-        1. She wants to go to
-        <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 1" autocomplete="off">
-        university next year.
-      </label>
-
-      <label class="mini-question">
-        2. There is
-        <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 2" autocomplete="off">
-        university near my house.
-      </label>
-
-      <label class="mini-question">
-        3. I went to
-        <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 3" autocomplete="off">
-        university to meet a professor.
-      </label>
-
-      <button class="mini-check" type="button">Check answers</button>
-      <div class="mini-result" aria-live="polite"></div>
-
-      <h4 class="speaking-title">Speaking Practice</h4>
-      <p class="speaking-instruction">Click each pattern to reveal the article. Then make a true sentence about yourself.</p>
-
-      <div class="speaking-patterns">
-        <button class="flip-card speaking-card" type="button" aria-label="University and years of study">
-          <span class="flip-card-inner">
-            <span class="flip-card-front">
-              <span class="difference-label">PATTERN 1</span>
-              <strong>university + years of study</strong>
-              <span class="flip-hint">Click to reveal the article</span>
-            </span>
-            <span class="flip-card-back">
-              <strong>Ø university</strong><br>
-              I went to university for four years.
-            </span>
-          </span>
-        </button>
-
-        <button class="flip-card speaking-card" type="button" aria-label="University nearby">
-          <span class="flip-card-inner">
-            <span class="flip-card-front">
-              <span class="difference-label">PATTERN 2</span>
-              <strong>university + nearby</strong>
-              <span class="flip-hint">Click to reveal the article</span>
-            </span>
-            <span class="flip-card-back">
-              <strong>a university</strong><br>
-              There is a university near my home.
-            </span>
-          </span>
-        </button>
-
-        <button class="flip-card speaking-card" type="button" aria-label="University and reason to go there">
-          <span class="flip-card-inner">
-            <span class="flip-card-front">
-              <span class="difference-label">PATTERN 3</span>
-              <strong>university + reason to go there</strong>
-              <span class="flip-hint">Click to reveal the article</span>
-            </span>
-            <span class="flip-card-back">
-              <strong>the university</strong><br>
-              I went to the university to meet a professor.
-            </span>
-          </span>
-        </button>
-      </div>
-    </article>
+<article class="mini-test-card" data-mini-test>
+  <h3>University</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I studied at <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 1" autocomplete="off"> university for four years.</label>
+  <label class="mini-question">2. There is <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 2" autocomplete="off"> university near my house.</label>
+  <label class="mini-question">3. I went to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 3" autocomplete="off"> university to meet a professor.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="university + years of study">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>university + years of study</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø university</strong><br>
+      I studied at university for four years.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="university + nearby">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>university + nearby</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>a university</strong><br>
+      There is a university near my house.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="university + reason to go there">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>university + reason to go there</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the university</strong><br>
+      I went to the university to meet a professor.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>School &amp; Hospital</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I went to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> school to speak to a teacher.</label>
+  <label class="mini-question">2. I enjoyed <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 2" autocomplete="off"> school when I was younger.</label>
+  <label class="mini-question">3. I went to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 3" autocomplete="off"> hospital to visit a friend.</label>
+  <label class="mini-question">4. There is <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 4" autocomplete="off"> hospital near the station.</label>
+  <label class="mini-question">5. I was in <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 5" autocomplete="off"> hospital for a few days.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="school + reason to go there">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>school + reason to go there</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the school</strong><br>
+      I went to the school to speak to a teacher.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="school + like/dislike">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>school + like/dislike</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø school</strong><br>
+      I enjoyed school when I was younger.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="hospital + reason to go there">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>hospital + reason to go there</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the hospital</strong><br>
+      I went to the hospital to visit a friend.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="hospital + nearby">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>hospital + nearby</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>a hospital</strong><br>
+      There is a hospital near the station.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="hospital + time as a patient">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 5</span>
+      <strong>hospital + time as a patient</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø hospital</strong><br>
+      I was in hospital for a few days.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>City &amp; Travel</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I usually arrive at <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> airport two hours before my flight.</label>
+  <label class="mini-question">2. <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 2" autocomplete="off"> city I live in is quite busy.</label>
+  <label class="mini-question">3. I’d like to visit <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 3" autocomplete="off"> city I’ve never been to before.</label>
+  <label class="mini-question">4. I usually travel during <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 4" autocomplete="off"> holidays.</label>
+  <label class="mini-question">5. I’m planning <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 5" autocomplete="off"> holiday for October.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="airport + arrival time">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>airport + arrival time</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the airport</strong><br>
+      I usually arrive at the airport two hours before my flight.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="city + describe where you live">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>city + describe where you live</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the city</strong><br>
+      The city I live in is quite busy.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="city + one you would like to visit">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>city + one you would like to visit</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>a city</strong><br>
+      I’d like to visit a city I’ve never been to before.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="holidays + usual travel period">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>holidays + usual travel period</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the holidays</strong><br>
+      I usually travel during the holidays.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="holiday + one planned trip">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 5</span>
+      <strong>holiday + one planned trip</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>a holiday</strong><br>
+      I’m planning a holiday for October.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Transport &amp; Traffic</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I took a taxi to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> station.</label>
+  <label class="mini-question">2. <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 2" autocomplete="off"> traffic is terrible in the morning.</label>
+  <label class="mini-question">3. I usually take <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 3" autocomplete="off"> bus to work.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="station + time you usually get there">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>station + time you usually get there</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the station</strong><br>
+      I took a taxi to the station.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="traffic + morning or evening">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>traffic + morning or evening</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø traffic</strong><br>
+      Traffic is terrible in the morning.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="bus + getting to work">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>bus + getting to work</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the bus</strong><br>
+      I usually take the bus to work.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Daily Routine</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I normally go to <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 1" autocomplete="off"> bed before midnight.</label>
+  <label class="mini-question">2. I usually go <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 2" autocomplete="off"> home straight after work.</label>
+  <label class="mini-question">3. I usually finish <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 3" autocomplete="off"> work at six.</label>
+  <label class="mini-question">4. We had <input class="article-input" type="text" data-answer="an" aria-label="Article in sentence 4" autocomplete="off"> early lunch today.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="bed + usual bedtime">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>bed + usual bedtime</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø bed</strong><br>
+      I normally go to bed before midnight.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="home + time to go after work">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>home + time to go after work</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø home</strong><br>
+      I usually go home straight after work.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="work + finishing time">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>work + finishing time</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø work</strong><br>
+      I usually finish work at six.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="lunch + unusual time">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>lunch + unusual time</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>an early lunch</strong><br>
+      We had an early lunch today.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Water, Food &amp; Coffee</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> water from my tap tastes strange.</label>
+  <label class="mini-question">2. I try to drink more <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 2" autocomplete="off"> water.</label>
+  <label class="mini-question">3. <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 3" autocomplete="off"> food at that restaurant was excellent.</label>
+  <label class="mini-question">4. I drink <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 4" autocomplete="off"> coffee every morning.</label>
+  <label class="mini-question">5. I don’t like taking <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 5" autocomplete="off"> medicine unless I have to.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="water + your tap">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>water + your tap</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the water</strong><br>
+      The water from my tap tastes strange.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="water + daily habit">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>water + daily habit</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø water</strong><br>
+      I try to drink more water.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="food + one particular restaurant">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>food + one particular restaurant</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the food</strong><br>
+      The food at that restaurant was excellent.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="coffee + habit">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>coffee + habit</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø coffee</strong><br>
+      I drink coffee every morning.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="medicine + general attitude">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 5</span>
+      <strong>medicine + general attitude</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø medicine</strong><br>
+      I don’t like taking medicine unless I have to.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Money &amp; Services</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. What is <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> price of this course?</label>
+  <label class="mini-question">2. I spent <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 2" autocomplete="off"> money I had saved for my trip.</label>
+  <label class="mini-question">3. I try to save <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 3" autocomplete="off"> money every month.</label>
+  <label class="mini-question">4. I need to go to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 4" autocomplete="off"> bank after work.</label>
+  <label class="mini-question">5. Is there <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 5" autocomplete="off"> bank near here?</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="price + how much something costs">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>price + how much something costs</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the price</strong><br>
+      What is the price of this course?
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="money + specific savings">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>money + specific savings</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the money</strong><br>
+      I spent the money I had saved for my trip.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="money + saving habit">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>money + saving habit</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø money</strong><br>
+      I try to save money every month.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="bank + reason to go">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>bank + reason to go</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the bank</strong><br>
+      I need to go to the bank after work.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="bank + nearby">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 5</span>
+      <strong>bank + nearby</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>a bank</strong><br>
+      Is there a bank near here?
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Technology</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> Wi-Fi in my flat is terrible.</label>
+  <label class="mini-question">2. <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 2" autocomplete="off"> technology makes life easier.</label>
+  <label class="mini-question">3. I downloaded <input class="article-input" type="text" data-answer="an" aria-label="Article in sentence 3" autocomplete="off"> app to learn French.</label>
+  <label class="mini-question">4. I use <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 4" autocomplete="off"> internet every day.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="Wi-Fi + connection at home">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>Wi-Fi + connection at home</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the Wi-Fi</strong><br>
+      The Wi-Fi in my flat is terrible.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="technology + general opinion">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>technology + general opinion</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø technology</strong><br>
+      Technology makes life easier.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="app + recent download">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>app + recent download</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>an app</strong><br>
+      I downloaded an app to learn French.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="internet + daily use">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>internet + daily use</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the internet</strong><br>
+      I use the internet every day.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Media &amp; Information</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I spend too much time on <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 1" autocomplete="off"> social media.</label>
+  <label class="mini-question">2. I listen to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 2" autocomplete="off"> news in the morning.</label>
+  <label class="mini-question">3. I don’t watch <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 3" autocomplete="off"> TV very much.</label>
+  <label class="mini-question">4. <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 4" autocomplete="off"> information in the email wasn’t clear.</label>
+  <label class="mini-question">5. I need <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 5" autocomplete="off"> information about the course.</label>
+  <label class="mini-question">6. I often ask my friends for <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 6" autocomplete="off"> advice.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="social media + time spent">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>social media + time spent</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø social media</strong><br>
+      I spend too much time on social media.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="news + habit">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>news + habit</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the news</strong><br>
+      I listen to the news in the morning.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="TV + watching habit">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>TV + watching habit</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø TV</strong><br>
+      I don’t watch TV very much.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="information + one specific email">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>information + one specific email</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the information</strong><br>
+      The information in the email wasn’t clear.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="information + something you need">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 5</span>
+      <strong>information + something you need</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø information</strong><br>
+      I need information about the course.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="advice + asking people">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 6</span>
+      <strong>advice + asking people</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø advice</strong><br>
+      I often ask my friends for advice.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Work &amp; People</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I need to speak to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> manager.</label>
+  <label class="mini-question">2. I got <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 2" autocomplete="off"> job I applied for.</label>
+  <label class="mini-question">3. I like <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 3" autocomplete="off"> colleagues I work with.</label>
+  <label class="mini-question">4. I enjoy meeting new <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 4" autocomplete="off"> people.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="manager + speak">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>manager + speak</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the manager</strong><br>
+      I need to speak to the manager.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="job + result after applying">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>job + result after applying</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the job</strong><br>
+      I got the job I applied for.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="colleagues + your team">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 3</span>
+      <strong>colleagues + your team</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the colleagues</strong><br>
+      I like the colleagues I work with.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="people + meeting generally">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 4</span>
+      <strong>people + meeting generally</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø people</strong><br>
+      I enjoy meeting new people.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Health Appointments</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I need to see <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> doctor.</label>
+  <label class="mini-question">2. I’m going to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 2" autocomplete="off"> dentist tomorrow.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="doctor + medical help">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>doctor + medical help</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the doctor</strong><br>
+      I need to see the doctor.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="dentist + reason or time">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>dentist + reason or time</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the dentist</strong><br>
+      I’m going to the dentist tomorrow.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Leisure</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. I don’t go to <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 1" autocomplete="off"> cinema very often.</label>
+  <label class="mini-question">2. I listen to <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 2" autocomplete="off"> music while I work.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="cinema + how often you go">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>cinema + how often you go</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>the cinema</strong><br>
+      I don’t go to the cinema very often.
+    </span>
+  </span>
+</button>
+<button class="flip-card speaking-card" type="button" aria-label="music + like or dislike">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 2</span>
+      <strong>music + like or dislike</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>Ø music</strong><br>
+      I listen to music while I work.
+    </span>
+  </span>
+</button></div>
+</article>
+<article class="mini-test-card" data-mini-test>
+  <h3>Animals</h3>
+  <p class="mini-test-note">Write <strong>a</strong>, <strong>an</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+  <label class="mini-question">1. My neighbour has <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 1" autocomplete="off"> dog.</label>
+  <button class="mini-check" type="button">Check answers</button>
+  <div class="mini-result" aria-live="polite"></div>
+  <h4 class="speaking-title">Speaking Practice</h4>
+  <p class="speaking-instruction">Click a pattern to reveal the article. Then make a true sentence about yourself.</p>
+  <div class="speaking-patterns"><button class="flip-card speaking-card" type="button" aria-label="animal your friend owns">
+  <span class="flip-card-inner">
+    <span class="flip-card-front">
+      <span class="difference-label">PATTERN 1</span>
+      <strong>animal your friend owns</strong>
+    </span>
+    <span class="flip-card-back">
+      <strong>a dog</strong><br>
+      My neighbour has a dog.
+    </span>
+  </span>
+</button></div>
+</article>
   </div>
 </section>
-
-
 
 
 <script>
