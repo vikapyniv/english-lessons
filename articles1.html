@@ -486,6 +486,41 @@ main{
   }
 </style>
 
+
+<style>
+  .mini-tests-section{
+    max-width:1200px;
+    margin:24px auto 56px;
+    padding:28px;
+    border:1px solid #e7e7e7;
+    border-radius:22px;
+    background:#fafafa;
+  }
+  .mini-tests-header{text-align:center;margin-bottom:22px}
+  .mini-tests-header h2{margin:0 0 8px;font-size:30px}
+  .mini-tests-header p{margin:0;color:var(--muted);font-size:17px}
+  .mini-tests-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+  .mini-test-card{padding:20px;border:1px solid #dedede;border-radius:18px;background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.05)}
+  .mini-test-card>h3{margin:0 0 6px;font-size:23px;color:#216f3d}
+  .mini-test-note{margin:0 0 16px;color:var(--muted);font-size:14px}
+  .mini-question{display:block;margin:0 0 12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fcfcff;line-height:1.5}
+  .article-input{width:72px;margin:0 5px;padding:7px 8px;border:2px solid #cfd3dd;border-radius:9px;background:#fff;text-align:center;font-weight:850;color:var(--ink)}
+  .article-input.correct{border-color:#62b783!important;background:#e9f8ef!important;color:#216f3d}
+  .article-input.wrong{border-color:#d86c6c!important;background:#fff0f0!important;color:#a62f2f}
+  .mini-check{width:100%;margin-top:4px;background:#216f3d;color:#fff;border-color:#216f3d}
+  .mini-result{min-height:22px;margin:10px 0 18px;font-weight:850;color:#216f3d}
+  .speaking-title{margin:18px 0 6px;font-size:19px}
+  .speaking-instruction{margin:0 0 12px;color:var(--muted);font-size:14px;line-height:1.45}
+  .speaking-patterns{display:grid;gap:10px}
+  .speaking-card,.speaking-card .flip-card-inner{min-height:118px}
+  .speaking-card .flip-card-front,.speaking-card .flip-card-back{padding:13px}
+  .speaking-card .difference-label{color:#654194;margin-bottom:6px}
+  .speaking-card .flip-card-front{justify-content:center;text-align:center}
+  .speaking-card .flip-card-back{font-size:14px;line-height:1.4}
+  .speaking-card .flip-hint{margin-top:8px;font-size:11px}
+  @media(max-width:900px){.mini-tests-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:600px){.mini-tests-grid{grid-template-columns:1fr}.mini-tests-section{padding:18px}}
+</style>
 </head>
 <body>
 
@@ -1010,6 +1045,89 @@ initDragAndDrop();
   </div>
 </section>
 
+<section class="mini-tests-section">
+  <div class="mini-tests-header">
+    <h2>Mini test &amp; speaking practice</h2>
+    <p>Complete the test, check your answers, and then make the examples personal.</p>
+  </div>
+
+  <div class="mini-tests-grid">
+    <article class="mini-test-card" data-mini-test>
+      <h3>University</h3>
+      <p class="mini-test-note">Write <strong>a</strong>, <strong>the</strong> or <strong>—</strong> in each gap.</p>
+
+      <label class="mini-question">
+        1. She wants to go to
+        <input class="article-input" type="text" data-answer="zero" aria-label="Article in sentence 1" autocomplete="off">
+        university next year.
+      </label>
+
+      <label class="mini-question">
+        2. There is
+        <input class="article-input" type="text" data-answer="a" aria-label="Article in sentence 2" autocomplete="off">
+        university near my house.
+      </label>
+
+      <label class="mini-question">
+        3. I went to
+        <input class="article-input" type="text" data-answer="the" aria-label="Article in sentence 3" autocomplete="off">
+        university to meet a professor.
+      </label>
+
+      <button class="mini-check" type="button">Check answers</button>
+      <div class="mini-result" aria-live="polite"></div>
+
+      <h4 class="speaking-title">Speaking Practice</h4>
+      <p class="speaking-instruction">Click each pattern to reveal the article. Then make a true sentence about yourself.</p>
+
+      <div class="speaking-patterns">
+        <button class="flip-card speaking-card" type="button" aria-label="University and years of study">
+          <span class="flip-card-inner">
+            <span class="flip-card-front">
+              <span class="difference-label">PATTERN 1</span>
+              <strong>university + years of study</strong>
+              <span class="flip-hint">Click to reveal the article</span>
+            </span>
+            <span class="flip-card-back">
+              <strong>Ø university</strong><br>
+              I went to university for four years.
+            </span>
+          </span>
+        </button>
+
+        <button class="flip-card speaking-card" type="button" aria-label="University nearby">
+          <span class="flip-card-inner">
+            <span class="flip-card-front">
+              <span class="difference-label">PATTERN 2</span>
+              <strong>university + nearby</strong>
+              <span class="flip-hint">Click to reveal the article</span>
+            </span>
+            <span class="flip-card-back">
+              <strong>a university</strong><br>
+              There is a university near my home.
+            </span>
+          </span>
+        </button>
+
+        <button class="flip-card speaking-card" type="button" aria-label="University and reason to go there">
+          <span class="flip-card-inner">
+            <span class="flip-card-front">
+              <span class="difference-label">PATTERN 3</span>
+              <strong>university + reason to go there</strong>
+              <span class="flip-hint">Click to reveal the article</span>
+            </span>
+            <span class="flip-card-back">
+              <strong>the university</strong><br>
+              I went to the university to meet a professor.
+            </span>
+          </span>
+        </button>
+      </div>
+    </article>
+  </div>
+</section>
+
+
 
 
 <script>
@@ -1017,6 +1135,41 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.flip-card').forEach(function(card) {
     card.addEventListener('click', function() {
       card.classList.toggle('flipped');
+    });
+  });
+});
+</script>
+
+<script>
+document.querySelectorAll('[data-mini-test]').forEach(function(test){
+  const inputs=[...test.querySelectorAll('.article-input')];
+  const result=test.querySelector('.mini-result');
+
+  function normalise(value){
+    const answer=value.trim().toLowerCase();
+    if(['—','–','-','ø','zero','no article','nothing'].includes(answer)) return 'zero';
+    return answer;
+  }
+
+  test.querySelector('.mini-check').addEventListener('click',function(){
+    let correct=0;
+    inputs.forEach(function(input){
+      input.classList.remove('correct','wrong');
+      const value=normalise(input.value);
+      if(value===input.dataset.answer){
+        input.classList.add('correct');
+        correct++;
+      }else{
+        input.classList.add('wrong');
+      }
+    });
+    result.textContent=correct+' / '+inputs.length+' correct';
+  });
+
+  inputs.forEach(function(input){
+    input.addEventListener('input',function(){
+      input.classList.remove('correct','wrong');
+      result.textContent='';
     });
   });
 });
