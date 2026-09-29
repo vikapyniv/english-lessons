@@ -521,6 +521,51 @@ main{
   @media(max-width:900px){.mini-tests-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   @media(max-width:600px){.mini-tests-grid{grid-template-columns:1fr}.mini-tests-section{padding:18px}}
 </style>
+
+<style>
+  /* Compact comparison cards */
+  .difference-grid{align-items:stretch}
+  .difference-label{
+    align-self:flex-start;
+    display:inline-flex;
+    width:auto;
+    margin:0 0 8px;
+    padding:4px 8px;
+    border-radius:999px;
+    background:#f1edff;
+    color:#654194;
+    font-size:10px;
+    line-height:1;
+    letter-spacing:.1em;
+  }
+  .difference-sentence{
+    margin:4px 0;
+    padding:7px 9px;
+    border-radius:9px;
+    background:#f7f8fa;
+    color:#343841;
+    font-size:13px;
+    line-height:1.3;
+  }
+  .difference-sentence strong{
+    color:#216f3d;
+    font-weight:900;
+  }
+  .flip-card-front{gap:2px}
+  .flip-card-front .flip-hint{
+    margin-top:6px;
+    font-size:9px;
+    letter-spacing:.08em;
+  }
+  .difference-grid>.flip-card .flip-card-back{
+    padding:12px;
+    font-size:13px;
+    line-height:1.4;
+  }
+  .difference-grid>.flip-card .flip-card-back strong{
+    color:#654194;
+  }
+</style>
 </head>
 <body>
 
@@ -751,10 +796,6 @@ main{
           He was taken to <span class="zero-mark">hospital</span> after the accident.
         </div>
 
-        <div class="sentence" draggable="true" data-answer="zero-purpose">
-          She wants to go to <span class="zero-mark">university</span> next year.
-        </div>
-
         
         <div class="sentence" draggable="true" data-answer="zero-fixed">
           I’m going to <span class="zero-mark">bed</span> now.
@@ -808,7 +849,6 @@ main{
         <b>Main purpose of the place</b>
         <div>Children go to <strong>school</strong> every day.</div>
         <div>He was taken to <strong>hospital</strong> after the accident.</div>
-        <div>She wants to go to <strong>university</strong> next year.</div>
               </div>
 
       <div class="answer-card">
