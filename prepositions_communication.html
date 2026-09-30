@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Prepositions of Communication, Opinions, Interaction</title>
+<style>
+    :root{
+        --bg:#f6f7fb;
+        --card:#ffffff;
+        --text:#1d2433;
+        --muted:#667085;
+        --line:#dfe3ea;
+        --soft:#eef2f7;
+        --accent:#293241;
+        --accent2:#e9eef5;
+    }
+    *{box-sizing:border-box}
+    body{
+        margin:0;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        background:var(--bg);
+        color:var(--text);
+        line-height:1.45;
+    }
+    .page{
+        max-width:1500px;
+        margin:0 auto;
+        padding:34px 24px 60px;
+    }
+    h1{
+        margin:0 0 10px;
+        font-size:clamp(30px, 4vw, 52px);
+        line-height:1.08;
+        letter-spacing:-1.3px;
+    }
+    .subtitle{
+        margin:0 0 28px;
+        color:var(--muted);
+        font-size:16px;
+        max-width:900px;
+    }
+    .section{
+        background:var(--card);
+        border:1px solid var(--line);
+        border-radius:20px;
+        margin:0 0 24px;
+        overflow:hidden;
+        box-shadow:0 8px 24px rgba(20,30,50,.045);
+    }
+    .section-title{
+        padding:18px 22px;
+        border-bottom:1px solid var(--line);
+        background:#fafbfc;
+        font-size:21px;
+        font-weight:800;
+    }
+    .grid{
+        display:grid;
+        grid-template-columns: 0.9fr 1.35fr 1fr;
+        min-height:350px;
+    }
+    .col{
+        padding:22px;
+        border-right:1px solid var(--line);
+    }
+    .col:last-child{border-right:none}
+    .eyebrow{
+        font-size:12px;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        color:var(--muted);
+        font-weight:800;
+        margin-bottom:10px;
+    }
+    .idea{
+        font-size:17px;
+        font-weight:700;
+        margin-bottom:12px;
+    }
+    .small{
+        color:var(--muted);
+        font-size:14px;
+    }
+    .questions{
+        margin:0;
+        padding-left:22px;
+    }
+    .questions li{
+        margin:0 0 13px;
+        padding-left:4px;
+    }
+    .bank{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    }
+    .bank-item{
+        background:var(--soft);
+        border-radius:12px;
+        padding:10px 12px;
+        font-size:14px;
+    }
+    .bank-item b{font-weight:800}
+    .patterns{
+        border-top:1px solid var(--line);
+        padding:18px 22px 20px;
+        background:#fcfcfd;
+    }
+    .pattern-list{
+        display:flex;
+        flex-wrap:wrap;
+        gap:9px;
+        margin-top:10px;
+    }
+    .pill{
+        border:1px solid #cfd6e0;
+        background:#fff;
+        border-radius:999px;
+        padding:7px 11px;
+        font-size:13px;
+        font-weight:650;
+    }
+    .note{
+        margin-top:26px;
+        background:#fff;
+        border:1px dashed #bcc5d1;
+        border-radius:16px;
+        padding:18px 20px;
+        color:#475467;
+        font-size:14px;
+    }
+    @media (max-width: 980px){
+        .grid{grid-template-columns:1fr}
+        .col{border-right:none;border-bottom:1px solid var(--line)}
+        .col:last-child{border-bottom:none}
+    }
+
+    .question-stack{
+        display:flex;
+        flex-direction:column;
+        gap:14px;
+    }
+    .question-card{
+        padding:14px 0;
+        border-bottom:1px solid var(--line);
+    }
+    .question-card:last-child{
+        border-bottom:none;
+    }
+    .question-text{
+        font-size:16px;
+        font-weight:700;
+        margin-bottom:9px;
+    }
+    .question-patterns{
+        display:flex;
+        flex-wrap:wrap;
+        gap:7px;
+    }
+    .mini-pattern{
+        display:inline-block;
+        background:#f5f7fa;
+        border:1px solid #d7dde6;
+        border-radius:10px;
+        padding:6px 9px;
+        font-size:12.5px;
+        font-weight:650;
+        color:#344054;
+    }
+
+    .bank-item{
+        line-height:1.5;
+    }
+    .bank-item b{
+        letter-spacing:.02em;
+    }
+
+    .video-wrap{
+        margin-top:14px;
+        position:relative;
+        width:100%;
+        aspect-ratio:9/16;
+        max-height:520px;
+        border-radius:16px;
+        overflow:hidden;
+        background:#111;
+    }
+    .video-wrap iframe{
+        width:100%;
+        height:100%;
+        display:block;
+    }
+
+    .antonym{
+        color:#7a3db8 !important;
+        border-color:#b99ad8 !important;
+        background:#f6effc !important;
+    }
+    .antonym b{
+        color:#7a3db8 !important;
+    }
+    .target{
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.01em;
+    }
+
+    .test-section{
+        margin-top:34px;
+        padding-top:10px;
+    }
+    .test-header{
+        margin-bottom:18px;
+    }
+    .test-header h2{
+        margin:0 0 7px;
+        font-size:30px;
+        letter-spacing:-.5px;
+    }
+    .test-header p{
+        margin:0;
+        color:var(--muted);
+        font-size:14px;
+    }
+    .test-grid{
+        display:grid;
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+        gap:16px;
+    }
+    .test-card{
+        background:#fff;
+        border:1px solid var(--line);
+        border-radius:16px;
+        padding:16px;
+        box-shadow:0 5px 16px rgba(20,30,50,.035);
+    }
+    .test-card-title{
+        font-size:14px;
+        font-weight:850;
+        letter-spacing:.04em;
+        text-transform:uppercase;
+        margin-bottom:12px;
+    }
+    .quiz-row{
+        padding:11px 0;
+        border-top:1px solid #edf0f4;
+    }
+    .quiz-row:first-of-type{
+        border-top:none;
+        padding-top:0;
+    }
+    .quiz-sentence{
+        font-size:14px;
+        line-height:1.55;
+        margin-bottom:8px;
+    }
+    .blank-input{
+        width:84px;
+        padding:6px 8px;
+        border:1px solid #cfd6df;
+        border-radius:8px;
+        font:inherit;
+        text-transform:uppercase;
+        background:#fff;
+        outline:none;
+    }
+    .blank-input:focus{
+        border-color:#8795a8;
+        box-shadow:0 0 0 3px rgba(82,102,128,.08);
+    }
+    .quiz-actions{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        flex-wrap:wrap;
+    }
+    .check-btn{
+        border:1px solid #b9c2ce;
+        background:#f8fafc;
+        color:#253041;
+        border-radius:8px;
+        padding:6px 10px;
+        font-size:12px;
+        font-weight:750;
+        cursor:pointer;
+    }
+    .check-btn:hover{
+        background:#eef2f6;
+    }
+    .feedback{
+        min-height:18px;
+        font-size:12px;
+        font-weight:750;
+    }
+    .feedback.correct{color:#217a4b}
+    .feedback.wrong{color:#b42318}
+    .blank-input.correct{
+        border-color:#67b98b;
+        background:#f0faf4;
+    }
+    .blank-input.wrong{
+        border-color:#e18a82;
+        background:#fff5f4;
+    }
+    @media (max-width: 1050px){
+        .test-grid{grid-template-columns:repeat(2, minmax(0,1fr))}
+    }
+    @media (max-width: 700px){
+        .test-grid{grid-template-columns:1fr}
+    }
+
+.section-quiz{border-top:1px solid var(--line);background:#fbfcfe;padding:0 22px 20px}
+.quiz-details{margin-top:18px;border:1px solid #d9dfe8;border-radius:14px;background:#fff;overflow:hidden}
+.quiz-details summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:800;font-size:14px;background:#f7f9fc;user-select:none}
+.quiz-details summary::-webkit-details-marker{display:none}
+.quiz-details summary::after{content:"＋";float:right;font-size:18px;line-height:1;color:#667085}
+.quiz-details[open] summary::after{content:"−"}
+.quiz-body{padding:14px 16px 16px}
+.quiz-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.quiz-item{border:1px solid #e4e8ef;border-radius:12px;padding:12px;background:#fff}
+.quiz-sentence{font-size:13px;line-height:1.55;margin-bottom:9px}
+.blank-input{width:80px;padding:5px 7px;border:1px solid #cfd6df;border-radius:7px;font:inherit;text-transform:uppercase;outline:none}
+.blank-input.correct{border-color:#67b98b;background:#f0faf4}
+.blank-input.wrong{border-color:#e18a82;background:#fff5f4}
+.quiz-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.check-btn{border:1px solid #b9c2ce;background:#f8fafc;color:#253041;border-radius:8px;padding:6px 10px;font-size:12px;font-weight:750;cursor:pointer}
+.feedback{min-height:18px;font-size:12px;font-weight:750}
+.feedback.correct{color:#217a4b}.feedback.wrong{color:#b42318}
+@media (max-width:1000px){.quiz-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:650px){.quiz-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+<h1>Prepositions of Communication, Opinions, Interaction</h1>
+<p class="subtitle">AGREE ON • OBJECT TO • APOLOGISE FOR • WARN ABOUT • REMIND OF</p>
+<section class="section">
+<div class="section-title">1. Agreeing, Disagreeing &amp; Public Opinions</div>
+<div class="grid">
+<div class="col"><div class="eyebrow">News / video</div><div class="idea">Elon Musk says “AI will make work optional” 🤯</div><div class="video-wrap"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/rdGMRKdOpH4" title="Elon Musk says “AI will make work optional”"></iframe></div></div>
+<div class="col"><div class="eyebrow">Discussion questions</div><div class="question-stack"><div class="question-card"><div class="question-text">1. What part of the statement do you agree or disagree with?</div><div class="question-patterns"><span class="mini-pattern antonym">AGREE ABOUT something</span><span class="mini-pattern antonym">OBJECT TO something / doing something</span></div></div><div class="question-card"><div class="question-text">2. Is there any idea, proposal, or decision here that you would accept or oppose?</div><div class="question-patterns"><span class="mini-pattern">AGREE TO something</span><span class="mini-pattern">APPROVE OF something</span></div></div><div class="question-card"><div class="question-text">3. What solution could people agree on, and would you argue for or against it?</div><div class="question-patterns"><span class="mini-pattern">AGREE ON something</span><span class="mini-pattern">ARGUE FOR something</span><span class="mini-pattern">ARGUE / PROTEST AGAINST something</span></div></div></div></div>
+<div class="col">
+<div class="eyebrow">Language bank</div>
+<div class="bank"><div class="bank-item antonym">We <b class="target">AGREE ABOUT</b> (the same view) the main problem.</div><div class="bank-item">We finally <b class="target">AGREED ON</b> (reach the same decision) a solution.</div><div class="bank-item">They <b class="target">AGREED TO</b> (accept) the proposal.</div><div class="bank-item">I <b class="target">APPROVE OF</b> (think it is good / right) the decision.</div><div class="bank-item antonym">I <b class="target">OBJECT TO</b> (oppose) the decision.</div><div class="bank-item">I would <b class="target">ARGUE FOR</b> (support) stricter rules.</div><div class="bank-item">I would <b class="target">ARGUE / PROTEST AGAINST</b> (oppose) stricter rules.</div></div>
+</div>
+</div>
+<div class="section-quiz"><details class="quiz-details"><summary>Check your knowledge</summary><div class="quiz-body"><div class="quiz-grid"><div class="quiz-item"><div class="quiz-sentence">We agree <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="about" id="sq1" spellcheck="false" type="text"/> the main problem.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq1')" type="button">Check answer</button><span class="feedback" id="sq1-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The team finally agreed <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="on" id="sq2" spellcheck="false" type="text"/> one solution.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq2')" type="button">Check answer</button><span class="feedback" id="sq2-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">They agreed <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq3" spellcheck="false" type="text"/> the proposal.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq3')" type="button">Check answer</button><span class="feedback" id="sq3-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">I don't approve <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="of" id="sq4" spellcheck="false" type="text"/> replacing people completely with AI.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq4')" type="button">Check answer</button><span class="feedback" id="sq4-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Many employees object <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq5" spellcheck="false" type="text"/> being monitored at work.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq5')" type="button">Check answer</button><span class="feedback" id="sq5-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Some experts argue <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="for" id="sq6" spellcheck="false" type="text"/> stricter rules.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq6')" type="button">Check answer</button><span class="feedback" id="sq6-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Thousands protested <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="against" id="sq7" spellcheck="false" type="text"/> the new policy.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq7')" type="button">Check answer</button><span class="feedback" id="sq7-feedback"></span></div></div></div></div></details></div></section>
+<section class="section">
+<div class="section-title">2. Reactions, Comments &amp; Public Debate</div>
+<div class="grid">
+<div class="col"><div class="eyebrow">News / video</div><div class="idea">YouTube Short</div><div class="video-wrap"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/Dl90C7JZDcM" title="YouTube Short"></iframe></div></div>
+<div class="col"><div class="eyebrow">Discussion questions</div><div class="question-stack"><div class="question-card"><div class="question-text">1. How did people react to this news?</div><div class="question-patterns"><span class="mini-pattern">REACT TO / RESPOND TO something</span></div></div><div class="question-card"><div class="question-text">2. What would you comment on if you saw this online?</div><div class="question-patterns"><span class="mini-pattern">COMMENT ON something</span><span class="mini-pattern">FOCUS ON something</span></div></div><div class="question-card"><div class="question-text">3. Would you discuss this story with friends? What part would you mention first?</div><div class="question-patterns"><span class="mini-pattern">DISCUSS / MENTION something</span><span class="mini-pattern">REFER TO somebody / something</span></div></div></div></div>
+<div class="col">
+<div class="eyebrow">Language bank</div>
+<div class="bank"><div class="bank-item">People <b class="target">REACTED TO / RESPONDED TO</b> the announcement.</div><div class="bank-item">I would <b class="target">COMMENT ON</b> (give an opinion) the price.</div><div class="bank-item">I would <b class="target">FOCUS ON</b> the long-term effects.</div><div class="bank-item">I would <b class="target">DISCUSS / MENTION</b> the story with friends.</div><div class="bank-item">The speaker <b class="target">REFERS TO</b> (mentions / points to) job losses.</div></div>
+</div>
+</div>
+<div class="section-quiz"><details class="quiz-details"><summary>Check your knowledge</summary><div class="quiz-body"><div class="quiz-grid"><div class="quiz-item"><div class="quiz-sentence">How did people react <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq8" spellcheck="false" type="text"/> the announcement?</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq8')" type="button">Check answer</button><span class="feedback" id="sq8-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">She responded <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq9" spellcheck="false" type="text"/> the criticism immediately.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq9')" type="button">Check answer</button><span class="feedback" id="sq9-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Several experts commented <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="on" id="sq10" spellcheck="false" type="text"/> the new policy.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq10')" type="button">Check answer</button><span class="feedback" id="sq10-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The interview focused <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="on" id="sq11" spellcheck="false" type="text"/> job security.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq11')" type="button">Check answer</button><span class="feedback" id="sq11-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">We discussed <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="" id="sq12" spellcheck="false" type="text"/> the story after class.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq12')" type="button">Check answer</button><span class="feedback" id="sq12-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">She mentioned <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="" id="sq13" spellcheck="false" type="text"/> the cost several times.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq13')" type="button">Check answer</button><span class="feedback" id="sq13-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The speaker referred <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq14" spellcheck="false" type="text"/> job losses.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq14')" type="button">Check answer</button><span class="feedback" id="sq14-feedback"></span></div></div></div></div></details></div></section>
+<section class="section">
+<div class="section-title">3. Complaints, Apologies &amp; Responsibility</div>
+<div class="grid">
+<div class="col"><div class="eyebrow">News / video</div><div class="idea">The World Owes Him an Apology</div><div class="video-wrap"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/YIInBgZ8ehk" title="The World Owes Him an Apology"></iframe></div></div>
+<div class="col"><div class="eyebrow">Discussion questions</div><div class="question-stack"><div class="question-card"><div class="question-text">1. Who should apologise, and what exactly should they apologise for?</div><div class="question-patterns"><span class="mini-pattern">APOLOGISE TO somebody</span><span class="mini-pattern">APOLOGISE FOR something / doing something</span><span class="mini-pattern">ADMIT TO something / doing something</span><span class="mini-pattern">CONFESS TO something / doing something</span></div></div><div class="question-card"><div class="question-text">2. Who would people complain to, and what would they complain about?</div><div class="question-patterns"><span class="mini-pattern">COMPLAIN TO somebody</span><span class="mini-pattern">COMPLAIN ABOUT something</span><span class="mini-pattern">CRITICISE somebody FOR something / doing something</span></div></div><div class="question-card"><div class="question-text">3. What excuse could the person or company give?</div><div class="question-patterns"><span class="mini-pattern">make an EXCUSE FOR something</span></div></div></div></div>
+<div class="col">
+<div class="eyebrow">Language bank</div>
+<div class="bank"><div class="bank-item">They should <b class="target">APOLOGISE TO</b> customers.</div><div class="bank-item">They should <b class="target">APOLOGISE FOR</b> the delay.</div><div class="bank-item">He <b class="target">ADMITTED TO</b> making a mistake.</div><div class="bank-item">I would <b class="target">COMPLAIN TO</b> the manager.</div><div class="bank-item">I would <b class="target">COMPLAIN ABOUT</b> the service.</div><div class="bank-item">They were <b class="target">CRITICISED FOR</b> hiding the problem.</div><div class="bank-item">He <b class="target">CONFESSED TO</b> lying.</div><div class="bank-item">That's a poor <b class="target">EXCUSE FOR</b> the delay.</div></div>
+</div>
+</div>
+<div class="section-quiz"><details class="quiz-details"><summary>Check your knowledge</summary><div class="quiz-body"><div class="quiz-grid"><div class="quiz-item"><div class="quiz-sentence">The company apologised <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq15" spellcheck="false" type="text"/> its customers.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq15')" type="button">Check answer</button><span class="feedback" id="sq15-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The company apologised <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="for" id="sq16" spellcheck="false" type="text"/> cancelling the event.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq16')" type="button">Check answer</button><span class="feedback" id="sq16-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">He admitted <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq17" spellcheck="false" type="text"/> making a mistake.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq17')" type="button">Check answer</button><span class="feedback" id="sq17-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">She confessed <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq18" spellcheck="false" type="text"/> lying.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq18')" type="button">Check answer</button><span class="feedback" id="sq18-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">I complained <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq19" spellcheck="false" type="text"/> the manager.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq19')" type="button">Check answer</button><span class="feedback" id="sq19-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">I complained <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="about" id="sq20" spellcheck="false" type="text"/> the poor service.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq20')" type="button">Check answer</button><span class="feedback" id="sq20-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The CEO was criticised <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="for" id="sq21" spellcheck="false" type="text"/> ignoring the warnings.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq21')" type="button">Check answer</button><span class="feedback" id="sq21-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">There is no excuse <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="for" id="sq22" spellcheck="false" type="text"/> speaking to customers like that.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq22')" type="button">Check answer</button><span class="feedback" id="sq22-feedback"></span></div></div></div></div></details></div></section>
+<section class="section">
+<div class="section-title">4. Accusations, Warnings &amp; Persuasion</div>
+<div class="grid">
+<div class="col"><div class="eyebrow">News / video</div><div class="idea">Polish PM Tusk issues stark warning that Putin could be planning to bomb UK as NATO on red alert 👀🔴</div><div class="video-wrap"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/UlcCN0E5q5c" title="Polish PM Tusk issues stark warning that Putin could be planning to bomb UK as NATO on red alert"></iframe></div></div>
+<div class="col"><div class="eyebrow">Discussion questions</div><div class="question-stack"><div class="question-card"><div class="question-text">1. What are people being warned about?</div><div class="question-patterns"><span class="mini-pattern">WARN somebody ABOUT something</span><span class="mini-pattern">WARN somebody OF something</span><span class="mini-pattern antonym">ASSURE somebody OF something</span></div></div><div class="question-card"><div class="question-text">2. Who is being accused or suspected of doing something wrong?</div><div class="question-patterns"><span class="mini-pattern">ACCUSE somebody OF something / doing something</span><span class="mini-pattern">SUSPECT somebody OF something / doing something</span></div></div><div class="question-card"><div class="question-text">3. What could convince or persuade people to change their opinion or behaviour? Who might this message appeal to?</div><div class="question-patterns"><span class="mini-pattern">CONVINCE somebody OF something</span><span class="mini-pattern">PERSUADE somebody TO do something</span><span class="mini-pattern">APPEAL TO somebody</span></div></div></div></div>
+<div class="col">
+<div class="eyebrow">Language bank</div>
+<div class="bank"><div class="bank-item">Experts <b class="target">WARNED people ABOUT</b> (tell them about a risk / problem) the situation.</div><div class="bank-item">Experts <b class="target">WARNED people OF</b> (alert them to a specific danger) a possible attack.</div><div class="bank-item">I would <b class="target">ASSURE people OF</b> (tell them confidently) their safety.</div><div class="bank-item">The company was <b class="target">ACCUSED OF</b> (say someone did something wrong) misleading customers.</div><div class="bank-item">They <b class="target">SUSPECTED him OF</b> (think someone may have done it) hiding information.</div><div class="bank-item">The evidence <b class="target">CONVINCED me OF</b> (make someone believe) the problem.</div><div class="bank-item">What would <b class="target">PERSUADE you TO</b> (make someone decide to act) change your mind?</div><div class="bank-item">The campaign <b class="target">APPEALED TO</b> (attract / interest) young voters.</div><div class="bank-item"><b class="target">SHOW OFF</b> (try to impress people)</div></div>
+</div>
+</div>
+<div class="section-quiz"><details class="quiz-details"><summary>Check your knowledge</summary><div class="quiz-body"><div class="quiz-grid"><div class="quiz-item"><div class="quiz-sentence">Officials warned people <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="about" id="sq23" spellcheck="false" type="text"/> possible delays.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq23')" type="button">Check answer</button><span class="feedback" id="sq23-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The report warned the public <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="of|about" id="sq24" spellcheck="false" type="text"/> the danger.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq24')" type="button">Check answer</button><span class="feedback" id="sq24-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The company assured customers <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="of" id="sq25" spellcheck="false" type="text"/> the safety of their data.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq25')" type="button">Check answer</button><span class="feedback" id="sq25-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">He was accused <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="of" id="sq26" spellcheck="false" type="text"/> hiding information.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq26')" type="button">Check answer</button><span class="feedback" id="sq26-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Police suspected him <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="of" id="sq27" spellcheck="false" type="text"/> leaking the documents.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq27')" type="button">Check answer</button><span class="feedback" id="sq27-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The evidence convinced me <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="of" id="sq28" spellcheck="false" type="text"/> the need for change.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq28')" type="button">Check answer</button><span class="feedback" id="sq28-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">What could persuade you <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq29" spellcheck="false" type="text"/> change your mind?</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq29')" type="button">Check answer</button><span class="feedback" id="sq29-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">The message appealed <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq30" spellcheck="false" type="text"/> younger voters.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq30')" type="button">Check answer</button><span class="feedback" id="sq30-feedback"></span></div></div></div></div></details></div></section>
+<section class="section">
+<div class="section-title">5. Direct Communication: Talking, Asking &amp; Replying</div>
+<div class="grid">
+<div class="col"><div class="eyebrow">News / video</div><div class="idea">Trump Spars With Black Journalists During NABJ Interview</div><div class="video-wrap"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/yjTatQsqyS4" title="Trump Spars With Black Journalists During NABJ Interview"></iframe></div></div>
+<div class="col"><div class="eyebrow">Discussion questions</div><div class="question-stack"><div class="question-card"><div class="question-text">1. Who is the speaker talking or speaking to, and what are they talking about?</div><div class="question-patterns"><span class="mini-pattern">TALK / SPEAK TO somebody</span><span class="mini-pattern">TALK / SPEAK WITH somebody</span><span class="mini-pattern">TALK / SPEAK ABOUT something</span><span class="mini-pattern">SPEAK ON something</span></div></div><div class="question-card"><div class="question-text">2. What would you ask this person?</div><div class="question-patterns"><span class="mini-pattern">ASK somebody a question</span></div></div><div class="question-card"><div class="question-text">3. How would you reply or explain your opinion to them?</div><div class="question-patterns"><span class="mini-pattern">REPLY / WRITE TO somebody</span><span class="mini-pattern">EXPLAIN / DESCRIBE something TO somebody</span><span class="mini-pattern">PHONE / CALL / EMAIL / TEXT somebody</span></div></div></div></div>
+<div class="col">
+<div class="eyebrow">Language bank</div>
+<div class="bank"><div class="bank-item">She <b class="target">TALKED / SPOKE TO</b> (directed her words to) the manager.</div><div class="bank-item">She <b class="target">TALKED / SPOKE WITH</b> (had a conversation with) a colleague.</div><div class="bank-item">They <b class="target">TALKED / SPOKE ABOUT</b> (topic) the new policy.</div><div class="bank-item">He <b class="target">SPOKE ON</b> (gave a formal talk / presentation on) AI at the conference.</div><div class="bank-item">I would <b class="target">ASK</b> them a question.</div><div class="bank-item">I would <b class="target">REPLY TO</b> the email.</div><div class="bank-item">I would <b class="target">EXPLAIN the problem TO</b> them.</div><div class="bank-item">I would <b class="target">CALL / EMAIL / TEXT</b> them directly.</div></div>
+</div>
+</div>
+<div class="section-quiz"><details class="quiz-details"><summary>Check your knowledge</summary><div class="quiz-body"><div class="quiz-grid"><div class="quiz-item"><div class="quiz-sentence">She talked <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to|with" id="sq31" spellcheck="false" type="text"/> the manager about the problem.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq31')" type="button">Check answer</button><span class="feedback" id="sq31-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">They talked <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="about" id="sq32" spellcheck="false" type="text"/> the new policy.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq32')" type="button">Check answer</button><span class="feedback" id="sq32-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">He spoke <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="on|about" id="sq33" spellcheck="false" type="text"/> AI regulation at the conference.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq33')" type="button">Check answer</button><span class="feedback" id="sq33-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Please reply <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq34" spellcheck="false" type="text"/> my email.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq34')" type="button">Check answer</button><span class="feedback" id="sq34-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">She wrote <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq35" spellcheck="false" type="text"/> the company yesterday.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq35')" type="button">Check answer</button><span class="feedback" id="sq35-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Can you explain the problem <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq36" spellcheck="false" type="text"/> me?</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq36')" type="button">Check answer</button><span class="feedback" id="sq36-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">He described the situation <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="to" id="sq37" spellcheck="false" type="text"/> the journalists.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq37')" type="button">Check answer</button><span class="feedback" id="sq37-feedback"></span></div></div></div></div></details></div></section>
+<section class="section">
+<div class="section-title">6. Social Interaction, Trust &amp; Recognition</div>
+<div class="grid">
+<div class="col"><div class="eyebrow">News / video</div><div class="idea">Mr. Bean Just Walks Off Stage After Receiving An Award</div><div class="video-wrap"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" frameborder="0" src="https://www.youtube.com/embed/_0IECPunR3I" title="Mr. Bean Just Walks Off Stage After Receiving An Award"></iframe></div></div>
+<div class="col"><div class="eyebrow">Discussion questions</div><div class="question-stack"><div class="question-card"><div class="question-text">1. Who deserves to be congratulated or complimented, and why?</div><div class="question-patterns"><span class="mini-pattern">CONGRATULATE somebody ON something</span><span class="mini-pattern">CONGRATULATE somebody FOR doing something</span><span class="mini-pattern">COMPLIMENT somebody ON something</span></div></div><div class="question-card"><div class="question-text">2. Who would you trust with information in this situation?</div><div class="question-patterns"><span class="mini-pattern">TRUST somebody WITH something</span><span class="mini-pattern">REMIND somebody ABOUT something</span></div></div><div class="question-card"><div class="question-text">3. Does this story remind you of anyone or anything similar?</div><div class="question-patterns"><span class="mini-pattern">REMIND somebody OF somebody / something</span></div></div></div></div>
+<div class="col">
+<div class="eyebrow">Language bank</div>
+<div class="bank"><div class="bank-item">I would <b class="target">CONGRATULATE her ON</b> (achievement / event) the promotion.</div><div class="bank-item">I would <b class="target">CONGRATULATE her FOR</b> (action / effort) handling it so well.</div><div class="bank-item">I would <b class="target">COMPLIMENT him ON</b> his response.</div><div class="bank-item">I wouldn't <b class="target">TRUST everyone WITH</b> that information.</div><div class="bank-item">I'd <b class="target">REMIND them ABOUT</b> (help them not forget) the deadline.</div><div class="bank-item">She <b class="target">REMINDS me OF</b> (makes me think of) my sister.</div></div>
+</div>
+</div>
+<div class="section-quiz"><details class="quiz-details"><summary>Check your knowledge</summary><div class="quiz-body"><div class="quiz-grid"><div class="quiz-item"><div class="quiz-sentence">Everyone congratulated her <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="on" id="sq38" spellcheck="false" type="text"/> the award.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq38')" type="button">Check answer</button><span class="feedback" id="sq38-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">I congratulated him <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="for" id="sq39" spellcheck="false" type="text"/> handling the situation well.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq39')" type="button">Check answer</button><span class="feedback" id="sq39-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">She complimented him <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="on" id="sq40" spellcheck="false" type="text"/> his clear answer.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq40')" type="button">Check answer</button><span class="feedback" id="sq40-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Would you trust this company <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="with" id="sq41" spellcheck="false" type="text"/> your personal data?</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq41')" type="button">Check answer</button><span class="feedback" id="sq41-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">Please remind me <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="about" id="sq42" spellcheck="false" type="text"/> the meeting tomorrow.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq42')" type="button">Check answer</button><span class="feedback" id="sq42-feedback"></span></div></div><div class="quiz-item"><div class="quiz-sentence">That actor reminds me <input aria-label="Missing preposition" autocomplete="off" class="blank-input" data-answers="of" id="sq43" spellcheck="false" type="text"/> my old teacher.</div><div class="quiz-actions"><button class="check-btn" onclick="checkPrep('sq43')" type="button">Check answer</button><span class="feedback" id="sq43-feedback"></span></div></div></div></div></details></div></section>
+<div class="note">
+<b>Teacher use:</b> Let students answer naturally first. Then ask them to answer again using 1–2 expressions from the Language Bank.
+        For stronger groups, hide the Language Bank during the final round and ask students to reuse the patterns from memory.
+    </div>
+</div>
+<script>
+function checkPrep(id){
+    const input = document.getElementById(id);
+    const feedback = document.getElementById(id + '-feedback');
+    if(!input || !feedback) return;
+
+    const raw = input.dataset.answers || '';
+    const accepted = raw.split('|').map(x => x.trim().toLowerCase());
+
+    const value = input.value.trim().toLowerCase();
+
+    input.classList.remove('correct','wrong');
+    feedback.classList.remove('correct','wrong');
+
+    const blankIsCorrect = accepted.includes('');
+
+    if(!value && !blankIsCorrect){
+        input.classList.add('wrong');
+        feedback.classList.add('wrong');
+        feedback.textContent = 'Type a preposition';
+        return;
+    }
+
+    if(accepted.includes(value)){
+        input.classList.add('correct');
+        feedback.classList.add('correct');
+        feedback.textContent = blankIsCorrect && value === '' ? 'Correct ✓ No preposition' : 'Correct ✓';
+    } else {
+        input.classList.add('wrong');
+        feedback.classList.add('wrong');
+        feedback.textContent = 'Try again';
+    }
+}
+
+document.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && e.target.classList.contains('blank-input')){
+        checkPrep(e.target.id);
+    }
+});
+</script></body>
+</html>
