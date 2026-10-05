@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Career Path: Apprenticeship</title>
+<style>
+  :root{
+    --bg:#f7f8fb;
+    --card:#ffffff;
+    --ink:#172033;
+    --muted:#647084;
+    --accent:#ff5e62;
+    --accent-soft:#fff0f0;
+    --blue:#3856d6;
+    --blue-soft:#eef2ff;
+    --green:#1f9d72;
+    --red:#d64545;
+    --line:#e6e9f0;
+    --shadow:0 10px 30px rgba(23,32,51,.08);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background:linear-gradient(180deg,#fff 0%,var(--bg) 100%);
+    color:var(--ink);
+  }
+  .page{
+    width:min(1180px,92vw);
+    margin:0 auto;
+    padding:40px 0 64px;
+  }
+  .hero{
+    background:linear-gradient(135deg,var(--accent) 0%,#ff7a7e 100%);
+    color:white;
+    border-radius:28px;
+    padding:34px 38px;
+    box-shadow:var(--shadow);
+    margin-bottom:28px;
+  }
+  .hero .eyebrow{
+    font-size:.78rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    opacity:.85;
+    font-weight:800;
+  }
+  .hero h1{
+    font-size:clamp(2rem,5vw,4rem);
+    line-height:1;
+    margin:10px 0 6px;
+  }
+  .hero p{margin:0;opacity:.92;font-size:1rem}
+  .section{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:26px;
+    margin-top:24px;
+  }
+  .section h2{
+    margin:0 0 6px;
+    font-size:1.45rem;
+  }
+  .section-intro{
+    margin:0 0 20px;
+    color:var(--muted);
+    line-height:1.5;
+  }
+  .grid-top{
+    display:grid;
+    grid-template-columns:minmax(0,2.2fr) minmax(250px,.8fr);
+    gap:22px;
+    align-items:start;
+  }
+  .quiz-list{display:grid;gap:12px}
+  .q{
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:15px 16px;
+    background:#fbfcff;
+  }
+  .q p{
+    margin:0 0 11px;
+    line-height:1.55;
+  }
+  .blank{
+    display:inline-block;
+    min-width:120px;
+    border-bottom:2px solid var(--ink);
+    transform:translateY(-2px);
+  }
+  .choices{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+  }
+  .choice{
+    appearance:none;
+    border:1px solid #d7dce8;
+    background:white;
+    color:var(--ink);
+    border-radius:999px;
+    padding:8px 13px;
+    font-size:.95rem;
+    cursor:pointer;
+    transition:.18s ease;
+  }
+  .choice:hover{transform:translateY(-1px);border-color:#aeb8d1}
+  .choice.correct{
+    border-color:var(--green);
+    background:#eaf8f3;
+    color:#117653;
+    font-weight:700;
+  }
+  .choice.wrong{
+    border-color:var(--red);
+    background:#fff0f0;
+    color:#ad2d2d;
+  }
+  .vocab{
+    background:var(--blue-soft);
+    border:1px solid #dfe5ff;
+    border-radius:18px;
+    padding:18px;
+    position:sticky;
+    top:18px;
+  }
+  .vocab h3{margin:0 0 12px;font-size:1.05rem}
+  .vocab ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+    display:grid;
+    gap:9px;
+  }
+  .vocab li{
+    padding-bottom:9px;
+    border-bottom:1px solid rgba(56,86,214,.12);
+    line-height:1.35;
+  }
+  .vocab li:last-child{border-bottom:0;padding-bottom:0}
+  .vocab b{color:var(--blue)}
+  .video-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.35fr) minmax(320px,.95fr);
+    gap:22px;
+    align-items:start;
+  }
+  .video-wrap{
+    aspect-ratio:16/9;
+    border-radius:18px;
+    overflow:hidden;
+    background:#111;
+    box-shadow:0 8px 24px rgba(0,0,0,.12);
+  }
+  iframe{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+  }
+  .job-card{
+    background:#fff9f0;
+    border:1px solid #f3dfbd;
+    border-radius:18px;
+    padding:18px;
+  }
+  .job-card h3{margin:0 0 8px}
+  .job-card .lead{margin:0 0 14px;color:#765b2b;line-height:1.5}
+  .statement-list{
+    margin:0;
+    padding-left:20px;
+    display:grid;
+    gap:10px;
+    line-height:1.45;
+  }
+  details{
+    margin-top:18px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:white;
+    overflow:hidden;
+  }
+  summary{
+    cursor:pointer;
+    list-style:none;
+    font-weight:800;
+    padding:15px 17px;
+    background:#f7f8fc;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::after{
+    content:"+";
+    float:right;
+    font-size:1.25rem;
+    line-height:1;
+    color:var(--blue);
+  }
+  details[open] summary::after{content:"–"}
+  .discussion{
+    padding:16px 20px 18px 36px;
+    margin:0;
+    display:grid;
+    gap:10px;
+    line-height:1.5;
+  }
+  .note{
+    margin-top:12px;
+    font-size:.84rem;
+    color:var(--muted);
+  }
+  @media (max-width:850px){
+    .grid-top,.video-grid{grid-template-columns:1fr}
+    .vocab{position:static}
+  }
+
+  .sticky-title{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    width:min(1180px,92vw);
+    margin:0 auto 18px;
+    padding:10px 16px;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border:1px solid var(--line);
+    border-radius:0 0 16px 16px;
+    box-shadow:0 8px 22px rgba(23,32,51,.08);
+  }
+  .sticky-title h1{
+    margin:0;
+    font-size:1rem;
+    line-height:1.2;
+    font-weight:800;
+    letter-spacing:.01em;
+    color:var(--ink);
+  }
+  .inline-select{
+    display:inline-block;
+    min-width:145px;
+    margin:0 4px;
+    padding:5px 30px 5px 9px;
+    border:1px solid #cfd6e6;
+    border-radius:9px;
+    background:white;
+    color:var(--ink);
+    font:inherit;
+    font-weight:650;
+    vertical-align:baseline;
+    cursor:pointer;
+  }
+  .inline-select:focus{
+    outline:2px solid rgba(56,86,214,.18);
+    border-color:var(--blue);
+  }
+  .inline-select.correct{
+    border-color:var(--green);
+    background:#eaf8f3;
+    color:#117653;
+  }
+  .inline-select.wrong{
+    border-color:var(--red);
+    background:#fff0f0;
+    color:#ad2d2d;
+  }
+  .page{
+    padding-top:0;
+  }
+</style>
+</head>
+<body>
+<main class="page">
+<header class="sticky-title"><h1>The Career Path: Apprenticeship</h1></header>
+<section class="section">
+<h2>1. Choose the correct option</h2>
+<p class="section-intro">Choose the correct option in each sentence. Then discuss each statement and say whether it is true for you, your job, or your work experience.</p>
+<div class="grid-top">
+<div class="quiz-list">
+<div class="q">
+<p><b>A.</b> My career <select aria-label="Choose the correct answer" class="inline-select" data-correct="path"><option value="">choose...</option><option value="path">path</option><option value="destination">destination</option></select> is quite unusual – I’ve worked in five different professions.</p>
+
+</div>
+<div class="q">
+<p><b>B.</b> In my first job, I got <select aria-label="Choose the correct answer" class="inline-select" data-correct="on-the-job"><option value="">choose...</option><option value="on-the-job">on-the-job</option><option value="classroom-based">classroom-based</option></select> training and learned a lot from my colleagues.</p>
+
+</div>
+<div class="q">
+<p><b>C.</b> I had to take an <select aria-label="Choose the correct answer" class="inline-select" data-correct="aptitude"><option value="">choose...</option><option value="aptitude">aptitude</option><option value="achievement">achievement</option></select> test to get the job I have now.</p>
+
+</div>
+<div class="q">
+<p><b>D.</b> If I could start my career again, I would <select aria-label="Choose the correct answer" class="inline-select" data-correct="train"><option value="">choose...</option><option value="train">train</option><option value="qualify">qualify</option></select> to be a doctor.</p>
+
+</div>
+<div class="q">
+<p><b>E.</b> Learning in the workplace, rather than in the classroom, allowed me to gain <select aria-label="Choose the correct answer" class="inline-select" data-correct="practical"><option value="">choose...</option><option value="practical">practical</option><option value="theoretical">theoretical</option></select> experience.</p>
+
+</div>
+<div class="q">
+<p><b>F.</b> I was lucky to have a fantastic <select aria-label="Choose the correct answer" class="inline-select" data-correct="mentor"><option value="">choose...</option><option value="mentor">mentor</option><option value="beginner">beginner</option></select> when I started work because they taught me a lot.</p>
+
+</div>
+<div class="q">
+<p><b>G.</b> After I finished school, I wasn’t sure what I wanted to do for a living, so I did an apprenticeship to learn a <select aria-label="Choose the correct answer" class="inline-select" data-correct="trade"><option value="">choose...</option><option value="trade">trade</option><option value="theory">theory</option></select>.</p>
+
+</div>
+<div class="q">
+<p><b>H.</b> I was attracted to an apprenticeship because at the end I would be <select aria-label="Choose the correct answer" class="inline-select" data-correct="certified"><option value="">choose...</option><option value="certified">certified</option><option value="unqualified">unqualified</option></select> to practise my profession.</p>
+
+</div>
+</div>
+<aside class="vocab">
+<h3>Useful vocabulary</h3>
+<ul>
+<li><b>career path</b> — work direction</li>
+<li><b>on-the-job training</b> — learning at work</li>
+<li><b>aptitude test</b> — ability test</li>
+<li><b>train to be</b> — prepare for profession</li>
+<li><b>practical experience</b> — real work experience</li>
+<li><b>mentor</b> — experienced adviser</li>
+<li><b>trade</b> — skilled practical job</li>
+<li><b>certified</b> — officially qualified</li>
+</ul>
+</aside>
+</div>
+</section>
+<section class="section">
+<h2>2. Video: Apprenticeships</h2>
+<p class="section-intro">Watch the video and then personalise the ideas by connecting them to a job you know well.</p>
+<div class="video-grid">
+<div>
+<div class="video-wrap">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" src="https://www.youtube.com/embed/UpK52ld3fo0" title="Apprenticeships video">
+</iframe>
+</div>
+<details>
+<summary>Discuss the Questions</summary>
+<ul class="discussion">
+<li>Do you think the video can encourage people to do apprenticeships? Why/Why not?</li>
+<li>Are young people in your country interested in trade jobs? Why/Why not?</li>
+<li>How popular are apprenticeships in your country? Have they become more popular or less popular in recent years?</li>
+<li>Why would someone choose to do an apprenticeship later in life?</li>
+<li>Do older adults do apprenticeships in your country? What challenges do they face?</li>
+<li>If you were going to do an apprenticeship, what profession would you choose?</li>
+</ul>
+</details>
+</div>
+<aside class="job-card">
+<h3>Think about a job</h3>
+<p class="lead">Choose your own job, a previous job, or any profession you know well. Decide which statements could describe the way people enter or learn this profession. Explain your answers.</p>
+<ul class="statement-list">
+<li>You usually have one career path and it is not easy to change career.</li>
+<li>You get on-the-job training from experts, but you also study using course materials.</li>
+<li>You have to take an aptitude test to show that you are suitable for the profession.</li>
+<li>You train to be a particular professional without learning everything about the whole industry.</li>
+<li>The main purpose is to gain practical experience.</li>
+<li>You have a mentor who supports you and answers your questions.</li>
+<li>After completing the training, you become a certified professional and can start working in the field.</li>
+<li>The training allows you to learn a trade.</li>
+</ul>
+</aside>
+</div>
+</section>
+<p class="note">Interactive answer buttons work offline; the embedded YouTube video requires an internet connection.</p>
+</main>
+<script>
+document.querySelectorAll('.inline-select').forEach(sel => {
+  sel.addEventListener('change', () => {
+    sel.classList.remove('correct','wrong');
+    if (!sel.value) return;
+    if (sel.value === sel.dataset.correct) {
+      sel.classList.add('correct');
+    } else {
+      sel.classList.add('wrong');
+    }
+  });
+});
+</script>
+</body>
+</html>
