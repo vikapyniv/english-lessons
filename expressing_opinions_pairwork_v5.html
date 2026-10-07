@@ -1,0 +1,965 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Expressing Opinions</title><style>
+:root{--bg:#eaf4ff;--paper:#fff;--ink:#17324d;--muted:#72869a;--line:#cfe0f2;--accent:#2f6fb3;--soft:#e8f2fc;--shadow:0 16px 40px rgba(47,111,179,.14)}
+*{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+body{overflow:hidden;background:linear-gradient(180deg,#eaf4ff 0%,#f7fbff 100%)} .page{width:min(1460px,96vw);height:100vh;margin:0 auto;padding:22px 0 24px;display:flex;flex-direction:column}
+h1{margin:0 0 18px;text-align:center;font-family:"Helvetica Neue",Inter,sans-serif;font-size:clamp(27px,2.6vw,38px);line-height:1;font-weight:400;letter-spacing:.01em;color:#245c96}
+.stage{flex:1;min-height:0;position:relative;display:flex;align-items:center;justify-content:center}
+.slide{display:none;width:100%;height:min(690px,calc(100vh - 100px));grid-template-columns:minmax(0,1.35fr) minmax(390px,.65fr);gap:20px;align-items:stretch}.slide.active{display:grid}
+.problem{position:relative;background:linear-gradient(145deg,#fff 0%,#f7fbff 100%);border:1px solid #c9def2;border-radius:30px;box-shadow:var(--shadow);padding:68px 54px 46px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.problem-label{position:absolute;top:22px;left:28px;color:#2f6fb3;font-size:12px;font-weight:800;letter-spacing:.16em}
+.problem-text{font-family:"Helvetica Neue",Inter,sans-serif;font-size:clamp(30px,3.4vw,53px);line-height:1.1;letter-spacing:-.022em;font-weight:700}
+.starters{display:flex;flex-direction:column;justify-content:center;gap:14px}.starter{background:#fff;border:1px solid #cfe0f2;border-radius:20px;box-shadow:0 8px 22px rgba(47,111,179,.09);padding:18px 20px 15px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px}.tag{display:inline-flex;align-items:center;min-height:22px;padding:4px 8px;border-radius:999px;font-size:10px;line-height:1;font-weight:700;letter-spacing:.045em;text-transform:uppercase;border:1px solid #d7e5f3;background:#f4f9ff;color:#56718a}
+.tag.level{background:#e6f2ff;color:#245c96;border-color:#c5def5}.tag.function{background:#edf5ff;color:#3d6796;border-color:#d5e5f5}
+.starter-main{font-size:clamp(15px,1.22vw,19px);line-height:1.32;font-weight:700}.starter-example{margin-top:7px;color:var(--muted);font-size:11.5px;line-height:1.4}
+.timer-box{position:absolute;top:46px;left:28px;display:flex;align-items:center;gap:8px;padding:7px 8px 7px 12px;border:1px solid #c8def2;background:#f3f9ff;border-radius:999px;box-shadow:0 5px 16px rgba(47,111,179,.08)}
+.timer-time{min-width:44px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}.timer-toggle,.timer-reset{border:0;cursor:pointer;font-family:inherit}.timer-toggle{background:#2f6fb3;color:#fff;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:700}.timer-reset{width:29px;height:29px;border-radius:50%;background:#dcecfb;color:#245c96;font-size:17px;display:flex;align-items:center;justify-content:center}
+.nav{position:absolute;inset:0;pointer-events:none}.nav button{pointer-events:auto;position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid #bfd6ec;background:#fff;color:#2f6fb3;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 22px rgba(47,111,179,.14)}
+#prev{left:-18px}#next{right:-18px}.counter{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);color:#72869a;font-size:12px;font-weight:600;letter-spacing:.06em}
+@media(max-width:900px){body{overflow:auto}.page{height:auto;min-height:100vh}.slide{height:auto;grid-template-columns:1fr}.problem{min-height:340px;padding:70px 34px 40px}.stage{padding:0 16px}#prev{left:-4px}#next{right:-4px}}
+
+
+
+.quiz-slide{display:none;width:100%;height:min(690px,calc(100vh - 100px));align-items:center;justify-content:center}
+.quiz-slide.active{display:flex}
+.quiz-card{width:min(980px,88%);background:#fff;border:1px solid #cfe0f2;border-radius:30px;box-shadow:0 16px 40px rgba(47,111,179,.14);padding:46px 54px}
+.quiz-kicker{font-size:12px;font-weight:800;letter-spacing:.16em;color:#2f6fb3;margin-bottom:18px}
+.quiz-question{font-size:clamp(27px,3vw,44px);line-height:1.18;font-weight:700;color:#17324d;margin-bottom:30px}
+.quiz-options{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.quiz-option{border:1px solid #cfe0f2;background:#f7fbff;color:#245c96;border-radius:18px;padding:17px 12px;font-size:18px;font-weight:700;cursor:pointer}
+.quiz-option:hover{background:#eaf4ff}.quiz-option.correct{background:#e7f7ee;border-color:#9fd0b3;color:#23663d}.quiz-option.wrong{background:#fff0f0;border-color:#e2a8a8;color:#9b2d2d}.quiz-feedback{min-height:26px;margin-top:18px;font-size:14px;font-weight:700;color:#56718a}
+@media(max-width:700px){.quiz-options{grid-template-columns:1fr}.quiz-card{padding:32px 24px}}
+</style></head><body><main class="page"><h1>Expressing Opinions</h1><div class="stage"><section class="slide active" data-index="0">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">AI will replace most human jobs in the future.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’M CONVINCED (= strongly believe) that...</div>
+          <div class="starter-example">I’m convinced that AI will transform many jobs rather than remove them.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I’m INCLINED TO (= mostly) AGREE because...</div>
+          <div class="starter-example">I’m inclined to agree because routine tasks are already becoming automated.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I WOULDN’T RULE OUT (= reject) the possibility that...</div>
+          <div class="starter-example">I wouldn’t rule out the possibility that some professions will disappear completely.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="1" data-answer="inclined">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’m ______ to agree because routine tasks are already becoming automated.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="convinced">convinced</button><button class="quiz-option" data-value="inclined">inclined</button><button class="quiz-option" data-value="rule">rule</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="2">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Employees should be allowed to work four days a week without losing pay.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I TAKE THE VIEW (= believe) that...</div>
+          <div class="starter-example">I take the view that shorter weeks can improve productivity.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I’D GO ALONG (= agree) WITH the idea that...</div>
+          <div class="starter-example">I’d go along with the idea that results matter more than hours spent at work.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I DON’T SUBSCRIBE TO THE THEORY (= don’t accept) that...</div>
+          <div class="starter-example">I don’t subscribe to the theory that a shorter week automatically means less work gets done.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="3" data-answer="along">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’d go ______ with the idea that results matter more than hours spent at work.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="view">view</button><button class="quiz-option" data-value="along">along</button><button class="quiz-option" data-value="subscribe">subscribe</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="4">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">A university degree is still necessary for a successful career.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">IT IS MY FIRM CONVICTION (= totally convinced) that...</div>
+          <div class="starter-example">It is my firm conviction that higher education still opens important doors.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I SIDE WITH (= support) the idea...</div>
+          <div class="starter-example">I side with the idea that practical experience can be just as valuable as a degree.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I’m OPPOSED (= against) to...</div>
+          <div class="starter-example">I’m opposed to treating university as the only route to a successful career.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="5" data-answer="side">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I ______ with the idea that practical experience can be just as valuable as a degree.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="convinced">convinced</button><button class="quiz-option" data-value="side">side</button><button class="quiz-option" data-value="opposed">opposed</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="6">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Society should eventually stop using cash completely.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’M LEANING TOWARDS (= beginning to support) the view that...</div>
+          <div class="starter-example">I’m leaning towards the view that cashless payments are more convenient.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I’D GO WITH (= accept/follow) the idea that...</div>
+          <div class="starter-example">I’d go with the idea that most everyday payments will eventually become digital.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">There are PROS AND CONS (= advantages and disadvantages) to...</div>
+          <div class="starter-example">There are pros and cons to removing cash completely.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="7" data-answer="leaning">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’m ______ towards the view that cashless payments are more convenient.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="leaning">leaning</button><button class="quiz-option" data-value="go">go</button><button class="quiz-option" data-value="pros">pros</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="8">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">People often become more conservative as they get older.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">IT’S A WIDESPREAD (= general) BELIEF that...</div>
+          <div class="starter-example">It’s a widespread belief that people become less open to change as they get older.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I SUSPECT (= have a strong feeling) that...</div>
+          <div class="starter-example">I suspect that experience can make some people more cautious.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I DON’T WANT TO JUMP TO CONCLUSIONS (= decide without enough information), but...</div>
+          <div class="starter-example">I don’t want to jump to conclusions, but age may affect the way people see risk.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="9" data-answer="widespread">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">It’s a ______ belief that people become less open to change as they get older.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="widespread">widespread</button><button class="quiz-option" data-value="suspect">suspect</button><button class="quiz-option" data-value="jump">jump</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="10">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Living alone is better than living with other people.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">FROM MY POINT OF VIEW...</div>
+          <div class="starter-example">From my point of view, living alone gives you more independence.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I’VE GOT A NAGGING (= persistent) DOUBT that...</div>
+          <div class="starter-example">I’ve got a nagging doubt that living alone is ideal for everyone.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I have SERIOUS MISGIVINGS (= doubts) about...</div>
+          <div class="starter-example">I have serious misgivings about the idea that living alone is always better.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="11" data-answer="nagging">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’ve got a ______ doubt that living alone is ideal for everyone.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="view">view</button><button class="quiz-option" data-value="nagging">nagging</button><button class="quiz-option" data-value="misgivings">misgivings</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="12">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">First impressions are usually accurate.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I wouldn’t ATTACH (= give) TOO MUCH IMPORTANCE to...</div>
+          <div class="starter-example">I wouldn’t attach too much importance to a first impression.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I wouldn’t MAKE ASSUMPTIONS (= decide without evidence) about... before...</div>
+          <div class="starter-example">I wouldn’t make assumptions about someone before getting to know them.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I’d CAST DOUBT (= wouldn’t trust it) on...</div>
+          <div class="starter-example">I’d cast doubt on any judgement based only on a first meeting.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="13" data-answer="attach">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I wouldn’t ______ too much importance to a first impression.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="attach">attach</button><button class="quiz-option" data-value="assumptions">assumptions</button><button class="quiz-option" data-value="cast">cast</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="14">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Parents should have a strong influence on major decisions their adult children make.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">THAT’S A FAIR (= reasonable) COMMENT, but...</div>
+          <div class="starter-example">That’s a fair comment, but adults still need to make their own choices.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I FEEL (= strongly think) that...</div>
+          <div class="starter-example">I feel that parents can advise without making the decision themselves.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">Opinions ARE DIVIDED (= people disagree) ON... but...</div>
+          <div class="starter-example">Opinions are divided on how much influence parents should have once their children are adults.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="15" data-answer="fair">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">That’s a ______ comment, but adults still need to make their own choices.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="fair">fair</button><button class="quiz-option" data-value="feel">feel</button><button class="quiz-option" data-value="divided">divided</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="16">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">If you are unhappy at work, you should always change jobs.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I RECKON (= think) that...</div>
+          <div class="starter-example">I reckon that being unhappy at work is a serious reason to consider leaving.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">ON THE ONE HAND... BUT ON THE OTHER HAND... (= consider both sides)</div>
+          <div class="starter-example">On the one hand, changing jobs can help; on the other hand, it can also create new problems.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’M STILL WRESTLING WITH (= struggling to decide/understand)...</div>
+          <div class="starter-example">I’m still wrestling with whether people should always leave a job that makes them unhappy.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="17" data-answer="reckon">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I ______ that being unhappy at work is a serious reason to consider leaving.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="reckon">reckon</button><button class="quiz-option" data-value="hand">hand</button><button class="quiz-option" data-value="wrestling">wrestling</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="18">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">You should always agree with your friend, even when you think they are wrong.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I STAND FOR (= strongly support/believe in)...</div>
+          <div class="starter-example">I stand for loyalty, but not at the cost of ignoring what I believe is right.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I’D STICK TOGETHER WITH... IF... (= support each other)</div>
+          <div class="starter-example">I’d stick together with my friend if the disagreement was minor.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I’D SETTLE FOR (= accept something that isn’t my first choice)...</div>
+          <div class="starter-example">I’d settle for a compromise if neither of us had to give up something important.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="19" data-answer="settle">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’d ______ for a compromise if neither of us had to give up something important.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="stand">stand</button><button class="quiz-option" data-value="together">together</button><button class="quiz-option" data-value="settle">settle</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="20">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Even if everyone else thinks you are wrong, you should continue to trust your own opinion or decision.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I STICK BY (= continue to support) my view that...</div>
+          <div class="starter-example">I stick by my view that changing your position just because others disagree is not always necessary.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I’D STICK UP FOR (= defend/support) the idea that...</div>
+          <div class="starter-example">I’d stick up for the idea that people should be able to trust their own judgement.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I HONESTLY THINK (= genuinely think) that...</div>
+          <div class="starter-example">I honestly think that being in the minority does not automatically mean you are wrong.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="21" data-answer="by">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I stick ______ my view that changing your position just because others disagree is not always necessary.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="by">by</button><button class="quiz-option" data-value="up">up</button><button class="quiz-option" data-value="honestly">honestly</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="22">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">You should never change your opinion or point of view once you have made up your mind.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">My CONSIDERED (= thinking carefully) OPINION is that...</div>
+          <div class="starter-example">My considered opinion is that refusing to change your mind can sometimes be a weakness.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">ONE THING THAT LEAPS OUT AT ME IS THAT (= is immediately obvious to me)...</div>
+          <div class="starter-example">One thing that leaps out at me is that new information can completely change a situation.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">ON REFLECTION (= after thinking carefully), I think...</div>
+          <div class="starter-example">On reflection, I think changing your opinion can be reasonable when the evidence changes.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="23" data-answer="reflection">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">On ______, I think changing your opinion can be reasonable when the evidence changes.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="considered">considered</button><button class="quiz-option" data-value="leaps">leaps</button><button class="quiz-option" data-value="reflection">reflection</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="24">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Politics should never be discussed with friends.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’d rather STAY OUT (= avoid) of...</div>
+          <div class="starter-example">I’d rather stay out of political arguments when people become personal.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I’d prefer not to ENTER INTO (= start) an ARGUMENT about...</div>
+          <div class="starter-example">I’d prefer not to enter into an argument about politics during a friendly dinner.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">We MAY BE POLES APART (= opposite views) on... but...</div>
+          <div class="starter-example">We may be poles apart on politics, but that doesn’t mean we can’t remain friends.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="25" data-answer="poles">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">We may be ______ apart on politics, but that doesn’t mean we can’t remain friends.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="stay">stay</button><button class="quiz-option" data-value="enter">enter</button><button class="quiz-option" data-value="poles">poles</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="26">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">People should always follow the traditions of their family or country.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’D COME AT THIS FROM A DIFFERENT ANGLE (= approach it differently)...</div>
+          <div class="starter-example">I’d come at this from a different angle and ask whether every tradition still makes sense today.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">CONTRARY TO (= different from) POPULAR BELIEF, I...</div>
+          <div class="starter-example">Contrary to popular belief, I don’t think every tradition has to be preserved.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">TO MY MIND (= in my opinion)...</div>
+          <div class="starter-example">To my mind, traditions should be followed only when they still have meaning.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="27" data-answer="mind">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">To my ______, traditions should be followed only when they still have meaning.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="come">come</button><button class="quiz-option" data-value="contrary">contrary</button><button class="quiz-option" data-value="mind">mind</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="28">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Every problem should be dealt with immediately instead of being put off until later.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">IF WE TALK IT THROUGH (= discuss it to understand it better), I think we may find that...</div>
+          <div class="starter-example">If we talk it through, I think we may find that the problem can be solved before it gets worse.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I THINK WE NEED TO CONFRONT THE ISSUE OF (= deal directly with)...</div>
+          <div class="starter-example">I think we need to confront the issue of problems that grow when they are ignored.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">IT COMES DOWN (= ultimately depends on) TO...</div>
+          <div class="starter-example">It comes down to whether dealing with the problem now will actually help.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="29" data-answer="comes">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">It ______ down to whether dealing with the problem now will actually help.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="talk">talk</button><button class="quiz-option" data-value="confront">confront</button><button class="quiz-option" data-value="comes">comes</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="30">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">You should always prove that you are right instead of simply expressing your opinion.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I wouldn’t WRITE the idea OFF (= decide it’s hopeless) just yet...</div>
+          <div class="starter-example">I wouldn’t write an opinion off just because I disagreed with it at first.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I’d QUESTION (= doubt) the idea...</div>
+          <div class="starter-example">I’d question an argument if the person had no evidence to support it.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’d SPEAK OUT (= express an opinion openly) by...</div>
+          <div class="starter-example">I’d speak out by explaining my opinion clearly, even if I couldn’t prove it completely.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="31" data-answer="question">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’d ______ an argument if the person had no evidence to support it.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="write">write</button><button class="quiz-option" data-value="question">question</button><button class="quiz-option" data-value="speak">speak</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="32">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">At work, important tasks and decisions should be handled by the whole team rather than by individual employees.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’d PUT FORWARD (= suggest) THE IDEA that...</div>
+          <div class="starter-example">I’d put forward the idea that major tasks should be shared by the whole team.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Phrasal verb</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’VE HIT ON THE IDEA THAT (= come up with a potentially good idea)...</div>
+          <div class="starter-example">I’ve hit on the idea that dividing responsibilities could make the team more effective.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’d PUT THE IDEA ACROSS (= explain clearly) by...</div>
+          <div class="starter-example">I’d put the idea across by explaining how teamwork could improve the result.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="33" data-answer="forward">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’d put ______ the idea that major tasks should be shared by the whole team.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="forward">forward</button><button class="quiz-option" data-value="hit">hit</button><button class="quiz-option" data-value="across">across</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="34">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">Schools should ban smartphones completely during the school day.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I have STRONG OPINIONS ON (= care a lot about)...</div>
+          <div class="starter-example">I have strong opinions on how phones affect concentration at school.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I COME OUT IN FAVOUR OF (= publicly support) the idea that...</div>
+          <div class="starter-example">I come out in favour of the idea that schools should limit phone use.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Vocabulary</span>
+            <span class="tag function">Disagreement</span>
+          </div>
+          <div class="starter-main">I COME OUT AGAINST (= publicly oppose) the idea that...</div>
+          <div class="starter-example">I come out against the idea that students should have unrestricted access to phones in class.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="35" data-answer="favour">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I come out in ______ of the idea that schools should limit phone use.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="strong">strong</button><button class="quiz-option" data-value="favour">favour</button><button class="quiz-option" data-value="against">against</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="36">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">There is no single best way to learn a foreign language.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’ve ALWAYS HELD (= believed for a long time) that...</div>
+          <div class="starter-example">I’ve always held that regular speaking practice matters most.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I TEND TO (= generally) AGREE that...</div>
+          <div class="starter-example">I tend to agree that different learners need different methods.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">B2</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Agreement</span>
+          </div>
+          <div class="starter-main">I’m a GREAT BELIEVER (= strongly support) in...</div>
+          <div class="starter-example">I’m a great believer in using the language actively rather than only studying rules.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="37" data-answer="believer">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’m a great ______ in using the language actively rather than only studying rules.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="held">held</button><button class="quiz-option" data-value="tend">tend</button><button class="quiz-option" data-value="believer">believer</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><section class="slide" data-index="38">
+        <div class="problem">
+          <div class="problem-label">DISCUSS</div>
+          <div class="timer-box">
+            <div class="timer-time">4:00</div>
+            <button class="timer-toggle" type="button">Start</button>
+            <button class="timer-reset" type="button" aria-label="Reset timer">↺</button>
+          </div>
+          <div class="problem-text">If most people believe something, there is probably some truth in it.</div>
+        </div>
+        <div class="starters">
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">IT’S COMMON KNOWLEDGE THAT (= generally known that)...</div>
+          <div class="starter-example">It’s common knowledge that popular beliefs are not always based on evidence.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Collocation</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">I’ve got a SNEAKING SUSPICION (= start to think) that...</div>
+          <div class="starter-example">I’ve got a sneaking suspicion that people often repeat ideas without checking them.</div>
+        </div>
+        <div class="starter">
+          <div class="tags">
+            <span class="tag level">C1</span>
+            <span class="tag type">Idiom</span>
+            <span class="tag function">Opinion</span>
+          </div>
+          <div class="starter-main">THE OTHER SIDE OF THE COIN (= opposite aspect) is...</div>
+          <div class="starter-example">The other side of the coin is that widely shared beliefs sometimes come from real experience.</div>
+        </div></div>
+      </section>
+<section class="quiz-slide" data-index="39" data-answer="sneaking">
+  <div class="quiz-card">
+    <div class="quiz-kicker">MINI TEST</div>
+    <div class="quiz-question">I’ve got a ______ suspicion that people often repeat ideas without checking them.</div>
+    <div class="quiz-options"><button class="quiz-option" data-value="common">common</button><button class="quiz-option" data-value="sneaking">sneaking</button><button class="quiz-option" data-value="coin">coin</button></div>
+    <div class="quiz-feedback"></div>
+  </div>
+</section><div class="nav"><button id="prev">‹</button><button id="next">›</button></div><div class="counter" id="counter">1 / 20</div></div></main><script>
+const screens=[...document.querySelectorAll('.slide,.quiz-slide')];
+const counter=document.getElementById('counter');let current=0;
+const discussionSlides=[...document.querySelectorAll('.slide')];
+const timers=discussionSlides.map(slide=>({remaining:240,interval:null,running:false,timeEl:slide.querySelector('.timer-time'),toggle:slide.querySelector('.timer-toggle'),reset:slide.querySelector('.timer-reset')}));
+function fmt(s){return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`}
+function renderTimer(i){const t=timers[i];t.timeEl.textContent=fmt(t.remaining);t.toggle.textContent=t.running?'Pause':(t.remaining===240?'Start':'Resume')}
+function stopTimer(i){const t=timers[i];if(!t)return;if(t.interval)clearInterval(t.interval);t.interval=null;t.running=false;renderTimer(i)}
+function startTimer(i){const t=timers[i];if(t.remaining===0)t.remaining=240;if(t.running)return;t.running=true;renderTimer(i);t.interval=setInterval(()=>{t.remaining--;if(t.remaining<=0){t.remaining=0;stopTimer(i);return}renderTimer(i)},1000)}
+timers.forEach((t,i)=>{t.toggle.addEventListener('click',()=>t.running?stopTimer(i):startTimer(i));t.reset.addEventListener('click',()=>{stopTimer(i);t.remaining=240;renderTimer(i)});renderTimer(i)});
+document.querySelectorAll('.quiz-slide').forEach(q=>{const answer=q.dataset.answer;const feedback=q.querySelector('.quiz-feedback');q.querySelectorAll('.quiz-option').forEach(btn=>btn.addEventListener('click',()=>{q.querySelectorAll('.quiz-option').forEach(b=>b.classList.remove('correct','wrong'));if(btn.dataset.value===answer){btn.classList.add('correct');feedback.textContent='Correct'}else{btn.classList.add('wrong');const right=[...q.querySelectorAll('.quiz-option')].find(b=>b.dataset.value===answer);if(right)right.classList.add('correct');feedback.textContent=`Correct answer: ${answer}`}}))});
+function show(index){const currentScreen=screens[current];if(currentScreen&&currentScreen.classList.contains('slide')){const di=discussionSlides.indexOf(currentScreen);if(di>=0)stopTimer(di)}current=(index+screens.length)%screens.length;screens.forEach((s,i)=>s.classList.toggle('active',i===current));counter.textContent=`${Math.floor(current/2)+1} / ${discussionSlides.length}`}
+document.getElementById('prev').addEventListener('click',()=>show(current-1));document.getElementById('next').addEventListener('click',()=>show(current+1));document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')show(current-1);if(e.key==='ArrowRight')show(current+1)});
+</script></body></html>
