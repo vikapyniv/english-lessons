@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>What Are You Afraid Of? | Speaking Lesson</title>
+<style>
+:root{
+  --ink:#24283c;--muted:#687185;--coral:#ee6568;--lilac:#eee9ff;--mint:#e0f5ed;
+  --peach:#fff0da;--blue:#e4efff;--pink:#ffe8ef;--border:#e5e7ef;--bg:#f8f8fc;
+  --correct:#15835f;--wrong:#b23d49;--correct-bg:#f4fcf8;--wrong-bg:#fff7f7;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.6;
+}
+header{
+  position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);
+  box-shadow:0 3px 15px rgba(36,40,60,.07)
+}
+.container{max-width:1120px;margin:auto;padding:0 26px}
+.topline{display:flex;align-items:center;gap:15px;padding:12px 0}
+.brand{font-size:1.08rem;font-weight:800;letter-spacing:0;color:var(--ink)}
+.brand .accent{color:var(--coral)}
+main{padding:30px 0 85px}
+.section{
+  margin:0 0 28px;background:#fff;border:1px solid var(--border);border-radius:25px;
+  padding:clamp(22px,4vw,42px);box-shadow:0 12px 35px rgba(36,40,60,.04);scroll-margin-top:85px;
+}
+.section-head{display:flex;align-items:center;gap:13px;margin-bottom:12px}
+.number{display:grid;place-items:center;background:var(--ink);color:#fff;width:38px;height:38px;border-radius:12px;font-weight:800;flex-shrink:0}
+.number.soft{background:#f4e8ea;color:var(--coral)}
+h2{margin:0;font-size:clamp(1.55rem,3vw,2.05rem);letter-spacing:-.035em;line-height:1.2}
+.instructions{color:var(--muted);font-size:1.01rem;margin:14px 0 24px;max-width:890px}
+.instruction-strong{font-weight:700;color:var(--ink)}
+.sentences{display:grid;gap:13px}
+.sentence{
+  border:1px solid var(--border);border-radius:15px;background:#fcfcff;padding:18px 20px;
+  display:flex;gap:16px;align-items:flex-start;transition:background .2s,border-color .2s;
+}
+.letter{display:grid;place-items:center;width:31px;height:31px;background:var(--lilac);color:#5c4ba0;font-weight:800;border-radius:9px;flex-shrink:0;line-height:1}
+.sentence-text{font-size:1.045rem;flex:1;line-height:2.05}
+.choice{
+  display:inline-block;vertical-align:baseline;max-width:100%;appearance:none;border:1.5px solid #abb1c5;
+  border-radius:10px;padding:7px 31px 7px 11px;font:inherit;font-weight:700;color:var(--ink);background-color:white;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='10' viewBox='0 0 13 10'%3E%3Cpath d='m2 3 4.5 4L11 3' fill='none' stroke='%23525a71' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;min-width:120px
+}
+.choice:focus-visible{outline:3px solid #ffbfbb;outline-offset:2px}
+.sentence.correct{border-color:#79c6ab;background:var(--correct-bg)}
+.sentence.wrong{border-color:#e7a3a9;background:var(--wrong-bg)}
+.sentence.correct .choice{border-color:var(--correct);color:var(--correct)}
+.sentence.wrong .choice{border-color:var(--wrong);color:var(--wrong)}
+.discussion{
+  background:var(--peach);padding:20px 23px;border-radius:15px;margin-top:24px;border-left:4px solid #eaaa60
+}
+.discussion strong{display:block;font-size:1.06rem;margin-bottom:4px}
+.discussion p{margin:0;color:#574b43}
+.therapies{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px;margin-top:22px}
+.therapy{border-radius:20px;padding:26px;min-height:208px;display:flex;flex-direction:column;align-items:flex-start}
+.therapy:nth-child(1){background:var(--peach)}
+.therapy:nth-child(2){background:var(--mint)}
+.therapy:nth-child(3){background:var(--pink)}
+.therapy:nth-child(4){background:var(--blue)}
+.therapy .symbol{font-size:1.65rem;margin-bottom:14px;line-height:1}
+.therapy h3{margin:0 0 10px;font-size:1.25rem;letter-spacing:-.025em;line-height:1.25}
+.therapy p{margin:0;color:#42485c;font-size:.98rem}
+.therapy .hint{font-size:.83rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-top:auto;padding-top:18px;opacity:.72}
+.phobia-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
+.phobia-card{
+  border:1px solid var(--border);border-radius:18px;background:#fff;padding:18px 17px 16px;
+  box-shadow:0 5px 14px rgba(36,40,60,.04);transition:transform .16s, box-shadow .16s;
+}
+.phobia-card:hover{transform:translateY(-2px);box-shadow:0 9px 20px rgba(36,40,60,.08)}
+.phobia-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.emoji{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#fff3f3;font-size:1.45rem;flex-shrink:0}
+.phobia-card h3{margin:0;font-size:1.03rem;line-height:1.25;letter-spacing:-.02em}
+.phobia-card p{margin:0;color:#4e5469;font-size:.95rem;line-height:1.45}
+.phobia-card .mini{margin-top:8px;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:#8b90a3;font-weight:700}
+footer{color:#8990a2;text-align:center;padding:0 20px 35px;font-size:.8rem}
+@media (max-width:900px){.phobia-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.therapies{grid-template-columns:1fr}}
+@media(max-width:650px){
+  .container{padding:0 15px}.section{padding:22px 16px;border-radius:18px}.sentence{padding:15px 12px;gap:10px}
+  .sentence-text{font-size:.98rem}.choice{min-width:106px}.topline{padding:11px 0}
+}
+@media (max-width:560px){.phobia-grid{grid-template-columns:1fr}}
+@media print{body{background:#fff}.section{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<header>
+  <div class="container topline">
+    <span class="brand">What are you <span class="accent">afraid of?</span></span>
+  </div>
+</header>
+
+<main class="container">
+  <section class="section" id="task1">
+    <div class="section-head">
+      <div class="number">01</div>
+      <h2>How do you feel about fear?</h2>
+    </div>
+    <p class="instructions"><span class="instruction-strong">Choose the correct option</span> in each sentence. Then read the statements and discuss them with your partner.</p>
+
+    <div class="sentences" id="sentences">
+      <div class="sentence">
+        <span class="letter">A</span>
+        <div class="sentence-text">I’m generally a <select aria-label="Answer A" class="choice" data-answer="confident"><option value="">Choose…</option><option value="confidence">confidence</option><option value="confident">confident</option></select> person and don’t have any fears that would stop me from doing what I want.</div>
+      </div>
+      <div class="sentence">
+        <span class="letter">B</span>
+        <div class="sentence-text">It’s hard for me to understand people who are scared <select aria-label="Answer B" class="choice" data-answer="of"><option value="">Choose…</option><option value="of">of</option><option value="from">from</option></select> things that I am not; for example, people who have a fear of dogs.</div>
+      </div>
+      <div class="sentence">
+        <span class="letter">C</span>
+        <div class="sentence-text">I was <select aria-label="Answer C" class="choice" data-answer="afraid"><option value="">Choose…</option><option value="fear">fear</option><option value="afraid">afraid</option></select> of clowns as a child, which was an irrational fear because they are not dangerous.</div>
+      </div>
+      <div class="sentence">
+        <span class="letter">D</span>
+        <div class="sentence-text">Last year, I decided to face my <select aria-label="Answer D" class="choice" data-answer="fear"><option value="">Choose…</option><option value="afraid">afraid</option><option value="fear">fear</option></select> of public speaking by giving a speech at my sister’s wedding.</div>
+      </div>
+      <div class="sentence">
+        <span class="letter">E</span>
+        <div class="sentence-text">I’d like to <select aria-label="Answer E" class="choice" data-answer="overcome"><option value="">Choose…</option><option value="overcome">overcome</option><option value="come over">come over</option></select> my fear of heights because I want to be able to enjoy city views from tall buildings.</div>
+      </div>
+      <div class="sentence">
+        <span class="letter">F</span>
+        <div class="sentence-text">I know it sounds silly but I’m always <select aria-label="Answer F" class="choice" data-answer="filled with"><option value="">Choose…</option><option value="filled with">filled with</option><option value="filled of">filled of</option></select> fear when I have to make an appointment with the dentist.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="section" id="task2">
+    <div class="section-head">
+      <div class="number">02</div>
+      <h2>Four ways to face your fears</h2>
+    </div>
+    <p class="instructions">Discuss each therapy. Do you think it is effective? Could it help you or other people? Does it make sense?</p>
+
+    <div class="therapies">
+      <article class="therapy">
+        <div class="symbol" aria-hidden="true">↗</div>
+        <h3>Exposure Therapy</h3>
+        <p>Face what scares you in a safe setting, starting with small steps and gradually moving to more difficult situations.</p>
+        <div class="hint">Little by little</div>
+      </article>
+      <article class="therapy">
+        <div class="symbol" aria-hidden="true">◉</div>
+        <h3>Flooding Therapy</h3>
+        <p>Face a very intense version of your fear for a longer time instead of increasing exposure gradually.</p>
+        <div class="hint">All at once</div>
+      </article>
+      <article class="therapy">
+        <div class="symbol" aria-hidden="true">✦</div>
+        <h3>Mindfulness</h3>
+        <p>Notice your fear without panicking. Slow down, breathe deeply and observe your thoughts and feelings.</p>
+        <div class="hint">Notice, don’t panic</div>
+      </article>
+      <article class="therapy">
+        <div class="symbol" aria-hidden="true">◇</div>
+        <h3>Cognitive Behavioural Therapy (CBT)</h3>
+        <p>Talk about the thoughts behind your fear, challenge irrational beliefs and face difficult situations with support.</p>
+        <div class="hint">Change thought patterns</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="phobias">
+    <div class="section-head">
+      <div class="number soft">★</div>
+      <h2>Phobias</h2>
+    </div>
+    <p class="instructions">Read each phobia and discuss: Did you know it? Does it seem strange or understandable? Why might people be afraid of it? If you want, say which therapy from Task 2 could help with it.</p>
+
+    <div class="phobia-grid">
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">👣</div><h3>Podophobia</h3></div><p>Fear of feet.</p><div class="mini">Unusual phobia</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">😴</div><h3>Somniphobia</h3></div><p>Fear of sleep.</p><div class="mini">Sleep-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🏫</div><h3>Scolionophobia</h3></div><p>Fear of school.</p><div class="mini">Everyday life</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🌙</div><h3>Noctiphobia / Nyctophobia</h3></div><p>Fear of the night or darkness.</p><div class="mini">Common phobia</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🏢</div><h3>Megalophobia</h3></div><p>Fear of very large things.</p><div class="mini">Size-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🩺</div><h3>Iatrophobia</h3></div><p>Fear of doctors.</p><div class="mini">Medical fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">☀️</div><h3>Heliophobia</h3></div><p>Fear of the sun.</p><div class="mini">Nature-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🐱</div><h3>Elurophobia</h3></div><p>Fear of cats.</p><div class="mini">Animal fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">⏰</div><h3>Chronomentrophobia</h3></div><p>Fear of clocks.</p><div class="mini">Object-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">💸</div><h3>Chrometophobia</h3></div><p>Fear of spending money.</p><div class="mini">Money-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🤡</div><h3>Coulrophobia</h3></div><p>Fear of clowns.</p><div class="mini">Common but strange</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🌌</div><h3>Astrophobia</h3></div><p>Fear of outer space.</p><div class="mini">Space-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🧊</div><h3>Cryophobia</h3></div><p>Fear of ice or cold.</p><div class="mini">Weather / temperature</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🧔</div><h3>Pogonophobia</h3></div><p>Fear of beards.</p><div class="mini">Appearance-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🏷️</div><h3>Onomatophobia</h3></div><p>Fear of names.</p><div class="mini">Language-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🐔</div><h3>Alektorophobia</h3></div><p>Fear of chickens.</p><div class="mini">Animal fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🐾</div><h3>Zoophobia</h3></div><p>Fear of animals.</p><div class="mini">Animal fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🐍</div><h3>Ophidiophobia</h3></div><p>Fear of snakes.</p><div class="mini">Animal fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">💧</div><h3>Hydrophobia</h3></div><p>Fear of water.</p><div class="mini">Common phobia</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🩸</div><h3>Hemophobia</h3></div><p>Fear of blood.</p><div class="mini">Medical fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🚪</div><h3>Claustrophobia</h3></div><p>Fear of confined, small or crowded spaces.</p><div class="mini">Very common</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🙍</div><h3>Autophobia</h3></div><p>Fear of being alone.</p><div class="mini">Emotional fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">⛈️</div><h3>Astraphobia</h3></div><p>Fear of thunder and lightning.</p><div class="mini">Weather-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🕷️</div><h3>Arachnophobia</h3></div><p>Fear of spiders.</p><div class="mini">Very common</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">✈️</div><h3>Aerophobia</h3></div><p>Fear of flying.</p><div class="mini">Travel-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">⛰️</div><h3>Acrophobia</h3></div><p>Fear of heights.</p><div class="mini">Very common</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🧼</div><h3>Mysophobia</h3></div><p>Fear of dirt or germs.</p><div class="mini">Cleanliness-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🎤</div><h3>Glossophobia</h3></div><p>Fear of public speaking.</p><div class="mini">Common social fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🐶</div><h3>Cynophobia</h3></div><p>Fear of dogs.</p><div class="mini">Animal fear</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">🏬</div><h3>Agoraphobia</h3></div><p>Fear of open or public places.</p><div class="mini">Place-related</div></article>
+      <article class="phobia-card"><div class="phobia-top"><div class="emoji">😨</div><h3>Phobophobia</h3></div><p>Fear of phobias or being afraid.</p><div class="mini">Meta fear</div></article>
+    </div>
+  </section>
+</main>
+
+
+
+<script>
+const selects = [...document.querySelectorAll('.choice')];
+function updateSelect(select){
+  const row = select.closest('.sentence');
+  row.classList.remove('correct','wrong');
+  if(!select.value) return;
+  if(select.value === select.dataset.answer){
+    row.classList.add('correct');
+  } else {
+    row.classList.add('wrong');
+  }
+}
+selects.forEach(select=>{
+  select.addEventListener('change',()=>updateSelect(select));
+  updateSelect(select);
+});
+</script>
+</body>
+</html>
