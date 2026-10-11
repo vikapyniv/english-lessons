@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Do It Yourself — Interactive Speaking Lesson</title>
+<style>
+:root{--ink:#25293d;--muted:#687185;--coral:#ee6568;--border:#e4e7ef;--bg:#f8f8fc;--green:#137b56;--red:#b13e49}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.58 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}header{position:sticky;top:0;z-index:20;background:white;border-bottom:1px solid var(--border);box-shadow:0 3px 15px #24283c0b}.wrap{width:min(1120px,calc(100% - 32px));margin:auto}.brand{padding:13px 0;font-weight:850;font-size:1.13rem}.brand span{color:var(--coral)}main{padding:28px 0 60px}.section{background:#fff;border:1px solid var(--border);box-shadow:0 10px 35px #24283c08;border-radius:24px;padding:clamp(21px,4vw,40px);margin-bottom:26px;scroll-margin-top:83px}.heading{display:flex;align-items:center;gap:12px;margin-bottom:19px}.num{width:38px;height:38px;border-radius:12px;background:#282c41;color:#fff;display:grid;place-items:center;font-weight:800;flex-shrink:0}h2{margin:0;font-size:clamp(1.45rem,2.8vw,2rem);letter-spacing:-.035em;line-height:1.2}h3{margin:0 0 10px;font-size:1.15rem}p.intro{margin:0 0 22px;color:var(--muted)}.video-layout{display:grid;grid-template-columns:1.07fr .93fr;gap:22px;align-items:start}.player{aspect-ratio:16/9;background:#191b27;border-radius:18px;overflow:hidden}.player iframe{display:block;width:100%;height:100%;border:0}.video-note{color:var(--muted);font-size:.84rem;margin:9px 0}.video-note a{color:#a34253}.questions{background:#fff0da;border-radius:19px;padding:21px 22px}.questions ol{margin:0;padding-left:22px}.questions li{padding-left:4px;margin-bottom:14px}.questions li:last-child{margin-bottom:0}.example-head,.pair{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}.example-head{padding:0 10px 8px;font-weight:800;color:#596173;font-size:.86rem;letter-spacing:.045em;text-transform:uppercase}.pairs{display:grid;gap:11px}.pair{align-items:stretch}.pair>div{border-radius:15px;padding:16px 18px;display:flex;align-items:center;min-height:75px;background:#f5f4ff}.pair>div:nth-child(2){background:#eaf6f1}.highlight{font-weight:850;color:#7557ad}.reflexive{font-weight:850;color:#147653}.blank{border:1.5px solid #95baa9;background:white;border-radius:10px;min-height:38px;width:146px;max-width:100%;padding:6px 10px;margin:0 3px;font:inherit;font-weight:800;color:#1b6850}.blank:focus{outline:3px solid #e0f0e9}.blank.good{border-color:var(--green);background:#ddf8eb;color:var(--green)}.blank.bad{border-color:var(--red);background:#ffebeb;color:var(--red)}.aside{background:#fff0da;border-radius:16px;padding:19px 22px;margin-top:20px}.aside p{margin:5px 0}.tag{display:inline-block;font-weight:800;color:#554d6a;margin-bottom:5px}.sentences{display:grid;gap:12px}.sentence{display:flex;gap:15px;align-items:flex-start;background:#fcfcff;border:1px solid var(--border);border-radius:15px;padding:16px 18px;transition:background .15s,border-color .15s}.sentence.correct{background:#f0fbf5;border-color:#73bfa0}.sentence.wrong{background:#fff2f2;border-color:#e5a3ac}.letter{background:#eee9ff;color:#5948a4;border-radius:9px;display:grid;place-items:center;width:32px;height:32px;flex:none;font-weight:850}.line{flex:1;line-height:2.18}.choice{appearance:none;background:white;border:1.5px solid #aeb5c5;border-radius:10px;padding:7px 31px 7px 11px;min-width:135px;max-width:100%;font:inherit;font-weight:750;color:var(--ink);cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='10' viewBox='0 0 13 10'%3E%3Cpath d='m2 3 4.5 4L11 3' fill='none' stroke='%23525a71' stroke-width='1.7' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}.sentence.correct .choice{border-color:var(--green);color:var(--green)}.sentence.wrong .choice{border-color:var(--red);color:var(--red)}.choice:focus-visible{outline:3px solid #ffd3cc;outline-offset:2px}.mini-note{margin:17px 0 0;font-size:.94rem;color:#686577}.discussion{margin-top:20px;padding:16px 19px;border-radius:14px;background:#fff0da;color:#514537}@media(max-width:800px){.video-layout{grid-template-columns:1fr}.questions{padding:19px}}@media(max-width:640px){.example-head{gap:9px;font-size:.73rem}.pair{gap:9px}.pair>div{padding:13px 10px;font-size:.88rem}.blank{width:110px;padding:6px}.section{padding:20px 15px}.sentence{padding:14px 11px;gap:9px}.choice{min-width:110px}.line{font-size:.96rem}}@media(max-width:420px){.example-head,.pair{grid-template-columns:1fr}.example-head span:last-child{display:none}.pair{gap:4px;margin-bottom:8px}.pair>div{min-height:auto}}
+
+/* Four horizontal columns per pronoun, without separate cards */
+.pronoun-groups{display:block}
+.pronoun-group{padding:18px 0 20px;border:0;border-bottom:1px solid var(--border);background:transparent}
+.pronoun-group:first-child{padding-top:0}
+.pronoun-group:last-child{border-bottom:0;padding-bottom:0}
+.pronoun-label{font-weight:850;font-size:.87rem;color:#7a6074;margin:0 0 7px;text-transform:uppercase;letter-spacing:.07em}
+.four-lines{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;align-items:start}
+.grammar-line{padding:5px 0;line-height:1.65;background:transparent;border:0;border-radius:0;color:var(--ink);overflow-wrap:break-word}
+.grammar-line.basic{font-weight:400;color:var(--ink)}
+.grammar-line.target{font-weight:600;color:var(--ink)}
+.grammar-line.target strong{font-weight:850;color:#147653}
+.grammar-line.target.by strong{color:#ad6531}
+.grammar-line .blank{vertical-align:middle;width:126px;min-height:36px;padding:4px 9px}
+@media(max-width:850px){.pronoun-groups{overflow-x:auto}.pronoun-group{min-width:830px}.grammar-line{font-size:.95rem}.four-lines{gap:15px}}@media(max-width:480px){.pronoun-group{padding:14px 0}}
+
+/* Highlight only the target columns while keeping the clean four-column grid */
+.four-lines .grammar-line:nth-child(2){background:#e5f6ee;border-left:4px solid #57ae86;border-radius:10px;padding:12px 11px}
+.four-lines .grammar-line:nth-child(4){background:#fff0dd;border-left:4px solid #e7a25a;border-radius:10px;padding:12px 11px}
+.four-lines .grammar-line:nth-child(1),.four-lines .grammar-line:nth-child(3){padding:12px 2px}
+.grammar-line.target.by .blank{border-color:#d69e67;color:#8d542a}
+.grammar-line.target.by .blank.good{border-color:var(--green);color:var(--green)}
+.grammar-line.target.by .blank.bad{border-color:var(--red);color:var(--red)}
+.quick-check{margin-top:25px;padding-top:20px;border-top:1px solid var(--border)}
+.quick-check h3{margin:0 0 5px;font-size:1.25rem}
+.quick-check > p{color:var(--muted);margin:0 0 18px}
+.quiz-grid{display:grid;gap:12px}
+.quiz-row{border:1px solid var(--border);border-radius:14px;background:#fcfcff;padding:15px 17px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px;transition:background .16s,border-color .16s}
+.quiz-row p{margin:0;font-weight:600;line-height:1.45}
+.quiz-row .choice{min-width:230px}
+.quiz-row.correct{background:#f0fbf5;border-color:#73bfa0}
+.quiz-row.wrong{background:#fff2f2;border-color:#e5a3ac}
+.quiz-row.correct .choice{border-color:var(--green);color:var(--green)}
+.quiz-row.wrong .choice{border-color:var(--red);color:var(--red)}
+@media(max-width:750px){.quiz-row{grid-template-columns:1fr}.quiz-row .choice{width:100%}}
+
+/* Matched yellow backgrounds for the comparison pair. */
+.four-lines .grammar-line:nth-child(2),
+.four-lines .grammar-line:nth-child(4){background:#fff3bf;border-left:4px solid #e8c64b;border-radius:10px;padding:12px 11px}
+.grammar-line.target.by strong{color:#9b7414}
+/* Keep the first and third columns deliberately unhighlighted. */
+.quiz-row{display:block}
+.quiz-row p{margin-bottom:11px}
+.quiz-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.quiz-option{display:flex;align-items:center;gap:10px;cursor:pointer;border:1.5px solid #d9dce7;border-radius:11px;background:#fff;padding:12px 14px;line-height:1.45;font-weight:500;min-height:56px;transition:background .16s,border-color .16s}
+.quiz-option input{width:18px;height:18px;accent-color:#555b7e;flex-shrink:0;margin:0}
+.quiz-option.correct{background:#e7f8ee;border-color:#66bc94;color:#126743}
+.quiz-option.wrong{background:#fff0f1;border-color:#dfa3a9;color:#a53843}
+.quiz-option.correct input{accent-color:#137b56}
+.quiz-option.wrong input{accent-color:#b13e49}
+.quiz-option:focus-within{outline:2px solid #a9afdf;outline-offset:2px}
+@media(max-width:650px){.quiz-options{grid-template-columns:1fr}}
+
+/* Paired practice for slide 24 and group discussions from slide 27 */
+.key-term{background:#fff0ad;color:#6e5211;padding:1px 5px;border-radius:4px;font-weight:800}
+.activity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.activity-card{border-radius:16px;padding:20px 22px;background:#faf9ff;border:1px solid #e8e7f4}
+.activity-card:nth-child(4n + 2){background:#fff9ed;border-color:#f1e6d2}
+.activity-card:nth-child(4n + 3){background:#eff9f6;border-color:#dbeee6}
+.activity-card:nth-child(4n + 4){background:#f5f2ff;border-color:#e9e1ff}
+.activity-card h3{font-size:1.1rem;margin:0 0 9px}
+.activity-card p{margin:7px 0;color:#4b5267;font-size:.95rem;line-height:1.55}
+.activity-card em{font-style:normal;font-weight:750;color:#466d60}
+.statement-list{display:grid;gap:12px}
+.statement{padding:17px 20px;border:1px solid var(--border);background:#fcfcff;border-radius:13px;line-height:1.6}
+@media(max-width:670px){.activity-grid{grid-template-columns:1fr}.activity-card{padding:17px}.statement{padding:15px}}
+
+/* Live-checked text answers for speaking statements */
+.statement{display:flex;align-items:flex-start;gap:12px;line-height:2.25}
+.statement-letter{display:grid;place-items:center;width:29px;height:29px;flex-shrink:0;border-radius:9px;background:#eee9ff;color:#5948a4;font-weight:800;line-height:1;margin-top:5px}
+.statement-content{flex:1;min-width:0}
+.opinion-blank{font:inherit;font-weight:750;border:1.5px solid #abb2c4;border-radius:9px;background:white;color:var(--ink);padding:5px 10px;min-width:130px;width:155px;max-width:100%;transition:background .15s,border-color .15s}
+.opinion-blank[data-answer="one another"]{width:160px}
+.opinion-blank:focus-visible{outline:3px solid #f4ded4;outline-offset:2px}
+.opinion-blank.good{border-color:#15835f;background:#e0f7ea;color:#116647}
+.opinion-blank.bad{border-color:#b23d49;background:#ffebeb;color:#9e2634}
+@media(max-width:640px){.statement{gap:8px}.opinion-blank{width:130px}}
+</style>
+<style>
+/* Single full-width video without side-by-side questions */
+.video-layout.full-video{display:block}
+.video-layout.full-video .player{width:100%;max-width:none}
+@media(max-width:800px){.video-layout.full-video{display:block}}
+</style></head>
+<body>
+<header><div class="wrap brand">Do It <span>Yourself</span></div></header>
+<main class="wrap">
+<section class="section" id="video">
+<div class="heading"><span class="num">01</span><h2>Watch &amp; discuss</h2></div>
+<p class="intro">Watch the video and discuss: Have you ever eaten in a restaurant alone? If so, did you feel like the man in the video? If not, how would you feel?</p><div class="video-layout full-video">
+<div><div class="player"><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/5zN7XyJZJtY" title="Do It Yourself — restaurant video"></iframe></div><p class="video-note">Video not playing? <a href="https://youtu.be/5zN7XyJZJtY" rel="noopener noreferrer" target="_blank">Open it on YouTube</a>.</p></div>
+
+</div>
+</section>
+<section class="section" id="grammar">
+<div class="heading"><span class="num">02</span><h2>Reflexive pronouns</h2></div>
+<p class="intro">Read each set of four sentences from left to right. Complete the reflexive pronouns in the highlighted sentences.</p>
+<div class="pronoun-groups">
+<div class="pronoun-group"><div class="pronoun-label">I</div><div class="four-lines">
+<div class="grammar-line basic">I learned how to cook.</div>
+<div class="grammar-line target">I taught <strong>myself</strong> how to cook.</div>
+<div class="grammar-line basic">I learned English without a teacher.</div>
+<div class="grammar-line target by">I learned English <strong>by myself</strong>.</div>
+</div></div>
+<div class="pronoun-group"><div class="pronoun-label">You · singular</div><div class="four-lines">
+<div class="grammar-line basic">You learned to play the guitar.</div>
+<div class="grammar-line target">You taught <input aria-label="You singular reflexive" autocomplete="off" class="blank" data-answer="yourself" spellcheck="false"/> to play the guitar.</div>
+<div class="grammar-line basic">You went to the concert alone.</div>
+<div class="grammar-line target by">You went to the concert <input aria-label="Write by + reflexive pronoun: by yourself" autocomplete="off" class="blank" data-answer="by yourself" spellcheck="false"/>.</div>
+</div></div>
+<div class="pronoun-group"><div class="pronoun-label">She</div><div class="four-lines">
+<div class="grammar-line basic">She learned to speak French.</div>
+<div class="grammar-line target">She taught <input aria-label="She reflexive" autocomplete="off" class="blank" data-answer="herself" spellcheck="false"/> to speak French.</div>
+<div class="grammar-line basic">She travelled to Paris alone.</div>
+<div class="grammar-line target by">She travelled to Paris <input aria-label="Write by + reflexive pronoun: by herself" autocomplete="off" class="blank" data-answer="by herself" spellcheck="false"/>.</div>
+</div></div>
+<div class="pronoun-group"><div class="pronoun-label">He</div><div class="four-lines">
+<div class="grammar-line basic">He repaired his bike instead of paying someone.</div>
+<div class="grammar-line target">He repaired his bike <input aria-label="He reflexive" autocomplete="off" class="blank" data-answer="himself" spellcheck="false"/>.</div>
+<div class="grammar-line basic">He went hiking alone.</div>
+<div class="grammar-line target by">He went hiking <input aria-label="Write by + reflexive pronoun: by himself" autocomplete="off" class="blank" data-answer="by himself" spellcheck="false"/>.</div>
+</div></div>
+<div class="pronoun-group"><div class="pronoun-label">It</div><div class="four-lines">
+<div class="grammar-line basic">The robot automatically switched off.</div>
+<div class="grammar-line target">The robot switched <input aria-label="It reflexive" autocomplete="off" class="blank" data-answer="itself" spellcheck="false"/> off.</div>
+<div class="grammar-line basic">The robot moved without anyone controlling it.</div>
+<div class="grammar-line target by">The robot moved <input aria-label="Write by + reflexive pronoun: by itself" autocomplete="off" class="blank" data-answer="by itself" spellcheck="false"/>.</div>
+</div></div>
+<div class="pronoun-group"><div class="pronoun-label">We</div><div class="four-lines">
+<div class="grammar-line basic">We painted the room instead of hiring painters.</div>
+<div class="grammar-line target">We painted the room <strong>ourselves</strong>.</div>
+<div class="grammar-line basic">We painted the room without help.</div>
+<div class="grammar-line target by">We painted the room <strong>by ourselves</strong>.</div>
+</div></div>
+<div class="pronoun-group"><div class="pronoun-label">You · plural</div><div class="four-lines">
+<div class="grammar-line basic">You all organised the event instead of hiring a planner.</div>
+<div class="grammar-line target">You all organised the event <input aria-label="You plural reflexive" autocomplete="off" class="blank" data-answer="yourselves" spellcheck="false"/>.</div>
+<div class="grammar-line basic">You all went on holiday without anyone else.</div>
+<div class="grammar-line target by">You all went on holiday <input aria-label="Write by + reflexive pronoun: by yourselves" autocomplete="off" class="blank" data-answer="by yourselves" spellcheck="false"/>.</div>
+</div></div>
+<div class="pronoun-group"><div class="pronoun-label">They</div><div class="four-lines">
+<div class="grammar-line basic">They built the shelves instead of hiring someone.</div>
+<div class="grammar-line target">They built the shelves <input aria-label="They reflexive" autocomplete="off" class="blank" data-answer="themselves" spellcheck="false"/>.</div>
+<div class="grammar-line basic">They went camping without anyone else.</div>
+<div class="grammar-line target by">They went camping <input aria-label="Write by + reflexive pronoun: by themselves" autocomplete="off" class="blank" data-answer="by themselves" spellcheck="false"/>.</div>
+</div></div>
+</div>
+<div class="quick-check" id="quick-check"><h3>Quick Check</h3><p>Choose one answer for each question.</p><div class="quiz-grid"><div class="quiz-row"><p>1. When do we use myself, yourself, himself, etc.?</p><div aria-label="When do we use myself, yourself, himself, etc.?" class="quiz-options" role="group"><label class="quiz-option"><input name="quick-check-1" type="radio" value="right"/><span>When someone does something themselves.</span></label><label class="quiz-option"><input name="quick-check-1" type="radio" value="wrong"/><span>When two people do something together.</span></label></div></div><div class="quiz-row"><p>2. What does <mark class="key-term">“by”</mark> mean in “by myself”?</p><div aria-label="What does by add in by myself?" class="quiz-options" role="group"><label class="quiz-option"><input name="quick-check-2" type="radio" value="wrong"/><span>It does not change the meaning.</span></label><label class="quiz-option"><input name="quick-check-2" type="radio" value="right"/><span>It means alone or without help.</span></label></div></div><div class="quiz-row"><p>3. What does <mark class="key-term">“-selves”</mark> mean in “ourselves” and “themselves”?</p><div aria-label="What does the ending -selves mean in ourselves and themselves?" class="quiz-options" role="group"><label class="quiz-option"><input name="quick-check-3" type="radio" value="right"/><span>Plural (more than one person).</span></label><label class="quiz-option"><input name="quick-check-3" type="radio" value="wrong"/><span>Singular (one person).</span></label></div></div><div class="quiz-row"><p>4. Which sentence uses each other correctly?</p><div aria-label="Which sentence uses each other correctly?" class="quiz-options" role="group"><label class="quiz-option"><input name="quick-check-4" type="radio" value="wrong"/><span>Anna helps each other with homework.</span></label><label class="quiz-option"><input name="quick-check-4" type="radio" value="right"/><span>Anna and Tom help each other.</span></label></div></div></div></div>
+</section>
+<section class="section" id="activities">
+<div class="heading"><span class="num">03</span><h2>Alone or together?</h2></div>
+<p class="intro">Choose an activity and share your opinion. Finish a starter with your own ideas. Use <strong>myself / yourself</strong>, <strong>by myself / by yourself</strong>, or <strong>each other</strong> where appropriate.</p>
+<div class="activity-grid"><article class="activity-card"><h3>Going to a concert</h3><p><em>Alone: </em>Going to a concert by myself / yourself can be…</p><p><em>Myself / yourself: </em>I can enjoy myself at a concert by… / You can enjoy yourself at a concert if…</p></article><article class="activity-card"><h3>Going to the gym</h3><p><em>Alone: </em>Going to the gym by myself / yourself is…</p><p><em>Myself / yourself: </em>I can challenge myself by… / You can push yourself to…</p><p><em>Together: </em>We can encourage each other to…</p></article><article class="activity-card"><h3>Going on a hike</h3><p><em>Alone: </em>Going on a hike by myself / yourself might be…</p><p><em>Myself / yourself: </em>I can prepare myself for… / You can challenge yourself by…</p></article><article class="activity-card"><h3>Preparing for an English exam</h3><p><em>Alone: </em>Preparing for an English exam by myself / yourself can…</p><p><em>Myself / yourself: </em>I can test myself on… / You can prepare yourself by…</p></article><article class="activity-card"><h3>Shopping for clothes</h3><p><em>Alone: </em>Shopping by myself / yourself is…</p><p><em>Myself / yourself: </em>I can buy myself… / You can treat yourself to…</p><p><em>Together: </em>We can help each other…</p></article><article class="activity-card"><h3>Swimming at the beach</h3><p><em>Alone: </em>Swimming by myself / yourself can…</p><p><em>Myself / yourself: </em>I can protect myself by… / You can enjoy yourself if…</p></article><article class="activity-card"><h3>Travelling to a foreign country</h3><p><em>Alone: </em>Travelling by myself / yourself can be…</p><p><em>Myself / yourself: </em>I can challenge myself to… / You can find yourself…</p><p><em>Together: </em>We can help each other with…</p></article><article class="activity-card"><h3>Watching a TV show</h3><p><em>Alone: </em>Watching a TV show by myself / yourself is…</p><p><em>Myself / yourself: </em>I can make myself… / You can let yourself…</p></article></div>
+</section>
+<section class="section" id="opinions"><div class="heading"><span class="num">04</span><h2>Do you agree?</h2></div><p class="intro">Complete each statement with the correct reflexive pronoun or expression. Then discuss whether you agree or disagree and explain why.</p><div class="statement-list"><div class="statement"><span class="statement-letter">A</span><span class="statement-content">It’s better to pay for an instructor than to teach <input class="opinion-blank" aria-label="Complete statement A" type="text" data-answer="yourself" autocomplete="off" autocapitalize="off" spellcheck="false" /> a new skill.</span></div><div class="statement"><span class="statement-letter">B</span><span class="statement-content">A long drive <input class="opinion-blank" aria-label="Complete statement B" type="text" data-answer="by yourself" autocomplete="off" autocapitalize="off" spellcheck="false" /> is much more relaxing than sharing the car with other people.</span></div><div class="statement"><span class="statement-letter">C</span><span class="statement-content">I would rather fix broken things <input class="opinion-blank" aria-label="Complete statement C" type="text" data-answer="myself" autocomplete="off" autocapitalize="off" spellcheck="false" /> than call someone else to do it.</span></div><div class="statement"><span class="statement-letter">D</span><span class="statement-content">Living <input class="opinion-blank" aria-label="Complete statement D" type="text" data-answer="by yourself" autocomplete="off" autocapitalize="off" spellcheck="false" /> is much easier than living with others.</span></div><div class="statement"><span class="statement-letter">E</span><span class="statement-content">In a relationship, sometimes it’s OK to have secrets rather than share everything with <input class="opinion-blank" aria-label="Complete statement E" type="text" data-answer="one another" autocomplete="off" autocapitalize="off" spellcheck="false" />.</span></div><div class="statement"><span class="statement-letter">F</span><span class="statement-content">I find it harder to buy things for <input class="opinion-blank" aria-label="Complete statement F" type="text" data-answer="myself" autocomplete="off" autocapitalize="off" spellcheck="false" /> than for other people.</span></div><div class="statement"><span class="statement-letter">G</span><span class="statement-content">It’s a better idea to start a business with a friend than <input class="opinion-blank" aria-label="Complete statement G" type="text" data-answer="by yourself" autocomplete="off" autocapitalize="off" spellcheck="false" />.</span></div></div></section></main>
+<script>
+for(const group of document.querySelectorAll('.quiz-options')){
+  const radios=[...group.querySelectorAll('input[type="radio"]')];
+  radios.forEach(radio=>radio.addEventListener('change',()=>{
+    radios.forEach(r=>r.closest('.quiz-option').classList.remove('correct','wrong'));
+    if(radio.checked)radio.closest('.quiz-option').classList.add(radio.value==='right'?'correct':'wrong');
+  }));
+}
+for(const input of document.querySelectorAll('.blank')){
+  function check(){
+    input.classList.remove('good','bad');
+    if(!input.value.trim())return;
+    input.classList.add(input.value.trim().replace(/\s+/g,' ').toLowerCase()===input.dataset.answer?'good':'bad');
+  }
+  input.addEventListener('change',check);
+  input.addEventListener('blur',check);
+  input.addEventListener('input',()=>input.classList.remove('good','bad'));
+}
+
+for(const input of document.querySelectorAll('.opinion-blank')){
+  input.addEventListener('input',()=>{
+    const value=input.value.trim().replace(/\s+/g,' ').toLowerCase();
+    input.classList.remove('good','bad');
+    if(!value)return;
+    input.classList.add(value===input.dataset.answer?'good':'bad');
+  });
+}
+</script>
+</body>
+</html>
