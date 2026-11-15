@@ -202,6 +202,14 @@ topics:
     cursor:pointer;
   }
 
+  .term[aria-pressed="true"]{outline:2px solid white;outline-offset:2px}
+  .match-verb{background:transparent;color:inherit;padding:4px;font:inherit;font-weight:750}
+  .dropped-item{display:block;width:100%;text-align:left;color:var(--ink);font-weight:500}
+  .dropped-item.correct{background:var(--good);border-color:#b7d5bc}
+  .dropped-item.wrong{background:var(--bad);border-color:#ddbbbb}
+  .match-meaning{display:block;margin-top:3px;font-size:12px;color:var(--muted)}
+  .match-discussion{margin-top:16px}
+
   .matching-controls{
     margin-top:16px;
     display:flex;
@@ -563,41 +571,10 @@ topics:
       </article>
     </section>
 
-    <section id="match">
-      <div class="section-head">
-        <div>
-          <div class="eyebrow">02 · Practice</div>
-          <h2>Match the phrases</h2>
-          <p class="instruction">Drag each phrase into the verb it naturally goes with. Click an item in a column to move it back.</p>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="match-layout">
-          <aside class="word-bank">
-            <h3>Phrases</h3>
-            <div class="terms" id="termBank"></div>
-          </aside>
-
-          <div class="drop-grid">
-            <div class="dropzone" data-verb="speak"><h3>SPEAK</h3><div class="dropped"></div></div>
-            <div class="dropzone" data-verb="talk"><h3>TALK</h3><div class="dropped"></div></div>
-            <div class="dropzone" data-verb="say"><h3>SAY</h3><div class="dropped"></div></div>
-            <div class="dropzone" data-verb="tell"><h3>TELL</h3><div class="dropped"></div></div>
-          </div>
-        </div>
-        <div class="matching-controls">
-          <button onclick="checkMatching()">Check</button>
-          <button class="secondary" onclick="resetMatching()">Reset</button>
-        </div>
-        <div class="match-feedback" id="matchFeedback"></div>
-      </div>
-    </section>
-
     <section id="speak">
       <div class="section-head">
         <div>
-          <div class="eyebrow">03 · Final speaking</div>
+          <div class="eyebrow">02 · Speaking</div>
           <h2>Choose. Ask. Respond.</h2>
           <p class="instruction">Choose a category. The prompt gives you the content of the question. Add the target verb and build a natural question. Your partner answers and should use the same verb naturally.</p>
         </div>
@@ -628,106 +605,155 @@ topics:
         </div>
       </div>
     </section>
+
+    <section id="match">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">03 · Practice</div>
+          <h2>Match the phrases</h2>
+          <p class="instruction">Drag each phrase to the verb it goes with, or select a phrase and then a verb. Select a phrase in a column to move it back.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="match-layout">
+          <aside class="word-bank">
+            <h3>Phrases</h3>
+            <div class="terms" id="termBank"></div>
+          </aside>
+
+          <div class="drop-grid">
+            <div class="dropzone" data-verb="speak"><h3><button class="match-verb" type="button">SPEAK</button></h3><div class="dropped"></div></div>
+            <div class="dropzone" data-verb="talk"><h3><button class="match-verb" type="button">TALK</button></h3><div class="dropped"></div></div>
+            <div class="dropzone" data-verb="say"><h3><button class="match-verb" type="button">SAY</button></h3><div class="dropped"></div></div>
+            <div class="dropzone" data-verb="tell"><h3><button class="match-verb" type="button">TELL</button></h3><div class="dropped"></div></div>
+          </div>
+        </div>
+        <div class="matching-controls">
+          <button class="secondary" onclick="resetMatching()">Reset</button>
+        </div>
+        <div class="match-feedback" id="matchFeedback" role="status"></div>
+      </div>
+      <p class="instruction match-discussion"><strong>Discuss with a partner.</strong> Once you’ve matched all the phrases, pick two or three. Which are new to you? When would you use them? Make a sentence with one phrase and share it with your partner.</p>
+    </section>
   </main>
 
   <footer>Just say it! · interactive lesson</footer>
   <script>
 const matchItems = [
   {text:"German", verb:"speak"},
-  {text:"highly of somebody / something", verb:"speak"},
-  {text:"for somebody", verb:"speak"},
-  {text:"up for somebody / something", verb:"speak"},
-  {text:"nonsense", verb:"talk"},
+  {text:"highly of somebody / something", verb:"speak", meaning:"praise someone/something"},
+  {text:"for somebody", verb:"speak", meaning:"represent someone"},
+  {text:"up for somebody / something", verb:"speak", meaning:"defend someone/something"},
+  {text:"nonsense", verb:"talk", meaning:"say silly things"},
   {text:"politics", verb:"talk"},
   {text:"business", verb:"talk"},
   {text:"about your personal life", verb:"talk"},
   {text:"goodbye", verb:"say"},
   {text:"no", verb:"say"},
-  {text:"cheese", verb:"say"},
-  {text:"something out loud", verb:"say"},
+  {text:"cheese", verb:"say", meaning:"smile for photos"},
+  {text:"something out loud", verb:"say", meaning:"say it audibly"},
   {text:"the truth", verb:"tell"},
   {text:"a joke", verb:"tell"},
   {text:"a lie", verb:"tell"},
-  {text:"the difference", verb:"tell"}
+  {text:"the difference", verb:"tell", meaning:"see what differs"}
 ];
 
 const bank = document.getElementById("termBank");
+const matchFeedback = document.getElementById("matchFeedback");
+const zones = [...document.querySelectorAll(".dropzone")];
 let dragged = null;
+let selectedTerm = null;
+
+function selectTerm(term){
+  selectedTerm?.setAttribute("aria-pressed", "false");
+  selectedTerm = term;
+  selectedTerm?.setAttribute("aria-pressed", "true");
+}
 
 function makeTerm(item, index){
-  const el = document.createElement("div");
-  el.className = "term";
-  el.draggable = true;
-  el.textContent = item.text;
-  el.dataset.index = index;
-  el.addEventListener("dragstart", () => {
-    dragged = el;
-    setTimeout(()=>el.classList.add("dragging"),0);
+  const term = document.createElement("button");
+  term.type = "button";
+  term.className = "term";
+  term.draggable = true;
+  term.textContent = item.text;
+  term.dataset.index = index;
+  term.setAttribute("aria-pressed", "false");
+  term.addEventListener("click", () => selectTerm(selectedTerm === term ? null : term));
+  term.addEventListener("dragstart", event => {
+    dragged = term;
+    event.dataTransfer.setData("text/plain", item.text);
+    requestAnimationFrame(() => term.classList.add("dragging"));
   });
-  el.addEventListener("dragend", () => {
-    el.classList.remove("dragging");
+  term.addEventListener("dragend", () => {
+    term.classList.remove("dragging");
     dragged = null;
   });
-  return el;
+  return term;
 }
 
-function loadBank(){
-  bank.innerHTML = "";
-  matchItems.forEach((item,i)=>bank.appendChild(makeTerm(item,i)));
-  document.querySelectorAll(".dropped").forEach(x=>x.innerHTML="");
-  document.getElementById("matchFeedback").textContent="";
+function resetMatching(){
+  selectTerm(null);
+  dragged = null;
+  bank.replaceChildren(...matchItems.map(makeTerm));
+  zones.forEach(zone => zone.querySelector(".dropped").replaceChildren());
+  matchFeedback.textContent = "";
 }
 
-document.querySelectorAll(".dropzone").forEach(zone=>{
-  zone.addEventListener("dragover",e=>{
-    e.preventDefault();
+function placeTerm(term, zone){
+  if (!term || !bank.contains(term)) return;
+
+  const index = Number(term.dataset.index);
+  const item = matchItems[index];
+  const correct = item.verb === zone.dataset.verb;
+  const chip = document.createElement("button");
+  chip.type = "button";
+  chip.className = "dropped-item " + (correct ? "correct" : "wrong");
+  chip.textContent = item.text;
+  chip.setAttribute("aria-label", item.text + (correct ? ", correct" : ", try again")
+    + (correct && item.meaning ? ", " + item.meaning : "") + ". Move back to phrases.");
+
+  if (correct && item.meaning){
+    const meaning = document.createElement("span");
+    meaning.className = "match-meaning";
+    meaning.textContent = item.meaning;
+    chip.appendChild(meaning);
+  }
+
+  chip.addEventListener("click", () => {
+    const returned = makeTerm(item, index);
+    bank.appendChild(returned);
+    chip.remove();
+    returned.focus();
+    matchFeedback.textContent = "";
+  });
+
+  zone.querySelector(".dropped").appendChild(chip);
+  selectTerm(null);
+  term.remove();
+  const completed = document.querySelectorAll(".dropped-item.correct").length;
+  matchFeedback.textContent = completed === matchItems.length
+    ? "All phrases matched. Discuss your choices with a partner."
+    : (correct ? "Correct. " : "Try again. ") + completed + " / " + matchItems.length + " correct.";
+}
+
+zones.forEach(zone => {
+  zone.querySelector(".match-verb").addEventListener("click", () => placeTerm(selectedTerm, zone));
+  zone.addEventListener("dragover", event => {
+    if (!dragged) return;
+    event.preventDefault();
     zone.classList.add("drag-over");
   });
-  zone.addEventListener("dragleave",()=>zone.classList.remove("drag-over"));
-  zone.addEventListener("drop",e=>{
-    e.preventDefault();
+  zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+  zone.addEventListener("drop", event => {
+    event.preventDefault();
     zone.classList.remove("drag-over");
-    if(!dragged) return;
-    const idx = dragged.dataset.index;
-    const item = matchItems[idx];
-    const chip = document.createElement("div");
-    chip.className="dropped-item";
-    chip.textContent=item.text;
-    chip.dataset.index=idx;
-    chip.dataset.chosen=zone.dataset.verb;
-    chip.title="Click to move back";
-    chip.addEventListener("click",()=>{
-      bank.appendChild(makeTerm(item,idx));
-      chip.remove();
-    });
-    zone.querySelector(".dropped").appendChild(chip);
-    dragged.remove();
+    placeTerm(dragged, zone);
+    dragged = null;
   });
 });
 
-function checkMatching(){
-  const placed = [...document.querySelectorAll(".dropped-item")];
-  if(placed.length < matchItems.length){
-    document.getElementById("matchFeedback").textContent =
-      `You have matched ${placed.length} of ${matchItems.length} phrases.`;
-    return;
-  }
-  let correct = 0;
-  placed.forEach(chip=>{
-    const expected = matchItems[chip.dataset.index].verb;
-    const ok = chip.dataset.chosen === expected;
-    chip.style.background = ok ? "var(--good)" : "var(--bad)";
-    chip.style.borderColor = ok ? "#b7d5bc" : "#ddbbbb";
-    if(ok) correct++;
-  });
-  document.getElementById("matchFeedback").textContent =
-    correct === matchItems.length
-      ? "Perfect — all patterns matched."
-      : `${correct} / ${matchItems.length} correct. Recheck the red items.`;
-}
-function resetMatching(){ loadBank(); }
-loadBank();
-
+resetMatching();
 
 document.querySelectorAll('.quiz-card').forEach(card => {
   const choices = [...card.querySelectorAll('.choice')];
