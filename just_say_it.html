@@ -525,7 +525,7 @@ topics:
               <button class="choice" type="button" aria-pressed="false">Let’s say about the trip.</button>
               <button class="choice" type="button" aria-pressed="false" data-correct="true">Let’s talk about the trip.</button>
             </div>
-            <div class="mini-explanation" role="status" data-explanation="Use talk about + topic for a conversation. Say about + topic on its own is incorrect in this sentence."></div>
+            <div class="mini-explanation" role="status" data-rule="Never use say about + topic to mean discuss." data-explanation="Use talk about + topic. To make a comment, you can say something about the topic."></div>
           </div>
           <div class="quiz-card">
             <p>You want to make one comment about the trip. Which sentence works?</p>
@@ -770,6 +770,11 @@ document.querySelectorAll('.quiz-card').forEach(card => {
       feedback.textContent = correct
         ? 'Correct. ' + feedback.dataset.explanation
         : 'Try again.';
+      if (correct && feedback.dataset.rule) {
+        const rule = document.createElement('strong');
+        rule.textContent = feedback.dataset.rule;
+        feedback.replaceChildren('Correct. ', rule, ' ' + feedback.dataset.explanation);
+      }
       feedback.classList.add('show');
     });
   });
