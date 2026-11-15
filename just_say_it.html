@@ -232,12 +232,6 @@ topics:
   }
 
   /* Quiz */
-  .quiz-list{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-  }
-
   .quiz-card{
     border:1px solid var(--line);
     background:#fff;
@@ -325,6 +319,82 @@ topics:
   .discussion-card h3{margin:0;font-size:22px;line-height:1.2}
   .choice:focus-visible{outline:2px solid #1f1f1f;outline-offset:3px}
 
+  /* Speaking */
+  .speak-shell{
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:18px;
+  }
+
+  .category-menu{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .category-btn{
+    width:100%;
+    text-align:left;
+    background:#fff;
+    color:#222;
+    border:1px solid var(--line);
+    padding:14px 15px;
+    font-size:18px;
+  }
+
+  .category-btn.active{
+    background:#1f1f1f;
+    color:#fff;
+  }
+
+  .prompt-stage{
+    min-height:390px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:24px;
+    padding:24px;
+  }
+
+  .prompt-label{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    color:var(--muted);
+    font-weight:800;
+  }
+
+  .prompt-text{
+    font-size:clamp(25px,4vw,46px);
+    line-height:1.08;
+    letter-spacing:-.035em;
+    margin:24px 0;
+    font-weight:800;
+  }
+
+  .partner-task{
+    padding:14px 16px;
+    border-radius:16px;
+    background:#f4f1ea;
+    color:#3c3c3c;
+    font-size:16px;
+  }
+
+  .stage-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:center;
+    margin-top:18px;
+  }
+
+  .counter{
+    color:var(--muted);
+    font-weight:700;
+  }
+
   footer{
     color:var(--muted);
     text-align:center;
@@ -333,17 +403,17 @@ topics:
   }
 
   @media (max-width:900px){
-    .match-layout,.video-grid{grid-template-columns:1fr}
+    .match-layout,.video-grid,.speak-shell{grid-template-columns:1fr}
     .drop-grid{grid-template-columns:1fr 1fr}
     .word-bank{min-height:auto}
     .dropzone{min-height:300px}
-    .quiz-list{grid-template-columns:1fr}
+    .category-menu{display:grid;grid-template-columns:1fr 1fr}
   }
 
   @media (max-width:560px){
     main{padding:20px 14px 50px}
     .topbar-inner{padding:12px 14px}
-    .drop-grid,.terms{grid-template-columns:1fr}
+    .drop-grid,.category-menu,.terms{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -524,79 +594,38 @@ topics:
       </div>
     </section>
 
-    <section id="choose">
+    <section id="speak">
       <div class="section-head">
         <div>
-          <div class="eyebrow">03 · Review</div>
-          <h2>Choose the correct form</h2>
-          <p class="instruction">Choose the verb that completes each sentence.</p>
+          <div class="eyebrow">03 · Final speaking</div>
+          <h2>Choose. Ask. Respond.</h2>
+          <p class="instruction">Choose a category. The prompt gives you the content of the question. Add the target verb and build a natural question. Your partner answers and should use the same verb naturally.</p>
         </div>
       </div>
-      <div class="quiz-list">
-        <div class="quiz-card">
-            <p>1. Can you ___ me your name?</p>
-            <div class="choice-row" role="group" aria-label="1. Can you ___ me your name?">
-              <button class="choice" type="button" aria-pressed="false">say</button>
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">tell</button>
-            </div>
-            <div class="mini-explanation" role="status" data-explanation="Use tell + person + information."></div>
+
+      <div class="speak-shell">
+        <div class="category-menu">
+          <button class="category-btn active" data-cat="speak">SPEAK</button>
+          <button class="category-btn" data-cat="talk">TALK</button>
+          <button class="category-btn" data-cat="say">SAY</button>
+          <button class="category-btn" data-cat="tell">TELL</button>
+        </div>
+
+        <div class="prompt-stage">
+          <div>
+            <div class="prompt-label" id="promptLabel">SPEAK · topic 1</div>
+            <div class="prompt-text" id="promptText"></div>
+            <div class="partner-task" id="partnerTask"></div>
           </div>
-        <div class="quiz-card">
-            <p>2. Please ___ hello to your sister for me.</p>
-            <div class="choice-row" role="group" aria-label="2. Please ___ hello to your sister for me.">
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">say</button>
-              <button class="choice" type="button" aria-pressed="false">tell</button>
+
+          <div class="stage-actions">
+            <div class="counter" id="counter">1 / 10</div>
+            <div style="display:flex;gap:10px">
+              <button class="secondary" onclick="prevPrompt()">Previous</button>
+              <button onclick="nextPrompt()">Next</button>
             </div>
-            <div class="mini-explanation" role="status" data-explanation="The expression is say hello to someone."></div>
           </div>
-        <div class="quiz-card">
-            <p>3. How many languages do you ___?</p>
-            <div class="choice-row" role="group" aria-label="3. How many languages do you ___?">
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">speak</button>
-              <button class="choice" type="button" aria-pressed="false">talk</button>
-            </div>
-            <div class="mini-explanation" role="status" data-explanation="Use speak + language."></div>
-          </div>
-        <div class="quiz-card">
-            <p>4. Did Jo ___ you about the new class?</p>
-            <div class="choice-row" role="group" aria-label="4. Did Jo ___ you about the new class?">
-              <button class="choice" type="button" aria-pressed="false">say</button>
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">tell</button>
-            </div>
-            <div class="mini-explanation" role="status" data-explanation="Use tell + person + about + topic."></div>
-          </div>
-        <div class="quiz-card">
-            <p>5. What did the teacher ___ at the end of the class?</p>
-            <div class="choice-row" role="group" aria-label="5. What did the teacher ___ at the end of the class?">
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">say</button>
-              <button class="choice" type="button" aria-pressed="false">tell</button>
-            </div>
-            <div class="mini-explanation" role="status" data-explanation="Use say to ask what words someone used."></div>
-          </div>
-        <div class="quiz-card">
-            <p>6. We need to ___ this over before we decide.</p>
-            <div class="choice-row" role="group" aria-label="6. We need to ___ this over before we decide.">
-              <button class="choice" type="button" aria-pressed="false">speak</button>
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">talk</button>
-            </div>
-            <div class="mini-explanation" role="status" data-explanation="Talk something over means discuss it before making a decision."></div>
-          </div>
-        <div class="quiz-card">
-            <p>7. Could you ___ up? I can’t hear you.</p>
-            <div class="choice-row" role="group" aria-label="7. Could you ___ up? I can’t hear you.">
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">speak</button>
-              <button class="choice" type="button" aria-pressed="false">tell</button>
-            </div>
-            <div class="mini-explanation" role="status" data-explanation="Speak up means speak louder."></div>
-          </div>
-        <div class="quiz-card">
-            <p>8. My aunt loves to ___ jokes at dinner.</p>
-            <div class="choice-row" role="group" aria-label="8. My aunt loves to ___ jokes at dinner.">
-              <button class="choice" type="button" aria-pressed="false">say</button>
-              <button class="choice" type="button" aria-pressed="false" data-correct="true">tell</button>
-            </div>
-            <div class="mini-explanation" role="status" data-explanation="The expression is tell a joke."></div>
-          </div>
+        </div>
       </div>
     </section>
   </main>
@@ -719,6 +748,98 @@ document.querySelectorAll('.quiz-card').forEach(card => {
     });
   });
 });
+
+const prompts = {
+  speak:[
+    "a foreign language you would like to learn",
+    "English + confidently",
+    "in public + comfortably",
+    "at work meetings + often",
+    "to strangers + easily",
+    "more slowly + when necessary",
+    "for yourself + in an argument",
+    "about your job + confidently",
+    "in front of a large audience + without stress",
+    "on someone’s behalf + at work"
+  ],
+  talk:[
+    "for hours + about one topic",
+    "to your best friend + every day",
+    "about money + openly",
+    "business + outside work",
+    "to strangers + easily",
+    "about your personal life + openly",
+    "on the phone + for a long time",
+    "during a movie + often",
+    "about politics + with friends",
+    "to yourself + sometimes"
+  ],
+  say:[
+    "goodbye + when leaving",
+    "no + without feeling guilty",
+    "something out loud + in public",
+    "hello + to a stranger",
+    "sorry + first",
+    "thank you + often",
+    "the same thing + twice",
+    "something nice + to a colleague",
+    "your name + slowly",
+    "what you really think + directly"
+  ],
+  tell:[
+    "the truth + even when it is difficult",
+    "a joke + at a party",
+    "a lie + to protect someone",
+    "the difference + between two people",
+    "someone + a secret",
+    "your friend + some important news",
+    "a story + from your childhood",
+    "someone + what happened",
+    "your parents + everything",
+    "someone + to wait"
+  ]
+};
+
+const partnerInstructions = {
+  speak:"Student A: make your own question with SPEAK. Partner: answer naturally and use SPEAK too.",
+  talk:"Student A: make your own question with TALK. Partner: answer naturally and use TALK too.",
+  say:"Student A: make your own question with SAY. Partner: answer naturally and use SAY too.",
+  tell:"Student A: make your own question with TELL. Partner: answer naturally and use TELL too."
+};
+
+let currentCat = "speak";
+let currentIndex = 0;
+
+function renderPrompt(){
+  const arr = prompts[currentCat];
+  document.getElementById("promptText").textContent = arr[currentIndex];
+  document.getElementById("promptLabel").textContent =
+    `${currentCat.toUpperCase()} · topic ${currentIndex+1}`;
+  document.getElementById("counter").textContent = `${currentIndex+1} / ${arr.length}`;
+  document.getElementById("partnerTask").textContent = partnerInstructions[currentCat];
+}
+
+document.querySelectorAll(".category-btn").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    document.querySelectorAll(".category-btn").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentCat = btn.dataset.cat;
+    currentIndex = 0;
+    renderPrompt();
+  });
+});
+
+function nextPrompt(){
+  const arr = prompts[currentCat];
+  currentIndex = (currentIndex + 1) % arr.length;
+  renderPrompt();
+}
+function prevPrompt(){
+  const arr = prompts[currentCat];
+  currentIndex = (currentIndex - 1 + arr.length) % arr.length;
+  renderPrompt();
+}
+renderPrompt();
   </script>
 </body>
 </html>
