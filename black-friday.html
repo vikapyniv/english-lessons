@@ -1,0 +1,505 @@
+---
+layout: null
+lesson: true
+title: "Black Friday is coming!"
+level:
+  - C1
+lesson_types:
+  - Vocabulary
+  - Grammar
+topics:
+  - Shopping
+grammar:
+  - Linking words
+vocabulary:
+  - Idioms
+  - Phrasal verbs
+description: "Explore the story behind Black Friday, practise shopping vocabulary, and use linking words to contrast ideas in a discussion."
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Black Friday is coming!</title>
+<style>
+:root{color-scheme:light;--ink:#211c24;--muted:#655b68;--paper:#fffcf8;--line:#ded4cf;--accent:#f8ce70;--purple:#382846}
+*{box-sizing:border-box}
+body{margin:0;background:#f3eee8;color:var(--ink);font:17px/1.55 system-ui,sans-serif}
+header{position:sticky;top:0;z-index:5;background:#211924;color:white;border-bottom:3px solid var(--accent)}
+.header-inner,main{width:min(920px,calc(100% - 32px));margin:auto}
+h1,h2{font-family:Georgia,serif;letter-spacing:-.035em;line-height:1.08}
+h1{font-size:clamp(1.15rem,2.5vw,1.52rem);margin:0;padding:8px 0;color:#fff5dc}
+main{padding:24px 0 54px}
+.player{overflow:hidden;border-radius:18px;background:#211924;color:white;box-shadow:0 12px 35px #2b1f2e21}
+video{display:block;width:100%;aspect-ratio:16/9;max-height:58vh;background:#110e12}
+.video-stage{position:relative;background:#110e12}
+.video-stage:has(.video-task:not([hidden])) video{min-height:clamp(320px,54vh,520px)}
+.video-task{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain;background:#241b2aea;color:#fff8ef;padding:clamp(14px,3vw,28px);scroll-padding-bottom:14px}
+.video-task .meta,.video-task .feedback{color:#f8ce70}
+.video-task h2{font-size:clamp(1.25rem,3vw,1.85rem)}
+.video-task .sentence{margin:8px 0 12px}
+.video-task .word-bank{margin-bottom:10px}
+.video-task .vocab{color:var(--ink)}
+.video-task .primary{border-color:#c4adc9}
+.gap{display:inline-flex;vertical-align:baseline}
+.gap input{text-align:center;width:5ch}
+.gap input.long-gap{width:13ch}
+.empty-slot{display:inline-block;min-width:2ch;border-bottom:1px solid #95729d;text-align:center}
+.lesson-intro{margin-bottom:12px}
+.lesson-intro p,.grammar-instructions{margin:0 0 14px}
+.speaking-table .example-row th,.speaking-table .example-row td,.speaking-table .example-model td{background:#f4eaf5}
+.example-model p{margin:0}
+.speaking-table .example-model td::before{content:none}
+.discuss-next{margin:16px 0}
+.player-footer{padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.player-footer p{margin:0;font-size:.88rem}
+nav,.actions,.word-bank{display:flex;flex-wrap:wrap;gap:8px}
+button{cursor:pointer;font:inherit;font-size:.875rem;font-weight:650;border:1px solid var(--line);color:var(--ink);background:white;border-radius:8px;padding:8px 12px}
+button:hover{background:#f7edde}
+button:focus-visible,input:focus-visible{outline:3px solid #9562aa;outline-offset:3px}
+nav button{background:#392d3f;color:#fff;border-color:#756479;font-variant-numeric:tabular-nums}
+nav button:hover,nav button[aria-current=true]{background:var(--accent);color:var(--ink);border-color:var(--accent)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;margin-top:20px;padding:clamp(17px,4vw,32px);scroll-margin-top:88px}
+h2{font-size:clamp(1.6rem,4vw,2.25rem);margin:0 0 12px}
+.meta{color:var(--muted);font-size:.87rem;font-weight:700;margin:0 0 7px}
+.sentence{font-size:clamp(1.05rem,3vw,1.31rem);margin:10px 0 16px}
+input,.slots{font:inherit;color:var(--purple);background:#f4eaf5;border:1px solid #c4adc9;border-radius:7px;padding:3px 7px}
+input{width:min(12ch,100%);margin:3px 1px}
+.slots{display:inline-flex;flex-wrap:wrap;gap:5px;min-width:8ch;vertical-align:middle}
+.slots button,.word-bank button{font-size:.9rem;padding:4px 8px}
+.word-bank{margin-bottom:18px}
+.primary{background:var(--purple);border-color:var(--purple);color:white}
+.primary:hover{background:#523764}
+.next{background:var(--accent);border-color:var(--accent)}
+.next:hover{background:#ffe1a0}
+.actions{margin-top:12px}
+.feedback{margin:10px 0 0;color:#6e353d;font-weight:600}
+.vocab{margin-top:16px;padding:15px 18px;background:#f4eaf5;border-left:4px solid #80588c;border-radius:7px}
+.vocab dt{font-family:Georgia,serif;font-size:clamp(1.45rem,4vw,2rem);font-weight:bold;color:var(--purple);line-height:1.1}
+.vocab dd{margin:5px 0 12px}
+.vocab dd:last-child{margin-bottom:0}
+ol{margin:0;padding-left:1.55em}
+li{padding:9px 0 9px 5px}
+li+li{border-top:1px solid var(--line)}
+[hidden]{display:none!important}
+
+.lesson-table{width:100%;border-collapse:collapse;font-size:.94rem;table-layout:fixed}
+.lesson-table th,.lesson-table td{border:1px solid var(--line);padding:12px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.lesson-table thead th{background:var(--purple);color:white}
+.grammar-table th:first-child{width:23%}
+.grammar-table tbody th{background:#f4eaf5;color:var(--purple)}
+.example-pair p{margin:0}
+.example-pair+.example-pair{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.example-pair .rewrite{margin-top:5px;padding-left:10px;border-left:3px solid #ad82b7;color:var(--purple)}
+.speaking-instructions{margin:0 0 16px}
+.speaking-table th:first-child{width:42%}
+.speaking-table tbody th{font-weight:400}
+.statement-number,.gloss{color:var(--muted)}
+.statement-number{font-variant-numeric:tabular-nums}
+.gloss{font-size:.88em}
+textarea{display:block;min-height:76px;width:100%;resize:vertical;padding:8px;border:1px solid #c4adc9;border-radius:7px;background:#fff;color:var(--ink);font:inherit}
+textarea:focus-visible{outline:3px solid #9562aa;outline-offset:2px}
+@media(max-width:620px){
+  .lesson-table th,.lesson-table td{padding:8px}
+  .grammar-table th:first-child{width:28%}
+  .speaking-table,.speaking-table tbody,.speaking-table tr,.speaking-table tbody th,.speaking-table td{display:block}
+  .speaking-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+  .speaking-table tbody th:first-child{width:100%}
+  .speaking-table tbody tr{margin-top:14px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .speaking-table tbody th,.speaking-table td{border:0;padding:10px 12px}
+  .speaking-table td::before{content:attr(data-label);display:block;margin-bottom:4px;color:var(--muted);font-weight:650}
+}
+</style>
+</head>
+<body>
+<header><div class="header-inner"><h1>Black Friday is coming!</h1></div></header>
+<main>
+<section aria-labelledby="video-title">
+<div class="lesson-intro">
+  <h2 id="video-title">1. The real story behind Black Friday</h2>
+  <p>Watch the video, do the tasks as you watch, and discuss the questions below.</p>
+</div>
+<div class="player">
+<div class="video-stage">
+  <video id="video" controls playsinline preload="metadata" src="black-friday.mp4" aria-label="The real story behind Black Friday"></video>
+<section class="video-task" id="task" aria-labelledby="task-title" hidden>
+  <p class="meta" id="task-number"></p>
+  <h2 id="task-title" tabindex="-1"></h2>
+  <form id="exercise">
+    <p class="sentence" id="sentence"></p>
+    <div class="word-bank" id="word-bank" aria-label="Scrambled words" hidden></div>
+    <div class="actions">
+      <button id="replay" type="button">↶ Replay 10 seconds</button>
+      <button id="reveal" type="button">Show answer</button>
+      <button class="primary" type="submit">Check answer</button>
+      <button class="next" id="resume" type="button">Continue video →</button>
+    </div>
+    <p id="feedback" class="feedback" role="status"></p>
+    <dl id="vocab" class="vocab" aria-label="Vocabulary" hidden></dl>
+  </form>
+</section>
+</div>
+  <div class="player-footer">
+    <p id="player-note">Play the video. It pauses for five listening tasks.</p>
+    <nav id="stops" aria-label="Go to a listening task"></nav>
+  </div>
+</div>
+</section>
+<section class="card" aria-labelledby="discuss-title">
+  <h2 id="discuss-title">Discuss the questions</h2>
+  <ol>
+    <li>What did the term Black Friday refer to in the past?</li>
+    <li>Why did Black Friday have negative connotations at the beginning?</li>
+    <li>What does the term Black Friday refer to now? What US holiday falls on Thursday before Black Friday?</li>
+  </ol>
+</section>
+
+<section class="card" aria-labelledby="grammar-title">
+  <h2 id="grammar-title">2. Alternatives to but</h2>
+  <p class="grammar-instructions">Read the table and compare each sentence with its version using <em>but</em>. <strong>What do these linkers mean?</strong></p>
+  <table class="lesson-table grammar-table">
+    <thead><tr><th scope="col">Linker</th><th scope="col">Examples</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">although / even though</th><td>
+        <div class="example-pair"><p>I didn’t have any money, <strong>but</strong> I went on a Black Friday shopping spree.</p><p class="rewrite"><strong>Although / Even though</strong> I didn’t have any money, I went on a Black Friday shopping spree.</p></div>
+      </td></tr>
+      <tr><th scope="row">in spite of / despite</th><td>
+        <div class="example-pair"><p>I didn’t have any money, <strong>but</strong> I went on a Black Friday shopping spree.</p><p class="rewrite">I went on a Black Friday shopping spree <strong>in spite of / despite</strong> not having any money.</p></div>
+        <div class="example-pair"><p>I didn’t have any money, <strong>but</strong> I went on a Black Friday shopping spree.</p><p class="rewrite">I went on a Black Friday shopping spree <strong>in spite of / despite</strong> the fact that I didn’t have any money.</p></div>
+        <div class="example-pair"><p>I didn’t have any money, <strong>but</strong> I went on a Black Friday shopping spree.</p><p class="rewrite">I went on a Black Friday shopping spree <strong>in spite of / despite</strong> the lack of money.</p></div>
+      </td></tr>
+      <tr><th scope="row">nevertheless</th><td>
+        <div class="example-pair"><p>I didn’t have any money, <strong>but</strong> I went on a Black Friday shopping spree.</p><p class="rewrite">I didn’t have any money. <strong>Nevertheless</strong>, I went on a Black Friday shopping spree.</p></div>
+      </td></tr>
+      <tr><th scope="row">whereas / while</th><td>
+        <div class="example-pair"><p>I went on a Black Friday shopping spree, <strong>but</strong> my friend decided to save some money this year and skipped Black Friday.</p><p class="rewrite">I went on a Black Friday shopping spree, <strong>whereas / while</strong> my friend decided to save some money this year and skipped Black Friday.</p></div>
+      </td></tr>
+    </tbody>
+  </table>
+</section>
+<section class="card" aria-labelledby="speaking-title">
+  <h2 id="speaking-title">3. Speaking · Black Friday opinions</h2>
+  <p class="speaking-instructions">Look at the example. It gives two short ideas and shows how to connect them with a linker.</p>
+  <table class="lesson-table speaking-table">
+    <thead><tr><th scope="col">Statement</th><th scope="col">Idea 1</th><th scope="col">Contrasting idea</th></tr></thead>
+    <tbody>
+      <tr class="example-row">
+        <th scope="row"><span class="statement-number">1.</span> A small shop should offer big discounts to <strong>go in the black</strong> <span class="gloss">(= start earning more than it spends)</span> because lower prices can bring in more customers.</th>
+        <td data-label="Idea 1">Big discounts bring in more customers.</td>
+        <td data-label="Contrasting idea">The shop earns less on each sale.</td>
+      </tr>
+      <tr class="example-model">
+        <td colspan="3"><p><strong>Example.</strong> <strong>Even though</strong> big discounts bring in more customers, a small shop might struggle to <strong>go in the black</strong> if it earns less on each sale.</p></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="discuss-next"><strong>Now do the same with the statements below. Use the reason in each statement as a starting point. Write it in your own words, then add a contrasting idea. Connect both ideas with a linker and discuss them. Say whether you agree and explain why. Ask your partner what they think and why. You can also give examples from your own life.</strong></p>
+  <table class="lesson-table speaking-table">
+    <thead><tr><th scope="col">Statement</th><th scope="col">Idea 1</th><th scope="col">Contrasting idea</th></tr></thead>
+    <tbody>
+      <tr>
+        <th scope="row"><span class="statement-number">2.</span> Black Friday sales should <strong>fall on</strong> <span class="gloss">(= happen on)</span> one day only because shops could offer bigger discounts for one day than for a whole week.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 2"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 2"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">3.</span> It’s worth <strong>showing up</strong> <span class="gloss">(= arriving)</span> early for a sale because the things you want might be gone by the time you get there.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 3"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 3"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">4.</span> The word “cheap” has a negative <strong>connotation</strong> <span class="gloss">(= feeling a word gives you)</span> in clothing ads because people might think the clothes are poor quality.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 4"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 4"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">5.</span> A shop that’s already <strong>in the black</strong> <span class="gloss">(= earning more than it spends)</span> should lower its prices because more people could afford to shop there.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 5"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 5"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">6.</span> If you’re <strong>in the red</strong> <span class="gloss">(= you owe money or spend more than you earn)</span>, you should wait before buying a new phone because it’s harder to pay off debt when you keep spending.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 6"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 6"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">7.</span> You’re more likely to <strong>get ripped off</strong> <span class="gloss">(= get tricked into paying too much)</span> online because you can’t always tell what you’re getting before you pay.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 7"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 7"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">8.</span> It’s worth <strong>splashing out on</strong> <span class="gloss">(= spending a lot of money on)</span> a good winter coat because you can wear it for years.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 8"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 8"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">9.</span> It’s OK to <strong>dip into your savings</strong> <span class="gloss">(= use some money you’ve saved)</span> for a holiday because it can be hard to find a time when all your friends are free.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 9"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 9"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">10.</span> It’s worth <strong>paying through the nose</strong> <span class="gloss">(= pay far too much)</span> to see your favourite band because they might not come to your city again for years.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 10"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 10"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">11.</span> It’s a good idea to <strong>cut back on</strong> <span class="gloss">(= spend less on)</span> eating out because bringing lunch from home can save you money every week.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 11"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 11"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">12.</span> A <strong>savvy shopper</strong> <span class="gloss">(= someone who knows how to shop well)</span> waits for clothes to go on sale because the same items often cost less a few weeks later.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 12"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 12"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">13.</span> It’s easy to <strong>get lured into buying</strong> <span class="gloss">(= be tempted to buy)</span> things you don’t need because a countdown makes you feel like you have to decide right away.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 13"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 13"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">14.</span> It’s fine to go on a <strong>shopping spree</strong> <span class="gloss">(= buying lots of things in a short time)</span> once a year because you can plan ahead and save up for it.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 14"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 14"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">15.</span> The <strong>Black Friday frenzy</strong> <span class="gloss">(= a time when lots of people rush to shop)</span> makes shopping more fun because going out with friends and looking for deals can feel like a special event.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 15"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 15"></textarea></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="statement-number">16.</span> It’s fine for shops to <strong>put a positive spin on</strong> <span class="gloss">(= make something sound better)</span> a small discount because even a small saving can help when you’re buying something expensive.</th>
+        <td data-label="Idea 1"><textarea rows="3" aria-label="Idea 1 for statement 16"></textarea></td>
+        <td data-label="Contrasting idea"><textarea rows="3" aria-label="Contrasting idea for statement 16"></textarea></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+</main>
+<script>
+const tasks = [
+  { time: 22, before: 'People used the term to refer generally to negative events that happen to ', answer: 'fall on', after: ' a Friday.',
+    vocabulary: [['fall on', 'To happen on a particular day or date.']] },
+  { time: 90, before: 'Factories had trouble getting their workers to ', answer: 'show up', after: ' on the day after Thanksgiving.',
+    vocabulary: [['show up', 'To arrive somewhere, for example at work.']] },
+  { time: 104, before: '', after: '.', words: ['Friday', 'as', 'were', 'days', 'Bonnie', 'Philadelphia', 'Thanksgiving', 'the', 'to', 'Black', 'in', 'writes', 'following', 'referring', 'police', 'that'],
+    order: [4, 11, 15, 14, 10, 5, 2, 13, 8, 7, 3, 12, 6, 1, 9, 0], vocabulary: [['refer to … as …', 'To call someone or something by a particular name.']] },
+  { time: 137, before: 'Retailers and workers didn’t like the negative ', answer: 'connotation', after: ' of the term Black Friday.',
+    vocabulary: [['connotation', 'An idea or feeling that a word suggests.']] },
+  { time: 162, before: '', after: '.', words: ['Black', 'in', 'Friday', 'shops', 'the', 'Some', 'on', 'black', 'go'],
+    order: [5, 3, 8, 1, 4, 7, 6, 0, 2], vocabulary: [
+      ['go in the black', 'To start making a profit.'],
+      ['be in the black', 'To be making a profit.'],
+      ['be in the red', 'To be losing money or to owe money.'],
+      ['go into the red', 'To start losing money or go into debt.']
+    ] }
+];
+
+const byId = id => document.getElementById(id);
+const video = byId('video');
+const taskCard = byId('task');
+const form = byId('exercise');
+const sentence = byId('sentence');
+const bank = byId('word-bank');
+const feedback = byId('feedback');
+const vocabulary = byId('vocab');
+const title = byId('task-title');
+const stopButtons = [];
+const completed = new Set();
+const responses = tasks.map(() => ({ typed: [], picked: [] }));
+let active = -1;
+let replayEnd = null;
+let previousTime = 0;
+
+function makeButton(label, onClick) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.textContent = label;
+  button.addEventListener('click', onClick);
+  return button;
+}
+
+function hideFeedback() {
+  feedback.textContent = '';
+  vocabulary.hidden = true;
+}
+
+function renderAnswer() {
+  const task = tasks[active];
+  const response = responses[active];
+  bank.replaceChildren();
+  bank.hidden = !task.words;
+  let blank;
+  if (task.words) {
+    blank = document.createElement('span');
+    blank.className = 'slots';
+    blank.setAttribute('aria-label', 'Words in your answer');
+    response.picked.forEach((word, position) => {
+      const button = makeButton(task.words[word], () => {
+        response.picked.splice(position, 1);
+        hideFeedback();
+        renderAnswer();
+        bank.querySelector('button')?.focus();
+      });
+      button.setAttribute('aria-label', 'Remove ' + task.words[word]);
+      blank.append(button);
+    });
+    for (let i = response.picked.length; i < task.words.length; i++) {
+      const slot = document.createElement('span');
+      slot.className = 'empty-slot';
+      slot.setAttribute('aria-hidden', 'true');
+      slot.textContent = ' ';
+      blank.append(slot);
+    }
+    task.words.forEach((word, index) => {
+      if (response.picked.includes(index)) return;
+      bank.append(makeButton(word, () => {
+        response.picked.push(index);
+        hideFeedback();
+        renderAnswer();
+        (bank.querySelector('button') || form.querySelector('[type=submit]')).focus();
+      }));
+    });
+  } else {
+    blank = document.createElement('span');
+    blank.className = 'gap';
+    const words = task.answer.split(' ');
+    words.forEach((word, index) => {
+      const field = document.createElement('input');
+      field.value = response.typed[index] || '';
+      field.autocomplete = 'off';
+      field.spellcheck = false;
+      if (word.length > 6) field.className = 'long-gap';
+      field.setAttribute('aria-label', 'Missing word ' + (index + 1) + ' of ' + words.length);
+      field.addEventListener('input', () => {
+        response.typed[index] = field.value;
+        hideFeedback();
+      });
+      blank.append(field);
+    });
+  }
+  sentence.replaceChildren(task.before, blank, task.after);
+}
+
+function showTask(index, navigate = true) {
+  active = index;
+  video.pause();
+  taskCard.hidden = false;
+  taskCard.scrollTop = 0;
+  stopButtons.forEach((button, i) => button.setAttribute('aria-current', i === index));
+  byId('task-number').textContent = 'Listening task ' + (index + 1) + ' of ' + tasks.length;
+  title.textContent = tasks[index].words ? 'Put the words in order' : 'Fill in the gaps';
+  hideFeedback();
+  renderAnswer();
+  if (navigate) {
+    title.focus({ preventScroll: true });
+    if (taskCard.getBoundingClientRect().bottom > window.innerHeight) {
+      taskCard.scrollIntoView({ block: 'nearest' });
+    }
+  }
+}
+
+function showVocabulary() {
+  vocabulary.replaceChildren();
+  for (const [term, definition] of tasks[active].vocabulary) {
+    const dt = document.createElement('dt');
+    const dd = document.createElement('dd');
+    dt.textContent = term;
+    dd.textContent = definition;
+    vocabulary.append(dt, dd);
+  }
+  vocabulary.hidden = false;
+  if (vocabulary.getBoundingClientRect().bottom > taskCard.getBoundingClientRect().bottom) {
+    taskCard.scrollTop = vocabulary.offsetTop - 12;
+  }
+}
+
+function playVideo() {
+  video.play().catch(() => {
+    if (replayEnd !== null) {
+      replayEnd = null;
+      taskCard.hidden = false;
+    }
+    byId('player-note').textContent = 'Press Play on the video to continue.';
+  });
+}
+
+const normalize = value => value.trim().toLowerCase().replace(/\s+/g, ' ');
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  const task = tasks[active];
+  const response = responses[active];
+  const correct = task.words
+    ? response.picked.length === task.order.length && task.order.every((word, i) => response.picked[i] === word)
+    : task.answer.split(' ').every((word, i) => normalize(response.typed[i] || '') === word);
+  feedback.textContent = correct ? 'Correct!' : 'Try again. You can replay the clip or show the answer.';
+  if (correct) showVocabulary();
+  else vocabulary.hidden = true;
+});
+
+byId('reveal').addEventListener('click', () => {
+  const task = tasks[active];
+  const response = responses[active];
+  if (task.words) response.picked = [...task.order];
+  else response.typed = task.answer.split(' ');
+  renderAnswer();
+  feedback.textContent = 'Answer shown.';
+  showVocabulary();
+});
+
+byId('replay').addEventListener('click', () => {
+  replayEnd = tasks[active].time;
+  taskCard.hidden = true;
+  video.currentTime = Math.max(0, replayEnd - 10);
+  playVideo();
+});
+
+byId('resume').addEventListener('click', () => {
+  const time = tasks[active].time;
+  replayEnd = null;
+  completed.add(active);
+  stopButtons[active].setAttribute('aria-current', 'false');
+  active = -1;
+  taskCard.hidden = true;
+  video.currentTime = time + 0.05;
+  video.focus({ preventScroll: true });
+  video.scrollIntoView({ block: 'nearest' });
+  playVideo();
+});
+
+tasks.forEach(({ time }, index) => {
+  const label = Math.floor(time / 60) + ':' + String(time % 60).padStart(2, '0');
+  const button = makeButton(label, () => {
+    replayEnd = null;
+    if (video.readyState > 0) video.currentTime = time;
+    showTask(index);
+  });
+  button.setAttribute('aria-label', 'Task ' + (index + 1) + ' at ' + label);
+  stopButtons.push(button);
+  byId('stops').append(button);
+});
+
+video.addEventListener('seeked', () => { previousTime = video.currentTime; });
+video.addEventListener('timeupdate', () => {
+  if (video.seeking) return;
+  const now = video.currentTime;
+  if (replayEnd !== null && now >= replayEnd) {
+    video.pause();
+    replayEnd = null;
+    taskCard.hidden = false;
+    title.focus({ preventScroll: true });
+  } else if (replayEnd === null && !video.paused) {
+    const next = tasks.findIndex(({ time }, index) =>
+      index !== active && !completed.has(index) && previousTime <= time && now >= time
+    );
+    if (next !== -1) showTask(next);
+  }
+  previousTime = now;
+});
+video.addEventListener('error', () => {
+  byId('player-note').textContent = 'Keep black-friday.mp4 in the same folder as this HTML file.';
+});
+</script>
+</body>
+</html>
